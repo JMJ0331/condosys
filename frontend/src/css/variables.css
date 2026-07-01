@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+:root{
+
+    font-size: 62.5%;
+
+    /* TONOS BLANCOS */
+    
+    --white-50: #FEFEFE;
+
+    /* TONOS NEGROS */
+
+    --black-400: #41413D;
+    --black-500: #11120D;
+
+    /* TONOS VERDERS */
+
+    --green-200: #A9DEB4;
+    --green-800: #256533;
+    --green-900: #1C4D27;
+
+    /* SOMBRAS */
+
+    --shadows-200: 200;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Nunito', sans-serif;
+}
