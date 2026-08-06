@@ -6,22 +6,252 @@
 
     /* TONOS BLANCOS */
     
-    --white-50: #FEFEFE;
+    --white-50: #fefefe;
+    --white-100: #fbfbfb;
+    --white-200: #f9f9f9;
+    --white-300: #f6f6f6;
+    --white-400: #f5f5f5;
+    --white-500: #f2f2f2;
+    --white-600: #dcdcdc;
+    --white-700: #acacac;
+    --white-800: #858585;
+    --white-900: #666666;
+
+
 
     /* TONOS NEGROS */
-
+    --black-50: #E7E7E7;
+    --black-100: #B5B6B4;
+    --black-200: #929290;
+    --black-300: #60605d;
     --black-400: #41413D;
     --black-500: #11120D;
+    --black-600: #0f100c;
+    --black-700: #0c0d09;
+    --black-800: #090a07;
+    --black-900: #070805;
 
     /* TONOS VERDERS */
 
-    --green-200: #A9DEB4;
+    --green-50: #ecf8ef;
+    --green-100: #c5e9cd;
+    --green-200: #a9deb4;
+    --green-300: #81cf92;
+    --green-400: #69c57d;
+    --green-500: #43b755;
+    --green-600: #3da755;
+    --green-700: #308242;
     --green-800: #256533;
-    --green-900: #1C4D27;
+    --green-900: #1c4d27;
 
+     /* TONOS AZULES */
+
+    --blue-50: #e6f4ff;
+    --blue-100: #b0deff;
+    --blue-200: #8aceff;
+    --blue-300: #54b8ff;
+    --blue-400: #33aaff;
+    --blue-500: #0095ff;
+    --blue-600: #0088e8;
+    --blue-700: #006ab5;
+    --blue-800: #00528c;
+    --blue-900: #003f6b;
+
+
+    /* TONOS ROJOS */
+    --red-50: #FDECEC;
+    --red-100: #FAC5C3;
+    --red-200: #F7A9A7;
+    --red-300: #F4827E;
+    --red-400: #F16965;
+    --red-500: #EE443F;
+    --red-600: #D93E39;
+    --red-700: #A9302D;
+    --red-800: #832523;
+    --red-900: #641D1A;
+
+
+    /*TONOS AMARILLOS*/
+    --yellow-50: #FFF7E6;
+    --yellow-100: #FFE5B0;
+    --yellow-200: #FFD88A;
+    --yellow-300: #FFC654;
+    --yellow-400: #FFBB33;
+    --yellow-500: #FFAA00;
+    --yellow-600: #E89B00;
+    --yellow-700: #B57900;
+    --yellow-800: #8C5E00;
+    --yellow-900: #6B4700;
+
+    
+    
     /* SOMBRAS */
+            
+    /* Shadows */
 
-    --shadows-200: 200;
+    --shadow-100: 100;
+    --shadow-200: 200;
+    --shadow-300: 300;
+    --shadow-400: 400;
+    --shadow-500: 500;
+    --shadow-600: 600;
+    --shadow-700: 700;
+    --shadow-800: 800;
+    --shadow-900: 900;
+
+
+    /* Border */
+
+    --border-0: 0;
+    --border-2: 2;
+    --border-4: 4;
+    --border-8: 8;
+    --border-16: 16;
+    --border-24: 24;
+    --border-32: 32;
+    --border-40: 40;
+    --border-48: 48;
+    --border-56: 56;
+    --border-64: 64;
+    --border-72: 72;
+    --border-80: 80;
+    --border-88: 88;
+    --border-96: 96;
+    --border-104: 104;
+    --border-112: 112;
+    --border-120: 120;
+    --border-128: 128;
+    --border-136: 136;
+    --border-144: 144;
+    --border-152: 152;
+    --border-160: 160;
+    --border-168: 168;
+    --border-176: 176;
+    --border-184: 184;
+    --border-192: 192;
+
+
+    /* Border Radius */
+
+    --borderR-0: 0;
+    --borderR-2: 2;
+    --borderR-4: 4;
+    --borderR-8: 8;
+    --borderR-16: 16;
+    --borderR-24: 24;
+    --borderR-32: 32;
+    --borderR-40: 40;
+    --borderR-48: 48;
+    --borderR-56: 56;
+    --borderR-64: 64;
+    --borderR-72: 72;
+    --borderR-80: 80;
+    --borderR-88: 88;
+    --borderR-96: 96;
+    --borderR-104: 104;
+    --borderR-112: 112;
+    --borderR-120: 120;
+    --borderR-128: 128;
+    --borderR-136: 136;
+    --borderR-144: 144;
+    --borderR-152: 152;
+    --borderR-160: 160;
+    --borderR-168: 168;
+    --borderR-176: 176;
+    --borderR-184: 184;
+    --borderR-192: 192;
+
+
+    /* Margin */
+
+    --margin-0: 0;
+    --margin-2: 2;
+    --margin-4: 4;
+    --margin-8: 8;
+    --margin-16: 16;
+    --margin-24: 24;
+    --margin-32: 32;
+    --margin-40: 40;
+    --margin-48: 48;
+    --margin-56: 56;
+    --margin-64: 64;
+    --margin-72: 72;
+    --margin-80: 80;
+    --margin-88: 88;
+    --margin-96: 96;
+    --margin-104: 104;
+    --margin-112: 112;
+    --margin-120: 120;
+    --margin-128: 128;
+    --margin-136: 136;
+    --margin-144: 144;
+    --margin-152: 152;
+    --margin-160: 160;
+    --margin-168: 168;
+    --margin-176: 176;
+    --margin-184: 184;
+    --margin-192: 192;
+
+    /* Padding */
+
+    --padding-0: 0;
+    --padding-2: 2;
+    --padding-4: 4;
+    --padding-8: 8;
+    --padding-16: 16;
+    --padding-24: 24;
+    --padding-32: 32;
+    --padding-40: 40;
+    --padding-48: 48;
+    --padding-56: 56;
+    --padding-64: 64;
+    --padding-72: 72;
+    --padding-80: 80;
+    --padding-88: 88;
+    --padding-96: 96;
+    --padding-104: 104;
+    --padding-112: 112;
+    --padding-120: 120;
+    --padding-128: 128;
+    --padding-136: 136;
+    --padding-144: 144;
+    --padding-152: 152;
+    --padding-160: 160;
+    --padding-168: 168;
+    --padding-176: 176;
+    --padding-184: 184;
+    --padding-192: 192;
+
+    /* Space */
+
+    --space-0: 0;
+    --space-2: 2;
+    --space-4: 4;
+    --space-8: 8;
+    --space-16: 16;
+    --space-24: 24;
+    --space-32: 32;
+    --space-40: 40;
+    --space-48: 48;
+    --space-56: 56;
+    --space-64: 64;
+    --space-72: 72;
+    --space-80: 80;
+    --space-88: 88;
+    --space-96: 96;
+    --space-104: 104;
+    --space-112: 112;
+    --space-120: 120;
+    --space-128: 128;
+    --space-136: 136;
+    --space-144: 144;
+    --space-152: 152;
+    --space-160: 160;
+    --space-168: 168;
+    --space-176: 176;
+    --space-184: 184;
+    --space-192: 192;
+
 }
 
 *{
