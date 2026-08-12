@@ -35,6 +35,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
 
 
+class ChangePasswordSerializer(serializers.Serializer):
+    """Serializer para cambio de contraseña"""
+    old_password = serializers.CharField(write_only=True, min_length=8)
+    new_password = serializers.CharField(write_only=True, min_length=8)
+
+
 class UserUpdateSerializer(serializers.ModelSerializer):
     """Serializer para actualizar datos del usuario"""
     

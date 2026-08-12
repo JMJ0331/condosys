@@ -18,6 +18,7 @@ api_v1_patterns = [
     path('communications/', include('communications.urls')),
     path('notifications/', include('notifications.urls')),
     path('chat/', include('chat.urls')),
+    path('reports/', include('reports.urls')),
 ]
 
 urlpatterns = [

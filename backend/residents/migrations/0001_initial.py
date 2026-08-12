@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('apartment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='residents', to='structure.apartment')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='resident_profile', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='resident_profiles', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name_plural': 'Residents',

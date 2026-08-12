@@ -20,7 +20,7 @@ class Resident(models.Model):
     )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, on_delete=CASCADE, related_name='resident_profile')
+    user = models.ForeignKey(User, on_delete=CASCADE, related_name='resident_profiles')
     apartment = models.ForeignKey(Apartment, on_delete=CASCADE, related_name='residents')
     role_in_apartment = models.CharField(max_length=30, choices=ROLE_CHOICES, default='occupant')
     

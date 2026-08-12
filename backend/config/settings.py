@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'communications.apps.CommunicationsConfig',
     'notifications.apps.NotificationsConfig',
     'chat.apps.ChatConfig',
+    'reports.apps.ReportsConfig',
 ]
 
 MIDDLEWARE = [

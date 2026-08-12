@@ -22,5 +22,27 @@ class PaymentViewSet(viewsets.ModelViewSet):
     search_fields = ['apartment__number', 'reference_number']
     ordering_fields = ['invoice_date', 'due_date', 'status']
     ordering = ['-invoice_date']
-    filterset_fields = ['apartment', 'status', 'payment_method']
+    filterset_fields = ['apartment', 'status', 'payment_method', 'charge_type']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        request = self.request
+        resident_id = request.query_params.get('resident')
+        month = request.query_params.get('month')
+        year = request.query_params.get('year')
+
+        if resident_id:
+            queryset = queryset.filter(apartment__residents__user_id=resident_id)
+        if month:
+            try:
+                queryset = queryset.filter(invoice_date__month=int(month))
+            except (ValueError, TypeError):
+                pass
+        if year:
+            try:
+                queryset = queryset.filter(invoice_date__year=int(year))
+            except (ValueError, TypeError):
+                pass
+
+        return queryset.distinct()
 

@@ -14,4 +14,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at', 'type']
     ordering = ['-created_at']
     filterset_fields = ['user', 'type', 'is_read']
-
+    def get_queryset(self):
+        user = self.request.user
+        if user.role in ['admin', 'manager']:
+            return Notification.objects.all()
+        return Notification.objects.filter(user=user)

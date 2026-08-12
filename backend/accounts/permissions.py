@@ -116,16 +116,17 @@ class CanModifyVisitor(BasePermission):
 
 class CanAccessApartment(BasePermission):
     """
-    - Resident can access own apartment data
-    - Manager/Admin can access any apartment
+    - Resident can access own apartment data (lectura)
+    - Manager/Admin can access cualquier apartamento
     """
     def has_object_permission(self, request, view, obj):
         if request.user.role in ['admin', 'manager']:
             return True
-        # Resident can access own apartment
-        from residents.models import Resident
-        try:
-            resident = Resident.objects.get(user=request.user, apartment=obj)
-            return resident.is_current
-        except Resident.DoesNotExist:
-            return False
+        if request.method in ['GET', 'HEAD', 'OPTIONS']:
+            from residents.models import Resident
+            try:
+                resident = Resident.objects.get(user=request.user, apartment=obj)
+                return resident.is_current
+            except Resident.DoesNotExist:
+                return False
+        return False
