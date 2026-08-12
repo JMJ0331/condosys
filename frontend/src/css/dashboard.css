@@ -1,2 +1,282 @@
 @import url(variables.css);
 
+header {
+    position: relative;
+    background: var(--white-50);
+    border-bottom: 1px solid var(--black-50);
+    overflow: visible;
+    z-index: 20;
+
+}
+
+.header-info {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: var(--padding-16);
+    
+}
+
+.header-brand {
+    font-weight: 700;
+    font-size: 40px;
+    letter-spacing: -0.01em;
+    color: var(--black-800);
+    
+}
+
+
+.header-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--white-50);
+    color: var(--black-800);
+    font-size: 30px;
+}
+
+.header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+}
+
+.btn-add {
+
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--white-50);
+    background: var(--green-700);
+    border: none;
+    border-radius: var(--borderR-24);
+    padding: var(--padding-8) var(--padding-24);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-add:hover { background: var(--green-300); }
+.btn-add:focus-visible { outline: 2px solid var(--b); outline-offset: 2px; }
+
+.icon-btn {
+    width: 30px;
+    height: 30px;
+    color: var(--black-400);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+
+
+#icon-btn1:hover { background: var(--white-700); }
+#icon-btn2:hover { background: var(--white-700); }
+
+
+.main-layout {
+    display: flex;
+    min-height: calc(100vh);
+}
+
+
+aside {
+    width: 250px;
+    flex-shrink: 0;
+    background: var(--white-50);
+    border-right: 1px solid var(--black-50);
+    padding: var(--padding-16);
+}
+
+aside .opt-aside-dsh {
+    width: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--padding-16);
+    border-radius: var(--borderR-16);
+    color: var(--black-800);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+aside .opt-aside-dsh + .opt-aside-dsh { margin-top: var(--margin-2) }
+
+aside .opt-aside-dsh:hover {
+    background: var(--white-300);
+    color: var(--black-800);
+}
+
+aside .opt-aside-dsh.active {
+    background: var(--white-400);
+    color: var(--black-800);
+    font-weight: 600;
+}
+
+aside .opt-aside-dsh img {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    opacity: 0.75;
+}
+
+aside .opt-aside-dsh.active img,
+aside .opt-aside-dsh:hover img { opacity: 1; }
+
+aside .opt-aside-dsh h4 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+    word-break: break-all;
+   
+}
+
+
+
+.container-main-side2 {
+    flex: 1;
+    padding: var(--padding-24);
+    min-width: 0;
+}
+
+
+.container-flex1 {
+    display: flex;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+}
+
+
+.app-info {
+    flex: 1 1 220px;
+    min-width: 220px;
+    background: var(--white-50);
+    border: 1px solid var(--black-50);
+    border-radius: var(--borderR-24);
+    padding: var(--padding-16);
+    box-shadow: 0px 5px 18px var(--white-600);
+}
+
+
+.app-info > .opt-aside-dsh {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin-bottom: var(--margin-12);
+    padding-bottom: var(--padding-12);
+    border-bottom: 1px solid var(--black-50);
+}
+
+.app-info > .opt-aside-dsh img {
+    width: 30px;
+    height: 30px;
+}
+
+.app-info > .opt-aside-dsh h4 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--black-400);
+}
+
+.app-info ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.app-info li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    padding: var(--padding-8) 0;
+}
+
+.app-info li > h4 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--black-400);
+    white-space: nowrap;
+}
+
+.app-info li > h4:last-child:not(:first-child) {
+    color: var(--black-400);
+    font-weight: 800;
+}
+
+
+
+.app-info meter {
+    width: 85px;
+    height: 6px;
+    border-radius: 999px;
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+}
+
+.app-info meter::-webkit-meter-bar {
+    background: var(--white-600);
+    border: none;
+    border-radius: var(--borderR-192);
+    height: 10px;
+}
+
+.app-info meter::-webkit-meter-optimum-value,
+.app-info meter::-webkit-meter-suboptimum-value,
+.app-info meter::-webkit-meter-even-less-good-value {
+    border-radius: 999px;
+}
+
+/* Color por posición de fila dentro de cada tarjeta:
+   1ra = rojo, 2da = ámbar, 3ra = verde, 4ta = azul */
+.app-info li:nth-child(1) meter::-webkit-meter-optimum-value {background: var(--green-500)};
+.app-info li:nth-child(1) meter::-webkit-meter-suboptimum-value {background: var(--yellow-500)};
+.app-info li:nth-child(1) meter::-webkit-meter-even-less-good-value { background: var(--red-500)};
+.app-info li:nth-child(1) meter::-moz-meter-bar { background: var(--red-500)};
+
+.app-info li:nth-child(2) meter::-webkit-meter-optimum-value  {background: var(--green-500)};
+.app-info li:nth-child(2) meter::-webkit-meter-suboptimum-value {background: var(--yellow-500)};
+.app-info li:nth-child(2) meter::-webkit-meter-even-less-good-value { background: var(--red-500)};
+.app-info li:nth-child(2) meter::-moz-meter-bar { background: var(--red-500); }
+
+.app-info li:nth-child(3) meter::-webkit-meter-optimum-value {background: var(--green-500)};
+.app-info li:nth-child(3) meter::-webkit-meter-suboptimum-value {background: var(--yellow-500)};
+.app-info li:nth-child(3) meter::-webkit-meter-even-less-good-value { background: var(--red-500)};
+.app-info li:nth-child(3) meter::-moz-meter-bar { background: var(--red-500)};
+
+.app-info li:nth-child(4) meter::-webkit-meter-optimum-value {background: var(--green-500)};
+.app-info li:nth-child(4) meter::-webkit-meter-suboptimum-value {background: var(--yellow-500)};
+.app-info li:nth-child(4) meter::-webkit-meter-even-less-good-value { background: var(--red-500)};
+.app-info li:nth-child(4) meter::-moz-meter-bar { background: var(--red-500)};
+
+/* =================== RESPONSIVE =================== */
+
+@media (max-width: 1024px) {
+    .container-flex1 { flex-wrap: wrap; }
+    .app-info { flex: 1 1 45%; }
+}
+
+@media (max-width: 768px) {
+    :root { --sidebar-w: 64px; }
+    aside .opt-aside-dsh h4 { display: none; }
+    .header-title { display: none; }
+    .container-main-side2 { padding: 18px; }
+    .app-info { flex: 1 1 100%; }
+}
+
+/* =================== FOCO / ACCESIBILIDAD =================== */
+
+a:focus-visible,
+button:focus-visible,
+.opt-aside-dsh:focus-visible {
+    outline: 2px solid var(--brand-green);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+}
