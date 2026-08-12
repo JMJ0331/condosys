@@ -1,0 +1,23 @@
+Django
+djangorestframework
+django-cors-headers
+psycopg
+
+# Real-time & WebSocket
+channels
+channels-redis
+daphne
+
+# Utilities
+python-dotenv
+celery
+redis
+Pillow
+
+# Production
+gunicorn
+whitenoise
+
+# Development
+django-extensions
+django-debug-toolbar
