@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'accounts',
     'chat',
     'communications',
-    'config',
     'incidents',
     'login',
     'maintenance',
