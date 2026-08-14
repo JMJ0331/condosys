@@ -1,6 +1,6 @@
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
-from condosys.accounts.permissions import CanAccessApartment
+from accounts.permissions import CanAccessApartment
 from .models import Garden, Building, Apartment
 from .serializers import (
     GardenSerializer, BuildingSerializer,

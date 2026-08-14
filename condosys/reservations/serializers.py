@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import CommonArea, Reservation
-from condosys.accounts.serializers import UserSerializer
+from accounts.serializers import UserSerializer
 
 
 class CommonAreaSerializer(serializers.ModelSerializer):

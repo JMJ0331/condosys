@@ -106,7 +106,7 @@ class CanModifyVisitor(BasePermission):
         if request.user.role == 'security':
             return True
         # Resident can view/edit visitors for own apartment
-        from condosys.residents.models import Resident
+        from residents.models import Resident
         try:
             resident = Resident.objects.get(user=request.user, apartment=obj.apartment)
             return True
@@ -123,7 +123,7 @@ class CanAccessApartment(BasePermission):
         if request.user.role in ['admin', 'manager']:
             return True
         if request.method in ['GET', 'HEAD', 'OPTIONS']:
-            from condosys.residents.models import Resident
+            from residents.models import Resident
             try:
                 resident = Resident.objects.get(user=request.user, apartment=obj)
                 return resident.is_current

@@ -5,14 +5,14 @@ python manage.py create_test_data
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import timedelta
-from condosys.accounts.models import User
-from condosys.structure.models import Garden, Building, Apartment
-from condosys.residents.models import Resident
-from condosys.payments.models import ChargeType, Payment
-from condosys.incidents.models import Incident
-from condosys.visitors.models import Visitor
-from condosys.reservations.models import CommonArea, Reservation
-from condosys.communications.models import Communication
+from accounts.models import User
+from structure.models import Garden, Building, Apartment
+from residents.models import Resident
+from payments.models import ChargeType, Payment
+from incidents.models import Incident
+from visitors.models import Visitor
+from reservations.models import CommonArea, Reservation
+from communications.models import Communication
 
 
 class Command(BaseCommand):

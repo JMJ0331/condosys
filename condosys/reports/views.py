@@ -5,12 +5,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import AuditLog
 from .serializers import AuditLogSerializer
-from condosys.structure.models import Apartment
-from condosys.residents.models import Resident
-from condosys.payments.models import Payment
-from condosys.incidents.models import Incident
-from condosys.visitors.models import Visitor
-from condosys.reservations.models import Reservation
+from structure.models import Apartment
+from residents.models import Resident
+from payments.models import Payment
+from incidents.models import Incident
+from visitors.models import Visitor
+from reservations.models import Reservation
 
 
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):

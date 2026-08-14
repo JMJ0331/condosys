@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Incident, IncidentHistory
-from condosys.accounts.serializers import UserSerializer
+from accounts.serializers import UserSerializer
 
 
 class IncidentHistorySerializer(serializers.ModelSerializer):

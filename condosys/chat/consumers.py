@@ -6,8 +6,8 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils import timezone
 from .models import ChatMessage
-from condosys.notifications.models import Notification
-from condosys.accounts.models import User
+from notifications.models import Notification
+from accounts.models import User
 
 
 class ChatConsumer(AsyncWebsocketConsumer):

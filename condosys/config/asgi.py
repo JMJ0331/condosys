@@ -17,7 +17,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django_asgi_app = get_asgi_application()
 
 # Import routing after django setup
-from condosys.chat import routing as chat_routing
+from chat import routing as chat_routing
 
 application = ProtocolTypeRouter({
     # Django's ASGI application to handle traditional HTTP requests

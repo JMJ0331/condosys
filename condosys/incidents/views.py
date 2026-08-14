@@ -2,7 +2,7 @@ from django.db.models import Q
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Incident, IncidentHistory
-from condosys.accounts.permissions import CanModifyIncident
+from accounts.permissions import CanModifyIncident
 from .serializers import (
     IncidentListSerializer, IncidentDetailSerializer,
     IncidentHistorySerializer

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Resident
-from condosys.accounts.serializers import UserSerializer
-from condosys.structure.serializers import ApartmentListSerializer
+from accounts.serializers import UserSerializer
+from structure.serializers import ApartmentListSerializer
 
 
 class ResidentSerializer(serializers.ModelSerializer):

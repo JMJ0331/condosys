@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'residents',
     'structure',
     'visitors',
+    'inicio',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'condosys.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -81,7 +82,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'condosys.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
