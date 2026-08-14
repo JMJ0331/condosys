@@ -19,9 +19,9 @@ header {
 
 .header-brand {
     font-weight: 700;
-    font-size: 40px;
+    font-size: 4rem;
     letter-spacing: -0.01em;
-    color: var(--black-800);
+    color: var(--green-800);;
     
 }
 
