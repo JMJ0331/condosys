@@ -18,19 +18,21 @@ body {
 }
 
 .panel-login {
-  width: 720px;
-  height: 420px;
+  width: 90%;
+  max-width: 720px;
+  height: auto;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  border-radius: 16px;
-  box-shadow: 0 0 40px 10px rgba(0, 0, 0, 0.2);
+  grid-template-columns: 1fr;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
 /* LADOS DEL PANEL */
 
 .lado-izq,
 .lado-der {
-  padding: 3.5rem;
+  padding: 1.5rem 1.25rem;
 }
 
 .lado-izq {
@@ -38,7 +40,6 @@ body {
   align-items: center;
   justify-content: center;
   background-color: var(--green-800);
-  border-radius: 16px 0 0 16px;
 }
 
 .nombre-app {
@@ -51,11 +52,10 @@ body {
 .lado-der {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1.25rem;
   background-color: var(--white-50);
-  border-radius: 0 16px 16px 0;
 }
 
 .titulo {
@@ -66,29 +66,62 @@ body {
 .form {
   display: flex;
   flex-direction: column;
-  gap: 6.5rem;
+  gap: 2.5rem;
+  max-width: 420px; /* constrain form on small screens to avoid very wide inputs */
+  width: 100%;
+  margin: 0 auto;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .container-input {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-bottom: 8px;
+}
+
+.container-input label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 12px;
+  font-size: 1.6rem;
+  transition: 250ms ease;
+  color: var(--black-200);
+  font-weight: 400;
 }
 
 .input {
+  height: 4rem;
   width: 100%;
   outline: none;
   border: 1px solid var(--green-200);
-  padding: 0.85rem 1.2rem;
+  padding: 1rem 1.2rem;
   border-radius: 10px;
   font-size: 1.6rem;
   color: var(--black-400);
   font-weight: 520;
 }
 
+.input:focus ~ label,
+.input:not(:placeholder-shown) ~ label {
+  top: 0;
+  background-color: var(--white-50);
+  color: var(--black-400);
+}
+
+.input:hover,
+.input:focus {
+  border: 1px solid var(--green-500);
+}
+
 .text-restrablecer {
-  font-size: 1.2rem;
+    width: fit-content;
+  font-size: 1.45rem;
   font-weight: 500;
   color: var(--green-800);
   text-decoration: none;
@@ -113,4 +146,96 @@ body {
   padding: 1.2rem 2.4rem;
   border-radius: 8px;
   cursor: pointer;
+  border: none;
+}
+
+/* Mobile-first breakpoints (mapped from project breakpoints)
+   Small: up to 425px — base styles already mobile-friendly
+   >=426px: restore two-column layout
+   >=769px: desktop spacing and width
+   >=1025px, >=1201px: larger adjustments */
+
+@media (min-width: 426px) {
+  .panel-login {
+    grid-template-columns: repeat(2, 1fr);
+    height: 420px;
+    border-radius: 16px;
+  }
+
+  .inputs {
+    width: 100%;
+  }
+
+  .lado-izq {
+    border-radius: 16px 0 0 16px;
+  }
+
+  .lado-der {
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    border-radius: 0 16px 16px 0;
+  }
+  /* increase form width on larger small screens */
+  .form {
+    max-width: 520px;
+  }
+}
+
+@media (min-width: 769px) {
+  .panel-login {
+    width: 60%;
+  }
+
+  .lado-izq,
+  .lado-der {
+    padding: 3.5rem;
+  }
+  .form {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .titulo {
+    font-size: 3.2rem;
+  }
+}
+
+@media (min-width: 1201px) {
+  .panel-login {
+    max-width: 900px;
+  }
+}
+
+/* Ensure stacked layout and controlled input width for very small screens */
+@media (max-width: 425px) {
+  .panel-login {
+    grid-template-columns: 1fr;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  .lado-izq {
+    display: flex;
+    padding: 1.25rem;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .lado-der {
+    padding: 1rem 1.25rem 1.5rem;
+    border-radius: 0 0 12px 12px;
+  }
+
+  /* Avoid inputs becoming too wide on very narrow screens */
+  .input {
+    max-width: 520px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+
+  .container {
+    padding: 0.75rem;
+  }
 }
