@@ -1,0 +1,40 @@
+@media (max-width: 1200px) {
+  :root {
+    font-size: 56.25%;
+  }
+}
+
+/* Mobile-first breakpoints
+   Base: very small screens (mobile)
+   Then scale up with min-width breakpoints that map to project sizes */
+
+:root {
+  font-size: 37.5%; /* mobile base */
+}
+
+@media (min-width: 426px) {
+  :root {
+    font-size: 43.75%;
+  }
+}
+
+@media (min-width: 769px) {
+  :root {
+    font-size: 50%;
+  }
+}
+
+@media (min-width: 1025px) {
+  :root {
+    font-size: 56.25%;
+  }
+}
+
+@media (min-width: 1201px) {
+  :root {
+    font-size: 62.5%;
+  }
+}
+
+/* Note: component-specific layout rules (e.g. .lado-der) are handled
+   in their local CSS files; this file only manages root font scaling. */
