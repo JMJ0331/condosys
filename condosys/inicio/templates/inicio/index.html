@@ -1,64 +1,51 @@
-{% extends 'base.html' %} 
-{% load static %} 
-
-{% block mini-cards %}
+{% extends 'base.html' %} {% load static %} {% block mini-cards %}
 
 <div class="container-main-side2">
   <div class="container-flex1">
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/city.svg" nombre_modulo="Departamentos" data="40"%} {% include 'componentes/mini_card.html' with url_imagen="images/icons/group.svg" nombre_modulo="Residentes" data="40"%}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/wallet.svg" nombre_modulo="Pagos" data="40"%} 
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/city.svg" nombre_modulo="Departamentos" data="40"%}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/group.svg" nombre_modulo="Residentes" data="40"%}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/wallet.svg" nombre_modulo="Pagos" data="40"%}
     {%include 'componentes/mini_card.html' with url_imagen="images/icons/community.svg" nombre_modulo="Visitantes" data="40"%}
   </div>
 
   <div class="container-flex">
-    <div class="filtrados">
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tempor
-        congue turpis at tincidunt. Nulla sed dui id nisl mollis accumsan. Ut
-        imperdiet, tellus sed ornare rutrum, velit leo rutrum massa, sed
-        placerat nisi velit vitae lorem. Donec sed dolor ut lacus laoreet
-        molestie. Morbi et sem a nisi fermentum varius eu a dolor. Vestibulum
-        ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-        curae; Curabitur et metus vel lectus malesuada congue non ac erat. Morbi
-        efficitur vel tellus ac auctor. Interdum et malesuada fames ac ante
-        ipsum primis in faucibus. Etiam elementum, erat at egestas dignissim,
-        magna ante molestie quam, et pellentesque massa nisl ac orci. Phasellus
-        in mi nec nibh malesuada aliquam non commodo arcu. Sed ornare ante
-        risus, vel imperdiet mauris accumsan a. Fusce ut pellentesque justo. In
-        et mollis ante. Vestibulum ante ipsum primis in faucibus orci luctus et
-        ultrices posuere cubilia curae; Suspendisse potenti. Mauris tempor
-        fringilla erat, ut sollicitudin ligula ullamcorper vitae. Cras dui
-        tellus, sagittis quis mattis ac, eleifend vel elit. Nulla ultrices
-        tortor in lacus tempus lacinia. In hac habitasse platea dictumst.
-        Curabitur enim nibh, vulputate in velit vel, semper aliquam purus. Donec
-        ultricies tempor volutpat. Curabitur nisl ante, aliquet eget turpis non,
-        iaculis congue quam. Morbi at massa a turpis rhoncus maximus. Aliquam
-        efficitur lorem sed lorem fringilla, vitae volutpat ex iaculis.
-        Vestibulum interdum nisl sit amet condimentum rutrum. Suspendisse
-        potenti. Sed eu erat consequat, sagittis justo at, commodo tortor.
-        Vivamus tristique leo in fermentum cursus. Suspendisse ornare aliquet
-        massa. Nulla gravida nec dolor sit amet lacinia. Praesent tempus lacinia
-        convallis. Aliquam vel leo quis felis auctor dictum ut tincidunt ligula.
-        Proin mollis neque sapien, non rhoncus felis tincidunt nec. Curabitur
-        laoreet consequat magna quis vulputate. Vivamus quis tincidunt eros, id
-        maximus nibh. Praesent hendrerit porttitor tincidunt. Nam facilisis
-        dolor justo, in pulvinar velit interdum sed. Quisque est enim, molestie
-        et lorem non, aliquet tincidunt lorem. Proin ac congue eros, quis
-        condimentum leo. Etiam vel magna a ex ullamcorper dapibus. Sed interdum,
-        neque eu egestas condimentum, lectus neque fringilla magna, suscipit
-        blandit sapien risus nec nisl. Cras lectus odio, hendrerit vel nibh
-        vitae, ullamcorper molestie orci. Praesent elementum molestie nunc at
-        eleifend. Class aptent taciti sociosqu ad litora torquent per conubia
-        nostra, per inceptos himenaeos. Integer laoreet sollicitudin volutpat.
-        Phasellus consequat vitae nisi a posuere. Donec vehicula imperdiet
-        lacinia. In blandit aliquet eros eget auctor. Cras mattis leo ut
-        malesuada dignissim. Duis et risus vel elit commodo molestie. Nulla
-        vestibulum eleifend neque. Pellentesque sed velit aliquam, rhoncus sem
-        et, lacinia sem.
-      </p>
+
+    <div class="filtros">
+
+      <div class="container-search">
+        <div class="filtros">
+          <input
+            type="text"
+            placeholder="Buscar inquilinos"
+            id="search-input"
+          />
+
+          <select name="tipo" id="tipo-select">
+            <option value="" selected >Jardines</option>
+            <option value="1">Tipo 1</option>
+            <option value="2">Tipo 2</option>
+          </select>
+          <select name="estado" id="estado-select">
+            <option value="" selected>Edificios</option>
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+          <select name="rango-precio" id="rango-precio-select">
+            <option value="" selected>Todos los precios</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+          </select>
+        </div>
+      </div>
     </div>
 
-    <div class="graficos">hola</div>
+    <div class="inquilinos">
+
+      {% for x in inquilinos %}
+        <!-- Contenido del inquilino -->
+      {% endfor %}
+    </div>
   </div>
 </div>
 {% endblock %}
