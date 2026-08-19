@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -6,6 +7,10 @@ from django.contrib.auth import authenticate, login as django_login, logout as d
 from .models import User
 from .permissions import IsAdmin, CanModifyUser
 from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, ChangePasswordSerializer
+
+
+def app_index(request):
+    return render(request, 'accounts/index.html', {'module_name': 'Cuentas'})
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -36,5 +36,15 @@
   }
 }
 
+
+@media (min-width: 1600px) {
+  body{
+    display: flex;
+    justify-content: center;
+  }
+  .container{
+    max-width: 1600px;
+  }
+}
 /* Note: component-specific layout rules (e.g. .lado-der) are handled
    in their local CSS files; this file only manages root font scaling. */

@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import CommonArea, Reservation
@@ -5,6 +6,10 @@ from .serializers import (
     CommonAreaSerializer, ReservationListSerializer,
     ReservationDetailSerializer
 )
+
+
+def app_index(request):
+    return render(request, 'reservations/index.html', {'module_name': 'Reservas'})
 
 
 class CommonAreaViewSet(viewsets.ModelViewSet):

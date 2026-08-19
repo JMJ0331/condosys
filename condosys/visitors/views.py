@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.shortcuts import render
 from django.utils import timezone
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
@@ -7,6 +8,10 @@ from rest_framework.response import Response
 from accounts.permissions import CanModifyVisitor
 from .models import Visitor
 from .serializers import VisitorSerializer
+
+
+def app_index(request):
+    return render(request, 'visitors/index.html', {'module_name': 'Visitantes'})
 
 
 class VisitorViewSet(viewsets.ModelViewSet):

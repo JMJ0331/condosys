@@ -1,7 +1,12 @@
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Notification
 from .serializers import NotificationSerializer
+
+
+def app_index(request):
+    return render(request, 'notifications/index.html', {'module_name': 'Notificaciones'})
 
 
 class NotificationViewSet(viewsets.ModelViewSet):

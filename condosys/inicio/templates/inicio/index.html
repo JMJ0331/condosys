@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% load static %} {% block mini-cards %}
+{% extends 'base.html' %} {% load static %} 
+
+{% block mini-cards %}
 
 <div class="container-main-side2">
   <div class="container-flex1">
@@ -9,9 +11,7 @@
   </div>
 
   <div class="container-flex">
-
     <div class="filtros">
-
       <div class="container-search">
         <div class="filtros">
           <input
@@ -21,7 +21,7 @@
           />
 
           <select name="tipo" id="tipo-select">
-            <option value="" selected >Jardines</option>
+            <option value="" selected>Jardines</option>
             <option value="1">Tipo 1</option>
             <option value="2">Tipo 2</option>
           </select>
@@ -41,9 +41,10 @@
     </div>
 
     <div class="inquilinos">
-
       {% for x in inquilinos %}
-        <!-- Contenido del inquilino -->
+      <article class="inquilino">{{ x }}</article>
+      {% empty %}
+      <p class="empty-state">No hay inquilinos registrados.</p>
       {% endfor %}
     </div>
   </div>

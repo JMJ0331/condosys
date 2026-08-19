@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Incident, IncidentHistory
@@ -7,6 +8,10 @@ from .serializers import (
     IncidentListSerializer, IncidentDetailSerializer,
     IncidentHistorySerializer
 )
+
+
+def app_index(request):
+    return render(request, 'incidents/index.html', {'module_name': 'Incidencias'})
 
 
 class IncidentViewSet(viewsets.ModelViewSet):

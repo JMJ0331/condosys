@@ -1,7 +1,12 @@
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import ChatMessage
 from .serializers import ChatMessageSerializer
+
+
+def app_index(request):
+    return render(request, 'chat/index.html', {'module_name': 'Chat'})
 
 
 class ChatMessageViewSet(viewsets.ModelViewSet):

@@ -1,7 +1,12 @@
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Payment, ChargeType
 from .serializers import PaymentSerializer, ChargeTypeSerializer
+
+
+def app_index(request):
+    return render(request, 'payments/index.html', {'module_name': 'Pagos'})
 
 
 class ChargeTypeViewSet(viewsets.ModelViewSet):

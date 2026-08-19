@@ -1,7 +1,12 @@
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Communication
 from .serializers import CommunicationSerializer
+
+
+def app_index(request):
+    return render(request, 'communications/index.html', {'module_name': 'Comunicados'})
 
 
 class CommunicationViewSet(viewsets.ModelViewSet):

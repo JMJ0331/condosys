@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import MaintenanceOrder
@@ -5,6 +6,10 @@ from .serializers import (
     MaintenanceOrderListSerializer,
     MaintenanceOrderDetailSerializer
 )
+
+
+def app_index(request):
+    return render(request, 'maintenance/index.html', {'module_name': 'Mantenimientos'})
 
 
 class MaintenanceOrderViewSet(viewsets.ModelViewSet):

@@ -1,4 +1,5 @@
 from django.db.models import Count, Q, Sum
+from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,6 +12,10 @@ from payments.models import Payment
 from incidents.models import Incident
 from visitors.models import Visitor
 from reservations.models import Reservation
+
+
+def app_index(request):
+    return render(request, 'reports/index.html', {'module_name': 'Reportes'})
 
 
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):

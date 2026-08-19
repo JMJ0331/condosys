@@ -1,8 +1,13 @@
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from .models import Resident
 from .serializers import ResidentSerializer
+
+
+def app_index(request):
+    return render(request, 'residents/index.html', {'module_name': 'Residentes'})
 
 
 class ResidentViewSet(viewsets.ModelViewSet):

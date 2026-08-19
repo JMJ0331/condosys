@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import CanAccessApartment
@@ -6,6 +7,10 @@ from .serializers import (
     GardenSerializer, BuildingSerializer,
     ApartmentListSerializer, ApartmentDetailSerializer
 )
+
+
+def app_index(request):
+    return render(request, 'structure/index.html', {'module_name': 'Departamentos'})
 
 
 class GardenViewSet(viewsets.ModelViewSet):
