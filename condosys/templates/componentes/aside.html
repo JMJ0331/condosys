@@ -1,53 +1,118 @@
 {% load static %}
 <aside>
-  <div class="opt-modulo active">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'inicio' %} active{% endif %}"
+    href="{% url 'inicio' %}"
+  >
     <img src="{% static 'images/icons/home.svg' %}" alt="home-icon" />
     <h4>Inicio</h4>
-  </div>
+  </a>
 
-  <div class="opt-modulo">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'structure_index' %} active{% endif %}"
+    href="{% url 'structure_index' %}"
+  >
     <img src="{% static 'images/icons/city.svg' %}" alt="city-icon" />
     <h4>Departamentos</h4>
-  </div>
+  </a>
 
-  <div class="opt-modulo">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'residents_index' %} active{% endif %}"
+    href="{% url 'residents_index' %}"
+  >
     <img src="{% static 'images/icons/group.svg' %}" alt="group-icon" />
     <h4>Residentes</h4>
-  </div>
+  </a>
 
-  <div class="opt-modulo">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'payments_index' %} active{% endif %}"
+    href="{% url 'payments_index' %}"
+  >
     <img src="{% static 'images/icons/wallet.svg' %}" alt="waallet-icon" />
     <h4>Pagos</h4>
-  </div>
+  </a>
 
-  <div class="opt-modulo">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'incidents_index' %} active{% endif %}"
+    href="{% url 'incidents_index' %}"
+  >
     <img
       src="{% static 'images/icons/message-text.svg' %}"
       alt="message-icon"
     />
     <h4>Incidencias</h4>
-  </div>
+  </a>
 
-  <div class="opt-modulo">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'visitors_index' %} active{% endif %}"
+    href="{% url 'visitors_index' %}"
+  >
     <img src="{% static 'images/icons/community.svg' %}" alt="community-icon" />
     <h4>Visitantes</h4>
-  </div>
+  </a>
 
-  <div class="opt-modulo">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'reservations_index' %} active{% endif %}"
+    href="{% url 'reservations_index' %}"
+  >
     <img src="{% static 'images/icons/neighbourhood.svg' %}" alt="neigh-icon" />
     <h4>Areas Comunes</h4>
-  </div>
+  </a>
 
-  <div class="opt-modulo">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'communications_index' %} active{% endif %}"
+    href="{% url 'communications_index' %}"
+  >
     <img
       src="{% static 'images/icons/chat-bubble-empty.svg' %}"
       alt="chat-icon"
     />
     <h4>Comunicados</h4>
-  </div>
+  </a>
 
-  <div class="opt-modulo">
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'maintenance_index' %} active{% endif %}"
+    href="{% url 'maintenance_index' %}"
+  >
     <img src="{% static 'images/icons/settings.svg' %}" alt="settings-icon" />
     <h4>Mantenimientos</h4>
-  </div>
+  </a>
+
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'accounts_index' %} active{% endif %}"
+    href="{% url 'accounts_index' %}"
+  >
+    <img src="{% static 'images/icons/user.svg' %}" alt="accounts-icon" />
+    <h4>Cuentas</h4>
+  </a>
+
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'chat_index' %} active{% endif %}"
+    href="{% url 'chat_index' %}"
+  >
+    <img
+      src="{% static 'images/icons/chat-bubble-empty.svg' %}"
+      alt="chat-icon"
+    />
+    <h4>Chat</h4>
+  </a>
+
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'notifications_index' %} active{% endif %}"
+    href="{% url 'notifications_index' %}"
+  >
+    <img
+      src="{% static 'images/icons/bell-notification.svg' %}"
+      alt="notifications-icon"
+    />
+    <h4>Notificaciones</h4>
+  </a>
+
+  <a
+    class="opt-modulo{% if request.resolver_match.url_name == 'reports_index' %} active{% endif %}"
+    href="{% url 'reports_index' %}"
+  >
+    <img src="{% static 'images/icons/city.svg' %}" alt="reports-icon" />
+    <h4>Reportes</h4>
+  </a>
 </aside>
