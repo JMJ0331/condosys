@@ -5,7 +5,7 @@ import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils import timezone
-from .models import ChatMessage
+from .models import ChatGroup, ChatMessage
 from notifications.models import Notification
 from accounts.models import User
 
@@ -185,9 +185,10 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_group_message(self, sender_id, group_name, message):
         """Guardar mensaje de grupo en BD"""
+        group, _ = ChatGroup.objects.get_or_create(name=group_name)
         chat_msg = ChatMessage.objects.create(
             sender_id=sender_id,
-            group_name=group_name,
+            group=group,
             message=message
         )
         return chat_msg

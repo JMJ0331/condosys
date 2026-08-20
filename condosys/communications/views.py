@@ -3,10 +3,16 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Communication
 from .serializers import CommunicationSerializer
+from .forms import CommunicationForm
 
 
 def app_index(request):
-    return render(request, 'communications/index.html', {'module_name': 'Comunicados'})
+    contexto = {
+        "form": CommunicationForm(),
+        'module_name': 'Comunicados'
+    }
+    
+    return render(request, 'communications/index.html', contexto)
 
 
 class CommunicationViewSet(viewsets.ModelViewSet):

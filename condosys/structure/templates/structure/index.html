@@ -1,5 +1,16 @@
 {% extends 'base.html' %} {% block mini-cards %}
 <main class="container-main-side2">
   <h1>{{ module_name }}</h1>
+
+  {{form_garden.as_p}}
+
+  <hr>
+
+  {{form_building.as_p}}
+
+   <hr>
+
+  {{form_apartments.as_p}}
+  
 </main>
 {% endblock %}

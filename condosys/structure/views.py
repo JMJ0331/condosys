@@ -7,10 +7,19 @@ from .serializers import (
     GardenSerializer, BuildingSerializer,
     ApartmentListSerializer, ApartmentDetailSerializer
 )
+from .forms import *
 
 
 def app_index(request):
-    return render(request, 'structure/index.html', {'module_name': 'Departamentos'})
+
+    contexto = {
+        'form_garden': GardenForm(),
+        'form_building': BuildingForm(),
+        'form_apartments': ApartmentsForm(),
+        'module_name': 'Departamentos'
+
+    }
+    return render(request, 'structure/index.html', contexto)
 
 
 class GardenViewSet(viewsets.ModelViewSet):

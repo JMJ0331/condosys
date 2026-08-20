@@ -18,5 +18,5 @@ class ChatMessageViewSet(viewsets.ModelViewSet):
     search_fields = ['sender__email', 'receiver__email', 'message']
     ordering_fields = ['created_at']
     ordering = ['-created_at']
-    filterset_fields = ['sender', 'receiver', 'group_name', 'is_read']
+    filterset_fields = ['sender', 'receiver', 'group', 'is_read']
 

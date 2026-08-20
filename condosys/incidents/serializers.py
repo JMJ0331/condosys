@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Incident, IncidentHistory
+from .models import Incident, IncidentHistory, IncidentImage
 from accounts.serializers import UserSerializer
 
 
@@ -13,6 +13,13 @@ class IncidentHistorySerializer(serializers.ModelSerializer):
             'id', 'incident', 'status_from', 'status_to',
             'changed_by', 'changed_by_detail', 'comment', 'created_at'
         ]
+        read_only_fields = ['id', 'created_at']
+
+
+class IncidentImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IncidentImage
+        fields = ['id', 'url', 'created_at']
         read_only_fields = ['id', 'created_at']
 
 
@@ -38,6 +45,7 @@ class IncidentDetailSerializer(serializers.ModelSerializer):
     reported_by_detail = UserSerializer(source='reported_by', read_only=True)
     assigned_to_detail = UserSerializer(source='assigned_to', read_only=True)
     history = IncidentHistorySerializer(source='incidenthistory_set', many=True, read_only=True)
+    images = IncidentImageSerializer(many=True, read_only=True)
     
     class Meta:
         model = Incident
@@ -45,6 +53,6 @@ class IncidentDetailSerializer(serializers.ModelSerializer):
             'id', 'apartment', 'category', 'priority', 'title',
             'description', 'status', 'reported_by', 'reported_by_detail',
             'assigned_to', 'assigned_to_detail', 'resolution_notes',
-            'image_urls', 'history', 'created_at', 'updated_at', 'resolved_at'
+            'images', 'history', 'created_at', 'updated_at', 'resolved_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'resolved_at', 'history']

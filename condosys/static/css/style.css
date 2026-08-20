@@ -37,7 +37,7 @@ header {
 
 .header-brand {
     font-weight: 700;
-    font-size: 3.4rem;
+    font-size: 3.5rem;
     letter-spacing: -0.5px;
     color: var(--green-700);
 
@@ -47,7 +47,7 @@ header {
 
     background: var(--white-50);
     color: var(--black-500);
-    font-size: 2.8rem;
+    font-size: 2.85rem;
     letter-spacing: -0.5px;
 }
 
@@ -58,7 +58,7 @@ header {
 }
 
 .btn-add {
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: var(--white-50);
     background: var(--green-700);
     border: none;
@@ -157,7 +157,7 @@ aside .opt-modulo:hover img {
 }
 
 aside .opt-modulo h4 {
-    font-size: 1.6rem;
+    font-size: 1.65rem;
     font-weight: 500;
 }
 
@@ -219,13 +219,13 @@ aside .opt-modulo h4 {
 
 .app-info>.opt-modulo h4 {
     margin: 0;
-    font-size: 1.6rem;
+    font-size: 1.65rem;
     font-weight: 600;
     color: var(--black-400);
 }
 
 .data {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
     color: var(--green-800);
 }
 
