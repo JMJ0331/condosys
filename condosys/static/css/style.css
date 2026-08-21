@@ -57,6 +57,28 @@ header {
     gap: var(--space-8);
 }
 
+.btn{
+   
+    font-size: 1.5rem;
+    padding: 1.25rem 2rem;
+    width: fit-content;
+    border: none;
+    border-radius: 3px;
+    background-color: var(--green-700);
+    cursor: pointer;
+    transition: 250ms ease;
+    color: var(--white-50);
+
+}
+
+.btn:hover{
+    background-color: var(--green-800);
+}
+
+.btn:active{
+    transform: scale(0.95)
+}
+
 .btn-add {
     font-size: 1.75rem;
     color: var(--white-50);

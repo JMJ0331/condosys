@@ -1,6 +1,9 @@
-{% extends 'base.html' %} {% block mini-cards %}
+{% extends 'base.html' %} 
+
+{% block mini-cards %}
+
 <main class="container-main-side2">
-  <h1>{{ module_name }}</h1>
+  {% include 'componentes/botones.html' with type_button="button" texto="Nuevo residente"%}
 
   {{form_resident.as_p}}
 </main>

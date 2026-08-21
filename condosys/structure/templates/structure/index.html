@@ -1,5 +1,10 @@
-{% extends 'base.html' %} {% block mini-cards %}
+{% extends 'base.html' %} 
+{% load static %}
+
+{% block mini-cards %}
 <main class="container-main-side2">
+
+ 
   <h1>{{ module_name }}</h1>
 
   {{form_garden.as_p}}
@@ -11,6 +16,10 @@
    <hr>
 
   {{form_apartments.as_p}}
+
+  {% include 'componentes/botones.html' with type_button="button" texto="Nuevo dpto"%}
   
 </main>
+
+
 {% endblock %}
