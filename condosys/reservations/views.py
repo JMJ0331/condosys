@@ -6,10 +6,16 @@ from .serializers import (
     CommonAreaSerializer, ReservationListSerializer,
     ReservationDetailSerializer
 )
+from .forms import CommonAreaForm, ReservationForm
 
 
 def app_index(request):
-    return render(request, 'reservations/index.html', {'module_name': 'Reservas'})
+    contexto = {
+        'form_common_area': CommonAreaForm(),
+        'form_reservation': ReservationForm(),
+        'module_name': 'Reservas'
+    }
+    return render(request, 'reservations/index.html', contexto)
 
 
 class CommonAreaViewSet(viewsets.ModelViewSet):

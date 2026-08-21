@@ -7,12 +7,13 @@ from django.contrib.auth import authenticate, login as django_login, logout as d
 from .models import User
 from .permissions import IsAdmin, CanModifyUser
 from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, ChangePasswordSerializer
-from .forms import UserForm
+from .forms import UserForm, UserCreateForm
 
 def app_index(request):
 
     contexto = {
         'form': UserForm(),
+        'form_user_create': UserCreateForm(),
         'module_name': 'Cuentas'
     }
     return render(request, 'accounts/index.html', contexto)

@@ -4,10 +4,17 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from .models import Resident
 from .serializers import ResidentSerializer
+from .forms import ResidentForm
 
 
 def app_index(request):
-    return render(request, 'residents/index.html', {'module_name': 'Residentes'})
+    contexto = {
+        
+        'form_resident': ResidentForm(),
+        'module_name': 'Residentes'
+
+    }
+    return render(request, 'residents/index.html', contexto)
 
 
 class ResidentViewSet(viewsets.ModelViewSet):

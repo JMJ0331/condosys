@@ -3,10 +3,15 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Notification
 from .serializers import NotificationSerializer
+from .forms import NotificationForm
 
 
 def app_index(request):
-    return render(request, 'notifications/index.html', {'module_name': 'Notificaciones'})
+    contexto = {
+        'form_notification': NotificationForm(),
+        'module_name': 'Notificaciones'
+    }
+    return render(request, 'notifications/index.html', contexto)
 
 
 class NotificationViewSet(viewsets.ModelViewSet):

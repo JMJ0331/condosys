@@ -8,10 +8,17 @@ from .serializers import (
     IncidentListSerializer, IncidentDetailSerializer,
     IncidentHistorySerializer
 )
+from .forms import IncidentForm, IncidentImageForm, IncidentHistoryForm
 
 
 def app_index(request):
-    return render(request, 'incidents/index.html', {'module_name': 'Incidencias'})
+    contexto = {
+        'form_incident': IncidentForm(),
+        'form_incident_image': IncidentImageForm(),
+        'form_incident_history': IncidentHistoryForm(),
+        'module_name': 'Incidencias'
+    }
+    return render(request, 'incidents/index.html', contexto)
 
 
 class IncidentViewSet(viewsets.ModelViewSet):

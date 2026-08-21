@@ -3,10 +3,16 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import ChatMessage
 from .serializers import ChatMessageSerializer
+from .forms import ChatGroupForm, ChatMessageForm
 
 
 def app_index(request):
-    return render(request, 'chat/index.html', {'module_name': 'Chat'})
+    contexto = {
+        'form_chat_group': ChatGroupForm(),
+        'form_chat_message': ChatMessageForm(),
+        'module_name': 'Chat'
+    }
+    return render(request, 'chat/index.html', contexto)
 
 
 class ChatMessageViewSet(viewsets.ModelViewSet):

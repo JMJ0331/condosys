@@ -12,10 +12,16 @@ from payments.models import Payment
 from incidents.models import Incident
 from visitors.models import Visitor
 from reservations.models import Reservation
+from .forms import AuditLogForm, AuditLogDetailForm
 
 
 def app_index(request):
-    return render(request, 'reports/index.html', {'module_name': 'Reportes'})
+    contexto = {
+        'form_audit_log': AuditLogForm(),
+        'form_audit_log_detail': AuditLogDetailForm(),
+        'module_name': 'Reportes'
+    }
+    return render(request, 'reports/index.html', contexto)
 
 
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):

@@ -9,6 +9,7 @@ from .forms import CommunicationForm
 def app_index(request):
     contexto = {
         "form": CommunicationForm(),
+        'form_communication': CommunicationForm(),
         'module_name': 'Comunicados'
     }
     

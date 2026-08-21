@@ -6,10 +6,15 @@ from .serializers import (
     MaintenanceOrderListSerializer,
     MaintenanceOrderDetailSerializer
 )
+from .forms import MaintenanceOrderForm
 
 
 def app_index(request):
-    return render(request, 'maintenance/index.html', {'module_name': 'Mantenimientos'})
+    contexto = {
+        'form_maintenance_order': MaintenanceOrderForm(),
+        'module_name': 'Mantenimientos'
+    }
+    return render(request, 'maintenance/index.html', contexto)
 
 
 class MaintenanceOrderViewSet(viewsets.ModelViewSet):

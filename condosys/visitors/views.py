@@ -8,10 +8,15 @@ from rest_framework.response import Response
 from accounts.permissions import CanModifyVisitor
 from .models import Visitor
 from .serializers import VisitorSerializer
+from .forms import VisitorForm
 
 
 def app_index(request):
-    return render(request, 'visitors/index.html', {'module_name': 'Visitantes'})
+    contexto = {
+        'form_visitor': VisitorForm(),
+        'module_name': 'Visitantes'
+    }
+    return render(request, 'visitors/index.html', contexto)
 
 
 class VisitorViewSet(viewsets.ModelViewSet):
