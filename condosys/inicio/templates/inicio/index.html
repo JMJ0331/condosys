@@ -1,4 +1,8 @@
-{% extends 'base.html' %} {% load static %} 
+{% extends 'base.html' %} {% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
 
 {% block mini-cards %}
 
@@ -10,7 +14,7 @@
     {%include 'componentes/mini_card.html' with url_imagen="images/icons/community.svg" nombre_modulo="Visitantes" data="40"%}
   </div>
 
-  <div class="container-flex">
+  <div class="container-flex" >
     <div class="filtros">
       <div class="container-search">
         <div class="filtros">
@@ -40,13 +44,38 @@
       </div>
     </div>
 
-    <div class="inquilinos">
-      {% for x in inquilinos %}
-      <article class="inquilino">{{ x }}</article>
-      {% empty %}
-      <p class="empty-state">No hay inquilinos registrados.</p>
-      {% endfor %}
+    <div class="Acciones-dashboard">
+      <div class="acciones">
+        <h3>Acciones rapidas</h3>
+
+        <div class="container-acciones">
+          <span class="accion" role="button">
+            <img src="{% static 'images/icons/lot-of-cash.svg' %}" alt="" />
+            <p>Registrar Pago</p>
+          </span>
+          <span class="accion" role="button">
+            <img src="{% static 'images/icons/container.svg' %}" alt="" />
+            <p>Registrar Visitante</p>
+          </span>
+          <span class="accion" role="button">
+            <img src="{% static 'images/icons/vector.svg' %}" alt="" />
+            <p>Crear incidencia</p>
+          </span>
+
+          <span class="accion" role="button">
+            <img src="{% static 'images/icons/voice.svg' %}" alt="" />
+            <p>Comunicado</p>
+          </span>
+        </div>
+      </div>
+
+      <div class="actividad-reciente">
+        <h2>Actividad Reciente</h2>
+      </div>
+    </div>
     </div>
   </div>
 </div>
 {% endblock %}
+
+         

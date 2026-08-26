@@ -1,0 +1,143 @@
+.container-main-side2 {
+	gap: 1.2rem;
+	padding: 1.6rem;
+}
+
+.container-flex1 {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 1.2rem;
+}
+
+.container-flex {
+	display: grid;
+	grid-template-columns: minmax(0, 1.7fr) minmax(22rem, 0.8fr);
+	gap: 1.2rem;
+	min-height: 32rem;
+}
+
+.container-flex > .filtros,
+.acciones,
+.actividad-reciente {
+	min-width: 0;
+	padding: 1.2rem;
+	border: 1px solid var(--black-50);
+	border-radius: 0.8rem;
+	background: var(--white-50);
+}
+
+.container-search,
+.container-search > .filtros {
+	width: 100%;
+}
+
+.container-search > .filtros {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+}
+
+#search-input,
+#tipo-select,
+#estado-select,
+#rango-precio-select {
+	box-sizing: border-box;
+	min-width: 0;
+	height: 3.2rem;
+	padding: 0 0.9rem;
+	border: 1px solid var(--black-50);
+	border-radius: 0.5rem;
+	background: var(--white-50);
+	color: var(--black-400);
+	font: inherit;
+}
+
+#search-input {
+	flex: 1;
+}
+
+#tipo-select,
+#estado-select,
+#rango-precio-select {
+	flex: 0 1 11rem;
+}
+
+.Acciones-dashboard {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.acciones h3,
+.actividad-reciente h2 {
+	margin: 0 0 1rem;
+	color: var(--black-400);
+	font-size: 1.4rem;
+	font-weight: 600;
+}
+
+.container-acciones {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.8rem;
+}
+
+.accion {
+	display: flex;
+	min-height: 6.2rem;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 0.5rem;
+	border-radius: 0.5rem;
+	background: var(--green-100);
+	color: var(--black-400);
+	text-align: center;
+}
+
+.accion img {
+	width: 1.8rem;
+	height: 1.8rem;
+}
+
+.accion p {
+	margin: 0;
+	font-size: 1.15rem;
+}
+
+.actividad-reciente {
+	flex: 1;
+	min-height: 15rem;
+}
+
+@media (max-width: 900px) {
+	.container-flex1 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.container-flex {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 560px) {
+	.container-main-side2 {
+		padding: 1rem;
+	}
+
+	.container-flex1,
+	.container-search > .filtros {
+		grid-template-columns: 1fr;
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	#search-input,
+	#tipo-select,
+	#estado-select,
+	#rango-precio-select {
+		width: 100%;
+		flex-basis: auto;
+	}
+}
