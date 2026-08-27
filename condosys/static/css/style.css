@@ -130,10 +130,70 @@ header {
 aside {
     display: flex;
     flex-direction: column;
-    background: var(--white-50);
+    background: var(--green-25);
     border-right: 1px solid var(--black-50);
     gap: var(--space-8);
-    padding: var(--padding-8) var(--padding-8) var(--padding-0) var(--padding-0);
+    padding: var(--padding-16);
+    border-right: 2px solid var(--green-75);
+}
+
+.app-log{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    padding: var(--padding-16) var(--padding-16);
+}
+
+
+
+
+
+.container-img{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 106, 59, 0.2);
+    border-radius: var(--borderR-8);
+    
+}
+
+.img-app {
+    width: 60%;
+    height: 60%;
+
+
+}
+
+.container-info{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.nombre-app{
+    font-size: 2.3rem;
+    font-weight: bold;
+    color: var(--green-800);
+    letter-spacing: -0.5px;
+}
+
+.nombre-residencial{
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--black-400);
+}
+
+.container-links{
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.container-links:last-child{
+    border-top: 1px solid var(--green-75);
 }
 
 aside .opt-modulo {
@@ -141,8 +201,8 @@ aside .opt-modulo {
     display: flex;
     align-items: center;
     gap: var(--space-8);
-    padding: var(--padding-16) var(--padding-24);
-    border-radius: var(--borderR-0) var(--borderR-8) var(--borderR-8) var(--borderR-0);
+    padding: var(--padding-8) var(--padding-8);
+    border-radius: var(--borderR-8);
     color: var(--black-400);
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease;
@@ -155,15 +215,14 @@ aside .opt-modulo+.opt-modulo {
 }
 
 aside .opt-modulo:hover {
-    background: var(--white-300);
+    background: #D2E8DD;
     color: var(--black-800);
 }
 
 aside .opt-modulo.active {
-    background: var(--white-400);
+    background: #D2E8DD;
     color: var(--black-800);
-    font-weight: 600;
-    border-left: 2px solid var(--green-700);
+    font-weight: 650;
 }
 
 aside .opt-modulo img {
@@ -211,6 +270,13 @@ aside .opt-modulo h4 {
     border: 1px solid var(--black-50);
     border-radius: var(--borderR-16);
 
+}
+
+.aside-options{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
 }
 
 .app-info {

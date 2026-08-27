@@ -14,11 +14,9 @@
 
     <div class="container">
 
-        {% include "componentes/header.html"%}
-
         <div class="main-layout">
 
-            {% include "componentes/aside.html"%}
+            {% include "componentes/aside.html" with nombre_residencial="Residencial Rialto" %}
 
             {% block mini-cards %}
             {% endblock %}

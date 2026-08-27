@@ -32,8 +32,9 @@
     --black-900: #070805;
 
     /* TONOS VERDERS */
-
+    --green-25: #F6FBF3;
     --green-50: #ecf8ef;
+    --green-75: #BECABE;
     --green-100: #c5e9cd;
     --green-200: #a9deb4;
     --green-300: #81cf92;
@@ -179,7 +180,7 @@
     --margin-72: 72px;
     --margin-80: 80px;
     --margin-88: 88px;
-    --margin-96: 96pxpx;
+    --margin-96: 96px;
     --margin-104: 104px;
     --margin-112: 112px;
     --margin-120: 120px;
