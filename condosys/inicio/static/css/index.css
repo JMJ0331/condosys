@@ -1,3 +1,6 @@
+@import url('../../../static/css/variables.css');
+
+
 .container-main-side2 {
 	gap: 1.2rem;
 	padding: 1.6rem;
@@ -19,47 +22,46 @@
 .container-flex > .filtros,
 .acciones,
 .actividad-reciente {
-	min-width: 0;
+	
 	padding: 1.2rem;
 	border: 1px solid var(--black-50);
 	border-radius: 0.8rem;
 	background: var(--white-50);
 }
 
-.container-search,
-.container-search > .filtros {
-	width: 100%;
-}
-
 .container-search > .filtros {
 	display: flex;
-	align-items: center;
-	gap: 0.8rem;
+	gap: var(--space-8);
 }
 
 #search-input,
 #tipo-select,
 #estado-select,
 #rango-precio-select {
-	box-sizing: border-box;
-	min-width: 0;
-	height: 3.2rem;
+	
+	height: 3.5rem;
 	padding: 0 0.9rem;
 	border: 1px solid var(--black-50);
-	border-radius: 0.5rem;
+	border-radius: 8px;
 	background: var(--white-50);
 	color: var(--black-400);
 	font: inherit;
+	vertical-align: middle;
 }
 
 #search-input {
+	padding: 1rem 1.2rem;
+	font-size: 1.3rem;
 	flex: 1;
 }
 
 #tipo-select,
 #estado-select,
 #rango-precio-select {
-	flex: 0 1 11rem;
+	max-width: 96px;
+	padding: var(--padding-8);
+	font-size: 1.3rem;
+	
 }
 
 .Acciones-dashboard {

@@ -139,15 +139,30 @@
 
     <div class="container-links">
 
-      <div class="container-link"></div>
-      <div class="container-link"></div>
-      <div class="container-link"></div>
-      <div class="container-link"></div>
+      <span class="otras-opciones" role="button">
+        <img src="{% static "images/icons/settings.svg" %}" alt="config">
+        Configuración
+      
+      </span>
 
-      <span role="button">Configuración</span>
-      <span role="button">Ayuda</span>
-      <span role="button">Cerrar Sesión</span>
-      <span role="button">{{nombre_usuario}}</span>
+      <span class="otras-opciones" role="button">
+        <img src="{% static "images/icons/question-mark.svg" %}" alt="interrogante">
+        Ayuda
+      
+      </span>
+
+      <span class="otras-opciones" role="button">
+        <img src="{% static "images/icons/log-out.svg" %}" alt="config">
+        Cerrar Sesión
+      
+      </span>
+
+      <span class="otras-opciones" role="button">
+        <img src="{% static "images/icons/user.svg" %}" alt="config">
+        {{nombre_usuario}}
+      
+      </span>
+
     </div>
 
   </div>

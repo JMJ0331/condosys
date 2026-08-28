@@ -16,7 +16,7 @@ body {
 
 .main-layout {
     display: grid;
-    grid-template-columns: minmax(220px, 0.2fr) minmax(0, 1fr);
+    grid-template-columns: minmax(220px, 0.23fr) minmax(0, 1fr);
     width: 100%;
 }
 
@@ -178,6 +178,7 @@ aside {
     font-weight: bold;
     color: var(--green-800);
     letter-spacing: -0.5px;
+    line-height: 1;
 }
 
 .nombre-residencial{
@@ -193,10 +194,11 @@ aside {
 }
 
 .container-links:last-child{
+    padding-top: var(--borderR-16);
     border-top: 1px solid var(--green-75);
 }
 
-aside .opt-modulo {
+aside .opt-modulo, .otras-opciones {
 
     display: flex;
     align-items: center;
@@ -229,7 +231,7 @@ aside .opt-modulo img {
     width: 24px;
     height: 24px;
     flex-shrink: 0;
-    opacity: 0.75;
+    opacity: 0.8;
 }
 
 aside .opt-modulo.active img,
@@ -237,8 +239,8 @@ aside .opt-modulo:hover img {
     opacity: 1;
 }
 
-aside .opt-modulo h4 {
-    font-size: 1.65rem;
+aside .opt-modulo h4, .otras-opciones{
+    font-size: 1.6rem;
     font-weight: 500;
 }
 
@@ -307,10 +309,11 @@ aside .opt-modulo h4 {
 
 .app-info>.opt-modulo h4 {
     margin: 0;
-    font-size: 1.65rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: var(--black-400);
 }
+
 
 .data {
     font-size: 1.55rem;
