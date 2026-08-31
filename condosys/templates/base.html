@@ -14,11 +14,13 @@
 
     <div class="container">
 
+        {% include "componentes/aside.html" with nombre_residencial="Residencial Rialto" nombre_usuario="CJY" %}
+
         <div class="main-layout">
 
-            {% include "componentes/aside.html" with nombre_residencial="Residencial Rialto" nombre_usuario="CJY" %}
-
             {% block mini-cards %}
+
+                
             {% endblock %}
 
         </div>
