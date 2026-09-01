@@ -1,6 +1,7 @@
 {% extends 'base.html' %} 
 
 {% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
 
 <main class="container-main-side2">
   {% include 'componentes/botones.html' with type_button="button" texto="Nuevo residente"%}

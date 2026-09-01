@@ -1,7 +1,6 @@
 {% extends 'base.html' %} {% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  <h1>{{ module_name }}</h1>
-
   {{form_audit_log.as_p}}
 
   <hr />
