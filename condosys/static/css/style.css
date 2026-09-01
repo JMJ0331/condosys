@@ -57,14 +57,20 @@ body {
     width: 16px;
     height: 16px;
     stroke: #66786d;
+    cursor: pointer;
+}
+
+.search-icon img{
+    width: 16px;
+    height: 16px;
 }
 
 .search-input {
     background-color: #eff4f0;
     border: 1px solid #d5dfd7;
     border-radius: 8px;
-    padding: 8px 12px 8px 36px;
-    font-size: 0.875rem;
+    padding: 1rem 3.5rem;
+    font-size: 1.4rem;
     color: #2c3e35;
     width: 280px;
     outline: none;
@@ -113,15 +119,9 @@ body {
     padding: 4px;
 }
 
-.notification-badge {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 8px;
-    height: 8px;
-    background-color: #dc2626;
-    border-radius: 50%;
-    border: 1.5px solid #fafbfc;
+.notification-btn img{
+    width: 24px;
+    height: 24px;
 }
 
 /* Avatar Usuario */
