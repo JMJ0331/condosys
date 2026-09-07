@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +12,7 @@ from .serializers import (
 from .forms import IncidentForm, IncidentImageForm, IncidentHistoryForm
 
 
+@login_required
 def app_index(request):
     contexto = {
         'form_incident': IncidentForm(),

@@ -10,30 +10,35 @@
   <div class="lado-der">
     <h2 class="titulo">Iniciar sesión</h2>
 
+    {% if error %}
+      <p role="alert">{{ error }}</p>
+    {% endif %}
+
     <form action="" method="post" class="form">
+      {% csrf_token %}
       <div class="inputs">
         <div class="container-input">
           <input
             type="email"
-            name="userEmail"
+            name="email"
             class="input"
-            id="userEmail"
+            id="email"
             placeholder=" "
             required
           />
-          <label for="userEmail">Email</label>
+          <label for="email">Email</label>
         </div>
 
         <div class="container-input">
           <input
             type="password"
-            name="userPassword"
+            name="password"
             class="input"
-            id="userPassword"
+            id="password"
             placeholder=" "
             required
           />
-          <label for="userPassword">Contraseña</label>
+          <label for="password">Contraseña</label>
          
         </div>
          <a href="" class="text-restrablecer">¿Se te ha olvidado la clave?</a>

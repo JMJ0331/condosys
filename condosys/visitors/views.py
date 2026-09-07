@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils import timezone
 from rest_framework import viewsets, filters, status
@@ -11,6 +12,7 @@ from .serializers import VisitorSerializer
 from .forms import VisitorForm
 
 
+@login_required
 def app_index(request):
     contexto = {
         'form_visitor': VisitorForm(),

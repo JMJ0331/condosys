@@ -1,4 +1,5 @@
 from django.db.models import Count, Q, Sum
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -15,6 +16,7 @@ from reservations.models import Reservation
 from .forms import AuditLogForm, AuditLogDetailForm
 
 
+@login_required
 def app_index(request):
     contexto = {
         'form_audit_log': AuditLogForm(),
