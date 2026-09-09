@@ -39,7 +39,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--green-800);
+  background-color: var(--green-900);
+}
+
+.container-logo{
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+.container-logo img{
+  width: 10.5rem;
+  height: 9rem;
 }
 
 .nombre-app {
@@ -52,24 +63,23 @@ body {
 .lado-der {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
-  gap: 1.25rem;
   background-color: var(--white-50);
+  gap: 2rem;
 }
 
 .titulo {
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 600;
+  color: var(--green-900);
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
-  max-width: 420px; /* constrain form on small screens to avoid very wide inputs */
   width: 100%;
-  margin: 0 auto;
 }
 
 .inputs {
@@ -99,11 +109,11 @@ body {
   height: 4rem;
   width: 100%;
   outline: none;
-  border: 1px solid var(--green-200);
-  padding: 1rem 1.2rem;
-  border-radius: 10px;
+  border: 1px solid var(--black-50);
+  padding: var(--padding-8) 1.2rem;
+  border-radius: 8px;
   font-size: 1.6rem;
-  color: var(--black-400);
+  color: var(--green-800);
   font-weight: 520;
 }
 
@@ -116,15 +126,16 @@ body {
 
 .input:hover,
 .input:focus {
-  border: 1px solid var(--green-500);
+  border: 1px solid var(--black-200);
 }
 
 .text-restrablecer {
-    width: fit-content;
-  font-size: 1.45rem;
+  align-self: center;
+  width: fit-content;
+  font-size: 1.25rem;
   font-weight: 500;
   color: var(--green-800);
-  text-decoration: none;
+  text-decoration: underline;
   transition: ease-out 250ms;
 }
 
@@ -135,18 +146,20 @@ body {
 
 .container-btn {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: .8rem;
 }
 
 .btn-enviar {
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: var(--white-50);
-  background-color: var(--green-900);
-  padding: 1.2rem 2.4rem;
+  font-size: 1.8rem;
+  color: var(--green-900);
+  background-color: var(--white-50);
+  padding: var(--padding-8) var(--padding-16);
   border-radius: 8px;
   cursor: pointer;
-  border: none;
+  border: 1px solid var(--black-50);
 }
 
 /* Mobile-first breakpoints (mapped from project breakpoints)
@@ -172,8 +185,7 @@ body {
 
   .lado-der {
     align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+   
     border-radius: 0 16px 16px 0;
   }
   /* increase form width on larger small screens */
