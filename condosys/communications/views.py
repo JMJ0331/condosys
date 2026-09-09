@@ -1,7 +1,21 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Communication
 from .serializers import CommunicationSerializer
+from .forms import CommunicationForm
+
+
+@login_required
+def app_index(request):
+    contexto = {
+        "form": CommunicationForm(),
+        'form_communication': CommunicationForm(),
+        'module_name': 'Comunicados'
+    }
+    
+    return render(request, 'communications/index.html', contexto)
 
 
 class CommunicationViewSet(viewsets.ModelViewSet):

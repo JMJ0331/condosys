@@ -7,6 +7,14 @@ import uuid
 # CHAT EN TIEMPO REAL
 # ==================================================
 
+class ChatGroup(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class ChatMessage(models.Model):
     """
     Mensaje de chat
@@ -22,7 +30,13 @@ class ChatMessage(models.Model):
         blank=True  # Si es null, es un mensaje de grupo
     )
     
-    group_name = models.CharField(max_length=100, blank=True, null=True)  # Si no es privado
+    group = models.ForeignKey(
+        ChatGroup,
+        on_delete=SET_NULL,
+        related_name='messages',
+        null=True,
+        blank=True
+    )
     message = models.TextField()
     
     is_read = models.BooleanField(default=False)
@@ -36,7 +50,7 @@ class ChatMessage(models.Model):
         indexes = [
             models.Index(fields=['sender']),
             models.Index(fields=['receiver']),
-            models.Index(fields=['group_name']),
+            models.Index(fields=['group']),
             models.Index(fields=['created_at']),
         ]
     

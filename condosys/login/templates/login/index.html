@@ -1,2 +1,22 @@
 {% load static %}
-{% extends 'base.html' %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Login | CONDOSYS</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    
+    <link rel="stylesheet" href="/static/css/mediaquerys.css" />
+  </head>
+  <body>
+
+    <div class="container">
+         
+        {% include "componentes/login.html" %}
+
+    </div>
+
+    <script type="module" src="{% static 'js/main.js' %}" defer></script>
+  </body>
+</html>

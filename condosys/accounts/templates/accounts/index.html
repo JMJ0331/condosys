@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+<main class="container-main-side2">
+  {{form.as_p}}
+
+  <hr />
+
+  {{form_user_create.as_p}}
+</main>
+{% endblock %}

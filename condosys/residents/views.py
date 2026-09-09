@@ -1,15 +1,26 @@
-from rest_framework import viewsets, filters
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from rest_framework import filters, viewsets
+from accounts.permissions import IsManager
+from .forms import ResidentForm
 from .models import Resident
 from .serializers import ResidentSerializer
+
+
+@login_required
+def app_index(request):
+    contexto = {
+        'form_resident': ResidentForm(),
+        'module_name': 'Residentes',
+    }
+    return render(request, 'residents/index.html', contexto)
 
 
 class ResidentViewSet(viewsets.ModelViewSet):
     """ViewSet para Resident"""
     queryset = Resident.objects.all()
     serializer_class = ResidentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['user__email', 'apartment__number']
     ordering_fields = ['created_at', 'move_in_date']
@@ -21,9 +32,3 @@ class ResidentViewSet(viewsets.ModelViewSet):
         if user.role in ['admin', 'manager']:
             return Resident.objects.all()
         return Resident.objects.filter(user=user)
-
-    def perform_create(self, serializer):
-        if self.request.user.role not in ['admin', 'manager']:
-            raise PermissionDenied('Solo administradores pueden crear residentes.')
-        serializer.save()
-

@@ -58,7 +58,6 @@ class Incident(models.Model):
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='new')
     
     resolution_notes = models.TextField(blank=True, null=True)
-    image_urls = models.JSONField(default=list, blank=True)  # Array de URLs de imágenes
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -76,6 +75,24 @@ class Incident(models.Model):
     
     def __str__(self):
         return f"#{self.id.hex[:8]} - {self.title} ({self.get_status_display()})"
+
+
+class IncidentImage(models.Model):
+    incident = models.ForeignKey(Incident, on_delete=CASCADE, related_name='images')
+    url = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['incident', 'url'],
+                name='unique_incident_image_url'
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.incident_id} - {self.url}"
 
 
 class IncidentHistory(models.Model):

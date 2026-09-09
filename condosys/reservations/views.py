@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import CommonArea, Reservation
@@ -5,6 +7,17 @@ from .serializers import (
     CommonAreaSerializer, ReservationListSerializer,
     ReservationDetailSerializer
 )
+from .forms import CommonAreaForm, ReservationForm
+
+
+@login_required
+def app_index(request):
+    contexto = {
+        'form_common_area': CommonAreaForm(),
+        'form_reservation': ReservationForm(),
+        'module_name': 'Reservas'
+    }
+    return render(request, 'reservations/index.html', contexto)
 
 
 class CommonAreaViewSet(viewsets.ModelViewSet):

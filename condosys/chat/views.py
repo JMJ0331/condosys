@@ -1,7 +1,20 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import ChatMessage
 from .serializers import ChatMessageSerializer
+from .forms import ChatGroupForm, ChatMessageForm
+
+
+@login_required
+def app_index(request):
+    contexto = {
+        'form_chat_group': ChatGroupForm(),
+        'form_chat_message': ChatMessageForm(),
+        'module_name': 'Chat'
+    }
+    return render(request, 'chat/index.html', contexto)
 
 
 class ChatMessageViewSet(viewsets.ModelViewSet):
@@ -13,5 +26,5 @@ class ChatMessageViewSet(viewsets.ModelViewSet):
     search_fields = ['sender__email', 'receiver__email', 'message']
     ordering_fields = ['created_at']
     ordering = ['-created_at']
-    filterset_fields = ['sender', 'receiver', 'group_name', 'is_read']
+    filterset_fields = ['sender', 'receiver', 'group', 'is_read']
 

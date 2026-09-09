@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+<main class="container-main-side2">
+  {{form_chat_group.as_p}}
+
+  <hr />
+
+  {{form_chat_message.as_p}}
+</main>
+{% endblock %}

@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import CanAccessApartment
@@ -6,6 +8,20 @@ from .serializers import (
     GardenSerializer, BuildingSerializer,
     ApartmentListSerializer, ApartmentDetailSerializer
 )
+from .forms import *
+
+
+@login_required
+def app_index(request):
+
+    contexto = {
+        'form_garden': GardenForm(),
+        'form_building': BuildingForm(),
+        'form_apartments': ApartmentsForm(),
+        'module_name': 'Departamentos'
+
+    }
+    return render(request, 'structure/index.html', contexto)
 
 
 class GardenViewSet(viewsets.ModelViewSet):

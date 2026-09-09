@@ -19,5 +19,23 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
     path('', include('inicio.urls')),
 ]
+=======
+    path('', include('login.urls')),
+    path('inicio', include('inicio.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('chat/', include('chat.urls')),
+    path('communications/', include('communications.urls')),
+    path('incidents/', include('incidents.urls')),
+    path('maintenance/', include('maintenance.urls')),
+    path('notifications/', include('notifications.urls')),
+    path('payments/', include('payments.urls')),
+    path('reports/', include('reports.urls')),
+    path('reservations/', include('reservations.urls')),
+    path('residents/', include('residents.urls')),
+    path('structure/', include('structure.urls')),
+    path('visitors/', include('visitors.urls')),
+]
+>>>>>>> main

@@ -1,4 +1,6 @@
 from django.db.models import Count, Q, Sum
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,6 +13,17 @@ from payments.models import Payment
 from incidents.models import Incident
 from visitors.models import Visitor
 from reservations.models import Reservation
+from .forms import AuditLogForm, AuditLogDetailForm
+
+
+@login_required
+def app_index(request):
+    contexto = {
+        'form_audit_log': AuditLogForm(),
+        'form_audit_log_detail': AuditLogDetailForm(),
+        'module_name': 'Reportes'
+    }
+    return render(request, 'reports/index.html', contexto)
 
 
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):

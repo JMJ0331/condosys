@@ -1,7 +1,20 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Payment, ChargeType
 from .serializers import PaymentSerializer, ChargeTypeSerializer
+from .forms import ChargeTypeForm, PaymentForm
+
+
+@login_required
+def app_index(request):
+    contexto = {
+        'form_charge_type': ChargeTypeForm(),
+        'form_payment': PaymentForm(),
+        'module_name': 'Pagos'
+    }
+    return render(request, 'payments/index.html', contexto)
 
 
 class ChargeTypeViewSet(viewsets.ModelViewSet):

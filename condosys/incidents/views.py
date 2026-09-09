@@ -1,4 +1,6 @@
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Incident, IncidentHistory
@@ -7,6 +9,18 @@ from .serializers import (
     IncidentListSerializer, IncidentDetailSerializer,
     IncidentHistorySerializer
 )
+from .forms import IncidentForm, IncidentImageForm, IncidentHistoryForm
+
+
+@login_required
+def app_index(request):
+    contexto = {
+        'form_incident': IncidentForm(),
+        'form_incident_image': IncidentImageForm(),
+        'form_incident_history': IncidentHistoryForm(),
+        'module_name': 'Incidencias'
+    }
+    return render(request, 'incidents/index.html', contexto)
 
 
 class IncidentViewSet(viewsets.ModelViewSet):

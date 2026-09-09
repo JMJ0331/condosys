@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -6,6 +8,17 @@ from django.contrib.auth import authenticate, login as django_login, logout as d
 from .models import User
 from .permissions import IsAdmin, CanModifyUser
 from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, ChangePasswordSerializer
+from .forms import UserForm, UserCreateForm
+
+@login_required
+def app_index(request):
+
+    contexto = {
+        'form': UserForm(),
+        'form_user_create': UserCreateForm(),
+        'module_name': 'Cuentas'
+    }
+    return render(request, 'accounts/index.html', contexto)
 
 
 class UserViewSet(viewsets.ModelViewSet):

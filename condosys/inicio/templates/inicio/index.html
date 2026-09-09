@@ -1,3 +1,94 @@
+<<<<<<< HEAD
 {% extends 'base.html' %}
 {% load static %}
 
+=======
+{% extends 'base.html' %} {% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+
+{% block mini-cards %}
+
+{% include "componentes/header.html" with nombre_modulo="Dashboard" %}
+
+<div class="container-main-side2">
+  <div class="container-flex1">
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/city.svg" nombre_modulo="Departamentos" data="40"%}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/group.svg" nombre_modulo="Residentes" data="40"%}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/wallet.svg" nombre_modulo="Pagos" data="40"%}
+    {%include 'componentes/mini_card.html' with url_imagen="images/icons/community.svg" nombre_modulo="Visitantes" data="40"%}
+  </div>
+
+  <div class="container-flex" >
+    
+    <div class="filtros">
+
+      <div class="container-search">
+        <div class="filtros">
+          <input
+            type="text"
+            placeholder="Buscar inquilinos"
+            id="search-input"
+          />
+
+          <select name="tipo" id="tipo-select">
+            <option value="" selected>Jardines</option>
+            <option value="1">Tipo 1</option>
+            <option value="2">Tipo 2</option>
+          </select>
+          <select name="estado" id="estado-select">
+            <option value="" selected>Edificios</option>
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+          <select name="rango-precio" id="rango-precio-select">
+            <option value="" selected>Todos los precios</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="container-inquilinos"></div>
+    </div>
+
+    <div class="Acciones-dashboard">
+      <div class="acciones">
+        <h3>Acciones rapidas</h3>
+
+        <div class="container-acciones">
+          <span class="accion" role="button">
+            <img src="{% static 'images/icons/lot-of-cash.svg' %}" alt="" />
+            <p>Registrar Pago</p>
+          </span>
+          <span class="accion" role="button">
+            <img src="{% static 'images/icons/container.svg' %}" alt="" />
+            <p>Registrar Visitante</p>
+          </span>
+          <span class="accion" role="button">
+            <img src="{% static 'images/icons/warning-triangle.svg' %}" alt="" />
+            <p>Crear incidencia</p>
+          </span>
+
+          <span class="accion" role="button">
+            <img src="{% static 'images/icons/voice.svg' %}" alt="" />
+            <p>Comunicado</p>
+          </span>
+        </div>
+      </div>
+
+      <div class="actividad-reciente">
+        <h2>Actividad Reciente</h2>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+         
+>>>>>>> main
