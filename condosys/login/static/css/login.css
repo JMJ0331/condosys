@@ -70,8 +70,8 @@ body {
 }
 
 .titulo {
-  font-size: 2.4rem;
-  font-weight: 600;
+  font-size: 2.5rem;
+  font-weight: 500;
   color: var(--green-900);
 }
 
@@ -110,10 +110,10 @@ body {
   width: 100%;
   outline: none;
   border: 1px solid var(--black-50);
-  padding: var(--padding-8) 1.2rem;
-  border-radius: 8px;
-  font-size: 1.6rem;
-  color: var(--green-800);
+  padding:  .4rem 1.2rem;
+  border-radius: var(--borderR-4);
+  font-size: 1.4rem;
+  color: var(--black-300);
   font-weight: 520;
 }
 
@@ -134,13 +134,13 @@ body {
   width: fit-content;
   font-size: 1.25rem;
   font-weight: 500;
-  color: var(--green-800);
+  color: var(--green-900);
   text-decoration: underline;
   transition: ease-out 250ms;
 }
 
 .text-restrablecer:hover {
-  color: var(--green-200);
+  color: var(--green-400);
   text-decoration: underline;
 }
 
@@ -208,11 +208,6 @@ body {
   }
 }
 
-@media (min-width: 1025px) {
-  .titulo {
-    font-size: 3.2rem;
-  }
-}
 
 @media (min-width: 1201px) {
   .panel-login {

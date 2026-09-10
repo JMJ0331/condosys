@@ -3,29 +3,14 @@
   <h1 class="header-title">{{nombre_modulo}}</h1>
 
   <div class="header-right">
-    <div class="search-container">
-
-      <span class="search-icon" role="button">
-        <img src="{% static 'images/icons/lupa.svg' %}" alt="lupa">
-      </span>
-  
-      <input
-        type="text"
-        class="search-input"
-        placeholder="Buscar apartamento, residente..."
-      />
-    </div>
-
-    <button class="btn-nuevo">+ Nuevo</button>
 
     <button class="notification-btn" aria-label="Notificaciones">
-        <img src="{% static 'images/icons/bell.svg' %}" alt="noti">
+        <img src="{% static 'images/icons/bell-notification(black 400).svg' %}" alt="noti">
     </button>
 
-    <img
-      src=""
-      alt="Foto del usuario"
-      class="user-avatar"
-    />
+    <span class="user-avatar" role="button">
+      <img src="" alt="Foto">
+    </span>
+
   </div>
 </header>
