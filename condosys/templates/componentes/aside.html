@@ -19,8 +19,20 @@
         <a
           class="opt-modulo{% if request.resolver_match.url_name == 'inicio' %} active{% endif %}"
           href="{% url 'inicio' %}"
+
         >
-          <img src="{% static 'images/icons/home.svg' %}" alt="home-icon" />
+        {% if request.resolver_match.url_name == 'inicio' %}
+
+          <img src="{% static 'images/icons/verdes/Container_green.svg' %}" alt="home-icon" />
+ 
+        {% else %}
+
+          <img src="{% static 'images/icons/blancos/Container_white.svg' %}" alt="home-icon" />
+      
+        {% endif %}
+
+          
+
           <h4>Inicio</h4>
         </a>
 
@@ -28,7 +40,15 @@
           class="opt-modulo{% if request.resolver_match.url_name == 'structure_index' %} active{% endif %}"
           href="{% url 'structure_index' %}"
         >
-          <img src="{% static 'images/icons/city.svg' %}" alt="city-icon" />
+
+        {% if request.resolver_match.url_name == 'structure_index' %}
+
+          <img src="{% static 'images/icons/verdes/city_green.svg' %}" alt="city-icon" /> 
+        {% else %}
+          <img src="{% static 'images/icons/blancos/city_white.svg' %}" alt="city-icon" />
+      
+        {% endif %}
+        
           <h4>Departamentos</h4>
         </a>
 
@@ -36,7 +56,15 @@
           class="opt-modulo{% if request.resolver_match.url_name == 'residents_index' %} active{% endif %}"
           href="{% url 'residents_index' %}"
         >
-          <img src="{% static 'images/icons/group.svg' %}" alt="group-icon" />
+
+        {% if request.resolver_match.url_name == 'residents_index' %}
+
+          <img src="{% static 'images/icons/verdes/group_green.svg' %}" alt="group-icon" /> 
+        {% else %}
+          <img src="{% static 'images/icons/blancos/group_white.svg' %}" alt="group-icon" />
+      
+        {% endif %}
+          
           <h4>Residentes</h4>
         </a>
 
@@ -44,7 +72,15 @@
           class="opt-modulo{% if request.resolver_match.url_name == 'payments_index' %} active{% endif %}"
           href="{% url 'payments_index' %}"
         >
-          <img src="{% static 'images/icons/wallet.svg' %}" alt="waallet-icon" />
+
+        {% if request.resolver_match.url_name == 'payments_index' %}
+
+          <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="waallet-icon" />
+        {% else %}
+          <img src="{% static 'images/icons/blancos/lot-of-cash_white.svg' %}" alt="waallet-icon" />
+      
+        {% endif %}
+        
           <h4>Pagos</h4>
         </a>
 
@@ -52,10 +88,15 @@
           class="opt-modulo{% if request.resolver_match.url_name == 'incidents_index' %} active{% endif %}"
           href="{% url 'incidents_index' %}"
         >
-          <img
-            src="{% static 'images/icons/message-text.svg' %}"
-            alt="message-icon"
-          />
+
+        {% if request.resolver_match.url_name == 'incidents_index' %}
+
+          <img src="{% static 'images/icons/verdes/warning-triangle_green.svg' %}" alt="message-icon"/>
+        {% else %}
+          <img src="{% static 'images/icons/blancos/warning-triangle_white.svg' %}" alt="message-icon"/>
+      
+        {% endif %}
+         
           <h4>Incidencias</h4>
         </a>
 
@@ -63,10 +104,15 @@
           class="opt-modulo{% if request.resolver_match.url_name == 'visitors_index' %} active{% endif %}"
           href="{% url 'visitors_index' %}"
         >
-          <img
-            src="{% static 'images/icons/community.svg' %}"
-            alt="community-icon"
-          />
+
+        {% if request.resolver_match.url_name == 'visitors_index' %}
+
+          <img src="{% static 'images/icons/verdes/community_green.svg' %}" alt="community-icon"/>
+        {% else %}
+          <img src="{% static 'images/icons/blancos/community_white.svg' %}" alt="community-icon"/>
+      
+        {% endif %}
+          
           <h4>Visitantes</h4>
         </a>
 
@@ -74,10 +120,15 @@
           class="opt-modulo{% if request.resolver_match.url_name == 'reservations_index' %} active{% endif %}"
           href="{% url 'reservations_index' %}"
         >
-          <img
-            src="{% static 'images/icons/neighbourhood.svg' %}"
-            alt="neigh-icon"
-          />
+
+        {% if request.resolver_match.url_name == 'reservations_index' %}
+
+          <img src="{% static 'images/icons/verdes/leaf_green.svg' %}" alt="neigh-icon"/>
+        {% else %}
+          <img src="{% static 'images/icons/blancos/leaf_white.svg' %}" alt="neigh-icon"/>
+      
+        {% endif %}
+         
           <h4>Areas Comunes</h4>
         </a>
 
@@ -85,10 +136,16 @@
           class="opt-modulo{% if request.resolver_match.url_name == 'communications_index' %} active{% endif %}"
           href="{% url 'communications_index' %}"
         >
-          <img
-            src="{% static 'images/icons/chat-bubble-empty.svg' %}"
-            alt="chat-icon"
-          />
+
+        {% if request.resolver_match.url_name == 'communications_index' %}
+
+          <img src="{% static 'images/icons/verdes/voice_green.svg' %}" alt="chat-icon"/>
+        {% else %}
+         
+          <img src="{% static 'images/icons/blancos/voice_white.svg' %}" alt="chat-icon"/>
+      
+        {% endif %}
+         
           <h4>Comunicados</h4>
         </a>
 
@@ -96,47 +153,19 @@
           class="opt-modulo{% if request.resolver_match.url_name == 'maintenance_index' %} active{% endif %}"
           href="{% url 'maintenance_index' %}"
         >
-          <img src="{% static 'images/icons/settings.svg' %}" alt="settings-icon" />
+
+        {% if request.resolver_match.url_name == 'communications_index' %}
+
+          <img src="{% static 'images/icons/blancos/reports_white.svg' %}" alt="settings-icon" /> 
+        {% else %}
+          <img src="{% static 'images/icons/verdes/reports_green.svg' %}" alt="settings-icon" />
+          
+        
+        {% endif %}
+          
           <h4>Mantenimientos</h4>
         </a>
 
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'accounts_index' %} active{% endif %}"
-          href="{% url 'accounts_index' %}"
-        >
-          <img src="{% static 'images/icons/user.svg' %}" alt="accounts-icon" />
-          <h4>Cuentas</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'chat_index' %} active{% endif %}"
-          href="{% url 'chat_index' %}"
-        >
-          <img
-            src="{% static 'images/icons/chat-bubble-empty.svg' %}"
-            alt="chat-icon"
-          />
-          <h4>Chat</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'notifications_index' %} active{% endif %}"
-          href="{% url 'notifications_index' %}"
-        >
-          <img
-            src="{% static 'images/icons/bell-notification.svg' %}"
-            alt="notifications-icon"
-          />
-          <h4>Notificaciones</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'reports_index' %} active{% endif %}"
-          href="{% url 'reports_index' %}"
-        >
-          <img src="{% static 'images/icons/city.svg' %}" alt="reports-icon" />
-          <h4>Reportes</h4>
-        </a>
       </div>
 
     </div>
