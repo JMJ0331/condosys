@@ -1,7 +1,7 @@
 {% load static %}
 <aside>
 
-  <div>
+  <div class="cont-info">
 
     <div class="app-log">
       <div class="container-img">
@@ -141,7 +141,6 @@
 
           <img src="{% static 'images/icons/verdes/voice_green.svg' %}" alt="chat-icon"/>
         {% else %}
-         
           <img src="{% static 'images/icons/blancos/voice_white.svg' %}" alt="chat-icon"/>
       
         {% endif %}
@@ -156,9 +155,9 @@
 
         {% if request.resolver_match.url_name == 'communications_index' %}
 
-          <img src="{% static 'images/icons/blancos/reports_white.svg' %}" alt="settings-icon" /> 
-        {% else %}
           <img src="{% static 'images/icons/verdes/reports_green.svg' %}" alt="settings-icon" />
+        {% else %}
+          <img src="{% static 'images/icons/blancos/reports_white.svg' %}" alt="settings-icon" /> 
           
         
         {% endif %}
@@ -193,13 +192,6 @@
       Cerrar Sesión
     
     </span>
-
-    <span class="otras-opciones" role="button">
-      <img src="{% static "images/icons/user.svg" %}" alt="config">
-      {{nombre_usuario}}
-    
-    </span>
-
   </div>
 
 

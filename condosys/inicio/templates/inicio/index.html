@@ -11,10 +11,10 @@
 
 <div class="container-main-side2">
   <div class="container-flex1">
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/city.svg" nombre_modulo="Departamentos" data="40"%}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/group.svg" nombre_modulo="Residentes" data="40"%}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/wallet.svg" nombre_modulo="Pagos" data="40"%}
-    {%include 'componentes/mini_card.html' with url_imagen="images/icons/community.svg" nombre_modulo="Visitantes" data="40"%}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/city_green.svg" nombre_modulo="Departamentos" data="40"%}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/group_green.svg" nombre_modulo="Residentes" data="40"%}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/community_green.svg" nombre_modulo="Pagos" data="40"%}
+    {%include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/id_green.svg" nombre_modulo="Visitantes" data="40"%}
   </div>
 
   <div class="container-flex" >
@@ -56,23 +56,35 @@
         <h3>Acciones rapidas</h3>
 
         <div class="container-acciones">
-          <span class="accion" role="button">
-            <img src="{% static 'images/icons/lot-of-cash.svg' %}" alt="" />
-            <p>Registrar Pago</p>
-          </span>
-          <span class="accion" role="button">
-            <img src="{% static 'images/icons/container.svg' %}" alt="" />
-            <p>Registrar Visitante</p>
-          </span>
-          <span class="accion" role="button">
-            <img src="{% static 'images/icons/warning-triangle.svg' %}" alt="" />
-            <p>Crear incidencia</p>
-          </span>
+          <button
+            type="button"
+            class="accion"
+            data-dialog="dialog-pago"
+          >
+            <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
+            <span>Registrar Pago</span>
+          </button>
+          <button
+            type="button"
+            class="accion"
+            data-dialog="dialog-visitante"
+          >
+            <img src="{% static 'images/icons/verdes/container_green.svg' %}" alt="" />
+            <span>Registrar Visitante</span>
+          </button>
+          <button
+            type="button"
+            class="accion"
+            data-dialog="dialog-incidencia"
+          >
+            <img src="{% static 'images/icons/verdes/warning-triangle_green.svg' %}" alt="" />
+            <span>Crear incidencia</span>
+          </button>
 
-          <span class="accion" role="button">
-            <img src="{% static 'images/icons/voice.svg' %}" alt="" />
-            <p>Comunicado</p>
-          </span>
+          <a class="accion" href="{% url 'communications_index' %}">
+            <img src="{% static 'images/icons/verdes/voice_green.svg' %}" alt="" />
+            <span>Comunicado</span>
+          </a>
         </div>
       </div>
 
@@ -83,6 +95,80 @@
 
   </div>
 </div>
+
+<dialog id="dialog-pago" aria-labelledby="dialog-pago-titulo">
+  <div class="dialog-header">
+    <h3 id="dialog-pago-titulo">Registrar Pago</h3>
+    <button type="button" class="dialog-close" data-dialog-close aria-label="Cerrar">&times;</button>
+  </div>
+  <form method="post" action="{% url 'crear_pago' %}">
+    {% csrf_token %}
+    {{ payment_form.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+      <button type="button" data-dialog-close>Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dialog-visitante" aria-labelledby="dialog-visitante-titulo">
+  <div class="dialog-header">
+    <h3 id="dialog-visitante-titulo">Registrar Visitante</h3>
+    <button type="button" class="dialog-close" data-dialog-close aria-label="Cerrar">&times;</button>
+  </div>
+  <form method="post" action="{% url 'crear_visitante' %}">
+    {% csrf_token %}
+    {{ visitor_form.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+      <button type="button" data-dialog-close>Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dialog-incidencia" aria-labelledby="dialog-incidencia-titulo">
+  <div class="dialog-header">
+    <h3 id="dialog-incidencia-titulo">Crear Incidencia</h3>
+    <button type="button" class="dialog-close" data-dialog-close aria-label="Cerrar">&times;</button>
+  </div>
+  <form method="post" action="{% url 'crear_incidencia' %}">
+    {% csrf_token %}
+    {{ incident_form.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+      <button type="button" data-dialog-close>Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  document.querySelectorAll('[data-dialog]').forEach((accion) => {
+    accion.addEventListener('click', () => {
+      const dialog = document.getElementById(accion.dataset.dialog);
+      if (dialog && typeof dialog.showModal === 'function') {
+        dialog.showModal();
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-dialog-close]').forEach((boton) => {
+    boton.addEventListener('click', () => boton.closest('dialog').close());
+  });
+
+  document.querySelectorAll('dialog').forEach((dialog) => {
+    dialog.addEventListener('click', (event) => {
+      const rect = dialog.getBoundingClientRect();
+      const dentro =
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+      if (!dentro) {
+        dialog.close();
+      }
+    });
+  });
+</script>
 {% endblock %}
 
          

@@ -18,6 +18,14 @@
 
         <div class="main-layout">
 
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="messages-{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
             {% block mini-cards %}
 
                 
