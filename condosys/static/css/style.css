@@ -2,6 +2,7 @@
 
 body {
     background-color: var(--white-50);
+    position: relative;
 }
 
 /* CONTENEDORES */
@@ -9,11 +10,41 @@ body {
 .container {
     display: grid;
     grid-template-columns: 0.21fr 1fr;
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 .main-layout {
     display: flex;
     flex-direction: column;
+}
+
+.messages {
+    list-style: none;
+    margin: 0;
+    padding: 1rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.messages li {
+    padding: 0.8rem 1.2rem;
+    border-radius: 0.6rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.messages-success {
+    background: var(--green-50);
+    border: 1px solid var(--green-600);
+    color: var(--green-900);
+}
+
+.messages-error {
+    background: var(--red-50);
+    border: 1px solid var(--red-500);
+    color: var(--red-900);
 }
 
 
@@ -120,8 +151,8 @@ body {
 }
 
 .notification-btn img{
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
 }
 
 /* Avatar Usuario */
@@ -218,6 +249,12 @@ aside {
     padding: var(--padding-16);
 }
 
+.cont-info{
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+}
+
 .app-log{
     display: flex;
     flex-direction: column;
@@ -268,6 +305,7 @@ aside {
 }
 
 aside > .container-links{
+    margin-top: 4rem;
     padding-top: var(--borderR-16);
     border-top: 1px solid var(--green-75);
 }
@@ -293,7 +331,7 @@ aside .opt-modulo:hover {
     & img{
         
        
-        filter: invert(21%) sepia(19%) saturate(2400%) hue-rotate(84deg) brightness(78%) contrast(95%);
+        filter: invert(21%) sepia(19%) saturate(2400%) hue-rotate(84deg) brightness(50%) contrast(95%);
         
 
     }
@@ -383,6 +421,11 @@ aside .opt-modulo h4, .otras-opciones{
 .app-info>.opt-modulo img, .otras-opciones img {
     width: 22px;
     height: 22px;
+}
+
+.app-info>.opt-modulo img{
+    background-color: var(--green-50);
+    
 }
 
 .app-info>.opt-modulo h4 {
