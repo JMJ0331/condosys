@@ -36,10 +36,10 @@ class ResidentViewSet(viewsets.ModelViewSet):
     serializer_class = ResidentSerializer
     permission_classes = [IsManager]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['full_name', 'email', 'cedula', 'apartment__number']
+    search_fields = ['user__email', 'apartment__number']
     ordering_fields = ['created_at', 'full_name']
     ordering = ['apartment', 'full_name']
-    filterset_fields = ['apartment', 'is_active']
+    filterset_fields = ['apartment', 'is_active', 'marital_status']
 
     def get_queryset(self):
         user = self.request.user
