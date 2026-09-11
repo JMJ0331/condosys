@@ -1,3 +1,5 @@
+# Para actualizarlas: .venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt
+
 Django
 djangorestframework
 django-filter
