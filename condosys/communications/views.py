@@ -1,5 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Communication
@@ -16,6 +18,20 @@ def app_index(request):
     }
     
     return render(request, 'communications/index.html', contexto)
+
+
+@login_required
+@require_POST
+def crear_comunicacion(request):
+    form = CommunicationForm(request.POST)
+    if form.is_valid():
+        comunicacion = form.save(commit=False)
+        comunicacion.sender = request.user
+        comunicacion.save()
+        messages.success(request, 'Comunicado creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el comunicado. Revisa los datos enviados.')
+    return redirect('inicio')
 
 
 class CommunicationViewSet(viewsets.ModelViewSet):

@@ -1,10 +1,22 @@
 {% extends 'base.html' %} {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  {{form_chat_group.as_p}}
+  <form method="post" action="{% url 'crear_grupo_chat' %}">
+    {% csrf_token %}
+    {{ form_chat_group.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 
   <hr />
 
-  {{form_chat_message.as_p}}
+  <form method="post" action="{% url 'crear_mensaje_chat' %}">
+    {% csrf_token %}
+    {{ form_chat_message.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 </main>
 {% endblock %}

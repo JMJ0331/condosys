@@ -1,10 +1,12 @@
 {% extends 'base.html' %} {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  {{ form.as_p}}
-
-  <hr />
-
-  {{form_communication.as_p}}
+  <form method="post" action="{% url 'crear_comunicacion' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 </main>
 {% endblock %}

@@ -1,5 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import CommonArea, Reservation
@@ -18,6 +20,32 @@ def app_index(request):
         'module_name': 'Reservas'
     }
     return render(request, 'reservations/index.html', contexto)
+
+
+@login_required
+@require_POST
+def crear_area_comun(request):
+    form = CommonAreaForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Área común creada correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el área común. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
+@login_required
+@require_POST
+def crear_reserva(request):
+    form = ReservationForm(request.POST)
+    if form.is_valid():
+        reserva = form.save(commit=False)
+        reserva.reserved_by = request.user
+        reserva.save()
+        messages.success(request, 'Reserva creada correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear la reserva. Revisa los datos enviados.')
+    return redirect('inicio')
 
 
 class CommonAreaViewSet(viewsets.ModelViewSet):

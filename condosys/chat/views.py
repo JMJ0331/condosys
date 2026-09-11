@@ -1,5 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import ChatMessage
@@ -15,6 +17,30 @@ def app_index(request):
         'module_name': 'Chat'
     }
     return render(request, 'chat/index.html', contexto)
+
+
+@login_required
+@require_POST
+def crear_grupo_chat(request):
+    form = ChatGroupForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Grupo de chat creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el grupo de chat. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
+@login_required
+@require_POST
+def crear_mensaje_chat(request):
+    form = ChatMessageForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Mensaje enviado correctamente.')
+    else:
+        messages.error(request, 'No se pudo enviar el mensaje. Revisa los datos enviados.')
+    return redirect('inicio')
 
 
 class ChatMessageViewSet(viewsets.ModelViewSet):

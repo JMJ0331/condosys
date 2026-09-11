@@ -40,6 +40,32 @@ def crear_incidencia(request):
     return redirect('inicio')
 
 
+@login_required
+@require_POST
+def crear_imagen_incidencia(request):
+    form = IncidentImageForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Imagen de incidencia agregada correctamente.')
+    else:
+        messages.error(request, 'No se pudo agregar la imagen. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
+@login_required
+@require_POST
+def crear_historial_incidencia(request):
+    form = IncidentHistoryForm(request.POST)
+    if form.is_valid():
+        historial = form.save(commit=False)
+        historial.changed_by = request.user
+        historial.save()
+        messages.success(request, 'Historial de incidencia creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el historial. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
 class IncidentViewSet(viewsets.ModelViewSet):
     """ViewSet para Incident"""
     queryset = Incident.objects.all()

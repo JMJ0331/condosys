@@ -1,5 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -19,6 +21,30 @@ def app_index(request):
         'module_name': 'Cuentas'
     }
     return render(request, 'accounts/index.html', contexto)
+
+
+@login_required
+@require_POST
+def crear_usuario(request):
+    form = UserForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Usuario registrado correctamente.')
+    else:
+        messages.error(request, 'No se pudo registrar el usuario. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
+@login_required
+@require_POST
+def crear_usuario_nuevo(request):
+    form = UserCreateForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Usuario creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el usuario. Revisa los datos enviados.')
+    return redirect('inicio')
 
 
 class UserViewSet(viewsets.ModelViewSet):

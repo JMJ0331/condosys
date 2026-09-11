@@ -1,14 +1,32 @@
 {% extends 'base.html' %} {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  {{form_incident.as_p}}
+  <form method="post" action="{% url 'crear_incidencia' %}">
+    {% csrf_token %}
+    {{ form_incident.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 
   <hr />
 
-  {{form_incident_image.as_p}}
+  <form method="post" action="{% url 'crear_imagen_incidencia' %}">
+    {% csrf_token %}
+    {{ form_incident_image.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 
   <hr />
 
-  {{form_incident_history.as_p}}
+  <form method="post" action="{% url 'crear_historial_incidencia' %}">
+    {% csrf_token %}
+    {{ form_incident_history.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 </main>
 {% endblock %}

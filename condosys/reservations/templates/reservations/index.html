@@ -1,10 +1,22 @@
 {% extends 'base.html' %} {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  {{form_common_area.as_p}}
+  <form method="post" action="{% url 'crear_area_comun' %}">
+    {% csrf_token %}
+    {{ form_common_area.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 
   <hr />
 
-  {{form_reservation.as_p}}
+  <form method="post" action="{% url 'crear_reserva' %}">
+    {% csrf_token %}
+    {{ form_reservation.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 </main>
 {% endblock %}

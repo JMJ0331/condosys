@@ -31,6 +31,18 @@ def crear_pago(request):
     return redirect('inicio')
 
 
+@login_required
+@require_POST
+def crear_tipo_cargo(request):
+    form = ChargeTypeForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Tipo de cargo creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el tipo de cargo. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
 class ChargeTypeViewSet(viewsets.ModelViewSet):
     """ViewSet para ChargeType"""
     queryset = ChargeType.objects.filter(is_active=True)
