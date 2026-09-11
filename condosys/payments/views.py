@@ -1,5 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Payment, ChargeType
@@ -15,6 +17,18 @@ def app_index(request):
         'module_name': 'Pagos'
     }
     return render(request, 'payments/index.html', contexto)
+
+
+@login_required
+@require_POST
+def crear_pago(request):
+    form = PaymentForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Pago registrado correctamente.')
+    else:
+        messages.error(request, 'No se pudo registrar el pago. Revisa los datos enviados.')
+    return redirect('inicio')
 
 
 class ChargeTypeViewSet(viewsets.ModelViewSet):

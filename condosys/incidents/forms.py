@@ -6,7 +6,7 @@ class IncidentForm(forms.ModelForm):
     class Meta:
         model = Incident
         fields = [
-            'apartment', 'reported_by', 'assigned_to', 'category',
+            'apartment', 'assigned_to', 'category',
             'priority', 'title', 'description', 'status', 'resolution_notes',
         ]
 

@@ -109,7 +109,7 @@ body {
   height: 4rem;
   width: 100%;
   outline: none;
-  border: 1px solid var(--black-50);
+  border: 1px solid var(--green-600);
   padding:  .4rem 1.2rem;
   border-radius: var(--borderR-4);
   font-size: 1.4rem;
@@ -126,7 +126,7 @@ body {
 
 .input:hover,
 .input:focus {
-  border: 1px solid var(--black-200);
+  border: 1px solid var(--green-900);
 }
 
 .text-restrablecer {
@@ -159,7 +159,16 @@ body {
   padding: var(--padding-8) var(--padding-16);
   border-radius: 8px;
   cursor: pointer;
-  border: 1px solid var(--black-50);
+  border: 1px solid var(--green-600);
+  transition: 350ms ease;
+}
+
+.btn-enviar:hover, .btn-enviar:focus{
+
+  background-color: var(--green-900);
+  border: 1px solid var(--green-900);
+  color: var(--white-50);
+
 }
 
 /* Mobile-first breakpoints (mapped from project breakpoints)

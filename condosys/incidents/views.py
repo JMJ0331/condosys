@@ -1,6 +1,8 @@
 from django.db.models import Q
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Incident, IncidentHistory
@@ -21,6 +23,21 @@ def app_index(request):
         'module_name': 'Incidencias'
     }
     return render(request, 'incidents/index.html', contexto)
+
+
+@login_required
+@require_POST
+def crear_incidencia(request):
+    form = IncidentForm(request.POST)
+    if form.is_valid():
+        incidencia = form.save(commit=False)
+        incidencia.reported_by = request.user
+        incidencia.status = 'new'
+        incidencia.save()
+        messages.success(request, 'Incidencia creada correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear la incidencia. Revisa los datos enviados.')
+    return redirect('inicio')
 
 
 class IncidentViewSet(viewsets.ModelViewSet):
