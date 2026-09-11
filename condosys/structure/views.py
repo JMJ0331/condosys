@@ -1,5 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import CanAccessApartment
@@ -22,6 +24,42 @@ def app_index(request):
 
     }
     return render(request, 'structure/index.html', contexto)
+
+
+@login_required
+@require_POST
+def crear_jardin(request):
+    form = GardenForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Jardín creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el jardín. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
+@login_required
+@require_POST
+def crear_edificio(request):
+    form = BuildingForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Edificio creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el edificio. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
+@login_required
+@require_POST
+def crear_departamento(request):
+    form = ApartmentsForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Departamento creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el departamento. Revisa los datos enviados.')
+    return redirect('inicio')
 
 
 class GardenViewSet(viewsets.ModelViewSet):
@@ -61,7 +99,7 @@ class ApartmentViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if user.role in ['admin', 'manager', 'maintenance', 'security']:
             return Apartment.objects.filter(is_active=True)
-        return Apartment.objects.filter(is_active=True, residents__user=user, residents__move_out_date__isnull=True).distinct()
+        return Apartment.objects.filter(is_active=True, residents__user=user, residents__is_active=True).distinct()
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

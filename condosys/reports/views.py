@@ -1,6 +1,8 @@
 from django.db.models import Count, Q, Sum
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -26,6 +28,32 @@ def app_index(request):
     return render(request, 'reports/index.html', contexto)
 
 
+@login_required
+@require_POST
+def crear_audit_log(request):
+    form = AuditLogForm(request.POST)
+    if form.is_valid():
+        log = form.save(commit=False)
+        log.user = request.user
+        log.save()
+        messages.success(request, 'Registro de auditoría creado correctamente.')
+    else:
+        messages.error(request, 'No se pudo crear el registro. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
+@login_required
+@require_POST
+def crear_audit_log_detail(request):
+    form = AuditLogDetailForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Detalle de auditoría agregado correctamente.')
+    else:
+        messages.error(request, 'No se pudo agregar el detalle. Revisa los datos enviados.')
+    return redirect('inicio')
+
+
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AuditLog.objects.all()
     serializer_class = AuditLogSerializer
@@ -41,7 +69,7 @@ class ReportViewSet(viewsets.ViewSet):
             'apartments_total': Apartment.objects.count(),
             'apartments_occupied': Apartment.objects.filter(status='occupied').count(),
             'apartments_available': Apartment.objects.filter(status='empty').count(),
-            'active_residents': Resident.objects.filter(move_out_date__isnull=True).count(),
+            'active_residents': Resident.objects.filter(is_active=True).count(),
             'payments_total': Payment.objects.count(),
             'payments_pending': Payment.objects.filter(status='pending').count(),
             'payments_overdue': Payment.objects.filter(status='overdue').count(),
