@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="residentes.css">
+    <title>Document</title>
+</head>
+<body>
+     <div class="filter-container">
+        <h2>Todos los residentes</h2>
+        <div class="filters">
+            <select id="filter-columnas" name="filter-columnas">
+                <option value="all">Todas las columnas</option>
+                <option value="1">Columna 1</option>
+                <option value="2">Columna 2</option>
+                <option value="3">Columna 3</option>
+            </select>
+
+            <select name="filter-estados" id="filter-estados">
+                <option value="all">Todos los estados</option>
+                <option value="1">Disponible</option>
+                <option value="2">Ocupado</option>
+              
+            </select>
+
+            <select name="filter-mascotas" id="filter-mas">
+                <option value="all">Todas las mascotas</option>
+                <option value="available">...</opcotastion>
+                <option value="occupied">...</option>
+            </select>
+            
+            <button type="button" id="new-apartment">+ Nuevo residente</button>
+        </div>
+    </div>
+
+    <div class="filtered-table">
+        <table>
+            <tr>
+                <th>Foto</th>
+                <th>Nombre Completo</th>
+                <th>Cedula</th>
+                <th>Estado civil</th>
+                <th>Telefono</th>
+                <th>Contacto de emergencia</th>
+                <th>Apartamento</th>
+                <th>Relcion</th>
+                <th>Fecha de ingreso/th>
+                <th>Mascotas </th>
+                <th>Acciones</th>
+
+            </tr>
+
+            <tr>
+               <td>Carlos Acosta</td>
+               <td>00000000000</td>
+               <td>Soltero</td>
+               <td>809-809-8098</td>
+               <td>Michelle</td>
+               <td>Activo</td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>
+
+            <tr>
+                <td>apt-508.jpg</td>
+                <td>B-508</td>
+                <td>Edificio 3</td>
+                <td>Torre A</td>
+                <td>Bloque 1</td>
+                <td>5</td>
+                <td>Jardin 3</td>
+                <td>Diego Ramírez</td>
+                <td>Ocupado</td>
+                <td><button type="button">...</button></td>
+            </tr>
+        </table>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,86 @@
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Apartamentos</title>
+</head>
+<body>
+    <div class="filter-container">
+        <h2>Todos los apartamentos</h2>
+        <div class="filters">
+            <select id="filter-jardines" name="filter-jardines">
+                <option value="all">Todos los jardines</option>
+                <option value="1">Jardin 1</option>
+                <option value="2">Jardin 2</option>
+                <option value="3">Jardin 3</option>
+            </select>
+
+            <select name="filter-edificios" id="filter-edificios">
+                <option value="all">Todos los edificios</option>
+                <option value="1">Edificio 1</option>
+                <option value="2">Edificio 2</option>
+                <option value="3">Edificio 3</option>
+            </select>
+
+            <select name="filter-estado" id="filter-estado">
+                <option value="all">Todos los estados</option>
+                <option value="available">Disponible</option>
+                <option value="occupied">Ocupado</option>
+            </select>
+            
+            <button type="button" id="new-apartment">+ Nuevo apartamento</button>
+        </div>
+    </div>
+
+    <div class="filtered-table">
+        <table>
+            <tr>
+                <th>Miniatura</th>
+                <th>Apartamento</th>
+                <th>Edificio</th>
+                <th>Torre</th>
+                <th>Bloque</th>
+                <th>Piso</th>
+                <th>Jardin</th>
+                <th>Propietario</th>
+                <th>Estado</th>
+                <th>Acciones </th>
+            </tr>
+
+            <tr>
+                <td>apt-204.jpg</td>
+                <td>A-204</td>
+                <td>Edificio 2</td>
+                <td>Torre B</td>
+                <td>Bloque 2</td>
+                <td>2</td>
+                <td>Jardin 1</td>
+                <td>Mariana Torres</td>
+                <td>Disponible</td>
+                <td><button type="button">Ver</button></td>
+            </tr>
+
+            <tr>
+                <td>apt-508.jpg</td>
+                <td>B-508</td>
+                <td>Edificio 3</td>
+                <td>Torre A</td>
+                <td>Bloque 1</td>
+                <td>5</td>
+                <td>Jardin 3</td>
+                <td>Diego Ramírez</td>
+                <td>Ocupado</td>
+                <td><button type="button">Ver</button></td>
+            </tr>
+        </table>
+    </div>
+
+    <style>
+        
+    </style>
+                          
+    
+</body>
+</html>
