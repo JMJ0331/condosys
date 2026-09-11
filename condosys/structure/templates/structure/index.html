@@ -5,15 +5,33 @@
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
 
-  {{form_garden.as_p}}
+  <form method="post" action="{% url 'crear_jardin' %}">
+    {% csrf_token %}
+    {{ form_garden.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 
   <hr>
 
-  {{form_building.as_p}}
+  <form method="post" action="{% url 'crear_edificio' %}">
+    {% csrf_token %}
+    {{ form_building.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 
-   <hr>
+  <hr>
 
-  {{form_apartments.as_p}}
+  <form method="post" action="{% url 'crear_departamento' %}">
+    {% csrf_token %}
+    {{ form_apartments.as_p }}
+    <div class="dialog-footer">
+      <button type="submit">Guardar</button>
+    </div>
+  </form>
 
   {% include 'componentes/botones.html' with type_button="button" texto="Nuevo dpto"%}
   
