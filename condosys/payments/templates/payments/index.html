@@ -1,24 +1,119 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/payments.css' %}">
+{% endblock %}
 {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
 
-  <form method="post" action="{% url 'crear_pago' %}">
-    {% csrf_token %}
-    {{ form_payment.as_p }}
-    <div class="dialog-footer">
-      <button type="submit">Guardar</button>
-    </div>
-  </form>
+  <div class="Acciones-dashboard">
+    <div class="acciones">
+      <h3>Registrar Pago</h3>
 
-  <hr />
+      <form method="post" action="{% url 'crear_pago' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_payment.non_field_errors }}
 
-  <form method="post" action="{% url 'crear_tipo_cargo' %}">
-    {% csrf_token %}
-    {{ form_charge_type.as_p }}
-    <div class="dialog-footer">
-      <button type="submit">Guardar</button>
+        <div class="form-section">
+          <legend>Datos del pago</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_payment.apartment.id_for_label }}">{{ form_payment.apartment.label }}</label>
+              {{ form_payment.apartment }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_payment.resident.id_for_label }}">{{ form_payment.resident.label }}</label>
+              <select name="{{ form_payment.resident.html_name }}" id="{{ form_payment.resident.id_for_label }}" class="select-field">
+                <option value="">Elegir un propietario/residente</option>
+                {% for res in residentes %}
+                <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_payment.amount.id_for_label }}">{{ form_payment.amount.label }}</label>
+              {{ form_payment.amount }}
+            </div>
+            <div class="form-field">
+              <label for="{{ form_payment.concept.id_for_label }}">{{ form_payment.concept.label }}</label>
+              {{ form_payment.concept }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <legend>Detalles del pago</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_payment.period.id_for_label }}">Periodo/Mes correspondiente</label>
+              {{ form_payment.period }}
+            </div>
+            <div class="form-field">
+              <label for="{{ form_payment.payment_date.id_for_label }}">Fecha del pago</label>
+              {{ form_payment.payment_date }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_payment.payment_method.id_for_label }}">Método de pago</label>
+              {{ form_payment.payment_method }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <legend>Comprobante</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_payment.receipt_image.id_for_label }}">Foto del comprobante</label>
+              {{ form_payment.receipt_image }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <legend>Estado del pago</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_payment.status.id_for_label }}">Estado</label>
+              {{ form_payment.status }}
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-footer">
+          <button type="submit">Agregar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
+
+  <script>
+    const selectApartamento = document.getElementById('{{ form_payment.apartment.id_for_label }}');
+    const selectResidente = document.getElementById('{{ form_payment.resident.id_for_label }}');
+
+    function filtrarResidentes() {
+      const apartamento = selectApartamento.value;
+      selectResidente.querySelectorAll('option[data-apartment]').forEach((opt) => {
+        opt.hidden = apartamento !== '' && opt.dataset.apartment !== apartamento;
+      });
+      if (selectResidente.selectedOptions[0]?.dataset.apartment &&
+          selectResidente.value !== '' &&
+          selectResidente.selectedOptions[0].dataset.apartment !== apartamento) {
+        selectResidente.value = '';
+      }
+    }
+
+    if (selectApartamento && selectResidente) {
+      selectApartamento.addEventListener('change', filtrarResidentes);
+      filtrarResidentes();
+    }
+  </script>
 </main>
 {% endblock %}

@@ -95,9 +95,9 @@ class ReportViewSet(viewsets.ViewSet):
         if status_param:
             queryset = queryset.filter(status=status_param)
         if month:
-            queryset = queryset.filter(invoice_date__month=month)
+            queryset = queryset.filter(period__month=month)
         if year:
-            queryset = queryset.filter(invoice_date__year=year)
+            queryset = queryset.filter(period__year=year)
 
         data = queryset.values('status').annotate(count=Count('id'), total=Sum('amount')).order_by('status')
         return Response(data)
