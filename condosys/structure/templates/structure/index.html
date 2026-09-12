@@ -1,41 +1,251 @@
 {% extends 'base.html' %} 
 {% load static %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/structure.css' %}">
+{% endblock %}
 {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+
 <main class="container-main-side2">
 
-  <form method="post" action="{% url 'crear_jardin' %}">
-    {% csrf_token %}
-    {{ form_garden.as_p }}
-    <div class="dialog-footer">
-      <button type="submit">Guardar</button>
+  <div class="Acciones-dashboard">
+    <div class="acciones">
+      <h3>Registrar Departamento</h3>
+
+      <form method="post" action="{% url 'crear_departamento' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_apartments.non_field_errors }}
+
+        <div class="form-section">
+          <legend>Información del departamento</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_apartments.name.id_for_label }}">{{ form_apartments.name.label }}</label>
+              {{ form_apartments.name }}
+              {{ form_apartments.name.errors }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Buscar propietario/residente</label>
+              <input type="text" id="buscar-residente" class="input-field" placeholder="Buscar" autocomplete="off">
+            </div>
+            <div class="form-field">
+              <label for="{{ form_apartments.owner.id_for_label }}">{{ form_apartments.owner.label }}</label>
+              {{ form_apartments.owner }}
+              {{ form_apartments.owner.errors }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_apartments.photo.id_for_label }}">{{ form_apartments.photo.label }}</label>
+              {{ form_apartments.photo }}
+              {{ form_apartments.photo.errors }}
+              <small class="form-help">Subir imagen (JPG, PNG o WEBP — máx. 2 MB)</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <legend>Ubicación</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="select-jardin">Jardín</label>
+              <select name="jardin-filtro" id="select-jardin" class="select-field">
+                <option value="">Elegir</option>
+                {% for jardin in jardines %}
+                <option value="{{ jardin.id }}">{{ jardin.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="{{ form_apartments.building.id_for_label }}">{{ form_apartments.building.label }}</label>
+              <select name="{{ form_apartments.building.html_name }}" id="{{ form_apartments.building.id_for_label }}" class="select-field">
+                <option value="">Elegir un edificio</option>
+                {% for edificio in edificios %}
+                <option value="{{ edificio.id }}" data-garden="{{ edificio.garden_id }}">{{ edificio.tower|default:'' }}{% if edificio.tower %} · {% endif %}{{ edificio.name }} · Bloque {{ edificio.block|default:'—' }}</option>
+                {% endfor %}
+              </select>
+              {{ form_apartments.building.errors }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_apartments.floor.id_for_label }}">{{ form_apartments.floor.label }}</label>
+              {{ form_apartments.floor }}
+              {{ form_apartments.floor.errors }}
+            </div>
+           
+          </div>
+        </div>
+
+        <div class="form-section">
+          <legend>Estado</legend>
+          <div class="form-row form-switch-row">
+            <div class="form-field">
+              <label class="switch-label" for="toggle-ocupado">
+                Ocupado
+                <span class="switch">
+                  <input type="checkbox" id="toggle-ocupado" class="switch-input">
+                  <span class="switch-slider"></span>
+                </span>
+              </label>
+              <input type="hidden" name="status" id="id_status" value="{{ form_apartments.status.value|default:'empty' }}">
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-footer">
+          <button type="submit">Actualizar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 
   <hr>
 
-  <form method="post" action="{% url 'crear_edificio' %}">
-    {% csrf_token %}
-    {{ form_building.as_p }}
-    <div class="dialog-footer">
-      <button type="submit">Guardar</button>
+  <div class="Acciones-dashboard">
+    <div class="acciones">
+      <h3>Registrar Jardín</h3>
+
+      <form method="post" action="{% url 'crear_jardin' %}">
+        {% csrf_token %}
+        {{ form_garden.non_field_errors }}
+
+        <div class="form-section">
+          <legend>Jardín del residencial</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_garden.name.id_for_label }}">{{ form_garden.name.label }}</label>
+              {{ form_garden.name }}
+              {{ form_garden.name.errors }}
+            </div>
+            <div class="form-field">
+              <label for="{{ form_garden.location.id_for_label }}">{{ form_garden.location.label }}</label>
+              {{ form_garden.location }}
+              {{ form_garden.location.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-footer">
+          <button type="submit">Guardar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 
   <hr>
 
-  <form method="post" action="{% url 'crear_departamento' %}">
-    {% csrf_token %}
-    {{ form_apartments.as_p }}
-    <div class="dialog-footer">
-      <button type="submit">Guardar</button>
-    </div>
-  </form>
+  <div class="Acciones-dashboard">
+    <div class="acciones">
+      <h3>Registrar Edificio</h3>
 
-  {% include 'componentes/botones.html' with type_button="button" texto="Nuevo dpto"%}
-  
+      <form method="post" action="{% url 'crear_edificio' %}">
+        {% csrf_token %}
+        {{ form_building.non_field_errors }}
+
+        <div class="form-section">
+          <legend>Ubicación del edificio</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_building.garden.id_for_label }}">{{ form_building.garden.label }}</label>
+              {{ form_building.garden }}
+              {{ form_building.garden.errors }}
+            </div>
+            <div class="form-field">
+              <label for="{{ form_building.name.id_for_label }}">{{ form_building.name.label }}</label>
+              {{ form_building.name }}
+              {{ form_building.name.errors }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_building.tower.id_for_label }}">{{ form_building.tower.label }}</label>
+              {{ form_building.tower }}
+              {{ form_building.tower.errors }}
+            </div>
+            <div class="form-field">
+              <label for="{{ form_building.block.id_for_label }}">{{ form_building.block.label }}</label>
+              {{ form_building.block }}
+              {{ form_building.block.errors }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="{{ form_building.number_of_floors.id_for_label }}">Número de pisos</label>
+              {{ form_building.number_of_floors }}
+              {{ form_building.number_of_floors.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-footer">
+          <button type="submit">Guardar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const selectJardin = document.getElementById('select-jardin');
+    const selectEdificio = document.getElementById('{{ form_apartments.building.id_for_label }}');
+    const selectOwner = document.getElementById('{{ form_apartments.owner.id_for_label }}');
+    const inputBuscarResidente = document.getElementById('buscar-residente');
+    const toggleOcupado = document.getElementById('toggle-ocupado');
+    const inputStatus = document.getElementById('id_status');
+
+    function filtrarEdificios() {
+      const jardin = selectJardin.value;
+      selectEdificio.querySelectorAll('option[data-garden]').forEach((opt) => {
+        opt.hidden = jardin !== '' && opt.dataset.garden !== jardin;
+      });
+      if (selectEdificio.value !== '' &&
+          selectEdificio.selectedOptions[0]?.dataset.garden &&
+          selectEdificio.selectedOptions[0].dataset.garden !== jardin) {
+        selectEdificio.value = '';
+        mostrarUbicacion();
+      }
+    }
+
+    function mostrarUbicacion() {
+      const opt = selectEdificio.selectedOptions[0];
+      const jardinNombre = opt ? (opt.textContent.split(' · ')[0]) : '—';
+      document.getElementById('info-jardin').textContent = `Jardín: ${jardinNombre}`;
+      document.getElementById('info-ubicacion').textContent =
+        `Edificio: ${opt ? opt.value : '—'} · Bloque: ${opt ? opt.textContent.split('Bloque ')[1] || '—' : '—'}`;
+    }
+
+    function filtrarResidentes() {
+      const termino = inputBuscarResidente.value.trim().toLowerCase();
+      selectOwner.querySelectorAll('option').forEach((opt) => {
+        opt.hidden = termino === '' || opt.textContent.toLowerCase().includes(termino);
+      });
+      if (selectOwner.value !== '' &&
+          !selectOwner.selectedOptions[0].textContent.toLowerCase().includes(termino)) {
+        selectOwner.value = '';
+      }
+    }
+
+    if (selectJardin && selectEdificio) {
+      selectJardin.addEventListener('change', filtrarEdificios);
+      selectEdificio.addEventListener('change', mostrarUbicacion);
+      filtrarEdificios();
+      mostrarUbicacion();
+    }
+
+    if (inputBuscarResidente && selectOwner) {
+      inputBuscarResidente.addEventListener('input', filtrarResidentes);
+    }
+
+    if (toggleOcupado && inputStatus) {
+      toggleOcupado.addEventListener('change', () => {
+        inputStatus.value = toggleOcupado.checked ? 'occupied' : 'empty';
+      });
+    }
+  </script>
 </main>
-
-
 {% endblock %}

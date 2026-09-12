@@ -36,6 +36,8 @@ class Building(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     garden = models.ForeignKey(Garden, on_delete=CASCADE, related_name='buildings')
     name = models.CharField(max_length=50)
+    tower = models.CharField(max_length=50, blank=True, null=True)
+    block = models.CharField(max_length=50, blank=True, null=True)
     number_of_floors = models.PositiveIntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     
@@ -67,18 +69,24 @@ class Apartment(models.Model):
         ('blocked', 'Bloqueado'),
     )
     
-    TYPE_CHOICES = (
-        ('apartment', 'Apartamento'),
-        ('house', 'Casa'),
-        ('commercial', 'Local comercial'),
-    )
-    
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     building = models.ForeignKey(Building, on_delete=CASCADE, related_name='apartments')
-    number = models.CharField(max_length=20)
+    name = models.CharField(max_length=50, help_text='Nombre del departamento')
+    owner = models.ForeignKey(
+        'residents.Resident',
+        on_delete=SET_NULL,
+        related_name='apartments_owned',
+        null=True,
+        blank=True,
+        help_text='Propietario/Residente del departamento',
+    )
+    photo = models.ImageField(
+        upload_to='apartments/',
+        blank=True,
+        null=True,
+        help_text='Imagen del departamento',
+    )
     floor = models.PositiveIntegerField(blank=True, null=True)
-    area_m2 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    type = models.CharField(max_length=30, choices=TYPE_CHOICES, default='apartment')
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='empty')
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -86,8 +94,8 @@ class Apartment(models.Model):
     is_active = models.BooleanField(default=True)
     
     class Meta:
-        ordering = ['building', 'floor', 'number']
-        unique_together = ('building', 'number')
+        ordering = ['building', 'floor', 'name']
+        unique_together = ('building', 'name')
         verbose_name_plural = 'Apartments'
         indexes = [
             models.Index(fields=['building']),
@@ -95,7 +103,7 @@ class Apartment(models.Model):
         ]
     
     def __str__(self):
-        return f"{self.building.garden.name} - {self.building.name} - {self.number}"
+        return f"{self.building.garden.name} - {self.building.name} - {self.name}"
     
     @property
     def garden(self):

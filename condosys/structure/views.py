@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import CanAccessApartment
+from residents.models import Resident
 from .models import Garden, Building, Apartment
 from .serializers import (
     GardenSerializer, BuildingSerializer,
@@ -20,6 +21,9 @@ def app_index(request):
         'form_garden': GardenForm(),
         'form_building': BuildingForm(),
         'form_apartments': ApartmentsForm(),
+        'jardines': Garden.objects.filter(is_active=True),
+        'edificios': Building.objects.filter(is_active=True),
+        'residentes': Resident.objects.select_related('apartment__building').all(),
         'module_name': 'Departamentos'
 
     }
@@ -53,7 +57,7 @@ def crear_edificio(request):
 @login_required
 @require_POST
 def crear_departamento(request):
-    form = ApartmentsForm(request.POST)
+    form = ApartmentsForm(request.POST, request.FILES)
     if form.is_valid():
         form.save()
         messages.success(request, 'Departamento creado correctamente.')
@@ -90,10 +94,10 @@ class ApartmentViewSet(viewsets.ModelViewSet):
     queryset = Apartment.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated, CanAccessApartment]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['number', 'building__name', 'building__garden__name']
-    ordering_fields = ['created_at', 'number', 'status']
-    ordering = ['building', 'floor', 'number']
-    filterset_fields = ['building', 'status', 'type']
+    search_fields = ['name', 'building__name', 'building__garden__name', 'owner__full_name']
+    ordering_fields = ['created_at', 'name', 'status']
+    ordering = ['building', 'floor', 'name']
+    filterset_fields = ['building', 'status', 'owner']
 
     def get_queryset(self):
         user = self.request.user

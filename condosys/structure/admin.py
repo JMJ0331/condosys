@@ -12,16 +12,16 @@ class GardenAdmin(admin.ModelAdmin):
 
 @admin.register(Building)
 class BuildingAdmin(admin.ModelAdmin):
-    list_display = ('name', 'garden', 'number_of_floors', 'is_active', 'created_at')
+    list_display = ('name', 'garden', 'tower', 'block', 'number_of_floors', 'is_active', 'created_at')
     list_filter = ('garden', 'is_active', 'created_at')
-    search_fields = ('name', 'garden__name')
+    search_fields = ('name', 'garden__name', 'tower', 'block')
     ordering = ('garden', 'name')
 
 
 @admin.register(Apartment)
 class ApartmentAdmin(admin.ModelAdmin):
-    list_display = ('number', 'building', 'floor', 'type', 'status', 'is_active')
-    list_filter = ('building', 'type', 'status', 'is_active')
-    search_fields = ('number', 'building__name')
-    ordering = ('building', 'floor', 'number')
+    list_display = ('name', 'building', 'owner', 'floor', 'status', 'is_active')
+    list_filter = ('building', 'status', 'is_active')
+    search_fields = ('name', 'building__name', 'owner__full_name')
+    ordering = ('building', 'floor', 'name')
 
