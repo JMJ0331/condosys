@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/residents.css' %}">
+{% endblock %}
+
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+
+<main class="container-main-side2">
+  <div class="form-head-row">
+    <h2 class="section-title">Nuevo residente</h2>
+    <a href="{% url 'residents_index' %}" class="btn-volver">&larr; Volver a residentes</a>
+  </div>
+
+  <form method="post" action="{% url 'crear_residente' %}" enctype="multipart/form-data" class="residente-form">
+    {% csrf_token %}
+
+    <fieldset class="form-section">
+      <legend>Información del personal</legend>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ form_resident.full_name.id_for_label }}">{{ form_resident.full_name.label }}</label>
+          {{ form_resident.full_name }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form_resident.marital_status.id_for_label }}">{{ form_resident.marital_status.label }}</label>
+          {{ form_resident.marital_status }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ form_resident.cedula.id_for_label }}">{{ form_resident.cedula.label }}</label>
+          {{ form_resident.cedula }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form_resident.photo.id_for_label }}">{{ form_resident.photo.label }}</label>
+          {{ form_resident.photo }}
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend>Información de contacto</legend>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ form_resident.phone.id_for_label }}">{{ form_resident.phone.label }}</label>
+          {{ form_resident.phone }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form_resident.email.id_for_label }}">{{ form_resident.email.label }}</label>
+          {{ form_resident.email }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ form_resident.emergency_contact.id_for_label }}">{{ form_resident.emergency_contact.label }}</label>
+          {{ form_resident.emergency_contact }}
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend>Residencia</legend>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ form_resident.apartment.id_for_label }}">{{ form_resident.apartment.label }}</label>
+          {{ form_resident.apartment }}
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="form-section form-switch-row">
+      <label class="switch-label" for="{{ form_resident.is_active.id_for_label }}">
+        <span>{{ form_resident.is_active.label }} del registro</span>
+        <span class="switch">
+          {{ form_resident.is_active }}
+          <span class="switch-slider"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="dialog-footer">
+      <button type="submit">Crear</button>
+      <button type="reset">Cancelar</button>
+    </div>
+  </form>
+</main>
+{% endblock %}

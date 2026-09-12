@@ -1,21 +1,65 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from rest_framework import filters, viewsets
 from accounts.permissions import IsManager
+from structure.models import Apartment
 from .forms import ResidentForm
 from .models import Resident
 from .serializers import ResidentSerializer
 
+PAGINATE_BY = 15
+
 
 @login_required
 def app_index(request):
+    qs = Resident.objects.select_related(
+        'apartment__building__garden', 'user'
+    ).all()
+
+    estado = request.GET.get('estado', '')
+    apartamento = request.GET.get('apartamento', '')
+
+    if estado == 'activo':
+        qs = qs.filter(is_active=True)
+    elif estado == 'inactivo':
+        qs = qs.filter(is_active=False)
+
+    if apartamento:
+        qs = qs.filter(apartment_id=apartamento)
+
+    paginator = Paginator(qs, PAGINATE_BY)
+    page = request.GET.get('page')
+    try:
+        residentes = paginator.page(page)
+    except PageNotAnInteger:
+        residentes = paginator.page(1)
+    except EmptyPage:
+        residentes = paginator.page(paginator.num_pages)
+
+    query = request.GET.copy()
+    query.pop('page', None)
+
+    contexto = {
+        'residentes': residentes,
+        'apartamentos': Apartment.objects.filter(is_active=True).select_related('building__garden'),
+        'estado_actual': estado,
+        'apartamento_actual': apartamento,
+        'paginacion_query': query.urlencode(),
+        'module_name': 'Residentes',
+    }
+    return render(request, 'residents/index.html', contexto)
+
+
+@login_required
+def nuevo_residente(request):
     contexto = {
         'form_resident': ResidentForm(),
         'module_name': 'Residentes',
     }
-    return render(request, 'residents/index.html', contexto)
+    return render(request, 'residents/nuevo.html', contexto)
 
 
 @login_required

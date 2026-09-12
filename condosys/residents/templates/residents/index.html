@@ -9,79 +9,106 @@
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 
 <main class="container-main-side2">
-  <h2 class="section-title">Nuevo residente</h2>
+  <div class="filter-container">
+    <h2>Todos los residentes</h2>
 
-  <form method="post" action="{% url 'crear_residente' %}" enctype="multipart/form-data" class="residente-form">
-    {% csrf_token %}
+    <div class="filters">
+      <select id="filtro-columnas" name="columnas" aria-label="Cantidad de columnas visibles">
+        <option value="0">Todas las columnas (9/9)</option>
+        <option value="1">1/9</option>
+        <option value="2">2/9</option>
+        <option value="3">3/9</option>
+        <option value="4">4/9</option>
+        <option value="5">5/9</option>
+        <option value="6">6/9</option>
+        <option value="7">7/9</option>
+        <option value="8">8/9</option>
+      </select>
 
-    <fieldset class="form-section">
-      <legend>Información del personal</legend>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ form_resident.full_name.id_for_label }}">{{ form_resident.full_name.label }}</label>
-          {{ form_resident.full_name }}
-        </div>
-        <div class="form-field">
-          <label for="{{ form_resident.marital_status.id_for_label }}">{{ form_resident.marital_status.label }}</label>
-          {{ form_resident.marital_status }}
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ form_resident.cedula.id_for_label }}">{{ form_resident.cedula.label }}</label>
-          {{ form_resident.cedula }}
-        </div>
-        <div class="form-field">
-          <label for="{{ form_resident.photo.id_for_label }}">{{ form_resident.photo.label }}</label>
-          {{ form_resident.photo }}
-        </div>
-      </div>
-    </fieldset>
+      <form method="get" class="filters-form" id="filtros-residentes">
+        <select name="estado" id="filtro-estado" onchange="this.form.submit()">
+          <option value="">Todos los estados</option>
+          <option value="activo" {% if estado_actual == 'activo' %}selected{% endif %}>Activo</option>
+          <option value="inactivo" {% if estado_actual == 'inactivo' %}selected{% endif %}>Inactivo</option>
+        </select>
 
-    <fieldset class="form-section">
-      <legend>Información de contacto</legend>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ form_resident.phone.id_for_label }}">{{ form_resident.phone.label }}</label>
-          {{ form_resident.phone }}
-        </div>
-        <div class="form-field">
-          <label for="{{ form_resident.email.id_for_label }}">{{ form_resident.email.label }}</label>
-          {{ form_resident.email }}
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ form_resident.emergency_contact.id_for_label }}">{{ form_resident.emergency_contact.label }}</label>
-          {{ form_resident.emergency_contact }}
-        </div>
-      </div>
-    </fieldset>
+        <select name="apartamento" id="filtro-apartamento" onchange="this.form.submit()">
+          <option value="">Todos los apartamentos</option>
+          {% for apartamento in apartamentos %}
+          <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
+          {% endfor %}
+        </select>
+      </form>
 
-    <fieldset class="form-section">
-      <legend>Residencia</legend>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ form_resident.apartment.id_for_label }}">{{ form_resident.apartment.label }}</label>
-          {{ form_resident.apartment }}
-        </div>
-      </div>
-    </fieldset>
-
-    <div class="form-section form-switch-row">
-      <label class="switch-label" for="{{ form_resident.is_active.id_for_label }}">
-        <span>{{ form_resident.is_active.label }} del registro</span>
-        <span class="switch">
-          {{ form_resident.is_active }}
-          <span class="switch-slider"></span>
-        </span>
-      </label>
+      <a href="{% url 'nuevo_residente' %}" class="btn-nuevo-residente">+ Nuevo residente</a>
     </div>
+  </div>
 
-    <div class="dialog-footer">
-      <button type="submit">Crear</button>
-      <button type="reset">Cancelar</button>
-    </div>
-  </form>
+  <div class="filtered-table">
+    <table class="tabla-residentes">
+      <thead>
+        <tr>
+          <th data-columna="foto">Foto</th>
+          <th data-columna="nombre">Nombre completo</th>
+          <th data-columna="cedula">Cédula</th>
+          <th data-columna="civil">Estado civil</th>
+          <th data-columna="telefono">Teléfono</th>
+          <th data-columna="contacto">Contacto de emergencia</th>
+          <th data-columna="apartamento">Apartamento</th>
+          <th data-columna="relacion">Relación</th>
+          <th data-columna="ingreso">Fecha de ingreso</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for residente in residentes %}
+        <tr>
+          <td data-columna="foto">
+            {% if residente.photo %}
+            <img src="{{ residente.photo.url }}" alt="Foto de {{ residente.full_name }}" class="foto-residente">
+            {% else %}
+            <span class="foto-placeholder" aria-hidden="true"></span>
+            {% endif %}
+          </td>
+          <td data-columna="nombre">{{ residente.full_name }}</td>
+          <td data-columna="cedula">{{ residente.cedula }}</td>
+          <td data-columna="civil">{{ residente.get_marital_status_display }}</td>
+          <td data-columna="telefono">{{ residente.phone }}</td>
+          <td data-columna="contacto">{{ residente.emergency_contact|default:"—" }}</td>
+          <td data-columna="apartamento">{{ residente.apartment.name }}</td>
+          <td data-columna="relacion">{% if residente.apartment.owner_id == residente.id %}Propietario{% else %}Ocupante{% endif %}</td>
+          <td data-columna="ingreso">{{ residente.created_at|date:"d/m/Y" }}</td>
+          <td class="columna-acciones">
+            <button type="button" class="btn-acciones" aria-label="Acciones">&hellip;</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="10" class="sin-registros">No hay residentes registrados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include "componentes/paginacion_tabla.html" with pagina=residentes %}
 </main>
+
+<script>
+  const selectColumnas = document.getElementById('filtro-columnas');
+  const columnas = Array.from(document.querySelectorAll('th[data-columna]'))
+    .map((th) => th.dataset.columna);
+
+  function aplicarColumnas() {
+    const cantidad = Number(selectColumnas.value);
+    columnas.forEach((columna, index) => {
+      const visibles = (cantidad === 0) || (index < cantidad);
+      document.querySelectorAll(`[data-columna="${columna}"]`).forEach((celda) => {
+        celda.style.display = visibles ? '' : 'none';
+      });
+    });
+  }
+
+  selectColumnas.addEventListener('change', aplicarColumnas);
+</script>
 {% endblock %}
