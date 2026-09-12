@@ -4,17 +4,16 @@ from django.views.generic import ListView
 
 from incidents.forms import IncidentForm
 from payments.forms import PaymentForm
-from residents.forms import ResidentForm
 from residents.models import Resident
 from structure.models import Apartment, Building, Garden
 from visitors.forms import VisitorForm
 
 
-class InicioView(LoginRequiredMixin, ListView):
+class InicioView(ListView):
     template_name = 'inicio/index.html'
     context_object_name = 'residentes'
     model = Resident
-    paginate_by = None
+    paginate_by = 12
 
     def get_queryset(self):
         qs = Resident.objects.select_related(
@@ -50,7 +49,7 @@ class InicioView(LoginRequiredMixin, ListView):
         ctx['payment_form'] = PaymentForm()
         ctx['visitor_form'] = VisitorForm()
         ctx['incident_form'] = IncidentForm()
-        ctx['resident_form'] = ResidentForm()
+        ctx['residentes_pago'] = Resident.objects.select_related('apartment').all()
         ctx['jardines'] = Garden.objects.filter(is_active=True)
         ctx['edificios'] = Building.objects.filter(is_active=True)
         ctx['departamentos'] = Apartment.objects.filter(is_active=True)

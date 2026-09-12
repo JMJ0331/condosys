@@ -47,7 +47,7 @@
           <select name="apartment" id="apartment-select" onchange="this.form.submit()">
             <option value="">Departamentos</option>
             {% for depto in departamentos %}
-              <option value="{{ depto.id }}" {% if apartment_actual == depto.id|stringformat:'s' %}selected{% endif %}>{{ depto.number }}</option>
+              <option value="{{ depto.id }}" {% if apartment_actual == depto.id|stringformat:'s' %}selected{% endif %}>{{ depto.name }}</option>
             {% endfor %}
           </select>
 
@@ -62,13 +62,42 @@
           <div class="tarjeta-inquilino-detalle">
             <span>{{ residente.email }}</span>
             <span>{{ residente.apartment.building.garden.name }} — {{ residente.apartment.building.name }}</span>
-            <span>Depto {{ residente.apartment.number }} · C.C. {{ residente.cedula }}</span>
+            <span>Depto {{ residente.apartment.name }} · C.C. {{ residente.cedula }}</span>
           </div>
         </div>
         {% empty %}
         <p class="sin-resultados">No se encontraron residentes.</p>
         {% endfor %}
       </div>
+
+      {% if is_paginated %}
+      <div class="paginacion-dashboard">
+        <span class="pagina-actual">
+          Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+        <div class="paginacion-flechas">
+          {% if page_obj.has_previous %}
+          <a
+            href="?page={{ page_obj.previous_page_number }}&search={{ search_actual }}&garden={{ garden_actual }}&building={{ building_actual }}&apartment={{ apartment_actual }}"
+            class="flecha-paginacion"
+            aria-label="Página anterior"
+          >‹</a>
+          {% else %}
+          <span class="flecha-paginacion deshabilitada" aria-hidden="true">‹</span>
+          {% endif %}
+
+          {% if page_obj.has_next %}
+          <a
+            href="?page={{ page_obj.next_page_number }}&search={{ search_actual }}&garden={{ garden_actual }}&building={{ building_actual }}&apartment={{ apartment_actual }}"
+            class="flecha-paginacion"
+            aria-label="Página siguiente"
+          >›</a>
+          {% else %}
+          <span class="flecha-paginacion deshabilitada" aria-hidden="true">›</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
     </div>
 
     <div class="Acciones-dashboard">
@@ -76,14 +105,6 @@
         <h3>Acciones rapidas</h3>
 
         <div class="container-acciones">
-          <button
-            type="button"
-            class="accion"
-            data-dialog="dialog-residente"
-          >
-            <img src="{% static 'images/icons/verdes/group_green.svg' %}" alt="" />
-            <span>Registrar Residente</span>
-          </button>
           <button
             type="button"
             class="accion"
@@ -124,95 +145,88 @@
   </div>
 </div>
 
-<dialog id="dialog-residente" aria-labelledby="dialog-residente-titulo">
-  <div class="dialog-header">
-    <h3 id="dialog-residente-titulo">Registrar Residente</h3>
-    <button type="button" class="dialog-close" data-dialog-close aria-label="Cerrar">&times;</button>
-  </div>
-  <form method="post" action="{% url 'crear_residente' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    <fieldset class="form-section">
-      <legend>Información del personal</legend>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ resident_form.full_name.id_for_label }}">{{ resident_form.full_name.label }}</label>
-          {{ resident_form.full_name }}
-        </div>
-        <div class="form-field">
-          <label for="{{ resident_form.marital_status.id_for_label }}">{{ resident_form.marital_status.label }}</label>
-          {{ resident_form.marital_status }}
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ resident_form.cedula.id_for_label }}">{{ resident_form.cedula.label }}</label>
-          {{ resident_form.cedula }}
-        </div>
-        <div class="form-field">
-          <label for="{{ resident_form.photo.id_for_label }}">{{ resident_form.photo.label }}</label>
-          {{ resident_form.photo }}
-        </div>
-      </div>
-    </fieldset>
-
-    <fieldset class="form-section">
-      <legend>Información de contacto</legend>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ resident_form.phone.id_for_label }}">{{ resident_form.phone.label }}</label>
-          {{ resident_form.phone }}
-        </div>
-        <div class="form-field">
-          <label for="{{ resident_form.email.id_for_label }}">{{ resident_form.email.label }}</label>
-          {{ resident_form.email }}
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ resident_form.emergency_contact.id_for_label }}">{{ resident_form.emergency_contact.label }}</label>
-          {{ resident_form.emergency_contact }}
-        </div>
-      </div>
-    </fieldset>
-
-    <fieldset class="form-section">
-      <legend>Residencia</legend>
-      <div class="form-row">
-        <div class="form-field">
-          <label for="{{ resident_form.apartment.id_for_label }}">{{ resident_form.apartment.label }}</label>
-          {{ resident_form.apartment }}
-        </div>
-      </div>
-    </fieldset>
-
-    <div class="form-section form-switch-row">
-      <label class="switch-label" for="{{ resident_form.is_active.id_for_label }}">
-        <span>{{ resident_form.is_active.label }} del registro</span>
-        <span class="switch">
-          {{ resident_form.is_active }}
-          <span class="switch-slider"></span>
-        </span>
-      </label>
-    </div>
-
-    <div class="dialog-footer">
-      <button type="submit">Crear</button>
-      <button type="button" data-dialog-close>Cancelar</button>
-    </div>
-  </form>
-</dialog>
-
 <dialog id="dialog-pago" aria-labelledby="dialog-pago-titulo">
   <div class="dialog-header">
     <h3 id="dialog-pago-titulo">Registrar Pago</h3>
     <button type="button" class="dialog-close" data-dialog-close aria-label="Cerrar">&times;</button>
   </div>
-  <form method="post" action="{% url 'crear_pago' %}">
+  <form method="post" action="{% url 'crear_pago' %}" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ payment_form.as_p }}
+    {{ payment_form.non_field_errors }}
+
+    <fieldset class="form-section">
+      <legend>Datos del pago</legend>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ payment_form.apartment.id_for_label }}">{{ payment_form.apartment.label }}</label>
+          {{ payment_form.apartment }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ payment_form.resident.id_for_label }}">{{ payment_form.resident.label }}</label>
+          <select name="{{ payment_form.resident.html_name }}" id="{{ payment_form.resident.id_for_label }}" class="select-field">
+            <option value="">Elegir un propietario/residente</option>
+            {% for res in residentes_pago %}
+            <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ payment_form.amount.id_for_label }}">{{ payment_form.amount.label }}</label>
+          {{ payment_form.amount }}
+        </div>
+        <div class="form-field">
+          <label for="{{ payment_form.concept.id_for_label }}">{{ payment_form.concept.label }}</label>
+          {{ payment_form.concept }}
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend>Detalles del pago</legend>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ payment_form.period.id_for_label }}">Periodo/Mes correspondiente</label>
+          {{ payment_form.period }}
+        </div>
+        <div class="form-field">
+          <label for="{{ payment_form.payment_date.id_for_label }}">Fecha del pago</label>
+          {{ payment_form.payment_date }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ payment_form.payment_method.id_for_label }}">Método de pago</label>
+          {{ payment_form.payment_method }}
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend>Comprobante</legend>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ payment_form.receipt_image.id_for_label }}">Foto del comprobante</label>
+          {{ payment_form.receipt_image }}
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend>Estado del pago</legend>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ payment_form.status.id_for_label }}">Estado</label>
+          {{ payment_form.status }}
+        </div>
+      </div>
+    </fieldset>
+
     <div class="dialog-footer">
-      <button type="submit">Guardar</button>
+      <button type="submit">Agregar</button>
       <button type="button" data-dialog-close>Cancelar</button>
     </div>
   </form>
@@ -275,6 +289,26 @@
       }
     });
   });
+
+  const selectApartamento = document.getElementById('{{ payment_form.apartment.id_for_label }}');
+  const selectResidente = document.getElementById('{{ payment_form.resident.id_for_label }}');
+
+  function filtrarResidentes() {
+    const apartamento = selectApartamento.value;
+    selectResidente.querySelectorAll('option[data-apartment]').forEach((opt) => {
+      opt.hidden = apartamento !== '' && opt.dataset.apartment !== apartamento;
+    });
+    if (selectResidente.selectedOptions[0]?.dataset.apartment &&
+        selectResidente.value !== '' &&
+        selectResidente.selectedOptions[0].dataset.apartment !== apartamento) {
+      selectResidente.value = '';
+    }
+  }
+
+  if (selectApartamento && selectResidente) {
+    selectApartamento.addEventListener('change', filtrarResidentes);
+    filtrarResidentes();
+  }
 </script>
 {% endblock %}
 
