@@ -27,12 +27,12 @@ class IncidentListSerializer(serializers.ModelSerializer):
     """Serializer simplificado para Incident (listados)"""
     reported_by_email = serializers.CharField(source='reported_by.email', read_only=True)
     assigned_to_email = serializers.CharField(source='assigned_to.email', read_only=True, allow_null=True)
-    apartment_number = serializers.CharField(source='apartment.number', read_only=True)
+    apartment_name = serializers.CharField(source='apartment.name', read_only=True)
     
     class Meta:
         model = Incident
         fields = [
-            'id', 'apartment', 'apartment_number', 'category',
+            'id', 'apartment', 'apartment_name', 'category',
             'priority', 'title', 'status', 'reported_by',
             'reported_by_email', 'assigned_to', 'assigned_to_email',
             'created_at', 'resolved_at'

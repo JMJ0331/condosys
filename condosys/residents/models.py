@@ -57,7 +57,7 @@ class Resident(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.full_name} - {self.apartment.number}"
+        return f"{self.full_name} - {self.apartment.name}"
 
     @property
     def is_current(self):

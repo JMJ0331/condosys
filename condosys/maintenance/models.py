@@ -67,6 +67,6 @@ class MaintenanceOrder(models.Model):
         ]
     
     def __str__(self):
-        apartment_str = f" - {self.apartment.number}" if self.apartment else ""
+        apartment_str = f" - {self.apartment.name}" if self.apartment else ""
         return f"#{self.id.hex[:8]} {apartment_str} - {self.get_type_display()}"
 

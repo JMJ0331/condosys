@@ -68,5 +68,5 @@ class Visitor(models.Model):
         ]
     
     def __str__(self):
-        return f"{self.name} - {self.apartment.number} - {self.scheduled_entry.date()}"
+        return f"{self.name} - {self.apartment.name} - {self.scheduled_entry.date()}"
 
