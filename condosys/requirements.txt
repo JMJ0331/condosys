@@ -16,6 +16,7 @@ python-dotenv
 celery
 redis
 Pillow
+reportlab
 
 # Production
 gunicorn

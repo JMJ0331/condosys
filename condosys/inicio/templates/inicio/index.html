@@ -227,6 +227,15 @@
 
     <div class="dialog-footer">
       <button type="submit">Agregar</button>
+      <button
+        type="button"
+        id="btn-generar-comprobante"
+        class="btn-generar-comprobante"
+        disabled
+      >
+        <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
+        Generar comprobante
+      </button>
       <button type="button" data-dialog-close>Cancelar</button>
     </div>
   </form>
@@ -309,6 +318,47 @@
     selectApartamento.addEventListener('change', filtrarResidentes);
     filtrarResidentes();
   }
+
+  // ---- Generar comprobante ----
+  const formPago = document.getElementById('btn-generar-comprobante').closest('form');
+  const camposRequeridos = ['apartment', 'resident', 'amount', 'concept', 'period', 'status'];
+  const btnComprobante = document.getElementById('btn-generar-comprobante');
+  const inputComprobante = formPago.querySelector('[name="receipt_image"]');
+
+  function formPagoCompleto() {
+    return camposRequeridos.every((nombre) => {
+      const el = formPago.querySelector(`[name="${nombre}"]`);
+      return el && el.value && el.value.trim() !== '';
+    });
+  }
+
+  function actualizarBloqueoComprobante() {
+    const completo = formPagoCompleto();
+    btnComprobante.disabled = !completo;
+    if (inputComprobante) inputComprobante.disabled = !completo;
+  }
+
+  camposRequeridos.forEach((nombre) => {
+    const el = formPago.querySelector(`[name="${nombre}"]`);
+    if (el) {
+      el.addEventListener('change', actualizarBloqueoComprobante);
+      el.addEventListener('input', actualizarBloqueoComprobante);
+    }
+  });
+
+  actualizarBloqueoComprobante();
+
+  btnComprobante.addEventListener('click', () => {
+    const params = new URLSearchParams();
+    [
+      'apartment', 'resident', 'amount', 'concept',
+      'period', 'payment_date', 'payment_method', 'status',
+    ].forEach((nombre) => {
+      const el = formPago.querySelector(`[name="${nombre}"]`);
+      if (el && el.value) params.set(nombre, el.value);
+    });
+    window.open("{% url 'generar_comprobante' %}?" + params.toString(), '_blank');
+  });
 </script>
 {% endblock %}
 
