@@ -68,7 +68,7 @@ class User(AbstractUser):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     
     # For filtering by hierarchy
-    garden_id = models.ForeignKey(
+    garden = models.ForeignKey(
         'structure.Garden',
         on_delete=SET_NULL,
         null=True,
@@ -76,7 +76,6 @@ class User(AbstractUser):
         related_name='users'
     )
     
-    last_login = models.DateTimeField(null=True, blank=True, auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)

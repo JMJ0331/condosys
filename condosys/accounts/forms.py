@@ -1,4 +1,4 @@
-from django import forms
+﻿from django import forms
 from .models import User
 
 
@@ -7,7 +7,7 @@ class UserForm(forms.ModelForm):
         model = User
         fields = [
             'email', 'first_name', 'last_name', 'phone', 'document',
-            'avatar_url', 'role', 'status', 'garden_id', 'is_active',
+            'avatar_url', 'role', 'status', 'garden', 'is_active',
         ]
 
 
@@ -19,7 +19,7 @@ class UserCreateForm(forms.ModelForm):
         model = User
         fields = [
             'email', 'first_name', 'last_name', 'phone', 'document',
-            'avatar_url', 'role', 'status', 'garden_id', 'is_active',
+            'avatar_url', 'role', 'status', 'garden', 'is_active',
         ]
 
     def clean(self):
@@ -27,7 +27,7 @@ class UserCreateForm(forms.ModelForm):
         password = cleaned_data.get('password')
         confirmation = cleaned_data.get('password_confirmation')
         if password and confirmation and password != confirmation:
-            self.add_error('password_confirmation', 'Las contraseñas no coinciden.')
+            self.add_error('password_confirmation', 'Las contraseÃ±as no coinciden.')
         return cleaned_data
 
     def save(self, commit=True):
