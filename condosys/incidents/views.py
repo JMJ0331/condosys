@@ -14,10 +14,7 @@ from .serializers import (
 from .forms import IncidentForm, IncidentImageForm, IncidentHistoryForm
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 def app_index(request):
     contexto = {
         'form_incident': IncidentForm(),
@@ -29,10 +26,7 @@ def app_index(request):
     return render(request, 'incidents/index.html', contexto)
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_incidencia(request):
     form = IncidentForm(request.POST, request.FILES)
@@ -62,10 +56,7 @@ def crear_incidencia(request):
     return redirect('inicio')
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_imagen_incidencia(request):
     form = IncidentImageForm(request.POST)
@@ -77,10 +68,7 @@ def crear_imagen_incidencia(request):
     return redirect('inicio')
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_historial_incidencia(request):
     form = IncidentHistoryForm(request.POST)

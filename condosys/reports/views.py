@@ -17,10 +17,7 @@ from reservations.models import Reservation
 from .forms import AuditLogForm, AuditLogDetailForm
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 def app_index(request):
     contexto = {
         'form_audit_log': AuditLogForm(),
@@ -30,10 +27,7 @@ def app_index(request):
     return render(request, 'reports/index.html', contexto)
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_audit_log(request):
     form = AuditLogForm(request.POST)
@@ -47,10 +41,7 @@ def crear_audit_log(request):
     return redirect('inicio')
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_audit_log_detail(request):
     form = AuditLogDetailForm(request.POST)

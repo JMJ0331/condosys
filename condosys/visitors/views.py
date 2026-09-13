@@ -13,10 +13,7 @@ from .serializers import VisitorSerializer
 from .forms import VisitorForm
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 def app_index(request):
     contexto = {
         'form_visitor': VisitorForm(),
@@ -25,10 +22,7 @@ def app_index(request):
     return render(request, 'visitors/index.html', contexto)
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_visitante(request):
     form = VisitorForm(request.POST)

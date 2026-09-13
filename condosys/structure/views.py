@@ -1,9 +1,6 @@
 from django.contrib import messages
-<<<<<<< HEAD
-=======
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 from django.shortcuts import redirect, render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
@@ -18,10 +15,7 @@ from .forms import ApartmentsForm
 PAGINATE_BY = 15
 
 
-<<<<<<< HEAD
-=======
 # @login_required
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 def app_index(request):
     apartamentos_qs = (
         Apartment.objects.select_related('building__garden', 'owner')
@@ -64,37 +58,6 @@ def app_index(request):
     return render(request, 'structure/index.html', contexto)
 
 
-<<<<<<< HEAD
-@require_POST
-def crear_jardin(request):
-    form = GardenForm(request.POST)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Jardín creado correctamente.')
-    else:
-        messages.error(request, 'No se pudo crear el jardín. Revisa los datos enviados.')
-    return redirect('inicio')
-
-
-@require_POST
-def crear_edificio(request):
-    form = BuildingForm(request.POST)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Edificio creado correctamente.')
-    else:
-        messages.error(request, 'No se pudo crear el edificio. Revisa los datos enviados.')
-    return redirect('inicio')
-
-
-@require_POST
-def crear_departamento(request):
-    form = ApartmentsForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Departamento creado correctamente.')
-    else:
-=======
 # @login_required
 def agregar_departamento(request):
     if request.method == 'POST':
@@ -103,7 +66,6 @@ def agregar_departamento(request):
             form.save()
             messages.success(request, 'Departamento creado correctamente.')
             return redirect('departamentos_index')
->>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
         messages.error(request, 'No se pudo crear el departamento. Revisa los datos enviados.')
     else:
         form = ApartmentsForm()
