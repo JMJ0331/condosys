@@ -1,22 +1,100 @@
-{% extends 'base.html' %} {% block mini-cards %}
+{% extends 'base.html' %}
+{% load static %}
+{% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  <form method="post" action="{% url 'crear_area_comun' %}">
-    {% csrf_token %}
-    {{ form_common_area.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
-    </div>
-  </form>
 
-  <hr />
+  <div class="panel-acciones">
+    <div class="acciones">
+      <h3>Registrar Reserva</h3>
 
-  <form method="post" action="{% url 'crear_reserva' %}">
-    {% csrf_token %}
-    {{ form_reservation.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
+      <form method="post" action="{% url 'crear_reserva' %}" data-form-reserva>
+        {% csrf_token %}
+        {{ form_reservation.non_field_errors }}
+
+        <div class="seccion-formulario">
+          <legend>Información de la reserva</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_reservation.common_area.id_for_label }}">{{ form_reservation.common_area.label }}</label>
+              <select name="{{ form_reservation.common_area.html_name }}" id="{{ form_reservation.common_area.id_for_label }}" class="campo-seleccion" data-reserva-area>
+                <option value="">Elegir área común</option>
+                {% for area in areas %}
+                <option value="{{ area.id }}" data-horario="{% if area.available_from and area.available_until %}{{ area.available_from|time:'H:i' }} - {{ area.available_until|time:'H:i' }}{% endif %}" data-dias-val="{{ area.available_days }}" data-dias="{{ area.get_available_days_display }}">{{ area.name }}</option>
+                {% endfor %}
+              </select>
+              <p class="aviso-horario" id="aviso-horario-area" role="status"></p>
+              {{ form_reservation.common_area.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_reservation.apartment.id_for_label }}">{{ form_reservation.apartment.label }}</label>
+              {{ form_reservation.apartment }}
+              {{ form_reservation.apartment.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_reservation.reserved_by.id_for_label }}">{{ form_reservation.reserved_by.label }}</label>
+              {{ form_reservation.reserved_by }}
+              {{ form_reservation.reserved_by.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_reservation.resident.id_for_label }}">{{ form_reservation.resident.label }}</label>
+              <select name="{{ form_reservation.resident.html_name }}" id="{{ form_reservation.resident.id_for_label }}" class="campo-seleccion" data-reserva-residente>
+                <option value="">Elegir un propietario/residente</option>
+                {% for res in residentes %}
+                <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
+                {% endfor %}
+              </select>
+              {{ form_reservation.resident.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Horario</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario campo-ancho-completo">
+              <label for="{{ form_reservation.fecha_reserva.id_for_label }}">{{ form_reservation.fecha_reserva.label }}</label>
+              {{ form_reservation.fecha_reserva }}
+              {{ form_reservation.fecha_reserva.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_reservation.hora_inicio.id_for_label }}">{{ form_reservation.hora_inicio.label }}</label>
+              {{ form_reservation.hora_inicio }}
+              {{ form_reservation.hora_inicio.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_reservation.hora_fin.id_for_label }}">{{ form_reservation.hora_fin.label }}</label>
+              {{ form_reservation.hora_fin }}
+              {{ form_reservation.hora_fin.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Estado</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_reservation.status.id_for_label }}">{{ form_reservation.status.label }}</label>
+              {{ form_reservation.status }}
+              {{ form_reservation.status.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="pie-formulario">
+          <button type="submit">Agregar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/reservas.js' %}" defer></script>
 {% endblock %}

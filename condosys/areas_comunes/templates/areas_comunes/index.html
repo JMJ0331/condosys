@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+<main class="container-main-side2">
+
+  <div class="panel-acciones">
+    <div class="acciones">
+      <h3>Registrar Área Común</h3>
+
+      <form method="post" action="{% url 'crear_area_comun' %}">
+        {% csrf_token %}
+        {{ form_area.non_field_errors }}
+
+        <div class="seccion-formulario">
+          <legend>Información del área</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_area.name.id_for_label }}">{{ form_area.name.label }}</label>
+              {{ form_area.name }}
+              {{ form_area.name.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_area.area_type.id_for_label }}">{{ form_area.area_type.label }}</label>
+              {{ form_area.area_type }}
+              {{ form_area.area_type.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_area.capacity.id_for_label }}">{{ form_area.capacity.label }}</label>
+              {{ form_area.capacity }}
+              {{ form_area.capacity.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Disponibilidad</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_area.available_from.id_for_label }}">{{ form_area.available_from.label }}</label>
+              {{ form_area.available_from }}
+              {{ form_area.available_from.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_area.available_until.id_for_label }}">{{ form_area.available_until.label }}</label>
+              {{ form_area.available_until }}
+              {{ form_area.available_until.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_area.available_days.id_for_label }}">{{ form_area.available_days.label }}</label>
+              {{ form_area.available_days }}
+              {{ form_area.available_days.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Reglas de uso</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario campo-ancho-completo">
+              <label for="{{ form_area.usage_conditions.id_for_label }}">{{ form_area.usage_conditions.label }}</label>
+              {{ form_area.usage_conditions }}
+              {{ form_area.usage_conditions.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Estado</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_area.status.id_for_label }}">{{ form_area.status.label }}</label>
+              {{ form_area.status }}
+              {{ form_area.status.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="pie-formulario">
+          <button type="submit">Agregar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if areas %}
+  <div class="panel-acciones">
+    <div class="acciones">
+      <h3>Todas las Áreas Comunes</h3>
+      <ul class="lista-areas">
+        {% for area in areas %}
+        <li>
+          <strong>{{ area.name }}</strong> —
+          {{ area.get_area_type_display }}
+          {% if area.capacity %}(Capacidad: {{ area.capacity }}){% endif %}
+          — Días: {{ area.get_available_days_display }}
+          — Estado: {{ area.get_status_display }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+</main>
+{% endblock %}

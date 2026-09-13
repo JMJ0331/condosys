@@ -1,7 +1,8 @@
 from django.db import models
 from django.db.models import CASCADE, PROTECT, SET_NULL
-from structure.models import Garden
+from structure.models import Garden, Apartment
 from accounts.models import User
+from residents.models import Resident
 import uuid
 
 # ==================================================
@@ -44,7 +45,25 @@ class Reservation(models.Model):
     )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    common_area = models.ForeignKey(CommonArea, on_delete=CASCADE, related_name='reservations')
+    common_area = models.ForeignKey(
+        'areas_comunes.AreaComun',
+        on_delete=CASCADE,
+        related_name='reservations',
+    )
+    apartment = models.ForeignKey(
+        Apartment,
+        on_delete=SET_NULL,
+        null=True,
+        blank=True,
+        related_name='reservations',
+    )
+    resident = models.ForeignKey(
+        Resident,
+        on_delete=SET_NULL,
+        null=True,
+        blank=True,
+        related_name='reservations',
+    )
     reserved_by = models.ForeignKey(User, on_delete=CASCADE, related_name='reservations')
     
     start_time = models.DateTimeField()

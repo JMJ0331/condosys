@@ -1,12 +1,100 @@
-{% extends 'base.html' %} {% block mini-cards %}
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mantenimiento.css' %}">
+{% endblock %}
+{% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  <form method="post" action="{% url 'crear_orden_mantenimiento' %}">
-    {% csrf_token %}
-    {{ form_maintenance_order.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
+
+  <div class="panel-acciones">
+    <div class="acciones">
+      <h3>Registrar Cargo de Mantenimiento</h3>
+
+      <form method="post" action="{% url 'crear_cargo_mantenimiento' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_cargo_mantenimiento.non_field_errors }}
+
+        <div class="seccion-formulario">
+          <legend>Información del cargo</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_cargo_mantenimiento.concept.id_for_label }}">{{ form_cargo_mantenimiento.concept.label }}</label>
+              {{ form_cargo_mantenimiento.concept }}
+              {{ form_cargo_mantenimiento.concept.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_cargo_mantenimiento.periodicity.id_for_label }}">{{ form_cargo_mantenimiento.periodicity.label }}</label>
+              {{ form_cargo_mantenimiento.periodicity }}
+              {{ form_cargo_mantenimiento.periodicity.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_cargo_mantenimiento.amount.id_for_label }}">{{ form_cargo_mantenimiento.amount.label }}</label>
+              {{ form_cargo_mantenimiento.amount }}
+              {{ form_cargo_mantenimiento.amount.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Aplicación</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_cargo_mantenimiento.payment_methods.id_for_label }}">{{ form_cargo_mantenimiento.payment_methods.label }}</label>
+              {{ form_cargo_mantenimiento.payment_methods }}
+              {{ form_cargo_mantenimiento.payment_methods.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_cargo_mantenimiento.effective_date.id_for_label }}">{{ form_cargo_mantenimiento.effective_date.label }}</label>
+              {{ form_cargo_mantenimiento.effective_date }}
+              {{ form_cargo_mantenimiento.effective_date.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Prueba del mantenimiento</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_cargo_mantenimiento.photo.id_for_label }}">{{ form_cargo_mantenimiento.photo.label }}</label>
+              <label class="btn-subir-archivo" for="{{ form_cargo_mantenimiento.photo.id_for_label }}">
+                {{ form_cargo_mantenimiento.photo }}
+                <span class="texto-boton-archivo" data-texto-archivo>Subir imagen</span>
+              </label>
+              <small class="ayuda-formulario" data-ayuda-foto>JPG, PNG o WEBP — máx. 2 MB</small>
+              {{ form_cargo_mantenimiento.photo.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Estado</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label class="etiqueta-interruptor" for="{{ form_cargo_mantenimiento.is_active.id_for_label }}">
+                <span>Activo</span>
+                <span class="interruptor">
+                  {{ form_cargo_mantenimiento.is_active }}
+                  <span class="deslizador-interruptor"></span>
+                </span>
+              </label>
+              {{ form_cargo_mantenimiento.is_active.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="pie-formulario">
+          <button type="submit">Actualizar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/mantenimiento.js' %}" defer></script>
 {% endblock %}

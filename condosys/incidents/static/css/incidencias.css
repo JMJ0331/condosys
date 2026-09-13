@@ -11,43 +11,6 @@
 	resize: vertical;
 }
 
-/* Botón de subida de evidencia (etiqueta que abre el input oculto) */
-.btn-subir-evidencia {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.6rem;
-	width: fit-content;
-	max-width: 100%;
-	padding: 1.2rem 1.6rem;
-	border: 1px dashed var(--green-600);
-	border-radius: var(--borderR-4);
-	background: var(--green-25);
-	color: var(--green-800);
-	font-size: 1.4rem;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.btn-subir-evidencia:hover {
-	background: var(--green-50);
-	border-color: var(--green-900);
-}
-
-.btn-subir-evidencia input[type="file"] {
-	position: absolute;
-	width: 0;
-	height: 0;
-	opacity: 0;
-	overflow: hidden;
-}
-
-.texto-boton-evidencia {
-	overflow-wrap: anywhere;
-	text-align: center;
-}
-
 /* =================== RESPONSIVE =================== */
 
 @media (max-width: 560px) {

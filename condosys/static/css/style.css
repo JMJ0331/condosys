@@ -1,11 +1,25 @@
 @import url(variables.css);
 
+/* ============================================================
+   STYLE.CSS — ESTILOS COMPARTIDOS
+   1. Bloques generales
+   2. Tipografía / letras
+   3. Componentes
+   4. Animaciones
+   5. Responsive
+   6. Accesibilidad / utilidades
+   ============================================================ */
+
+/* ============================================================
+   1. BLOQUES GENERALES
+   ============================================================ */
+
 body {
     background-color: var(--white-50);
     position: relative;
 }
 
-/* CONTENEDORES */
+/* -- Contenedores / Layout -- */
 
 .container {
     display: grid;
@@ -20,19 +34,58 @@ body {
     min-width: 0;
 }
 
-.messages {
-    list-style: none;
-    margin: 0;
-    padding: 1rem 1.6rem;
+.container-main-side2 {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--padding-16);
+    gap: var(--space-8);
 }
 
-.messages li {
-    padding: 0.8rem 1.2rem;
-    border-radius: 0.6rem;
-    font-size: 1.4rem;
+.container-flex1 {
+    display: flex;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+}
+
+.container-flex {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* ============================================================
+   2. TIPOGRAFÍA / LETRAS
+   ============================================================ */
+
+.header-title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--green-800);
+    letter-spacing: -0.02rem;
+}
+
+.nombre-app {
+    font-size: 2.8rem;
+    font-weight: normal;
+    color: var(--white-50);
+    letter-spacing: -0.05rem;
+}
+
+.nombre-residencial {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--black-400);
+}
+
+.data {
+    font-size: 1.55rem;
+    color: var(--green-800);
+}
+
+aside .opt-modulo h4, .otras-opciones{
+    font-size: 1.5rem;
     font-weight: 500;
 }
 
@@ -98,7 +151,7 @@ body {
     color: var(--white-50);
 }
 
-/* Caja de Búsqueda */
+/* Caja de búsqueda */
 .search-container {
     position: relative;
     display: flex;
@@ -160,8 +213,26 @@ body {
     background-color: var(--green-900);
 }
 
-/* ESTILO DE LETRAS */
+/* -- Botones -- */
 
+.btn-nuevo {
+    background-color: var(--green-800);
+    color: var(--white-50);
+    border: none;
+    border-radius: 8px;
+    padding: var(--padding-8) var(--padding-16);
+    font-size: 1.3rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-nuevo:hover {
+    background-color: var(--green-900);
+}
 
 .btn{
    
@@ -232,6 +303,8 @@ body {
 #Bell-notification-icon {
     background-image: url(../images/icons/bell-notification.svg);
 }
+
+/* -- Barra lateral / Sidebar -- */
 
 aside {
     height: 100vh;
@@ -310,19 +383,6 @@ aside::-webkit-scrollbar-thumb:hover {
     display: flex;
     align-items: center;
     flex-direction: column;
-}
-
-.nombre-app{
-    font-size: 2.8rem;
-    font-weight: normal;
-    color: var(--white-50);
-    letter-spacing: -0.05rem;
-}
-
-.nombre-residencial{
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--black-400);
 }
 
 .container-links{
@@ -436,23 +496,11 @@ aside .opt-modulo h4 {
 .container-main-side2 {
     display: flex;
     flex-direction: column;
-    min-width: 0;
-    width: 100%;
-    box-sizing: border-box;
-    padding: var(--padding-16);
-    gap: var(--space-8);
+    justify-content: space-between;
+    gap: .4rem;
 }
 
-.container-flex1 {
-    display: flex;
-    gap: var(--space-16);
-    flex-wrap: wrap;
-}
-
-.container-flex {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-}
+/* -- Tarjetas / Paneles -- */
 
 .filtrados {
     display: flex;
@@ -461,13 +509,6 @@ aside .opt-modulo h4 {
     border: 1px solid var(--black-50);
     border-radius: var(--borderR-16);
 
-}
-
-.aside-options{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: .4rem;
 }
 
 .app-info {
@@ -505,91 +546,45 @@ aside .opt-modulo h4 {
     color: var(--black-400);
 }
 
+/* -- Mensajes (flash / feedback) -- */
 
-.data {
-    font-size: 1.55rem;
-    color: var(--green-800);
-}
-
-/* .app-info ul {
+.messages {
     list-style: none;
     margin: 0;
-    padding: 0;
-}
-
-.app-info li {
+    padding: 1rem 1.6rem;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-8);
-    padding: var(--padding-8) 0;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.app-info li > h4 {
-    margin: 0;
-    font-size: 2rem;
+.messages li {
+    padding: 0.8rem 1.2rem;
+    border-radius: 0.6rem;
+    font-size: 1.4rem;
     font-weight: 500;
-    color: var(--black-400);
-    white-space: nowrap;
 }
 
-.app-info li > h4:last-child:not(:first-child) {
-    color: var(--black-400);
-    font-weight: 800;
+.messages-success {
+    background: var(--green-50);
+    border: 1px solid var(--green-600);
+    color: var(--green-900);
 }
 
-.app-info meter {
-    width: 8.5rem;
-    height: 0.6rem;
-    border-radius: 999px;
-    appearance: none;
-    -webkit-appearance: none;
-    flex-shrink: 0;
+.messages-error {
+    background: var(--red-50);
+    border: 1px solid var(--red-500);
+    color: var(--red-900);
 }
 
-.app-info meter::-webkit-meter-bar {
-    background: var(--white-600);
-    border: none;
-    border-radius: var(--borderR-192);
-    height: 1rem;
-}
+/* ============================================================
+   4. ANIMACIONES
+   (Bloque reservado para keyframes y animaciones reutilizables;
+   las transiciones de cada componente viven dentro de este.)
+   ============================================================ */
 
-.app-info meter::-webkit-meter-optimum-value,
-.app-info meter::-webkit-meter-suboptimum-value,
-.app-info meter::-webkit-meter-even-less-good-value {
-    border-radius: 999px;
-}
-
-*/
-
-/* Color por posición de fila dentro de cada tarjeta:
-   1ra = rojo, 2da = ámbar, 3ra = verde, 4ta = azul */
-
-/* 
-
-.app-info li:nth-child(1) meter::-webkit-meter-optimum-value {background: var(--green-500)};
-.app-info li:nth-child(1) meter::-webkit-meter-suboptimum-value {background: var(--yellow-500)};
-.app-info li:nth-child(1) meter::-webkit-meter-even-less-good-value { background: var(--red-500)};
-.app-info li:nth-child(1) meter::-moz-meter-bar { background: var(--red-500)};
-
-.app-info li:nth-child(2) meter::-webkit-meter-optimum-value  {background: var(--green-500)};
-.app-info li:nth-child(2) meter::-webkit-meter-suboptimum-value {background: var(--yellow-500)};
-.app-info li:nth-child(2) meter::-webkit-meter-even-less-good-value { background: var(--red-500)};
-.app-info li:nth-child(2) meter::-moz-meter-bar { background: var(--red-500); }
-
-.app-info li:nth-child(3) meter::-webkit-meter-optimum-value {background: var(--green-500)};
-.app-info li:nth-child(3) meter::-webkit-meter-suboptimum-value {background: var(--yellow-500)};
-.app-info li:nth-child(3) meter::-webkit-meter-even-less-good-value { background: var(--red-500)};
-.app-info li:nth-child(3) meter::-moz-meter-bar { background: var(--red-500)};
-
-.app-info li:nth-child(4) meter::-webkit-meter-optimum-value {background: var(--green-500)};
-.app-info li:nth-child(4) meter::-webkit-meter-suboptimum-value {background: var(--yellow-500)};
-.app-info li:nth-child(4) meter::-webkit-meter-even-less-good-value { background: var(--red-500)};
-.app-info li:nth-child(4) meter::-moz-meter-bar { background: var(--red-500)};  
-
-*/
-
-/* =================== RESPONSIVE =================== */
+/* ============================================================
+   5. RESPONSIVE
+   ============================================================ */
 
 @media (max-width: 1024px) {
     .container-flex1 {
@@ -634,7 +629,9 @@ aside .opt-modulo h4 {
     }
 }
 
-/* =================== FOCO / ACCESIBILIDAD =================== */
+/* ============================================================
+   6. ACCESIBILIDAD / UTILIDADES
+   ============================================================ */
 
 a:focus-visible,
 button:focus-visible,

@@ -1,72 +1,67 @@
 from django.db import models
-from django.db.models import CASCADE, PROTECT, SET_NULL
-from structure.models import Apartment
-from incidents.models import Incident
-from accounts.models import User
+from django.utils import timezone
 import uuid
 
 # ==================================================
-# ÓRDENES DE MANTENIMIENTO
+# CARGOS / CUOTAS DE MANTENIMIENTO
 # ==================================================
 
-class MaintenanceOrder(models.Model):
+class MaintenanceCharge(models.Model):
     """
-    Orden de mantenimiento
-    Puede originarse de una incidencia o ser preventiva
+    Cargo recurrente de mantenimiento con sus métodos de pago permitidos
+    (concepto, periodicidad, monto, vigencia y evidencia fotográfica).
     """
-    TYPE_CHOICES = (
-        ('preventive', 'Preventivo'),
-        ('corrective', 'Correctivo'),
-        ('emergency', 'Emergencia'),
+    CONCEPT_CHOICES = (
+        ('maintenance', 'Mantenimiento'),
+        ('security', 'Seguridad'),
+        ('cleaning', 'Limpieza'),
+        ('administration', 'Administración'),
+        ('reserve_fund', 'Fondo de reserva'),
+        ('water', 'Agua'),
+        ('electricity', 'Electricidad'),
+        ('other', 'Otro'),
     )
-    
-    STATUS_CHOICES = (
-        ('scheduled', 'Programado'),
-        ('in_progress', 'En proceso'),
-        ('completed', 'Completado'),
-        ('cancelled', 'Cancelado'),
+
+    PERIODICITY_CHOICES = (
+        ('monthly', 'Mensual'),
+        ('quarterly', 'Trimestral'),
+        ('semiannual', 'Semestral'),
+        ('annual', 'Anual'),
     )
-    
+
+    # Mismos métodos que define Payment (payments.models): efectivo,
+    # transferencia, tarjeta, cheque, en línea y otro.
+    PAYMENT_METHOD_CHOICES = (
+        ('cash', 'Efectivo'),
+        ('transfer', 'Transferencia'),
+        ('card', 'Tarjeta'),
+        ('check', 'Cheque'),
+        ('online', 'Pago en línea'),
+        ('other', 'Otro'),
+    )
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    incident = models.ForeignKey(
-        Incident,
-        on_delete=SET_NULL,
-        null=True,
+    concept = models.CharField(max_length=30, choices=CONCEPT_CHOICES)
+    periodicity = models.CharField(max_length=20, choices=PERIODICITY_CHOICES, default='monthly')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    payment_methods = models.CharField(
+        max_length=20,
+        choices=PAYMENT_METHOD_CHOICES,
         blank=True,
-        related_name='maintenance_orders'
-    )
-    apartment = models.ForeignKey(
-        Apartment,
-        on_delete=CASCADE,
-        related_name='maintenance_orders',
         null=True,
-        blank=True
     )
-    assigned_to = models.ForeignKey(User, on_delete=PROTECT, related_name='maintenance_orders')
-    
-    type = models.CharField(max_length=30, choices=TYPE_CHOICES)
-    description = models.TextField()
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='scheduled')
-    
-    scheduled_date = models.DateField(blank=True, null=True)
-    completion_date = models.DateField(blank=True, null=True)
-    
-    estimated_cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    actual_cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    
-    notes = models.TextField(blank=True, null=True)
+
+    effective_date = models.DateField(default=timezone.localdate)
+    photo = models.FileField(upload_to='mantenimiento/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        ordering = ['-scheduled_date']
-        verbose_name_plural = 'Maintenance Orders'
-        indexes = [
-            models.Index(fields=['status']),
-            models.Index(fields=['assigned_to']),
-        ]
-    
-    def __str__(self):
-        apartment_str = f" - {self.apartment.name}" if self.apartment else ""
-        return f"#{self.id.hex[:8]} {apartment_str} - {self.get_type_display()}"
 
+    class Meta:
+        ordering = ['-effective_date']
+        verbose_name_plural = 'Cargos de mantenimiento'
+
+    def __str__(self):
+        return f"{self.get_concept_display()} - {self.amount} ({self.get_periodicity_display()})"

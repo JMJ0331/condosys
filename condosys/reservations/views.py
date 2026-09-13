@@ -4,6 +4,8 @@ from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import CommonArea, Reservation
+from residents.models import Resident
+from areas_comunes.models import AreaComun
 from .serializers import (
     CommonAreaSerializer, ReservationListSerializer,
     ReservationDetailSerializer
@@ -16,6 +18,8 @@ def app_index(request):
     contexto = {
         'form_common_area': CommonAreaForm(),
         'form_reservation': ReservationForm(),
+        'areas': AreaComun.objects.filter(status='activo'),
+        'residentes': Resident.objects.select_related('apartment').all(),
         'module_name': 'Reservas'
     }
     return render(request, 'reservations/index.html', contexto)
@@ -38,9 +42,7 @@ def crear_area_comun(request):
 def crear_reserva(request):
     form = ReservationForm(request.POST)
     if form.is_valid():
-        reserva = form.save(commit=False)
-        reserva.reserved_by = request.user
-        reserva.save()
+        form.save()
         messages.success(request, 'Reserva creada correctamente.')
     else:
         messages.error(request, 'No se pudo crear la reserva. Revisa los datos enviados.')
