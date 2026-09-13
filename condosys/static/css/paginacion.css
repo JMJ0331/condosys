@@ -1,3 +1,5 @@
+@import url(variables.css);
+
 /* ============================================
    Paginación (componente compartido)
    ============================================ */
@@ -6,16 +8,16 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: 12px;
+	gap: 1.2rem;
 	flex-wrap: wrap;
-	padding-top: 16px;
-	margin-top: 18px;
+	padding-top: 1.6rem;
+	margin-top: 1.8rem;
 }
 
 .numeros-paginacion {
 	display: flex;
 	align-items: center;
-	gap: 6px;
+	gap: 0.6rem;
 	flex-wrap: wrap;
 }
 
@@ -24,15 +26,15 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-width: 34px;
-	height: 34px;
-	padding: 0 10px;
-	border: 1px solid #e2e5ea;
+	min-width: 3.4rem;
+	height: 3.4rem;
+	padding: 0 1rem;
+	border: 1px solid var(--black-50);
 	border-radius: 8px;
-	background: #ffffff;
-	color: #4b5563;
+	background: var(--white-50);
+	color: var(--black-400);
 	font: inherit;
-	font-size: 12.5px;
+	font-size: 1.25rem;
 	font-weight: 500;
 	text-decoration: none;
 	cursor: pointer;
@@ -40,8 +42,8 @@
 
 .boton-pagina:hover,
 .numero-pagina:not(.activa):not(.puntos):hover {
-	border-color: #16a34a;
-	color: #166534;
+	border-color: var(--green-600);
+	color: var(--green-800);
 }
 
 .boton-pagina.deshabilitada {
@@ -50,9 +52,9 @@
 }
 
 .numero-pagina.activa {
-	background: #14532d;
-	border-color: #14532d;
-	color: #ffffff;
+	background: var(--green-900);
+	border-color: var(--green-900);
+	color: var(--white-50);
 }
 
 .numero-pagina.puntos {

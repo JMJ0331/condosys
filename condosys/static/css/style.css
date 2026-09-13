@@ -50,29 +50,29 @@ body {
 
 /* Bar Header Container */
 .app-header {
-    height: 64px;
+    height: 6.4rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #fafbfc;
+    background-color: var(--white-100);
     padding: 0 var(--padding-24);
     
-    border-bottom: 1px solid #e5e9e6;
+    border-bottom: 1px solid var(--black-50);
 }
 
 /* Título Izquierdo */
 .header-title {
     font-size: 2.4rem;
     font-weight: bold;
-    color: #006a3b;
-    letter-spacing: -0.2px;
+    color: var(--green-800);
+    letter-spacing: -0.02rem;
 }
 
 /* Sección Derecha */
 .header-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 1.6rem;
 }
 
 /* Caja de Búsqueda */
@@ -84,43 +84,43 @@ body {
 
 .search-icon {
     position: absolute;
-    left: 12px;
-    width: 16px;
-    height: 16px;
-    stroke: #66786d;
+    left: 1.2rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    stroke: var(--black-300);
     cursor: pointer;
 }
 
 .search-icon img{
-    width: 16px;
-    height: 16px;
+    width: 1.6rem;
+    height: 1.6rem;
 }
 
 .search-input {
-    background-color: #eff4f0;
-    border: 1px solid #d5dfd7;
+    background-color: var(--green-25);
+    border: 1px solid var(--black-50);
     border-radius: 8px;
     padding: 1rem 3.5rem;
     font-size: 1.4rem;
-    color: #2c3e35;
-    width: 280px;
+    color: var(--black-400);
+    width: 28rem;
     outline: none;
     transition: background-color 0.2s, border-color 0.2s;
 }
 
 .search-input::placeholder {
-    color: #7b8e83;
+    color: var(--black-200);
 }
 
 .search-input:focus {
-    background-color: #ffffff;
-    border-color: #006a3b;
+    background-color: var(--white-50);
+    border-color: var(--green-800);
 }
 
 /* Botón + Nuevo */
 .btn-nuevo {
-    background-color: #006A3B;
-    color: #ffffff;
+    background-color: var(--green-800);
+    color: var(--white-50);
     border: none;
     border-radius: 8px;
     padding: var(--padding-8) var(--padding-16);
@@ -129,12 +129,12 @@ body {
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 0.4rem;
     transition: background-color 0.2s ease;
 }
 
 .btn-nuevo:hover {
-    background-color: #00522e;
+    background-color: var(--green-900);
 }
 
 /* Icono Notificación */
@@ -143,25 +143,25 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    color: #333333;
+    color: var(--black-400);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
+    padding: 0.4rem;
 }
 
 .notification-btn img{
-    width: 22px;
-    height: 22px;
+    width: 2.2rem;
+    height: 2.2rem;
 }
 
 /* Avatar Usuario */
 .user-avatar {
-    width: 42px;
-    height: 42px;
+    width: 4.2rem;
+    height: 4.2rem;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid #d5dfd7;
+    border: 1px solid var(--black-50);
     cursor: pointer;
 }
 
@@ -206,13 +206,13 @@ body {
 }
 
 .btn-add:focus-visible {
-    outline: 2px solid var(--b);
-    outline-offset: 2px;
+    outline: 2px solid var(--green-600);
+    outline-offset: 0.2rem;
 }
 
 .icon-btn {
-    width: 40px;
-    height: 40px;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     padding: var(--padding-8);
     cursor: pointer;
@@ -263,8 +263,8 @@ aside {
 }
 
 .container-img{
-    width: 50px;
-    height: 50px;
+    width: 5rem;
+    height: 5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -289,7 +289,7 @@ aside {
     font-size: 2.8rem;
     font-weight: normal;
     color: var(--white-50);
-    letter-spacing: -0.5px;
+    letter-spacing: -0.05rem;
 }
 
 .nombre-residencial{
@@ -344,8 +344,8 @@ aside .opt-modulo.active {
 }
 
 aside .opt-modulo img {
-    width: 22px;
-    height: 22px;
+    width: 2.2rem;
+    height: 2.2rem;
     flex-shrink: 0;
     opacity: 0.8;
 }
@@ -419,8 +419,8 @@ aside .opt-modulo h4, .otras-opciones{
 }
 
 .app-info>.opt-modulo img, .otras-opciones img {
-    width: 22px;
-    height: 22px;
+    width: 2.2rem;
+    height: 2.2rem;
 }
 
 .app-info>.opt-modulo img{
@@ -455,7 +455,7 @@ aside .opt-modulo h4, .otras-opciones{
 
 .app-info li > h4 {
     margin: 0;
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 500;
     color: var(--black-400);
     white-space: nowrap;
@@ -467,8 +467,8 @@ aside .opt-modulo h4, .otras-opciones{
 }
 
 .app-info meter {
-    width: 85px;
-    height: 6px;
+    width: 8.5rem;
+    height: 0.6rem;
     border-radius: 999px;
     appearance: none;
     -webkit-appearance: none;
@@ -479,7 +479,7 @@ aside .opt-modulo h4, .otras-opciones{
     background: var(--white-600);
     border: none;
     border-radius: var(--borderR-192);
-    height: 10px;
+    height: 1rem;
 }
 
 .app-info meter::-webkit-meter-optimum-value,
@@ -531,7 +531,7 @@ aside .opt-modulo h4, .otras-opciones{
 
 @media (max-width: 768px) {
     :root {
-        --sidebar-w: 64px;
+        --sidebar-w: 6.4rem;
     }
 
     aside .opt-modulo h4 {
@@ -543,7 +543,7 @@ aside .opt-modulo h4, .otras-opciones{
     }
 
     .container-main-side2 {
-        padding: 18px;
+        padding: 1.8rem;
     }
 
     .app-info {
@@ -556,6 +556,6 @@ aside .opt-modulo h4, .otras-opciones{
 a:focus-visible,
 button:focus-visible,
 .opt-modulo:focus-visible {
-    outline: 2px solid var(--brand-green);
-    outline-offset: 2px;
+    outline: 2px solid var(--green-600);
+    outline-offset: 0.2rem;
 }

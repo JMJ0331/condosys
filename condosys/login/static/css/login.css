@@ -9,7 +9,7 @@ body {
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 140rem;
   width: 90%;
   display: flex;
   justify-content: center;
@@ -19,7 +19,7 @@ body {
 
 .panel-login {
   width: 90%;
-  max-width: 720px;
+  max-width: 72rem;
   height: auto;
   display: grid;
   grid-template-columns: 1fr;
@@ -56,8 +56,8 @@ body {
 .nombre-app {
   font-size: 2rem;
   font-weight: bold;
-  letter-spacing: -0.5px;
-  color: #ffffff;
+  letter-spacing: -0.05rem;
+  color: var(--white-50);
 }
 
 .lado-der {
@@ -98,7 +98,7 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 12px;
+  left: 1.2rem;
   font-size: 1.6rem;
   transition: 250ms ease;
   color: var(--black-200);
@@ -180,7 +180,7 @@ body {
 @media (min-width: 426px) {
   .panel-login {
     grid-template-columns: repeat(2, 1fr);
-    height: 420px;
+    height: 42rem;
     border-radius: 16px;
   }
 
@@ -199,7 +199,7 @@ body {
   }
   /* increase form width on larger small screens */
   .form {
-    max-width: 520px;
+    max-width: 52rem;
   }
 }
 
@@ -213,14 +213,14 @@ body {
     padding: 3.5rem;
   }
   .form {
-    max-width: 600px;
+    max-width: 60rem;
   }
 }
 
 
 @media (min-width: 1201px) {
   .panel-login {
-    max-width: 900px;
+    max-width: 90rem;
   }
 }
 
@@ -245,7 +245,7 @@ body {
 
   /* Avoid inputs becoming too wide on very narrow screens */
   .input {
-    max-width: 520px;
+    max-width: 52rem;
     width: 100%;
     box-sizing: border-box;
     margin: 0 auto;
