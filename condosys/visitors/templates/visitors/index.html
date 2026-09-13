@@ -4,7 +4,7 @@
   <form method="post" action="{% url 'crear_visitante' %}">
     {% csrf_token %}
     {{ form_visitor.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
     </div>
   </form>

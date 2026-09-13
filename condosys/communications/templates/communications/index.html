@@ -4,7 +4,7 @@
   <form method="post" action="{% url 'crear_comunicacion' %}">
     {% csrf_token %}
     {{ form.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
     </div>
   </form>

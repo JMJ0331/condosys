@@ -4,7 +4,7 @@
   <form method="post" action="{% url 'crear_area_comun' %}">
     {% csrf_token %}
     {{ form_common_area.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
     </div>
   </form>
@@ -14,7 +14,7 @@
   <form method="post" action="{% url 'crear_reserva' %}">
     {% csrf_token %}
     {{ form_reservation.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
     </div>
   </form>

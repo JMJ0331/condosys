@@ -4,7 +4,7 @@
   <form method="post" action="{% url 'crear_incidencia' %}">
     {% csrf_token %}
     {{ form_incident.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
     </div>
   </form>
@@ -14,7 +14,7 @@
   <form method="post" action="{% url 'crear_imagen_incidencia' %}">
     {% csrf_token %}
     {{ form_incident_image.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
     </div>
   </form>
@@ -24,7 +24,7 @@
   <form method="post" action="{% url 'crear_historial_incidencia' %}">
     {% csrf_token %}
     {{ form_incident_history.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
     </div>
   </form>
