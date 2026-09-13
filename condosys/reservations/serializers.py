@@ -20,12 +20,16 @@ class CommonAreaSerializer(serializers.ModelSerializer):
 class ReservationListSerializer(serializers.ModelSerializer):
     """Serializer simplificado para Reservation (listados)"""
     common_area_name = serializers.CharField(source='common_area.name', read_only=True)
+    apartment_name = serializers.CharField(source='apartment.name', read_only=True)
+    resident_name = serializers.CharField(source='resident.full_name', read_only=True)
     reserved_by_email = serializers.CharField(source='reserved_by.email', read_only=True)
     
     class Meta:
         model = Reservation
         fields = [
             'id', 'common_area', 'common_area_name',
+            'apartment', 'apartment_name',
+            'resident', 'resident_name',
             'reserved_by', 'reserved_by_email',
             'start_time', 'end_time', 'reason',
             'expected_guests', 'status', 'created_at'
@@ -36,6 +40,8 @@ class ReservationListSerializer(serializers.ModelSerializer):
 class ReservationDetailSerializer(serializers.ModelSerializer):
     """Serializer detallado para Reservation"""
     common_area_detail = CommonAreaSerializer(source='common_area', read_only=True)
+    apartment_name = serializers.CharField(source='apartment.name', read_only=True)
+    resident_name = serializers.CharField(source='resident.full_name', read_only=True)
     reserved_by_detail = UserSerializer(source='reserved_by', read_only=True)
     approved_by_detail = UserSerializer(source='approved_by', read_only=True)
     
@@ -43,6 +49,8 @@ class ReservationDetailSerializer(serializers.ModelSerializer):
         model = Reservation
         fields = [
             'id', 'common_area', 'common_area_detail',
+            'apartment', 'apartment_name',
+            'resident', 'resident_name',
             'reserved_by', 'reserved_by_detail',
             'start_time', 'end_time', 'reason', 'expected_guests',
             'status', 'approved_by', 'approved_by_detail',
