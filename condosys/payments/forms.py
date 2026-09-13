@@ -12,6 +12,8 @@ class PaymentForm(forms.ModelForm):
             'receipt_image', 'status',
         ]
         widgets = {
+            # data-pago-apartamento y data-pago-residente son referencias que usa
+            # static/js/pagos.js para filtrar los residentes según el apartamento elegido.
             'apartment': forms.Select(attrs={
                 'class': 'campo-seleccion',
                 'data-pago-apartamento': '',
@@ -41,12 +43,15 @@ class PaymentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # select_related evita consultas extra al mostrar el apartamento de cada residente.
         self.fields['resident'].queryset = Resident.objects.select_related('apartment').all()
 
     def clean(self):
         cleaned_data = super().clean()
         apartment = cleaned_data.get('apartment')
         resident = cleaned_data.get('resident')
+        # Consistencia cliente/servidor: aunque el JS ya filtra, se valida
+        # que el residente pertenezca realmente al apartamento seleccionado.
         if apartment and resident and resident.apartment_id != apartment.id:
             self.add_error('resident', 'El residente no pertenece al apartamento seleccionado.')
         return cleaned_data

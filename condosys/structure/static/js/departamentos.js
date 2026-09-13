@@ -11,6 +11,8 @@
  *   - <input type="hidden" id="id_status">
  */
 (() => {
+  // Referencias a los controles del formulario de registro de departamentos. Se dejan
+  // el id del campo de estado (id_status) cifrado al mismo nombre que usa el modelo.
   const selectJardin = document.getElementById('select-jardin');
   const selectEdificio = document.querySelector('[data-departamento="edificio"]');
   const selectPropietario = document.querySelector('[data-departamento="propietario"]');
@@ -18,6 +20,8 @@
   const toggleOcupado = document.getElementById('toggle-ocupado');
   const inputStatus = document.getElementById('id_status');
 
+  // Muestra solo los edificios del jardín elegido (cada <option> declara su jardín
+  // en data-garden). Si el edificio seleccionado ya no pertenece al jardín, se deselecciona.
   function filtrarEdificios() {
     if (!selectJardin || !selectEdificio) return;
     const jardin = selectJardin.value;
@@ -33,6 +37,8 @@
     }
   }
 
+  // Actualiza la etiqueta de ubicación con el jardín y edificio actualmente elegidos.
+  // Los contenedores de información son opcionales: solo se actualizan si existen en la página.
   function mostrarUbicacion() {
     if (!selectEdificio) return;
     const opt = selectEdificio.selectedOptions[0];
@@ -48,6 +54,8 @@
     }
   }
 
+  // Búsqueda del propietario: oculta las opciones del select que no contengan el
+  // texto escrito. Si el propietario elegido deja de coincidir, lo deseleccionamos.
   function filtrarResidentes() {
     if (!inputBuscarResidente || !selectPropietario) return;
     const termino = inputBuscarResidente.value.trim().toLowerCase();
@@ -62,12 +70,15 @@
     }
   }
 
+  // El interruptor visual "Ocupado" se traduce al campo oculto status del formulario
+  // (occupied/empty), que es el valor que persiste el backend.
   function sincronizarEstado() {
     if (toggleOcupado && inputStatus) {
       inputStatus.value = toggleOcupado.checked ? 'occupied' : 'empty';
     }
   }
 
+  // Conexión de eventos: filtro de jardín, cambio de edificio y estado inicial de ambos.
   if (selectJardin && selectEdificio) {
     selectJardin.addEventListener('change', filtrarEdificios);
     selectEdificio.addEventListener('change', mostrarUbicacion);
@@ -75,10 +86,12 @@
     mostrarUbicacion();
   }
 
+  // Búsqueda del propietario en tiempo real mientras se escribe.
   if (inputBuscarResidente && selectPropietario) {
     inputBuscarResidente.addEventListener('input', filtrarResidentes);
   }
 
+  // Sincronización del estado ocupado/desocupado al alternar el interruptor.
   if (toggleOcupado && inputStatus) {
     toggleOcupado.addEventListener('change', sincronizarEstado);
   }

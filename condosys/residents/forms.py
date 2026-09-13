@@ -3,17 +3,19 @@ from django.core.exceptions import ValidationError
 from PIL import Image
 from .models import Resident
 
-
+# Restricciones de imagen compartidas por todos los formularios que suben fotos.
 ALLOWED_FORMATS = ('JPEG', 'PNG', 'WEBP')
 MAX_SIZE_MB = 2
 
 
 def validate_photo(image):
+    """Valida que el archivo sea una imagen JPG/PNG/WEBP de máximo 2 MB."""
     if image is None:
         return
     if image.size > MAX_SIZE_MB * 1024 * 1024:
         raise ValidationError(f"La imagen no puede superar {MAX_SIZE_MB} MB.")
     try:
+        # verify() abre y comprueba la integridad del archivo sin dejarlo en memoria.
         img = Image.open(image)
         img.verify()
         fmt = (img.format or '').upper()
@@ -24,6 +26,7 @@ def validate_photo(image):
 
 
 class ResidentForm(forms.ModelForm):
+    """Formulario de alta/edición de residentes; usa estilos y clases compartidos."""
     class Meta:
         model = Resident
         fields = [
@@ -37,6 +40,7 @@ class ResidentForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'placeholder': '000-000-0000'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Correo electrónico'}),
             'emergency_contact': forms.TextInput(attrs={'placeholder': '000-000-0000'}),
+            # Clases 'campo-seleccion' y 'entrada-interruptor' vienen de static/css/formularios.css.
             'apartment': forms.Select(attrs={'class': 'campo-seleccion'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'entrada-interruptor'}),
         }
