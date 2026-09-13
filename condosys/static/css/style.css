@@ -311,7 +311,7 @@ aside {
     height: 100dvh;
     position: sticky;
     top: 0;
-    overflow-y: auto;
+    overflow: hidden;
     display: flex;
     
     flex-direction: column;
@@ -321,33 +321,40 @@ aside {
     padding: var(--padding-16);
 }
 
-/* Scrollbar del sidebar (visible en pantallas pequeñas) */
-aside {
+/* El scroll vive solo en la lista central: logo y usuario quedan fijos
+   y las opciones ya no pasan por debajo de ellos. */
+.aside-options {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--green-600) 50%, transparent) var(--green-900);
 }
 
-aside::-webkit-scrollbar {
+/* Scrollbar del sidebar (visible en pantallas pequeñas) */
+.aside-options::-webkit-scrollbar {
     width: 0.6rem;
 }
 
-aside::-webkit-scrollbar-track {
+.aside-options::-webkit-scrollbar-track {
     background: var(--green-900);
 }
 
-aside::-webkit-scrollbar-thumb {
+.aside-options::-webkit-scrollbar-thumb {
     background: color-mix(in srgb, var(--green-600) 50%, transparent);
     border-radius: var(--borderR-24);
 }
 
-aside::-webkit-scrollbar-thumb:hover {
+.aside-options::-webkit-scrollbar-thumb:hover {
     background: color-mix(in srgb, var(--green-500) 50%, transparent);
 }
 
 .cont-info{
     display: flex;
     flex-direction: column;
-    gap: var(--space-16);
+    gap: var(--space-8);
+    flex: 1;
+    min-height: 0;
 }
 
 .app-log{
@@ -359,7 +366,7 @@ aside::-webkit-scrollbar-thumb:hover {
     top: 0;
     z-index: 10;
     background-color: var(--green-900);
-    padding-bottom: var(--padding-16);
+    padding-bottom: var(--padding-8);
 }
 
 .container-img{
@@ -395,7 +402,7 @@ aside::-webkit-scrollbar-thumb:hover {
     display: flex;
     align-items: center;
     gap: var(--space-8);
-    margin-top: 4rem;
+    margin-top: var(--margin-16);
     padding-top: var(--padding-16);
     border-top: 1px solid var(--green-75);
     color: var(--white-50);
