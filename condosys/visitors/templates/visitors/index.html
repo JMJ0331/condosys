@@ -1,12 +1,97 @@
-{% extends 'base.html' %} {% block mini-cards %}
+{% extends 'base.html' %}
+{% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  <form method="post" action="{% url 'crear_visitante' %}">
-    {% csrf_token %}
-    {{ form_visitor.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
+
+  <div class="panel-acciones">
+    <div class="acciones">
+      <h3>Registrar Visitante</h3>
+
+      <form method="post" action="{% url 'crear_visitante' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_visitor.non_field_errors }}
+
+        <div class="seccion-formulario">
+          <legend>Información del visitante</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.name.id_for_label }}">{{ form_visitor.name.label }}</label>
+              {{ form_visitor.name }}
+              {{ form_visitor.name.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.type.id_for_label }}">{{ form_visitor.type.label }}</label>
+              {{ form_visitor.type }}
+              {{ form_visitor.type.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.document_type.id_for_label }}">{{ form_visitor.document_type.label }}</label>
+              {{ form_visitor.document_type }}
+              {{ form_visitor.document_type.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.document_image.id_for_label }}">{{ form_visitor.document_image.label }}</label>
+              <label class="btn-subir-archivo" for="{{ form_visitor.document_image.id_for_label }}">
+                {{ form_visitor.document_image }}
+                <span class="texto-boton-archivo" data-texto-archivo>Subir imagen</span>
+              </label>
+              <small class="ayuda-formulario" data-ayuda-foto>JPG, PNG o WEBP — máx. 2 MB</small>
+              {{ form_visitor.document_image.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Destino y autorización</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.apartment.id_for_label }}">{{ form_visitor.apartment.label }}</label>
+              {{ form_visitor.apartment }}
+              {{ form_visitor.apartment.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.authorized_by.id_for_label }}">{{ form_visitor.authorized_by.label }}</label>
+              {{ form_visitor.authorized_by }}
+              {{ form_visitor.authorized_by.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Registro de acceso</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.fecha_entrada.id_for_label }}">{{ form_visitor.fecha_entrada.label }}</label>
+              {{ form_visitor.fecha_entrada }}
+              {{ form_visitor.fecha_entrada.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.fecha_salida.id_for_label }}">{{ form_visitor.fecha_salida.label }}</label>
+              {{ form_visitor.fecha_salida }}
+              {{ form_visitor.fecha_salida.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Estado</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_visitor.status.id_for_label }}">{{ form_visitor.status.label }}</label>
+              {{ form_visitor.status }}
+              {{ form_visitor.status.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="pie-formulario">
+          <button type="submit">Agregar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </main>
 {% endblock %}

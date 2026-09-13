@@ -29,7 +29,6 @@ def crear_visitante(request):
     if form.is_valid():
         visitante = form.save(commit=False)
         visitante.registered_by = request.user
-        visitante.status = 'pending'
         visitante.save()
         messages.success(request, 'Visitante registrado correctamente.')
     else:

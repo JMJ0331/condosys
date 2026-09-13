@@ -19,7 +19,14 @@ class Visitor(models.Model):
         ('provider', 'Proveedor'),
         ('other', 'Otro'),
     )
-    
+
+    DOCUMENT_TYPE_CHOICES = (
+        ('cedula', 'Cédula'),
+        ('pasaporte', 'Pasaporte'),
+        ('licencia', 'Licencia de conducir'),
+        ('otro', 'Otro'),
+    )
+
     STATUS_CHOICES = (
         ('pending', 'Esperando'),
         ('authorized', 'Autorizado'),
@@ -34,6 +41,8 @@ class Visitor(models.Model):
     
     name = models.CharField(max_length=100)
     document = models.CharField(max_length=50, blank=True, null=True)
+    document_type = models.CharField(max_length=20, choices=DOCUMENT_TYPE_CHOICES, blank=True, null=True)
+    document_image = models.FileField(upload_to='visitantes/', blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     reason = models.CharField(max_length=100, blank=True, null=True)
     type = models.CharField(max_length=30, choices=TYPE_CHOICES, default='other')

@@ -10,7 +10,7 @@ class VisitorAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at', 'actual_entry', 'actual_exit')
     ordering = ('-scheduled_entry',)
     fieldsets = (
-        ('Visitor Info', {'fields': ('name', 'document', 'phone', 'type')}),
+        ('Visitor Info', {'fields': ('name', 'document_type', 'document', 'document_image', 'phone', 'type')}),
         ('Apartment & Registration', {'fields': ('apartment', 'registered_by')}),
         ('Schedule', {'fields': ('scheduled_entry', 'scheduled_exit', 'actual_entry', 'actual_exit')}),
         ('Authorization', {'fields': ('status', 'authorized_by', 'reason', 'vehicle_plate', 'notes')}),
