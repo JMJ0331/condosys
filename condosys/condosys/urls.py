@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('areas-comunes/', include('areas_comunes.urls')),
     path('', include('login.urls')),
-    path('inicio', include('inicio.urls')),
+    path('inicio/', include('inicio.urls')),
     path('cuentas/', include('accounts.urls')),
     path('chat/', include('chat.urls')),
     path('comunicados/', include('communications.urls')),

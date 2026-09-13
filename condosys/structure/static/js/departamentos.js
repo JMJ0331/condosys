@@ -1,13 +1,14 @@
 /**
  * Lógica específica del módulo Departamentos (structure).
  * - Página index (#filtros-departamentos): selector de columnas + auto-submit filtros.
- * - Página agregar: filtro de jardín → edificio, búsqueda de propietario, interruptor ocupado.
+ * - Página agregar: filtro de jardín → edificio, zona de imagen e interruptor ocupado.
  *
  * La plantilla agregar.html debe usar:
  *   - <select id="select-jardin">
  *   - <select data-departamento="edificio">     (sus opciones llevan data-garden)
- *   - <select data-departamento="propietario">
- *   - <input id="buscar-residente">
+ *   - <input type="file" data-departamento="foto">
+ *   - <div id="zona-imagen"> + <img id="vista-previa-imagen"> + <span id="contenido-zona">
+ *   - <button id="boton-subir-imagen">
  *   - <input type="checkbox" id="toggle-ocupado">
  *   - <input type="hidden" id="id_status">
  */
@@ -83,16 +84,21 @@
     });
   }
 
-  // --- Página agregar: filtros enlazados jardín → edificio + propietario ---
+  // --- Página agregar: jardín → edificio, zona de imagen y estado ---
 
   const selectJardin = document.getElementById('select-jardin');
   const selectEdificio = document.querySelector('[data-departamento="edificio"]');
-  const selectPropietario = document.querySelector('[data-departamento="propietario"]');
-  const inputBuscarResidente = document.getElementById('buscar-residente');
   const toggleOcupado = document.getElementById('toggle-ocupado');
   const inputStatus = document.getElementById('id_status');
   const inputTorre = document.getElementById('torre-departamento');
   const inputBloque = document.getElementById('bloque-departamento');
+  const zonaImagen = document.getElementById('zona-imagen');
+  const inputFoto = document.querySelector('[data-departamento="foto"]');
+  const botonSubir = document.getElementById('boton-subir-imagen');
+  const vistaPrevia = document.getElementById('vista-previa-imagen');
+  const contenidoZona = document.getElementById('contenido-zona');
+  const nombreArchivo = document.getElementById('nombre-archivo');
+  let urlPrevia = null;
 
   function filtrarEdificios() {
     if (!selectJardin || !selectEdificio) return;
@@ -121,24 +127,27 @@
     }
   }
 
-  function filtrarResidentes() {
-    if (!inputBuscarResidente || !selectPropietario) return;
-    const termino = inputBuscarResidente.value.trim().toLowerCase();
-    selectPropietario.querySelectorAll('option').forEach((opt) => {
-      opt.hidden = termino === '' || opt.textContent.toLowerCase().includes(termino);
-    });
-    if (
-      selectPropietario.value !== '' &&
-      !selectPropietario.selectedOptions[0]?.textContent.toLowerCase().includes(termino)
-    ) {
-      selectPropietario.value = '';
-    }
-  }
-
   function sincronizarEstado() {
     if (toggleOcupado && inputStatus) {
       inputStatus.value = toggleOcupado.checked ? 'occupied' : 'empty';
     }
+  }
+
+  function mostrarVistaPrevia(archivo) {
+    if (!archivo || !vistaPrevia) return;
+    if (urlPrevia) URL.revokeObjectURL(urlPrevia);
+    urlPrevia = URL.createObjectURL(archivo);
+    vistaPrevia.src = urlPrevia;
+    vistaPrevia.hidden = false;
+    if (contenidoZona) contenidoZona.hidden = true;
+    if (nombreArchivo) {
+      nombreArchivo.textContent = archivo.name;
+      nombreArchivo.hidden = false;
+    }
+  }
+
+  function abrirSelectorImagen() {
+    if (inputFoto) inputFoto.click();
   }
 
   if (selectJardin && selectEdificio) {
@@ -148,11 +157,40 @@
     mostrarUbicacion();
   }
 
-  if (inputBuscarResidente && selectPropietario) {
-    inputBuscarResidente.addEventListener('input', filtrarResidentes);
-  }
-
   if (toggleOcupado && inputStatus) {
     toggleOcupado.addEventListener('change', sincronizarEstado);
+    sincronizarEstado();
+  }
+
+  if (zonaImagen && inputFoto) {
+    zonaImagen.addEventListener('click', abrirSelectorImagen);
+    zonaImagen.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Enter' || evento.key === ' ') {
+        evento.preventDefault();
+        abrirSelectorImagen();
+      }
+    });
+    zonaImagen.addEventListener('dragover', (evento) => {
+      evento.preventDefault();
+      zonaImagen.classList.add('zona-activa');
+    });
+    zonaImagen.addEventListener('dragleave', () => {
+      zonaImagen.classList.remove('zona-activa');
+    });
+    zonaImagen.addEventListener('drop', (evento) => {
+      evento.preventDefault();
+      zonaImagen.classList.remove('zona-activa');
+      if (evento.dataTransfer.files.length > 0) {
+        inputFoto.files = evento.dataTransfer.files;
+        mostrarVistaPrevia(evento.dataTransfer.files[0]);
+      }
+    });
+    inputFoto.addEventListener('change', () => {
+      if (inputFoto.files.length > 0) mostrarVistaPrevia(inputFoto.files[0]);
+    });
+  }
+
+  if (botonSubir) {
+    botonSubir.addEventListener('click', abrirSelectorImagen);
   }
 })();

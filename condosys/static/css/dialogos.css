@@ -8,6 +8,7 @@ dialog {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background-color: black;
+	width: min(56rem, calc(100vw - 2.4rem));
 	max-height: 85vh;
 	padding: 1.6rem;
 	border: 1px solid var(--black-50);
@@ -50,7 +51,7 @@ dialog form textarea {
 	width: 100%;
 	box-sizing: border-box;
 	outline: none;
-	border: 1px solid var(--green-600);
+	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-4);
 	padding: 0.4rem 1.2rem;
 	background: var(--white-50);
@@ -104,4 +105,16 @@ dialog form textarea:focus {
 /* Marcador del componente modal (plantilla base) */
 .modo-modal {
 	background: gray;
+}
+
+@media (max-width: 560px) {
+	dialog {
+		width: calc(100vw - 1.6rem);
+		max-height: 90vh;
+		overflow-y: auto;
+	}
+
+	dialog form {
+		grid-template-columns: 1fr;
+	}
 }

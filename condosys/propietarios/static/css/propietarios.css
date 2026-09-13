@@ -46,10 +46,6 @@
 	outline: none;
 }
 
-.filtros-tabla select:focus {
-	border-color: var(--green-600);
-}
-
 /* Tabla */
 .tabla-filtrada {
 	margin-top: 1.8rem;

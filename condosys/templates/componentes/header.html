@@ -1,8 +1,9 @@
 {%load static %}
 <header class="app-header">
-  <h1 class="header-title">{{nombre_modulo}}</h1>
-
-  <div class="header-right">
-
+  <div class="titulo-encabezado">
+    {% if url_volver %}
+    <a href="{% url url_volver %}" class="boton-volver-flecha" aria-label="Volver">&lsaquo;</a>
+    {% endif %}
+    <h1 class="header-title">{{nombre_modulo}}</h1>
   </div>
 </header>

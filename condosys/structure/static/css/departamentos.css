@@ -97,46 +97,48 @@
 	flex-wrap: wrap;
 }
 
-.filtros-tabla select {
-	appearance: none;
-	-webkit-appearance: none;
-	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
-	border: 1px solid var(--black-50);
-	border-radius: var(--borderR-8);
-	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
-	font-size: 1.25rem;
-	color: var(--black-400);
-	cursor: pointer;
-	min-width: 15rem;
-	outline: none;
-}
-
-.filtros-tabla select:focus {
-	border-color: var(--green-600);
-}
-
-/* Selector de columnas visibles */
-.selector-columnas {
-	position: relative;
-}
-
+/* Filtros del listado + selector de columnas: mismo estilo en ambos. */
+.filtros-tabla select,
 .boton-columnas {
 	appearance: none;
 	-webkit-appearance: none;
+	box-sizing: border-box;
+	margin: 0;
 	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
 	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-8);
 	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
 	font: inherit;
 	font-size: 1.25rem;
+	line-height: 1.4;
 	color: var(--black-400);
 	cursor: pointer;
 	min-width: 15rem;
 	outline: none;
+	text-align: left;
+	transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
 }
 
-.boton-columnas:focus {
-	border-color: var(--green-600);
+.filtros-tabla select:hover,
+.boton-columnas:hover {
+	border-color: var(--green-900);
+}
+
+/* Mismo efecto de foco que los demás: borde + halo de sombra.
+   Los select nativos lo reciben de entradas.css (select:focus);
+   el botón es un <button> y necesita su propia regla para igualarlos. */
+.filtros-tabla select:focus,
+.boton-columnas:focus,
+.boton-columnas[aria-expanded="true"] {
+	border-color: var(--green-900);
+	border-width: 1px;
+	outline: none;
+	box-shadow: 0 0 0 2px var(--green-200);
+}
+
+/* Contenedor del selector de columnas visibles */
+.selector-columnas {
+	position: relative;
 }
 
 .panel-columnas {
@@ -178,6 +180,16 @@
 	accent-color: var(--green-900);
 	width: 1.6rem;
 	height: 1.6rem;
+}
+
+/* Los checkbox del panel no llevan el borde + halo de foco global
+   de entradas.css (input:focus); ese efecto es solo del botón. */
+.panel-columnas .opcion-columna input:focus,
+.panel-columnas .opcion-columna input:active {
+	border-color: var(--black-50) !important;
+	border-width: 1px !important;
+	box-shadow: none !important;
+	outline: none !important;
 }
 
 .opcion-columna span {
@@ -293,17 +305,256 @@ table.tabla-departamentos {
 	padding: 2.4rem;
 }
 
+/* Página agregar: réplica de departamentosformularioEstilo.png */
+.pagina-agregar {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+}
+
+.formulario-agregar {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 30rem;
+	gap: 1.6rem;
+	align-items: start;
+}
+
+.columna-principal {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+	min-width: 0;
+}
+
+.columna-lateral {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 1.2rem;
+	min-width: 0;
+	background: var(--white-50);
+}
+
+.tarjeta {
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	overflow: hidden;
+}
+
+.cabecera-tarjeta {
+	margin: 0;
+	padding: 1.2rem 1.6rem;
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: var(--black-400);
+	border-bottom: 1px solid var(--black-50);
+}
+
+.cuerpo-tarjeta {
+	padding: 1.6rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.etiqueta-campo {
+	font-size: 1.3rem;
+	font-weight: 500;
+	color: var(--black-400);
+}
+
+/* Zona de imagen con borde punteado */
+.zona-imagen {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 28rem;
+	padding: 1.6rem;
+	background: var(--white-100);
+	border: 1px dashed var(--black-100);
+	border-radius: var(--borderR-8);
+	cursor: pointer;
+}
+
+.zona-imagen:focus {
+	border-color: var(--green-900);
+	outline: none;
+}
+
+.zona-activa {
+	border-color: var(--green-900);
+	background: var(--green-25);
+}
+
+.contenido-zona {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	text-align: center;
+}
+
+.contenido-zona[hidden] {
+	display: none;
+}
+
+.icono-zona {
+	width: 2.4rem;
+	height: 2.4rem;
+	color: var(--white-700);
+}
+
+.texto-subir {
+	font-size: 1.2rem;
+	font-weight: 500;
+	color: var(--white-700);
+}
+
+.texto-ayuda {
+	font-size: 1.1rem;
+	color: var(--white-700);
+}
+
+.vista-previa-imagen {
+	max-width: 100%;
+	max-height: 26rem;
+	object-fit: contain;
+	border-radius: var(--borderR-4);
+}
+
+.vista-previa-imagen[hidden] {
+	display: none;
+}
+
+/* Input nativo de foto: fuera del layout pero funcional para que la
+   zona y el botón abran el selector con JS. */
+input[data-departamento="foto"] {
+	position: absolute;
+	width: 0.1rem;
+	height: 0.1rem;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.nombre-archivo {
+	font-size: 1.2rem;
+	color: var(--black-300);
+}
+
+.nombre-archivo[hidden] {
+	display: none;
+}
+
+.boton-subir {
+	align-self: flex-start;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-4);
+	padding: 0.4rem 1.2rem;
+	font: inherit;
+	font-size: 1.3rem;
+	font-weight: 500;
+	color: var(--green-900);
+	cursor: pointer;
+}
+
+.boton-subir svg {
+	width: 1.6rem;
+	height: 1.6rem;
+}
+
+/* Interruptor de la tarjeta Estado: como en la imagen, la pista queda
+   clara y lo verde es la pastilla (el interruptor compartido de
+   formularios.css usa pista verde + pastilla blanca). */
+.tarjeta-estado .deslizador-interruptor {
+	background: var(--white-400);
+}
+
+.tarjeta-estado .deslizador-interruptor::before {
+	background: var(--white-700);
+}
+
+.tarjeta-estado .interruptor input:checked + .deslizador-interruptor {
+	background: var(--white-400);
+}
+
+.tarjeta-estado .interruptor input:checked + .deslizador-interruptor::before {
+	background: var(--green-900);
+}
+
+/* Lateral: acción principal + cancelar (ancho del contenedor,
+   alto según contenido) */
+.boton-agregar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	box-sizing: border-box;
+	height: fit-content;
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--green-900);
+	color: var(--white-50);
+	border: none;
+	border-radius: var(--borderR-8);
+	font: inherit;
+	font-size: 1.4rem;
+	font-weight: 600;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.boton-cancelar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	box-sizing: border-box;
+	height: fit-content;
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--white-50);
+	color: var(--red-500);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	font-size: 1.4rem;
+	font-weight: 500;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+@media (max-width: 900px) {
+	.formulario-agregar {
+		grid-template-columns: 1fr;
+	}
+}
+
 @media (max-width: 560px) {
 	.contenedor-filtros {
-		align-items: flex-start;
+		align-items: stretch;
+		flex-direction: column;
 	}
 
-	.filtros-tabla {
+	.filtros-tabla,
+	.formulario-filtros {
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.selector-columnas {
 		width: 100%;
 	}
 
 	.filtros-tabla select,
-	.boton-columnas {
+	.boton-columnas,
+	.boton-nuevo-departamento {
+		width: 100%;
 		flex: 1 1 auto;
 		min-width: 0;
 	}

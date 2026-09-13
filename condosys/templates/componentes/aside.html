@@ -9,7 +9,7 @@
       </div>
 
       <div class="container-info">
-        <h1 class="nombre-app">Condosys</h1>
+        <h1 class="nombre-app">condosys</h1>
       </div>
     </div>
 
@@ -27,7 +27,7 @@
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'departamentos_index' %} active{% endif %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'departamentos_index' or request.resolver_match.url_name == 'agregar_departamento' %} active{% endif %}"
           href="{% url 'departamentos_index' %}"
         >
 
@@ -127,13 +127,28 @@
   </div>
   
 
-  <div class="container-links">
-
-    <span class="otras-opciones" role="button">
-      <img src="{% static "images/icons/log-out.svg" %}" alt="config">
-      Cerrar Sesión
-    </span>
+  {% if request.user.is_authenticated %}
+  <div class="usuario-sidebar">
+    <div class="avatar-usuario" aria-hidden="true">
+      {% if request.user.avatar_url %}
+      <img src="{{ request.user.avatar_url }}" alt="">
+      {% else %}
+      <span>{{ request.user.full_name|default:request.user.email|slice:":1"|upper }}</span>
+      {% endif %}
+    </div>
+    <div class="info-usuario">
+      <span class="nombre-usuario">{{ request.user.full_name|default:request.user.email }}</span>
+      <span class="correo-usuario">{{ request.user.email }}</span>
+    </div>
   </div>
+  {% else %}
+  <div class="usuario-sidebar">
+    <div class="avatar-usuario" aria-hidden="true"><span>?</span></div>
+    <div class="info-usuario">
+      <span class="nombre-usuario">Invitado</span>
+    </div>
+  </div>
+  {% endif %}
 
 
 </aside>
