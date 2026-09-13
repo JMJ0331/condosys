@@ -86,11 +86,11 @@
 .boton-nuevo-residente {
 	display: inline-flex;
 	align-items: center;
-	background: var(--green-800);
+	background: var(--green-900);
 	color: var(--white-50);
 	border: none;
 	border-radius: 8px;
-	padding: 0.9rem 1.6rem;
+	padding: var(--padding-8) var(--padding-16);
 	font-size: 1.25rem;
 	font-weight: 500;
 	cursor: pointer;
