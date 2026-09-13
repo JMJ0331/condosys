@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
@@ -13,7 +12,6 @@ from .serializers import ResidentSerializer
 PAGINATE_BY = 15
 
 
-@login_required
 def app_index(request):
     qs = Resident.objects.select_related(
         'apartment__building__garden', 'user'
@@ -53,7 +51,6 @@ def app_index(request):
     return render(request, 'residents/index.html', contexto)
 
 
-@login_required
 def nuevo_residente(request):
     contexto = {
         'form_resident': ResidentForm(),
@@ -62,7 +59,6 @@ def nuevo_residente(request):
     return render(request, 'residents/nuevo.html', contexto)
 
 
-@login_required
 @require_POST
 def crear_residente(request):
     form = ResidentForm(request.POST, request.FILES)

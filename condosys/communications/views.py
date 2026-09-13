@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
@@ -9,7 +8,6 @@ from .serializers import CommunicationSerializer
 from .forms import CommunicationForm
 
 
-@login_required
 def app_index(request):
     contexto = {
         "form": CommunicationForm(),
@@ -20,7 +18,6 @@ def app_index(request):
     return render(request, 'communications/index.html', contexto)
 
 
-@login_required
 @require_POST
 def crear_comunicacion(request):
     form = CommunicationForm(request.POST)

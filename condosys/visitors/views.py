@@ -1,6 +1,5 @@
 from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
@@ -14,7 +13,6 @@ from .serializers import VisitorSerializer
 from .forms import VisitorForm
 
 
-@login_required
 def app_index(request):
     contexto = {
         'form_visitor': VisitorForm(),
@@ -23,7 +21,6 @@ def app_index(request):
     return render(request, 'visitors/index.html', contexto)
 
 
-@login_required
 @require_POST
 def crear_visitante(request):
     form = VisitorForm(request.POST)

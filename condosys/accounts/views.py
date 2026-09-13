@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from rest_framework import viewsets, status
@@ -12,7 +11,6 @@ from .permissions import IsAdmin, CanModifyUser
 from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, ChangePasswordSerializer
 from .forms import UserForm, UserCreateForm
 
-@login_required
 def app_index(request):
 
     contexto = {
@@ -23,7 +21,6 @@ def app_index(request):
     return render(request, 'accounts/index.html', contexto)
 
 
-@login_required
 @require_POST
 def crear_usuario(request):
     form = UserForm(request.POST)
@@ -35,7 +32,6 @@ def crear_usuario(request):
     return redirect('inicio')
 
 
-@login_required
 @require_POST
 def crear_usuario_nuevo(request):
     form = UserCreateForm(request.POST)

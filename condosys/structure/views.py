@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
@@ -14,7 +13,6 @@ from .serializers import (
 from .forms import *
 
 
-@login_required
 def app_index(request):
 
     contexto = {
@@ -30,7 +28,6 @@ def app_index(request):
     return render(request, 'structure/index.html', contexto)
 
 
-@login_required
 @require_POST
 def crear_jardin(request):
     form = GardenForm(request.POST)
@@ -42,7 +39,6 @@ def crear_jardin(request):
     return redirect('inicio')
 
 
-@login_required
 @require_POST
 def crear_edificio(request):
     form = BuildingForm(request.POST)
@@ -54,7 +50,6 @@ def crear_edificio(request):
     return redirect('inicio')
 
 
-@login_required
 @require_POST
 def crear_departamento(request):
     form = ApartmentsForm(request.POST, request.FILES)

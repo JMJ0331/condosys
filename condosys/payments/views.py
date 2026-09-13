@@ -2,7 +2,6 @@ from decimal import Decimal, InvalidOperation
 from io import BytesIO
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
@@ -28,7 +27,6 @@ from residents.models import Resident
 from structure.models import Apartment
 
 
-@login_required
 def app_index(request):
     contexto = {
         'form_payment': PaymentForm(),
@@ -39,7 +37,6 @@ def app_index(request):
     return render(request, 'payments/index.html', contexto)
 
 
-@login_required
 @require_POST
 def crear_pago(request):
     form = PaymentForm(request.POST, request.FILES)
@@ -87,7 +84,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return queryset.distinct()
 
 
-@login_required
 def generar_comprobante(request):
     """Genera un comprobante de pago en PDF con los datos del formulario."""
     apartment_id = request.GET.get('apartment', '')

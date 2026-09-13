@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
@@ -12,7 +11,6 @@ from .serializers import (
 from .forms import CommonAreaForm, ReservationForm
 
 
-@login_required
 def app_index(request):
     contexto = {
         'form_common_area': CommonAreaForm(),
@@ -22,7 +20,6 @@ def app_index(request):
     return render(request, 'reservations/index.html', contexto)
 
 
-@login_required
 @require_POST
 def crear_area_comun(request):
     form = CommonAreaForm(request.POST)
@@ -34,7 +31,6 @@ def crear_area_comun(request):
     return redirect('inicio')
 
 
-@login_required
 @require_POST
 def crear_reserva(request):
     form = ReservationForm(request.POST)
