@@ -1,0 +1,66 @@
+/* ============================================
+   Panel de acciones compartido
+   ============================================ */
+
+.panel-acciones {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.acciones {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+	padding: 1.2rem;
+	border: 1px solid var(--black-50);
+	border-radius: 0.8rem;
+	background: var(--white-50);
+}
+
+.acciones h3 {
+	margin: 0;
+	color: var(--black-400);
+	font-size: 1.4rem;
+	font-weight: 600;
+}
+
+.contenedor-acciones {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.8rem;
+}
+
+.accion {
+	display: flex;
+	height: 7rem;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 0.8rem;
+	border-radius: 5px;
+	padding: var(--padding-8) 0;
+	background: var(--green-100);
+	color: var(--black-400);
+	text-align: center;
+	cursor: pointer;
+	font: inherit;
+	border: none;
+	text-decoration: none;
+}
+
+.accion img {
+	width: 2.1rem;
+	height: 2.1rem;
+}
+
+.accion span {
+	font-size: 1.2rem;
+}
+
+@media (max-width: 560px) {
+	.contenedor-acciones {
+		grid-template-columns: 1fr;
+	}
+}

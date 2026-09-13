@@ -1,0 +1,62 @@
+/* ============================================
+   Paginación (componente compartido)
+   ============================================ */
+
+.paginacion-tabla {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	flex-wrap: wrap;
+	padding-top: 16px;
+	margin-top: 18px;
+}
+
+.numeros-paginacion {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.boton-pagina,
+.numero-pagina {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 34px;
+	height: 34px;
+	padding: 0 10px;
+	border: 1px solid #e2e5ea;
+	border-radius: 8px;
+	background: #ffffff;
+	color: #4b5563;
+	font: inherit;
+	font-size: 12.5px;
+	font-weight: 500;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.boton-pagina:hover,
+.numero-pagina:not(.activa):not(.puntos):hover {
+	border-color: #16a34a;
+	color: #166534;
+}
+
+.boton-pagina.deshabilitada {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.numero-pagina.activa {
+	background: #14532d;
+	border-color: #14532d;
+	color: #ffffff;
+}
+
+.numero-pagina.puntos {
+	border: none;
+	background: none;
+	cursor: default;
+}

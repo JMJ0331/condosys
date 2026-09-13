@@ -1,0 +1,107 @@
+/* ============================================
+   Diálogos <dialog> compartidos
+   ============================================ */
+
+dialog {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: black;
+	max-height: 85vh;
+	padding: 1.6rem;
+	border: 1px solid var(--black-50);
+	border-radius: 0.8rem;
+	background: var(--white-50);
+	color: var(--black-400);
+}
+
+dialog::backdrop {
+	background: rgba(0, 0, 0, 0.45);
+}
+
+dialog form {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.2rem;
+	margin-top: 1.2rem;
+}
+
+dialog form p {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	margin: 0;
+}
+
+dialog form p:has(textarea) {
+	grid-column: 1 / -1;
+}
+
+dialog form label {
+	font-size: 1.3rem;
+	font-weight: 500;
+	color: var(--black-400);
+}
+
+dialog form input,
+dialog form select,
+dialog form textarea {
+	width: 100%;
+	box-sizing: border-box;
+	outline: none;
+	border: 1px solid var(--green-600);
+	border-radius: var(--borderR-4);
+	padding: 0.4rem 1.2rem;
+	background: var(--white-50);
+	font: inherit;
+	font-size: 1.4rem;
+	font-weight: 520;
+	color: var(--black-300);
+}
+
+dialog form input:not([type='checkbox']):not([type='radio']),
+dialog form select {
+	height: 4rem;
+}
+
+dialog form textarea {
+	min-height: 8rem;
+	resize: none;
+}
+
+dialog form input:hover,
+dialog form input:focus,
+dialog form select:hover,
+dialog form select:focus,
+dialog form textarea:hover,
+dialog form textarea:focus {
+	border-color: var(--green-900);
+}
+
+.cabecera-dialogo {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.8rem;
+}
+
+.cabecera-dialogo h3 {
+	margin: 0;
+	color: var(--black-400);
+	font-size: 1.4rem;
+}
+
+.boton-cerrar {
+	border: none;
+	background: transparent;
+	color: var(--black-400);
+	font-size: 1.8rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+/* Marcador del componente modal (plantilla base) */
+.modo-modal {
+	background: gray;
+}
