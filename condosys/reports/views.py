@@ -18,7 +18,7 @@ from reservations.models import Reservation
 from .forms import AuditLogForm, AuditLogDetailForm
 
 
-@login_required
+# @login_required
 def app_index(request):
     contexto = {
         'form_audit_log': AuditLogForm(),
@@ -28,7 +28,7 @@ def app_index(request):
     return render(request, 'reports/index.html', contexto)
 
 
-@login_required
+# @login_required
 @require_POST
 def crear_audit_log(request):
     form = AuditLogForm(request.POST)
@@ -42,7 +42,7 @@ def crear_audit_log(request):
     return redirect('inicio')
 
 
-@login_required
+# @login_required
 @require_POST
 def crear_audit_log_detail(request):
     form = AuditLogDetailForm(request.POST)

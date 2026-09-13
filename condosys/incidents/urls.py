@@ -6,13 +6,13 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'incidents', IncidentViewSet, basename='incident')
-router.register(r'history', IncidentHistoryViewSet, basename='incidenthistory')
+router.register(r'incidencias', IncidentViewSet, basename='incidencia')
+router.register(r'historial', IncidentHistoryViewSet, basename='historialincidencia')
 
 urlpatterns = [
     path('crear/imagen/', crear_imagen_incidencia, name='crear_imagen_incidencia'),
     path('crear/historial/', crear_historial_incidencia, name='crear_historial_incidencia'),
     path('crear/', crear_incidencia, name='crear_incidencia'),
-    path('', app_index, name='incidents_index'),
+    path('', app_index, name='incidencias_index'),
     path('', include(router.urls)),
 ]

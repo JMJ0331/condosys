@@ -8,185 +8,99 @@
 
 <main class="container-main-side2">
 
-  <div class="panel-acciones">
+  <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
-      <h3>Registrar Departamento</h3>
 
-      <form method="post" action="{% url 'crear_departamento' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form_apartments.non_field_errors }}
+  <div class="contenedor-filtros">
+    <h2>Todos los departamentos</h2>
 
-        <div class="seccion-formulario">
-          <legend>Información del departamento</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_apartments.name.id_for_label }}">{{ form_apartments.name.label }}</label>
-              {{ form_apartments.name }}
-              {{ form_apartments.name.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label>Buscar propietario/residente</label>
-              <input type="text" id="buscar-residente" class="campo-entrada" placeholder="Buscar" autocomplete="off">
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_apartments.owner.id_for_label }}">{{ form_apartments.owner.label }}</label>
-              {{ form_apartments.owner }}
-              {{ form_apartments.owner.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_apartments.photo.id_for_label }}">{{ form_apartments.photo.label }}</label>
-              {{ form_apartments.photo }}
-              {{ form_apartments.photo.errors }}
-              <small class="ayuda-formulario">Subir imagen (JPG, PNG o WEBP — máx. 2 MB)</small>
-            </div>
-          </div>
+    <div class="filtros-tabla">
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
         </div>
+      </div>
 
-        <div class="seccion-formulario">
-          <legend>Ubicación</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="select-jardin">Jardín</label>
-              <select name="jardin-filtro" id="select-jardin" class="campo-seleccion">
-                <option value="">Elegir</option>
-                {% for jardin in jardines %}
-                <option value="{{ jardin.id }}">{{ jardin.name }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_apartments.building.id_for_label }}">{{ form_apartments.building.label }}</label>
-              <select name="{{ form_apartments.building.html_name }}" id="{{ form_apartments.building.id_for_label }}" class="campo-seleccion" data-departamento="edificio">
-                <option value="">Elegir un edificio</option>
-                {% for edificio in edificios %}
-                <option value="{{ edificio.id }}" data-garden="{{ edificio.garden_id }}">{{ edificio.tower|default:'' }}{% if edificio.tower %} · {% endif %}{{ edificio.name }} · Bloque {{ edificio.block|default:'—' }}</option>
-                {% endfor %}
-              </select>
-              {{ form_apartments.building.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_apartments.floor.id_for_label }}">{{ form_apartments.floor.label }}</label>
-              {{ form_apartments.floor }}
-              {{ form_apartments.floor.errors }}
-            </div>
-           
-          </div>
-        </div>
+      <form method="get" class="formulario-filtros" id="filtros-departamentos">
+        <select name="jardin" id="filtro-jardin">
+          <option value="">Todos los jardines</option>
+          {% for jardin in jardines %}
+          <option value="{{ jardin.id }}" {% if jardin_actual == jardin.id|stringformat:'s' %}selected{% endif %}>{{ jardin.name }}</option>
+          {% endfor %}
+        </select>
 
-        <div class="seccion-formulario">
-          <legend>Estado</legend>
-          <div class="fila-formulario fila-interruptor">
-            <div class="campo-formulario">
-              <label class="etiqueta-interruptor" for="toggle-ocupado">
-                Ocupado
-                <span class="interruptor">
-                  <input type="checkbox" id="toggle-ocupado" class="entrada-interruptor">
-                  <span class="deslizador-interruptor"></span>
-                </span>
-              </label>
-              <input type="hidden" name="status" id="id_status" value="{{ form_apartments.status.value|default:'empty' }}">
-            </div>
-          </div>
-        </div>
+        <select name="edificio" id="filtro-edificio">
+          <option value="">Todos los edificios</option>
+          {% for edificio in edificios %}
+          <option value="{{ edificio.id }}" {% if edificio_actual == edificio.id|stringformat:'s' %}selected{% endif %}>{{ edificio.name }}</option>
+          {% endfor %}
+        </select>
 
-        <div class="pie-formulario">
-          <button type="submit">Actualizar</button>
-          <button type="reset">Cancelar</button>
-        </div>
+        <select name="estado" id="filtro-estado">
+          <option value="">Todos los estados</option>
+          <option value="empty" {% if estado_actual == 'empty' %}selected{% endif %}>Vacío</option>
+          <option value="occupied" {% if estado_actual == 'occupied' %}selected{% endif %}>Ocupado</option>
+          <option value="maintenance" {% if estado_actual == 'maintenance' %}selected{% endif %}>En reparación</option>
+          <option value="blocked" {% if estado_actual == 'blocked' %}selected{% endif %}>Bloqueado</option>
+        </select>
       </form>
+
+      <a href="{% url 'agregar_departamento' %}" class="boton-nuevo-departamento">+ Agregar departamento</a>
     </div>
   </div>
 
-  <hr>
-
-  <div class="panel-acciones">
-    <div class="acciones">
-      <h3>Registrar Jardín</h3>
-
-      <form method="post" action="{% url 'crear_jardin' %}">
-        {% csrf_token %}
-        {{ form_garden.non_field_errors }}
-
-        <div class="seccion-formulario">
-          <legend>Jardín del residencial</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_garden.name.id_for_label }}">{{ form_garden.name.label }}</label>
-              {{ form_garden.name }}
-              {{ form_garden.name.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_garden.location.id_for_label }}">{{ form_garden.location.label }}</label>
-              {{ form_garden.location }}
-              {{ form_garden.location.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="pie-formulario">
-          <button type="submit">Guardar</button>
-          <button type="reset">Cancelar</button>
-        </div>
-      </form>
-    </div>
+  <div class="tabla-filtrada">
+    <table class="tabla-departamentos">
+      <thead>
+        <tr>
+          <th data-columna="miniatura">Miniatura</th>
+          <th data-columna="departamento">Departamento</th>
+          <th data-columna="edificio">Edificio</th>
+          <th data-columna="torre">Torre</th>
+          <th data-columna="bloque">Bloque</th>
+          <th data-columna="piso">Piso</th>
+          <th data-columna="jardin">Jardin</th>
+          <th data-columna="propietario">Propietario</th>
+          <th data-columna="ocupado">Ocupado</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for departamento in departamentos %}
+        <tr>
+          <td data-columna="miniatura">
+            {% if departamento.photo %}
+            <img src="{{ departamento.photo.url }}" alt="Foto de {{ departamento.name }}" class="foto-departamento">
+            {% else %}
+            <span class="foto-placeholder" aria-hidden="true"></span>
+            {% endif %}
+          </td>
+          <td data-columna="departamento">{{ departamento.name }}</td>
+          <td data-columna="edificio">{{ departamento.building.name }}</td>
+          <td data-columna="torre">{{ departamento.building.tower|default:"—" }}</td>
+          <td data-columna="bloque">{{ departamento.building.block|default:"—" }}</td>
+          <td data-columna="piso">{{ departamento.floor|default:"—" }}</td>
+          <td data-columna="jardin">{{ departamento.building.garden.name }}</td>
+          <td data-columna="propietario">{{ departamento.owner.full_name|default:"—" }}</td>
+          <td data-columna="ocupado">{{ departamento.get_status_display }}</td>
+          <td class="columna-acciones">
+            <button type="button" class="boton-acciones" aria-label="Acciones">&hellip;</button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="10" class="sin-registros">Sin coincidencias.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 
-  <hr>
-
-  <div class="panel-acciones">
-    <div class="acciones">
-      <h3>Registrar Edificio</h3>
-
-      <form method="post" action="{% url 'crear_edificio' %}">
-        {% csrf_token %}
-        {{ form_building.non_field_errors }}
-
-        <div class="seccion-formulario">
-          <legend>Ubicación del edificio</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_building.garden.id_for_label }}">{{ form_building.garden.label }}</label>
-              {{ form_building.garden }}
-              {{ form_building.garden.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_building.name.id_for_label }}">{{ form_building.name.label }}</label>
-              {{ form_building.name }}
-              {{ form_building.name.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_building.tower.id_for_label }}">{{ form_building.tower.label }}</label>
-              {{ form_building.tower }}
-              {{ form_building.tower.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_building.block.id_for_label }}">{{ form_building.block.label }}</label>
-              {{ form_building.block }}
-              {{ form_building.block.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_building.number_of_floors.id_for_label }}">Número de pisos</label>
-              {{ form_building.number_of_floors }}
-              {{ form_building.number_of_floors.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="pie-formulario">
-          <button type="submit">Guardar</button>
-          <button type="reset">Cancelar</button>
-        </div>
-      </form>
+  {% include "componentes/paginacion_tabla.html" with pagina=departamentos %}
     </div>
   </div>
 </main>

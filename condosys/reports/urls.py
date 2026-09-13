@@ -3,14 +3,14 @@ from rest_framework.routers import DefaultRouter
 from .views import AuditLogViewSet, ReportViewSet, app_index, crear_audit_log, crear_audit_log_detail
 
 router = DefaultRouter()
-router.register(r'audit-logs', AuditLogViewSet, basename='auditlog')
+router.register(r'bitacoras', AuditLogViewSet, basename='bitacora')
 
 urlpatterns = [
-    path('crear/audit-log/', crear_audit_log, name='crear_audit_log'),
-    path('crear/detalle/', crear_audit_log_detail, name='crear_audit_log_detail'),
-    path('', app_index, name='reports_index'),
+    path('crear/bitacora/', crear_audit_log, name='crear_bitacora'),
+    path('crear/detalle/', crear_audit_log_detail, name='crear_detalle_bitacora'),
+    path('', app_index, name='reportes_index'),
     path('', include(router.urls)),
-    path('summary/', ReportViewSet.as_view({'get': 'summary'}), name='report-summary'),
-    path('payments/', ReportViewSet.as_view({'get': 'payments'}), name='report-payments'),
-    path('occupancy/', ReportViewSet.as_view({'get': 'occupancy'}), name='report-occupancy'),
+    path('resumen/', ReportViewSet.as_view({'get': 'summary'}), name='reporte_resumen'),
+    path('pagos/', ReportViewSet.as_view({'get': 'payments'}), name='reporte_pagos'),
+    path('ocupacion/', ReportViewSet.as_view({'get': 'occupancy'}), name='reporte_ocupacion'),
 ]

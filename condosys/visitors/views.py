@@ -14,7 +14,7 @@ from .serializers import VisitorSerializer
 from .forms import VisitorForm
 
 
-@login_required
+# @login_required
 def app_index(request):
     contexto = {
         'form_visitor': VisitorForm(),
@@ -23,7 +23,7 @@ def app_index(request):
     return render(request, 'visitors/index.html', contexto)
 
 
-@login_required
+# @login_required
 @require_POST
 def crear_visitante(request):
     form = VisitorForm(request.POST)

@@ -9,7 +9,7 @@ from .serializers import NotificationSerializer
 from .forms import NotificationForm
 
 
-@login_required
+# @login_required
 def app_index(request):
     contexto = {
         'form_notification': NotificationForm(),
@@ -18,7 +18,7 @@ def app_index(request):
     return render(request, 'notifications/index.html', contexto)
 
 
-@login_required
+# @login_required
 @require_POST
 def crear_notificacion(request):
     form = NotificationForm(request.POST)

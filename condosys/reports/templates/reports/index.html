@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  <form method="post" action="{% url 'crear_audit_log' %}">
+  <form method="post" action="{% url 'crear_bitacora' %}">
     {% csrf_token %}
     {{ form_audit_log.as_p }}
     <div class="pie-formulario">
@@ -11,7 +11,7 @@
 
   <hr />
 
-  <form method="post" action="{% url 'crear_audit_log_detail' %}">
+  <form method="post" action="{% url 'crear_detalle_bitacora' %}">
     {% csrf_token %}
     {{ form_audit_log_detail.as_p }}
     <div class="pie-formulario">

@@ -9,7 +9,7 @@ from .serializers import CommunicationSerializer
 from .forms import CommunicationForm
 
 
-@login_required
+# @login_required
 def app_index(request):
     contexto = {
         "form": CommunicationForm(),
@@ -20,7 +20,7 @@ def app_index(request):
     return render(request, 'communications/index.html', contexto)
 
 
-@login_required
+# @login_required
 @require_POST
 def crear_comunicacion(request):
     form = CommunicationForm(request.POST)

@@ -1,69 +1,82 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
-from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import CanAccessApartment
-from residents.models import Resident
 from .models import Garden, Building, Apartment
 from .serializers import (
     GardenSerializer, BuildingSerializer,
     ApartmentListSerializer, ApartmentDetailSerializer
 )
-from .forms import *
+from .forms import ApartmentsForm
+
+PAGINATE_BY = 15
 
 
-@login_required
+# @login_required
 def app_index(request):
+    apartamentos_qs = (
+        Apartment.objects.select_related('building__garden', 'owner')
+        .order_by('building__garden__name', 'building__name', 'floor', 'name')
+    )
+
+    estado = request.GET.get('estado', '')
+    jardin = request.GET.get('jardin', '')
+    edificio = request.GET.get('edificio', '')
+
+    if estado:
+        apartamentos_qs = apartamentos_qs.filter(status=estado)
+    if jardin:
+        apartamentos_qs = apartamentos_qs.filter(building__garden_id=jardin)
+    if edificio:
+        apartamentos_qs = apartamentos_qs.filter(building_id=edificio)
+
+    paginator = Paginator(apartamentos_qs, PAGINATE_BY)
+    pagina = request.GET.get('page')
+    try:
+        departamentos = paginator.page(pagina)
+    except PageNotAnInteger:
+        departamentos = paginator.page(1)
+    except EmptyPage:
+        departamentos = paginator.page(paginator.num_pages)
+
+    query = request.GET.copy()
+    query.pop('page', None)
 
     contexto = {
-        'form_garden': GardenForm(),
-        'form_building': BuildingForm(),
-        'form_apartments': ApartmentsForm(),
+        'departamentos': departamentos,
         'jardines': Garden.objects.filter(is_active=True),
         'edificios': Building.objects.filter(is_active=True),
-        'residentes': Resident.objects.select_related('apartment__building').all(),
+        'estado_actual': estado,
+        'jardin_actual': jardin,
+        'edificio_actual': edificio,
+        'paginacion_query': query.urlencode(),
         'module_name': 'Departamentos'
-
     }
     return render(request, 'structure/index.html', contexto)
 
 
-@login_required
-@require_POST
-def crear_jardin(request):
-    form = GardenForm(request.POST)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Jardín creado correctamente.')
-    else:
-        messages.error(request, 'No se pudo crear el jardín. Revisa los datos enviados.')
-    return redirect('inicio')
-
-
-@login_required
-@require_POST
-def crear_edificio(request):
-    form = BuildingForm(request.POST)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Edificio creado correctamente.')
-    else:
-        messages.error(request, 'No se pudo crear el edificio. Revisa los datos enviados.')
-    return redirect('inicio')
-
-
-@login_required
-@require_POST
-def crear_departamento(request):
-    form = ApartmentsForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Departamento creado correctamente.')
-    else:
+# @login_required
+def agregar_departamento(request):
+    if request.method == 'POST':
+        form = ApartmentsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Departamento creado correctamente.')
+            return redirect('departamentos_index')
         messages.error(request, 'No se pudo crear el departamento. Revisa los datos enviados.')
-    return redirect('inicio')
+    else:
+        form = ApartmentsForm()
+
+    contexto = {
+        'form_apartments': form,
+        'jardines': Garden.objects.filter(is_active=True),
+        'edificios': Building.objects.filter(is_active=True),
+        'module_name': 'Departamentos'
+    }
+    return render(request, 'structure/agregar.html', contexto)
 
 
 class GardenViewSet(viewsets.ModelViewSet):
