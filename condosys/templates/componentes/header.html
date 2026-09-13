@@ -1,16 +1,9 @@
 {%load static %}
 <header class="app-header">
-  <h1 class="header-title">{{nombre_modulo}}</h1>
-
-  <div class="header-right">
-
-    <button class="notification-btn" aria-label="Notificaciones">
-        <img src="{% static 'images/icons/negros/bell-notification_black.svg' %}" alt="noti">
-    </button>
-
-    <span class="user-avatar" role="button">
-      <img src="" alt="Foto">
-    </span>
-
+  <div class="titulo-encabezado">
+    {% if url_volver %}
+    <a href="{% url url_volver %}" class="boton-volver-flecha" aria-label="Volver">&lsaquo;</a>
+    {% endif %}
+    <h1 class="header-title">{{nombre_modulo}}</h1>
   </div>
 </header>

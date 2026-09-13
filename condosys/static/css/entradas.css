@@ -1,0 +1,36 @@
+@import url(variables.css);
+
+/* ============================================
+   Entradas (inputs, textareas y selects) - regla global.
+   Estado normal: borde delgado con el color de
+   bordes de la paleta.
+   Estado foco: borde color de marca, un poco más
+   grueso, con transición suave.
+   Ambos colores salen de variables.css para que
+   un cambio de marca se refleje en todos lados.
+   ============================================ */
+
+input,
+textarea,
+select {
+	border: 1px solid var(--black-50);
+	transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+	border-color: var(--green-900);
+}
+
+input:active,
+textarea:active,
+select:active,
+input:focus,
+textarea:focus,
+select:focus {
+	border-color: var(--green-900) !important;
+	border-width: 1px !important;
+	outline: none !important;
+	box-shadow: 0 0 0 2px var(--green-200) !important;
+}

@@ -46,7 +46,7 @@
 	width: 100%;
 	box-sizing: border-box;
 	height: 4rem;
-	border: 1px solid var(--green-600);
+	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-4);
 	padding: 0.4rem 1.2rem;
 	background: var(--white-50);
@@ -97,7 +97,7 @@
 	width: 100%;
 	box-sizing: border-box;
 	height: 4rem;
-	border: 1px solid var(--green-600);
+	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-4);
 	padding: 0.4rem 1.2rem;
 	background: var(--white-50);

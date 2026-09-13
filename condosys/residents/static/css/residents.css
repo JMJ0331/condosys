@@ -79,10 +79,6 @@
 	outline: none;
 }
 
-.filtros-tabla select:focus {
-	border-color: var(--green-600);
-}
-
 .boton-nuevo-residente {
 	display: inline-flex;
 	align-items: center;
