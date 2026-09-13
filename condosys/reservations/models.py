@@ -45,7 +45,11 @@ class Reservation(models.Model):
     )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    common_area = models.ForeignKey(CommonArea, on_delete=CASCADE, related_name='reservations')
+    common_area = models.ForeignKey(
+        'areas_comunes.AreaComun',
+        on_delete=CASCADE,
+        related_name='reservations',
+    )
     apartment = models.ForeignKey(
         Apartment,
         on_delete=SET_NULL,

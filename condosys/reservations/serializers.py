@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import CommonArea, Reservation
 from accounts.serializers import UserSerializer
+from areas_comunes.serializers import AreaComunSerializer
 
 
 class CommonAreaSerializer(serializers.ModelSerializer):
@@ -39,7 +40,7 @@ class ReservationListSerializer(serializers.ModelSerializer):
 
 class ReservationDetailSerializer(serializers.ModelSerializer):
     """Serializer detallado para Reservation"""
-    common_area_detail = CommonAreaSerializer(source='common_area', read_only=True)
+    common_area_detail = AreaComunSerializer(source='common_area', read_only=True)
     apartment_name = serializers.CharField(source='apartment.name', read_only=True)
     resident_name = serializers.CharField(source='resident.full_name', read_only=True)
     reserved_by_detail = UserSerializer(source='reserved_by', read_only=True)

@@ -4,6 +4,7 @@ from datetime import datetime
 from accounts.models import User
 from structure.models import Apartment
 from residents.models import Resident
+from areas_comunes.models import AreaComun
 from .models import CommonArea, Reservation
 
 
@@ -46,9 +47,6 @@ class ReservationForm(forms.ModelForm):
             'common_area', 'apartment', 'resident', 'reserved_by', 'status',
         ]
         widgets = {
-            # data-reserva-apartamento lo usa static/js/reservas.js para
-            # filtrar los propietarios/residentes por apartamento.
-            'common_area': forms.Select(attrs={'class': 'campo-seleccion'}),
             'apartment': forms.Select(attrs={
                 'class': 'campo-seleccion',
                 'data-reserva-apartamento': '',
@@ -67,10 +65,10 @@ class ReservationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Solo áreas y apartamentos activos para reservar.
-        self.fields['common_area'].queryset = (
-            CommonArea.objects.filter(is_active=True).select_related('garden')
-        )
+        # El select de área se renderiza manualmente en la plantilla (con
+        # data-horario / data-dias para el aviso y la validación del JS); aquí
+        # solo se define el queryset de áreas disponibles para reservar.
+        self.fields['common_area'].queryset = AreaComun.objects.filter(status='activo')
         self.fields['common_area'].empty_label = 'Elegir área común'
         self.fields['apartment'].queryset = (
             Apartment.objects.filter(is_active=True).select_related('building')
@@ -102,6 +100,22 @@ class ReservationForm(forms.ModelForm):
                 self.add_error('hora_fin', 'La hora de fin debe ser posterior a la hora de inicio.')
             cleaned_data['start_time'] = inicio
             cleaned_data['end_time'] = fin
+
+        # Valida que la reserva quede dentro del horario y de los días
+        # permitidos del área común seleccionada.
+        area = cleaned_data.get('common_area')
+        if area:
+            if area.available_from and area.available_until:
+                rango = f'{area.available_from:%H:%M} a {area.available_until:%H:%M}'
+                if hora_inicio is not None and hora_inicio < area.available_from:
+                    self.add_error('hora_inicio', f'Fuera del horario del área. Permitido: {rango}.')
+                if hora_fin is not None and hora_fin > area.available_until:
+                    self.add_error('hora_fin', f'Fuera del horario del área. Permitido: {rango}.')
+            if fecha is not None:
+                if area.available_days == 'lun_vie' and fecha.weekday() >= 5:
+                    self.add_error('fecha_reserva', 'Esa área solo está disponible de lunes a viernes.')
+                elif area.available_days == 'fines_semana' and fecha.weekday() < 5:
+                    self.add_error('fecha_reserva', 'Esa área solo está disponible los fines de semana.')
         return cleaned_data
 
     def save(self, commit=True):
