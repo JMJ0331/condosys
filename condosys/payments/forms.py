@@ -12,23 +12,31 @@ class PaymentForm(forms.ModelForm):
             'receipt_image', 'status',
         ]
         widgets = {
-            'apartment': forms.Select(attrs={'class': 'select-field', 'placeholder': 'Elegir apartamento'}),
-            'resident': forms.Select(attrs={'class': 'select-field', 'placeholder': 'Elegir un propietario/residente'}),
+            'apartment': forms.Select(attrs={
+                'class': 'campo-seleccion',
+                'data-pago-apartamento': '',
+                'placeholder': 'Elegir apartamento',
+            }),
+            'resident': forms.Select(attrs={
+                'class': 'campo-seleccion',
+                'data-pago-residente': '',
+                'placeholder': 'Elegir un propietario/residente',
+            }),
             'amount': forms.NumberInput(attrs={
-                'class': 'input-field',
+                'class': 'campo-entrada',
                 'placeholder': 'Ejemplo: $15,000',
                 'step': '0.01',
                 'min': '0',
             }),
-            'concept': forms.Select(attrs={'class': 'select-field', 'placeholder': 'Elegir concepto'}),
-            'period': forms.DateInput(attrs={'type': 'date', 'class': 'input-field'}),
-            'payment_date': forms.DateInput(attrs={'type': 'date', 'class': 'input-field'}),
-            'payment_method': forms.Select(attrs={'class': 'select-field', 'placeholder': 'Elegir método de pago'}),
+            'concept': forms.Select(attrs={'class': 'campo-seleccion', 'placeholder': 'Elegir concepto'}),
+            'period': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}),
+            'payment_date': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}),
+            'payment_method': forms.Select(attrs={'class': 'campo-seleccion', 'placeholder': 'Elegir método de pago'}),
             'receipt_image': forms.ClearableFileInput(attrs={
-                'class': 'input-field',
+                'class': 'campo-entrada',
                 'accept': 'image/jpeg,image/png,image/webp',
             }),
-            'status': forms.Select(attrs={'class': 'select-field', 'placeholder': 'Elegir estado'}),
+            'status': forms.Select(attrs={'class': 'campo-seleccion', 'placeholder': 'Elegir estado'}),
         }
 
     def __init__(self, *args, **kwargs):

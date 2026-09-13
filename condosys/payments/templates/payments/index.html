@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/payments.css' %}">
+<link rel="stylesheet" href="{% static 'css/pagos.css' %}">
 {% endblock %}
 {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
 
-  <div class="Acciones-dashboard">
+  <div class="panel-acciones">
     <div class="acciones">
       <h3>Registrar Pago</h3>
 
@@ -15,83 +15,87 @@
         {% csrf_token %}
         {{ form_payment.non_field_errors }}
 
-        <div class="form-section">
+        <div class="seccion-formulario">
           <legend>Datos del pago</legend>
-          <div class="form-row">
-            <div class="form-field">
+          <div class="fila-formulario">
+            <div class="campo-formulario">
               <label for="{{ form_payment.apartment.id_for_label }}">{{ form_payment.apartment.label }}</label>
               {{ form_payment.apartment }}
+              {{ form_payment.apartment.errors }}
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-field">
+          <div class="fila-formulario">
+            <div class="campo-formulario">
               <label for="{{ form_payment.resident.id_for_label }}">{{ form_payment.resident.label }}</label>
-              <select name="{{ form_payment.resident.html_name }}" id="{{ form_payment.resident.id_for_label }}" class="select-field">
+              <select name="{{ form_payment.resident.html_name }}" id="{{ form_payment.resident.id_for_label }}" class="campo-seleccion" data-pago-residente>
                 <option value="">Elegir un propietario/residente</option>
                 {% for res in residentes %}
                 <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
                 {% endfor %}
               </select>
+              {{ form_payment.resident.errors }}
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-field">
+          <div class="fila-formulario">
+            <div class="campo-formulario">
               <label for="{{ form_payment.amount.id_for_label }}">{{ form_payment.amount.label }}</label>
               {{ form_payment.amount }}
             </div>
-            <div class="form-field">
+            <div class="campo-formulario">
               <label for="{{ form_payment.concept.id_for_label }}">{{ form_payment.concept.label }}</label>
               {{ form_payment.concept }}
             </div>
           </div>
         </div>
 
-        <div class="form-section">
+        <div class="seccion-formulario">
           <legend>Detalles del pago</legend>
-          <div class="form-row">
-            <div class="form-field">
+          <div class="fila-formulario">
+            <div class="campo-formulario">
               <label for="{{ form_payment.period.id_for_label }}">Periodo/Mes correspondiente</label>
               {{ form_payment.period }}
             </div>
-            <div class="form-field">
+            <div class="campo-formulario">
               <label for="{{ form_payment.payment_date.id_for_label }}">Fecha del pago</label>
               {{ form_payment.payment_date }}
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-field">
+          <div class="fila-formulario">
+            <div class="campo-formulario">
               <label for="{{ form_payment.payment_method.id_for_label }}">Método de pago</label>
               {{ form_payment.payment_method }}
             </div>
           </div>
         </div>
 
-        <div class="form-section">
+        <div class="seccion-formulario">
           <legend>Comprobante</legend>
-          <div class="form-row">
-            <div class="form-field">
+          <div class="fila-formulario">
+            <div class="campo-formulario">
               <label for="{{ form_payment.receipt_image.id_for_label }}">Foto del comprobante</label>
               {{ form_payment.receipt_image }}
+              <small class="ayuda-formulario">Subir imagen (JPG, PNG o WEBP — máx. 2 MB)</small>
             </div>
           </div>
         </div>
 
-        <div class="form-section">
+        <div class="seccion-formulario">
           <legend>Estado del pago</legend>
-          <div class="form-row">
-            <div class="form-field">
+          <div class="fila-formulario">
+            <div class="campo-formulario">
               <label for="{{ form_payment.status.id_for_label }}">Estado</label>
               {{ form_payment.status }}
             </div>
           </div>
         </div>
 
-        <div class="dialog-footer">
+        <div class="pie-formulario">
           <button type="submit">Agregar</button>
           <button
             type="button"
             id="btn-generar-comprobante"
-            class="btn-generar-comprobante"
+            class="btn-comprobante"
+            data-url-comprobante="{% url 'generar_comprobante' %}"
             disabled
           >
             <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
@@ -102,68 +106,10 @@
       </form>
     </div>
   </div>
-
-  <script>
-    const selectApartamento = document.getElementById('{{ form_payment.apartment.id_for_label }}');
-    const selectResidente = document.getElementById('{{ form_payment.resident.id_for_label }}');
-
-    function filtrarResidentes() {
-      const apartamento = selectApartamento.value;
-      selectResidente.querySelectorAll('option[data-apartment]').forEach((opt) => {
-        opt.hidden = apartamento !== '' && opt.dataset.apartment !== apartamento;
-      });
-      if (selectResidente.selectedOptions[0]?.dataset.apartment &&
-          selectResidente.value !== '' &&
-          selectResidente.selectedOptions[0].dataset.apartment !== apartamento) {
-        selectResidente.value = '';
-      }
-    }
-
-    if (selectApartamento && selectResidente) {
-      selectApartamento.addEventListener('change', filtrarResidentes);
-      filtrarResidentes();
-    }
-
-    // ---- Generar comprobante ----
-    const formPago = document.getElementById('btn-generar-comprobante').closest('form');
-    const camposRequeridos = ['apartment', 'resident', 'amount', 'concept', 'period', 'status'];
-    const btnComprobante = document.getElementById('btn-generar-comprobante');
-    const inputComprobante = formPago.querySelector('[name="receipt_image"]');
-
-    function formPagoCompleto() {
-      return camposRequeridos.every((nombre) => {
-        const el = formPago.querySelector(`[name="${nombre}"]`);
-        return el && el.value && el.value.trim() !== '';
-      });
-    }
-
-    function actualizarBloqueoComprobante() {
-      const completo = formPagoCompleto();
-      btnComprobante.disabled = !completo;
-      if (inputComprobante) inputComprobante.disabled = !completo;
-    }
-
-    camposRequeridos.forEach((nombre) => {
-      const el = formPago.querySelector(`[name="${nombre}"]`);
-      if (el) {
-        el.addEventListener('change', actualizarBloqueoComprobante);
-        el.addEventListener('input', actualizarBloqueoComprobante);
-      }
-    });
-
-    actualizarBloqueoComprobante();
-
-    btnComprobante.addEventListener('click', () => {
-      const params = new URLSearchParams();
-      [
-        'apartment', 'resident', 'amount', 'concept',
-        'period', 'payment_date', 'payment_method', 'status',
-      ].forEach((nombre) => {
-        const el = formPago.querySelector(`[name="${nombre}"]`);
-        if (el && el.value) params.set(nombre, el.value);
-      });
-      window.open("{% url 'generar_comprobante' %}?" + params.toString(), '_blank');
-    });
-  </script>
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/pagos.js' %}" defer></script>
 {% endblock %}
