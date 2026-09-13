@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'css/inicio.css' %}">
 {% endblock %}
 
 
@@ -21,7 +21,7 @@
     
     <div class="filtros">
 
-      <form method="GET" action="{% url 'inicio' %}" class="container-search">
+      <form method="GET" action="{% url 'inicio' %}" class="contenedor-busqueda">
         <div class="filtros">
           <input
             type="text"
@@ -32,19 +32,19 @@
             aria-label="Buscar residentes"
           />
 
-          <select name="garden" id="garden-select" onchange="this.form.submit()">
+          <select name="garden" id="garden-select">
             <option value="">Jardines</option>
             {% for jardin in jardines %}
               <option value="{{ jardin.id }}" {% if garden_actual == jardin.id|stringformat:'s' %}selected{% endif %}>{{ jardin.name }}</option>
             {% endfor %}
           </select>
-          <select name="building" id="building-select" onchange="this.form.submit()">
+          <select name="building" id="building-select">
             <option value="">Edificios</option>
             {% for edificio in edificios %}
               <option value="{{ edificio.id }}" {% if building_actual == edificio.id|stringformat:'s' %}selected{% endif %}>{{ edificio.name }}</option>
             {% endfor %}
           </select>
-          <select name="apartment" id="apartment-select" onchange="this.form.submit()">
+          <select name="apartment" id="apartment-select">
             <option value="">Departamentos</option>
             {% for depto in departamentos %}
               <option value="{{ depto.id }}" {% if apartment_actual == depto.id|stringformat:'s' %}selected{% endif %}>{{ depto.name }}</option>
@@ -55,11 +55,11 @@
         </div>
       </form>
 
-      <div class="container-inquilinos">
+      <div class="contenedor-residentes">
         {% for residente in residentes %}
-        <div class="tarjeta-inquilino">
-          <div class="tarjeta-inquilino-nombre">{{ residente.full_name }}</div>
-          <div class="tarjeta-inquilino-detalle">
+        <div class="tarjeta-residente">
+          <div class="tarjeta-residente-nombre">{{ residente.full_name }}</div>
+          <div class="tarjeta-residente-detalle">
             <span>{{ residente.email }}</span>
             <span>{{ residente.apartment.building.garden.name }} — {{ residente.apartment.building.name }}</span>
             <span>Depto {{ residente.apartment.name }} · C.C. {{ residente.cedula }}</span>
@@ -71,7 +71,7 @@
       </div>
 
       {% if is_paginated %}
-      <div class="paginacion-dashboard">
+      <div class="paginacion-tarjetas">
         <span class="pagina-actual">
           Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
         </span>
@@ -100,11 +100,11 @@
       {% endif %}
     </div>
 
-    <div class="Acciones-dashboard">
+    <div class="panel-acciones">
       <div class="acciones">
         <h3>Acciones rapidas</h3>
 
-        <div class="container-acciones">
+        <div class="contenedor-acciones">
           <button
             type="button"
             class="accion"
@@ -146,26 +146,26 @@
 </div>
 
 <dialog id="dialog-pago" aria-labelledby="dialog-pago-titulo">
-  <div class="dialog-header">
+  <div class="cabecera-dialogo">
     <h3 id="dialog-pago-titulo">Registrar Pago</h3>
-    <button type="button" class="dialog-close" data-dialog-close aria-label="Cerrar">&times;</button>
+    <button type="button" class="boton-cerrar" data-dialog-close aria-label="Cerrar">&times;</button>
   </div>
   <form method="post" action="{% url 'crear_pago' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ payment_form.non_field_errors }}
 
-    <fieldset class="form-section">
+    <fieldset class="seccion-formulario">
       <legend>Datos del pago</legend>
-      <div class="form-row">
-        <div class="form-field">
+      <div class="fila-formulario">
+        <div class="campo-formulario">
           <label for="{{ payment_form.apartment.id_for_label }}">{{ payment_form.apartment.label }}</label>
           {{ payment_form.apartment }}
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-field">
+      <div class="fila-formulario">
+        <div class="campo-formulario">
           <label for="{{ payment_form.resident.id_for_label }}">{{ payment_form.resident.label }}</label>
-          <select name="{{ payment_form.resident.html_name }}" id="{{ payment_form.resident.id_for_label }}" class="select-field">
+          <select name="{{ payment_form.resident.html_name }}" id="{{ payment_form.resident.id_for_label }}" class="campo-seleccion" data-pago-residente>
             <option value="">Elegir un propietario/residente</option>
             {% for res in residentes_pago %}
             <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
@@ -173,64 +173,66 @@
           </select>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-field">
+      <div class="fila-formulario">
+        <div class="campo-formulario">
           <label for="{{ payment_form.amount.id_for_label }}">{{ payment_form.amount.label }}</label>
           {{ payment_form.amount }}
         </div>
-        <div class="form-field">
+        <div class="campo-formulario">
           <label for="{{ payment_form.concept.id_for_label }}">{{ payment_form.concept.label }}</label>
           {{ payment_form.concept }}
         </div>
       </div>
     </fieldset>
 
-    <fieldset class="form-section">
+    <fieldset class="seccion-formulario">
       <legend>Detalles del pago</legend>
-      <div class="form-row">
-        <div class="form-field">
+      <div class="fila-formulario">
+        <div class="campo-formulario">
           <label for="{{ payment_form.period.id_for_label }}">Periodo/Mes correspondiente</label>
           {{ payment_form.period }}
         </div>
-        <div class="form-field">
+        <div class="campo-formulario">
           <label for="{{ payment_form.payment_date.id_for_label }}">Fecha del pago</label>
           {{ payment_form.payment_date }}
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-field">
+      <div class="fila-formulario">
+        <div class="campo-formulario">
           <label for="{{ payment_form.payment_method.id_for_label }}">Método de pago</label>
           {{ payment_form.payment_method }}
         </div>
       </div>
     </fieldset>
 
-    <fieldset class="form-section">
+    <fieldset class="seccion-formulario">
       <legend>Comprobante</legend>
-      <div class="form-row">
-        <div class="form-field">
+      <div class="fila-formulario">
+        <div class="campo-formulario">
           <label for="{{ payment_form.receipt_image.id_for_label }}">Foto del comprobante</label>
           {{ payment_form.receipt_image }}
+          <small class="ayuda-formulario">Subir imagen (JPG, PNG o WEBP — máx. 2 MB)</small>
         </div>
       </div>
     </fieldset>
 
-    <fieldset class="form-section">
+    <fieldset class="seccion-formulario">
       <legend>Estado del pago</legend>
-      <div class="form-row">
-        <div class="form-field">
+      <div class="fila-formulario">
+        <div class="campo-formulario">
           <label for="{{ payment_form.status.id_for_label }}">Estado</label>
           {{ payment_form.status }}
         </div>
       </div>
     </fieldset>
 
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Agregar</button>
       <button
         type="button"
         id="btn-generar-comprobante"
-        class="btn-generar-comprobante"
+        class="btn-comprobante"
+        data-url-comprobante="{% url 'generar_comprobante' %}"
         disabled
       >
         <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
@@ -242,14 +244,14 @@
 </dialog>
 
 <dialog id="dialog-visitante" aria-labelledby="dialog-visitante-titulo">
-  <div class="dialog-header">
+  <div class="cabecera-dialogo">
     <h3 id="dialog-visitante-titulo">Registrar Visitante</h3>
-    <button type="button" class="dialog-close" data-dialog-close aria-label="Cerrar">&times;</button>
+    <button type="button" class="boton-cerrar" data-dialog-close aria-label="Cerrar">&times;</button>
   </div>
   <form method="post" action="{% url 'crear_visitante' %}">
     {% csrf_token %}
     {{ visitor_form.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
       <button type="button" data-dialog-close>Cancelar</button>
     </div>
@@ -257,109 +259,23 @@
 </dialog>
 
 <dialog id="dialog-incidencia" aria-labelledby="dialog-incidencia-titulo">
-  <div class="dialog-header">
+  <div class="cabecera-dialogo">
     <h3 id="dialog-incidencia-titulo">Crear Incidencia</h3>
-    <button type="button" class="dialog-close" data-dialog-close aria-label="Cerrar">&times;</button>
+    <button type="button" class="boton-cerrar" data-dialog-close aria-label="Cerrar">&times;</button>
   </div>
   <form method="post" action="{% url 'crear_incidencia' %}">
     {% csrf_token %}
     {{ incident_form.as_p }}
-    <div class="dialog-footer">
+    <div class="pie-formulario">
       <button type="submit">Guardar</button>
       <button type="button" data-dialog-close>Cancelar</button>
     </div>
   </form>
 </dialog>
-
-<script>
-  document.querySelectorAll('[data-dialog]').forEach((accion) => {
-    accion.addEventListener('click', () => {
-      const dialog = document.getElementById(accion.dataset.dialog);
-      if (dialog && typeof dialog.showModal === 'function') {
-        dialog.showModal();
-      }
-    });
-  });
-
-  document.querySelectorAll('[data-dialog-close]').forEach((boton) => {
-    boton.addEventListener('click', () => boton.closest('dialog').close());
-  });
-
-  document.querySelectorAll('dialog').forEach((dialog) => {
-    dialog.addEventListener('click', (event) => {
-      const rect = dialog.getBoundingClientRect();
-      const dentro =
-        event.clientX >= rect.left &&
-        event.clientX <= rect.right &&
-        event.clientY >= rect.top &&
-        event.clientY <= rect.bottom;
-      if (!dentro) {
-        dialog.close();
-      }
-    });
-  });
-
-  const selectApartamento = document.getElementById('{{ payment_form.apartment.id_for_label }}');
-  const selectResidente = document.getElementById('{{ payment_form.resident.id_for_label }}');
-
-  function filtrarResidentes() {
-    const apartamento = selectApartamento.value;
-    selectResidente.querySelectorAll('option[data-apartment]').forEach((opt) => {
-      opt.hidden = apartamento !== '' && opt.dataset.apartment !== apartamento;
-    });
-    if (selectResidente.selectedOptions[0]?.dataset.apartment &&
-        selectResidente.value !== '' &&
-        selectResidente.selectedOptions[0].dataset.apartment !== apartamento) {
-      selectResidente.value = '';
-    }
-  }
-
-  if (selectApartamento && selectResidente) {
-    selectApartamento.addEventListener('change', filtrarResidentes);
-    filtrarResidentes();
-  }
-
-  // ---- Generar comprobante ----
-  const formPago = document.getElementById('btn-generar-comprobante').closest('form');
-  const camposRequeridos = ['apartment', 'resident', 'amount', 'concept', 'period', 'status'];
-  const btnComprobante = document.getElementById('btn-generar-comprobante');
-  const inputComprobante = formPago.querySelector('[name="receipt_image"]');
-
-  function formPagoCompleto() {
-    return camposRequeridos.every((nombre) => {
-      const el = formPago.querySelector(`[name="${nombre}"]`);
-      return el && el.value && el.value.trim() !== '';
-    });
-  }
-
-  function actualizarBloqueoComprobante() {
-    const completo = formPagoCompleto();
-    btnComprobante.disabled = !completo;
-    if (inputComprobante) inputComprobante.disabled = !completo;
-  }
-
-  camposRequeridos.forEach((nombre) => {
-    const el = formPago.querySelector(`[name="${nombre}"]`);
-    if (el) {
-      el.addEventListener('change', actualizarBloqueoComprobante);
-      el.addEventListener('input', actualizarBloqueoComprobante);
-    }
-  });
-
-  actualizarBloqueoComprobante();
-
-  btnComprobante.addEventListener('click', () => {
-    const params = new URLSearchParams();
-    [
-      'apartment', 'resident', 'amount', 'concept',
-      'period', 'payment_date', 'payment_method', 'status',
-    ].forEach((nombre) => {
-      const el = formPago.querySelector(`[name="${nombre}"]`);
-      if (el && el.value) params.set(nombre, el.value);
-    });
-    window.open("{% url 'generar_comprobante' %}?" + params.toString(), '_blank');
-  });
-</script>
 {% endblock %}
 
-         
+{% block scripts %}
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/pagos.js' %}" defer></script>
+<script src="{% static 'js/dashboard.js' %}" defer></script>
+{% endblock %}

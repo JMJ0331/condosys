@@ -1,0 +1,215 @@
+@import url('../../../static/css/variables.css');
+
+
+.container-main-side2 {
+	gap: 1.2rem;
+	padding: 1.6rem;
+}
+
+.container-flex1 {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 1.2rem;
+}
+
+.container-flex1 .app-info .opt-modulo img {
+	width: 3.5rem;
+	height: 3.5rem;
+	padding: 0.8rem;
+	border-radius: 8px;
+	background: var(--green-50);
+}
+
+.container-flex {
+	display: grid;
+	grid-template-columns: minmax(0, 1.7fr) minmax(22rem, 0.8fr);
+	gap: 1.2rem;
+	min-height: 32rem;
+}
+
+.container-flex > .filtros,
+.actividad-reciente {
+	padding: 1.2rem;
+	border: 1px solid var(--black-50);
+	border-radius: 0.8rem;
+	background: var(--white-50);
+}
+
+.contenedor-busqueda > .filtros {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-8);
+}
+
+#search-input,
+#garden-select,
+#building-select,
+#apartment-select,
+.btn-buscar {
+	height: 3.5rem;
+	padding: 0 0.9rem;
+	border: 1px solid var(--black-50);
+	border-radius: 8px;
+	background: var(--white-50);
+	color: var(--black-400);
+	font: inherit;
+	vertical-align: middle;
+}
+
+#search-input {
+	padding: 1rem 1.2rem;
+	font-size: 1.3rem;
+	flex: 1 1 18rem;
+	min-width: 0;
+}
+
+#garden-select,
+#building-select,
+#apartment-select {
+	flex: 0 1 auto;
+	min-width: 7rem;
+	padding: var(--padding-8);
+	font-size: 1.3rem;
+}
+
+.btn-buscar {
+	flex: 0 1 auto;
+	border: none;
+	background: var(--green-100);
+	color: var(--black-400);
+	font-size: 1.3rem;
+	cursor: pointer;
+}
+
+.contenedor-residentes {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0.8rem;
+	margin-top: 1.2rem;
+	max-height: 56rem;
+	overflow-y: auto;
+	padding-right: 0.4rem;
+}
+
+.tarjeta-residente {
+	padding: 1rem;
+	border: 1px solid var(--black-50);
+	border-radius: 0.6rem;
+	background: var(--white-50);
+}
+
+.tarjeta-residente-nombre {
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: var(--black-400);
+	margin-bottom: 0.4rem;
+}
+
+.tarjeta-residente-detalle {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	font-size: 1.2rem;
+	color: var(--black-300);
+}
+
+.sin-resultados {
+	padding: 1.2rem;
+	text-align: center;
+	color: var(--black-300);
+	font-size: 1.3rem;
+}
+
+.paginacion-tarjetas {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 1rem;
+	margin-top: 1.2rem;
+}
+
+.pagina-actual {
+	font-size: 1.2rem;
+	color: var(--black-300);
+}
+
+.paginacion-flechas {
+	display: flex;
+	gap: 0.6rem;
+}
+
+.flecha-paginacion {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.6rem;
+	height: 3.6rem;
+	border: 1px solid var(--green-600);
+	border-radius: var(--borderR-4);
+	background: var(--white-50);
+	color: var(--green-900);
+	font-size: 2rem;
+	line-height: 1;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background 0.2s ease, color 0.2s ease;
+}
+
+.flecha-paginacion:hover {
+	background: var(--green-600);
+	color: var(--white-50);
+}
+
+.flecha-paginacion.deshabilitada {
+	opacity: 0.4;
+	cursor: not-allowed;
+	background: var(--white-50);
+	color: var(--black-300);
+	border-color: var(--black-50);
+}
+
+.actividad-reciente h2 {
+	margin: 0 0 1rem;
+	color: var(--black-400);
+	font-size: 1.4rem;
+	font-weight: 600;
+}
+
+.actividad-reciente {
+	flex: 1;
+	min-height: 15rem;
+}
+
+@media (max-width: 900px) {
+	.container-flex1 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.container-flex {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 560px) {
+	.container-main-side2 {
+		padding: 1rem;
+	}
+
+	.container-flex1,
+	.contenedor-busqueda > .filtros {
+		grid-template-columns: 1fr;
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	#search-input,
+	#garden-select,
+	#building-select,
+	#apartment-select,
+	.btn-buscar {
+		width: 100%;
+		flex-basis: auto;
+	}
+}
