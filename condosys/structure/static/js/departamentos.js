@@ -1,8 +1,9 @@
 /**
  * Lógica específica del módulo Departamentos (structure).
- * Filtros de jardín/edificio, búsqueda de propietario y estado ocupado.
+ * - Página index (#filtros-departamentos): selector de columnas + auto-submit filtros.
+ * - Página agregar: filtro de jardín → edificio, búsqueda de propietario, interruptor ocupado.
  *
- * La plantilla debe usar:
+ * La plantilla agregar.html debe usar:
  *   - <select id="select-jardin">
  *   - <select data-departamento="edificio">     (sus opciones llevan data-garden)
  *   - <select data-departamento="propietario">
@@ -11,17 +12,88 @@
  *   - <input type="hidden" id="id_status">
  */
 (() => {
-  // Referencias a los controles del formulario de registro de departamentos. Se dejan
-  // el id del campo de estado (id_status) cifrado al mismo nombre que usa el modelo.
+  // --- Página index: selector de columnas + auto-submit filtros ---
+
+  const formularioFiltros = document.getElementById('filtros-departamentos');
+  if (formularioFiltros) {
+    formularioFiltros.querySelectorAll('select').forEach((select) => {
+      select.addEventListener('change', () => formularioFiltros.submit());
+    });
+  }
+
+  const botonColumnas = document.getElementById('boton-columnas');
+  const panelColumnas = document.getElementById('panel-columnas');
+  const toggleTodas = document.getElementById('toggle-todas-columnas');
+
+  if (botonColumnas && panelColumnas) {
+    const columnas = Array.from(document.querySelectorAll('th[data-columna]'))
+      .map((th) => ({ nombre: th.dataset.columna, texto: th.textContent.trim() }));
+
+    const casillas = new Map();
+    columnas.forEach(({ nombre, texto }) => {
+      const etiqueta = document.createElement('label');
+      const casilla = document.createElement('input');
+      const textoColumnas = document.createElement('span');
+      etiqueta.className = 'opcion-columna';
+      casilla.type = 'checkbox';
+      casilla.checked = true;
+      textoColumnas.textContent = texto;
+      etiqueta.append(casilla, textoColumnas);
+      panelColumnas.appendChild(etiqueta);
+      casillas.set(nombre, casilla);
+    });
+
+    function aplicarCasilla(nombre, visible) {
+      document.querySelectorAll(`[data-columna="${nombre}"]`).forEach((celda) => {
+        celda.style.display = visible ? '' : 'none';
+      });
+    }
+
+    function sincronizarTodas() {
+      toggleTodas.checked = columnas.every(({ nombre }) => casillas.get(nombre).checked);
+    }
+
+    function cerrarPanel() {
+      panelColumnas.hidden = true;
+      botonColumnas.setAttribute('aria-expanded', 'false');
+    }
+
+    botonColumnas.addEventListener('click', () => {
+      const abierto = !panelColumnas.hidden;
+      panelColumnas.hidden = abierto;
+      botonColumnas.setAttribute('aria-expanded', String(!abierto));
+    });
+
+    toggleTodas.addEventListener('change', () => {
+      columnas.forEach(({ nombre }) => {
+        casillas.get(nombre).checked = toggleTodas.checked;
+        aplicarCasilla(nombre, toggleTodas.checked);
+      });
+    });
+
+    casillas.forEach((casilla, nombre) => {
+      casilla.addEventListener('change', () => {
+        aplicarCasilla(nombre, casilla.checked);
+        sincronizarTodas();
+      });
+    });
+
+    document.addEventListener('click', (evento) => {
+      if (!evento.target.closest('.selector-columnas')) cerrarPanel();
+    });
+  }
+
+  // --- Página agregar: filtros enlazados jardín → edificio + propietario ---
+
   const selectJardin = document.getElementById('select-jardin');
   const selectEdificio = document.querySelector('[data-departamento="edificio"]');
   const selectPropietario = document.querySelector('[data-departamento="propietario"]');
   const inputBuscarResidente = document.getElementById('buscar-residente');
   const toggleOcupado = document.getElementById('toggle-ocupado');
   const inputStatus = document.getElementById('id_status');
+  const inputTorre = document.getElementById('torre-departamento');
+  const inputBloque = document.getElementById('bloque-departamento');
 
-  // Muestra solo los edificios del jardín elegido (cada <option> declara su jardín
-  // en data-garden). Si el edificio seleccionado ya no pertenece al jardín, se deselecciona.
   function filtrarEdificios() {
     if (!selectJardin || !selectEdificio) return;
     const jardin = selectJardin.value;
@@ -35,27 +107,20 @@
     ) {
       selectEdificio.value = '';
     }
+    mostrarUbicacion();
   }
 
-  // Actualiza la etiqueta de ubicación con el jardín y edificio actualmente elegidos.
-  // Los contenedores de información son opcionales: solo se actualizan si existen en la página.
   function mostrarUbicacion() {
     if (!selectEdificio) return;
     const opt = selectEdificio.selectedOptions[0];
-    const jardinNombre = opt ? opt.textContent.split(' · ')[0] : '—';
-    const infoJardin = document.getElementById('info-jardin');
-    const infoUbicacion = document.getElementById('info-ubicacion');
-    if (infoJardin) {
-      infoJardin.textContent = `Jardín: ${jardinNombre}`;
+    if (inputTorre) {
+      inputTorre.value = opt ? opt.dataset.torre || '' : '';
     }
-    if (infoUbicacion) {
-      infoUbicacion.textContent =
-        `Edificio: ${opt ? opt.value : '—'} · Bloque: ${opt ? opt.textContent.split('Bloque ')[1] || '—' : '—'}`;
+    if (inputBloque) {
+      inputBloque.value = opt ? opt.dataset.bloque || '' : '';
     }
   }
 
-  // Búsqueda del propietario: oculta las opciones del select que no contengan el
-  // texto escrito. Si el propietario elegido deja de coincidir, lo deseleccionamos.
   function filtrarResidentes() {
     if (!inputBuscarResidente || !selectPropietario) return;
     const termino = inputBuscarResidente.value.trim().toLowerCase();
@@ -70,15 +135,12 @@
     }
   }
 
-  // El interruptor visual "Ocupado" se traduce al campo oculto status del formulario
-  // (occupied/empty), que es el valor que persiste el backend.
   function sincronizarEstado() {
     if (toggleOcupado && inputStatus) {
       inputStatus.value = toggleOcupado.checked ? 'occupied' : 'empty';
     }
   }
 
-  // Conexión de eventos: filtro de jardín, cambio de edificio y estado inicial de ambos.
   if (selectJardin && selectEdificio) {
     selectJardin.addEventListener('change', filtrarEdificios);
     selectEdificio.addEventListener('change', mostrarUbicacion);
@@ -86,12 +148,10 @@
     mostrarUbicacion();
   }
 
-  // Búsqueda del propietario en tiempo real mientras se escribe.
   if (inputBuscarResidente && selectPropietario) {
     inputBuscarResidente.addEventListener('input', filtrarResidentes);
   }
 
-  // Sincronización del estado ocupado/desocupado al alternar el interruptor.
   if (toggleOcupado && inputStatus) {
     toggleOcupado.addEventListener('change', sincronizarEstado);
   }

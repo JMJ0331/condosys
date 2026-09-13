@@ -21,147 +21,89 @@
           href="{% url 'inicio' %}"
 
         >
-        {% if request.resolver_match.url_name == 'inicio' %}
-
-          <img src="{% static 'images/icons/verdes/Container_green.svg' %}" alt="home-icon" />
- 
-        {% else %}
-
-          <img src="{% static 'images/icons/blancos/Container_white.svg' %}" alt="home-icon" />
-      
-        {% endif %}
-
-          
+        <img src="{% static 'images/icons/blancos/Container_white.svg' %}" alt="home-icon" />
 
           <h4>Inicio</h4>
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'structure_index' %} active{% endif %}"
-          href="{% url 'structure_index' %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'departamentos_index' %} active{% endif %}"
+          href="{% url 'departamentos_index' %}"
         >
 
-        {% if request.resolver_match.url_name == 'structure_index' %}
-
-          <img src="{% static 'images/icons/verdes/city_green.svg' %}" alt="city-icon" /> 
-        {% else %}
-          <img src="{% static 'images/icons/blancos/city_white.svg' %}" alt="city-icon" />
-      
-        {% endif %}
-        
+        <img src="{% static 'images/icons/blancos/city_white.svg' %}" alt="city-icon" />
           <h4>Departamentos</h4>
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'residents_index' %} active{% endif %}"
-          href="{% url 'residents_index' %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'residentes_index' %} active{% endif %}"
+          href="{% url 'residentes_index' %}"
         >
 
-        {% if request.resolver_match.url_name == 'residents_index' %}
-
-          <img src="{% static 'images/icons/verdes/group_green.svg' %}" alt="group-icon" /> 
-        {% else %}
-          <img src="{% static 'images/icons/blancos/group_white.svg' %}" alt="group-icon" />
-      
-        {% endif %}
-          
+        <img src="{% static 'images/icons/blancos/group_white.svg' %}" alt="group-icon" />
           <h4>Residentes</h4>
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'payments_index' %} active{% endif %}"
-          href="{% url 'payments_index' %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'propietarios_index' %} active{% endif %}"
+          href="{% url 'propietarios_index' %}"
         >
 
-        {% if request.resolver_match.url_name == 'payments_index' %}
+        <img src="{% static 'images/icons/blancos/home-user_white.svg' %}" alt="propietario-icon"/>
+          <h4>Propietarios</h4>
+        </a>
 
-          <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="waallet-icon" />
-        {% else %}
-          <img src="{% static 'images/icons/blancos/lot-of-cash_white.svg' %}" alt="waallet-icon" />
-      
-        {% endif %}
-        
+        <a
+          class="opt-modulo{% if request.resolver_match.url_name == 'pagos_index' %} active{% endif %}"
+          href="{% url 'pagos_index' %}"
+        >
+
+        <img src="{% static 'images/icons/blancos/lot-of-cash_white.svg' %}" alt="waallet-icon" />
           <h4>Pagos</h4>
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'incidents_index' %} active{% endif %}"
-          href="{% url 'incidents_index' %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'incidencias_index' %} active{% endif %}"
+          href="{% url 'incidencias_index' %}"
         >
 
-        {% if request.resolver_match.url_name == 'incidents_index' %}
-
-          <img src="{% static 'images/icons/verdes/warning-triangle_green.svg' %}" alt="message-icon"/>
-        {% else %}
-          <img src="{% static 'images/icons/blancos/warning-triangle_white.svg' %}" alt="message-icon"/>
-      
-        {% endif %}
-         
+        <img src="{% static 'images/icons/blancos/warning-triangle_white.svg' %}" alt="message-icon"/>
           <h4>Incidencias</h4>
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'visitors_index' %} active{% endif %}"
-          href="{% url 'visitors_index' %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'visitantes_index' %} active{% endif %}"
+          href="{% url 'visitantes_index' %}"
         >
 
-        {% if request.resolver_match.url_name == 'visitors_index' %}
-
-          <img src="{% static 'images/icons/verdes/community_green.svg' %}" alt="community-icon"/>
-        {% else %}
-          <img src="{% static 'images/icons/blancos/community_white.svg' %}" alt="community-icon"/>
-      
-        {% endif %}
-          
+        <img src="{% static 'images/icons/blancos/community_white.svg' %}" alt="community-icon"/>
           <h4>Visitantes</h4>
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'reservations_index' %} active{% endif %}"
-          href="{% url 'reservations_index' %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'reservas_index' %} active{% endif %}"
+          href="{% url 'reservas_index' %}"
         >
 
-        {% if request.resolver_match.url_name == 'reservations_index' %}
-
-          <img src="{% static 'images/icons/verdes/leaf_green.svg' %}" alt="neigh-icon"/>
-        {% else %}
-          <img src="{% static 'images/icons/blancos/leaf_white.svg' %}" alt="neigh-icon"/>
-      
-        {% endif %}
-         
+        <img src="{% static 'images/icons/blancos/leaf_white.svg' %}" alt="neigh-icon"/>
           <h4>Areas Comunes</h4>
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'communications_index' %} active{% endif %}"
-          href="{% url 'communications_index' %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'comunicados_index' %} active{% endif %}"
+          href="{% url 'comunicados_index' %}"
         >
 
-        {% if request.resolver_match.url_name == 'communications_index' %}
-
-          <img src="{% static 'images/icons/verdes/voice_green.svg' %}" alt="chat-icon"/>
-        {% else %}
-          <img src="{% static 'images/icons/blancos/voice_white.svg' %}" alt="chat-icon"/>
-      
-        {% endif %}
-         
+        <img src="{% static 'images/icons/blancos/voice_white.svg' %}" alt="chat-icon"/>
           <h4>Comunicados</h4>
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'maintenance_index' %} active{% endif %}"
-          href="{% url 'maintenance_index' %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'mantenimientos_index' %} active{% endif %}"
+          href="{% url 'mantenimientos_index' %}"
         >
 
-        {% if request.resolver_match.url_name == 'communications_index' %}
-
-          <img src="{% static 'images/icons/verdes/reports_green.svg' %}" alt="settings-icon" />
-        {% else %}
-          <img src="{% static 'images/icons/blancos/reports_white.svg' %}" alt="settings-icon" /> 
-          
-        
-        {% endif %}
-          
+        <img src="{% static 'images/icons/blancos/reports_white.svg' %}" alt="settings-icon" />
           <h4>Mantenimientos</h4>
         </a>
 

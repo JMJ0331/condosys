@@ -319,28 +319,23 @@ aside .opt-modulo, .otras-opciones {
     border-radius: var(--borderR-8);
     color: var(--white-50);
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
     overflow-wrap: normal;
     text-decoration: none;
 }
 
 aside .opt-modulo:hover {
-    background: var(--white-50);
-    color: var(--green-900);
-
-    & img{
-        
-       
-        filter: invert(21%) sepia(19%) saturate(2400%) hue-rotate(84deg) brightness(50%) contrast(95%);
-        
-
-    }
+    background: var(--white-50-hover);
+    border-top-left-radius: var(--borderR-0);
+    border-bottom-left-radius: var(--borderR-0);
 }
 
 aside .opt-modulo.active {
-    background: var(--white-50);
-    color: var(--green-900);
+    background: var(--white-50-active);
+    color: var(--white-50);
     font-weight: 650;
+    border-left: 4px solid var(--white-50);
+    border-top-left-radius: var(--borderR-0);
+    border-bottom-left-radius: var(--borderR-0);
 }
 
 aside .opt-modulo img {
@@ -350,8 +345,7 @@ aside .opt-modulo img {
     opacity: 0.8;
 }
 
-aside .opt-modulo.active img,
-aside .opt-modulo:hover img {
+aside .opt-modulo.active img {
     opacity: 1;
 }
 

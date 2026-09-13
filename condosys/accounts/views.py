@@ -11,6 +11,10 @@ from .permissions import IsAdmin, CanModifyUser
 from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, ChangePasswordSerializer
 from .forms import UserForm, UserCreateForm
 
+<<<<<<< HEAD
+=======
+# @login_required
+>>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 def app_index(request):
 
     contexto = {
@@ -21,6 +25,10 @@ def app_index(request):
     return render(request, 'accounts/index.html', contexto)
 
 
+<<<<<<< HEAD
+=======
+# @login_required
+>>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_usuario(request):
     form = UserForm(request.POST)
@@ -32,6 +40,10 @@ def crear_usuario(request):
     return redirect('inicio')
 
 
+<<<<<<< HEAD
+=======
+# @login_required
+>>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_usuario_nuevo(request):
     form = UserCreateForm(request.POST)

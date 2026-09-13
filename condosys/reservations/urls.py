@@ -6,12 +6,12 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'common-areas', CommonAreaViewSet, basename='commonarea')
-router.register(r'', ReservationViewSet, basename='reservation')
+router.register(r'areas-comunes', CommonAreaViewSet, basename='areacomun')
+router.register(r'', ReservationViewSet, basename='reserva')
 
 urlpatterns = [
     path('crear/area-comun/', crear_area_comun, name='crear_area_comun'),
     path('crear/', crear_reserva, name='crear_reserva'),
-    path('', app_index, name='reservations_index'),
+    path('', app_index, name='reservas_index'),
     path('', include(router.urls)),
 ]

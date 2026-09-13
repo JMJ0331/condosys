@@ -11,6 +11,10 @@ from .serializers import (
 from .forms import MaintenanceOrderForm
 
 
+<<<<<<< HEAD
+=======
+# @login_required
+>>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 def app_index(request):
     contexto = {
         'form_maintenance_order': MaintenanceOrderForm(),
@@ -19,6 +23,10 @@ def app_index(request):
     return render(request, 'maintenance/index.html', contexto)
 
 
+<<<<<<< HEAD
+=======
+# @login_required
+>>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_orden_mantenimiento(request):
     form = MaintenanceOrderForm(request.POST)

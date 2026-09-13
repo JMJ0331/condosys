@@ -1,13 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ResidentViewSet, app_index, crear_residente, nuevo_residente
+from .views import ResidentViewSet, app_index, crear_residente
 
 router = DefaultRouter()
-router.register(r'', ResidentViewSet, basename='resident')
+router.register(r'', ResidentViewSet, basename='residente')
 
 urlpatterns = [
-    path('nuevo/', nuevo_residente, name='nuevo_residente'),
     path('crear/', crear_residente, name='crear_residente'),
-    path('', app_index, name='residents_index'),
+    path('', app_index, name='residentes_index'),
     path('', include(router.urls)),
 ]

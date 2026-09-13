@@ -27,6 +27,10 @@ from residents.models import Resident
 from structure.models import Apartment
 
 
+<<<<<<< HEAD
+=======
+# @login_required
+>>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 def app_index(request):
     contexto = {
         'form_payment': PaymentForm(),
@@ -37,6 +41,10 @@ def app_index(request):
     return render(request, 'payments/index.html', contexto)
 
 
+<<<<<<< HEAD
+=======
+# @login_required
+>>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 @require_POST
 def crear_pago(request):
     form = PaymentForm(request.POST, request.FILES)
@@ -84,6 +92,10 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return queryset.distinct()
 
 
+<<<<<<< HEAD
+=======
+# @login_required
+>>>>>>> 92964151f67b4af53f5d5b1c0445adc7116e3df9
 def generar_comprobante(request):
     """Genera un comprobante de pago en PDF con los datos del formulario."""
     apartment_id = request.GET.get('apartment', '')

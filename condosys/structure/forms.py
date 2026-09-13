@@ -1,29 +1,6 @@
 from django import forms
 from residents.forms import validate_photo
-from .models import Apartment, Building, Garden
-
-
-class GardenForm(forms.ModelForm):
-    """Formulario de alta/edición de jardines."""
-    class Meta:
-        model = Garden
-        fields = ['name', 'location', 'description', 'is_active']
-
-
-class BuildingForm(forms.ModelForm):
-    """Formulario de alta/edición de edificios; placeholders en español."""
-    class Meta:
-        model = Building
-        fields = [
-            'garden', 'name', 'tower', 'block',
-            'number_of_floors', 'description', 'is_active',
-        ]
-        widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Edificio'}),
-            'tower': forms.TextInput(attrs={'placeholder': 'Torre'}),
-            'block': forms.TextInput(attrs={'placeholder': 'Bloque'}),
-            'description': forms.TextInput(attrs={'placeholder': 'Descripción'}),
-        }
+from .models import Apartment
 
 
 class ApartmentsForm(forms.ModelForm):

@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
-from django.views.decorators.http import require_POST
 from rest_framework import filters, viewsets
 from accounts.permissions import IsManager
 from structure.models import Apartment
@@ -12,6 +11,7 @@ from .serializers import ResidentSerializer
 PAGINATE_BY = 15
 
 
+# @login_required
 def app_index(request):
     qs = Resident.objects.select_related(
         'apartment__building__garden', 'user'
@@ -51,23 +51,23 @@ def app_index(request):
     return render(request, 'residents/index.html', contexto)
 
 
-def nuevo_residente(request):
+# @login_required
+def crear_residente(request):
+    if request.method == 'POST':
+        form = ResidentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Residente registrado correctamente.')
+            return redirect('inicio')
+        messages.error(request, 'No se pudo registrar el residente. Revisa los datos enviados.')
+    else:
+        form = ResidentForm()
+
     contexto = {
-        'form_resident': ResidentForm(),
+        'form_resident': form,
         'module_name': 'Residentes',
     }
     return render(request, 'residents/nuevo.html', contexto)
-
-
-@require_POST
-def crear_residente(request):
-    form = ResidentForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Residente registrado correctamente.')
-    else:
-        messages.error(request, 'No se pudo registrar el residente. Revisa los datos enviados.')
-    return redirect('inicio')
 
 
 class ResidentViewSet(viewsets.ModelViewSet):

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'maintenance',
     'notifications',
     'payments',
+    'propietarios',
     'reports',
     'reservations',
     'residents',

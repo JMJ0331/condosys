@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/residents.css' %}">
+<link rel="stylesheet" href="{% static 'css/propietarios.css' %}">
 {% endblock %}
 
 {% block mini-cards %}
@@ -10,7 +10,7 @@
 
 <main class="container-main-side2">
   <div class="contenedor-filtros">
-    <h2>Todos los residentes</h2>
+    <h2>Todos los propietarios</h2>
 
     <div class="filtros-tabla">
       <select id="filtro-columnas" name="columnas" aria-label="Cantidad de columnas visibles">
@@ -25,7 +25,7 @@
         <option value="8">Máx. 8</option>
       </select>
 
-      <form method="get" class="formulario-filtros" id="filtros-residentes">
+      <form method="get" class="formulario-filtros" id="filtros-propietarios">
         <select name="estado" id="filtro-estado">
           <option value="">Todos los estados</option>
           <option value="activo" {% if estado_actual == 'activo' %}selected{% endif %}>Activo</option>
@@ -39,62 +39,62 @@
           {% endfor %}
         </select>
       </form>
-
-      <a href="{% url 'crear_residente' %}" class="boton-nuevo-residente">+ Nuevo residente</a>
     </div>
   </div>
 
   <div class="tabla-filtrada">
-    <table class="tabla-residentes">
+    <table class="tabla-propietarios">
       <thead>
         <tr>
           <th data-columna="foto">Foto</th>
           <th data-columna="nombre">Nombre completo</th>
           <th data-columna="cedula">Cédula</th>
-          <th data-columna="civil">Estado civil</th>
           <th data-columna="telefono">Teléfono</th>
-          <th data-columna="contacto">Contacto de emergencia</th>
-          <th data-columna="apartamento">Apartamento</th>
-          <th data-columna="relacion">Relación</th>
-          <th data-columna="ingreso">Fecha de ingreso</th>
+          <th data-columna="email">Correo</th>
+          <th data-columna="apartamentos">Apartamentos propios</th>
+          <th data-columna="residencia">Apartamento de residencia</th>
           <th class="columna-acciones">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        {% for residente in residentes %}
+        {% for propietario in propietarios %}
         <tr>
           <td data-columna="foto">
-            {% if residente.photo %}
-            <img src="{{ residente.photo.url }}" alt="Foto de {{ residente.full_name }}" class="foto-residente">
+            {% if propietario.photo %}
+            <img src="{{ propietario.photo.url }}" alt="Foto de {{ propietario.full_name }}" class="foto-propietario">
             {% else %}
             <span class="foto-placeholder" aria-hidden="true"></span>
             {% endif %}
           </td>
-          <td data-columna="nombre">{{ residente.full_name }}</td>
-          <td data-columna="cedula">{{ residente.cedula }}</td>
-          <td data-columna="civil">{{ residente.get_marital_status_display }}</td>
-          <td data-columna="telefono">{{ residente.phone }}</td>
-          <td data-columna="contacto">{{ residente.emergency_contact|default:"—" }}</td>
-          <td data-columna="apartamento">{{ residente.apartment.name }}</td>
-          <td data-columna="relacion">{% if residente.apartment.owner_id == residente.id %}Propietario{% else %}Ocupante{% endif %}</td>
-          <td data-columna="ingreso">{{ residente.created_at|date:"d/m/Y" }}</td>
+          <td data-columna="nombre">{{ propietario.full_name }}</td>
+          <td data-columna="cedula">{{ propietario.cedula }}</td>
+          <td data-columna="telefono">{{ propietario.phone }}</td>
+          <td data-columna="email">{{ propietario.email|default:"—" }}</td>
+          <td data-columna="apartamentos">
+            <ul class="lista-apartamentos-propios">
+              {% for apartamento in propietario.apartments_owned.all %}
+              <li>{{ apartamento.name }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+          <td data-columna="residencia">{{ propietario.apartment.name }}</td>
           <td class="columna-acciones">
             <button type="button" class="boton-acciones" aria-label="Acciones">&hellip;</button>
           </td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="10" class="sin-registros">Sin coincidencias.</td>
+          <td colspan="8" class="sin-registros">Sin coincidencias.</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
-  {% include "componentes/paginacion_tabla.html" with pagina=residentes %}
+  {% include "componentes/paginacion_tabla.html" with pagina=propietarios %}
 </main>
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/residentes.js' %}" defer></script>
+<script src="{% static 'js/propietarios.js' %}" defer></script>
 {% endblock %}

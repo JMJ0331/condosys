@@ -1,0 +1,122 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/departamentos.css' %}">
+{% endblock %}
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+
+<main class="container-main-side2">
+
+  <div class="panel-acciones">
+    <div class="acciones">
+      <div class="fila-encabezado">
+        <h2 class="titulo-seccion">Agregar departamento</h2>
+        <a href="{% url 'departamentos_index' %}" class="boton-volver">&larr; Volver a departamentos</a>
+      </div>
+
+      <form method="post" action="{% url 'agregar_departamento' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_apartments.non_field_errors }}
+
+        <div class="seccion-formulario">
+          <legend>Información del departamento</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_apartments.name.id_for_label }}">{{ form_apartments.name.label }}</label>
+              {{ form_apartments.name }}
+              {{ form_apartments.name.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label>Buscar propietario/residente</label>
+              <input type="text" id="buscar-residente" class="campo-entrada" placeholder="Buscar" autocomplete="off">
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_apartments.owner.id_for_label }}">{{ form_apartments.owner.label }}</label>
+              {{ form_apartments.owner }}
+              {{ form_apartments.owner.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_apartments.photo.id_for_label }}">{{ form_apartments.photo.label }}</label>
+              {{ form_apartments.photo }}
+              {{ form_apartments.photo.errors }}
+              <small class="ayuda-formulario">Subir imagen (JPG, PNG o WEBP — máx. 2 MB)</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Ubicación</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_apartments.building.id_for_label }}">{{ form_apartments.building.label }}</label>
+              <select name="{{ form_apartments.building.html_name }}" id="{{ form_apartments.building.id_for_label }}" class="campo-seleccion" data-departamento="edificio">
+                <option value="">Elegir un edificio</option>
+                {% for edificio in edificios %}
+                <option value="{{ edificio.id }}" data-garden="{{ edificio.garden_id }}" data-torre="{{ edificio.tower|default:'' }}" data-bloque="{{ edificio.block|default:'' }}">{{ edificio.tower|default:'' }}{% if edificio.tower %} · {% endif %}{{ edificio.name }} · Bloque {{ edificio.block|default:'—' }}</option>
+                {% endfor %}
+              </select>
+              {{ form_apartments.building.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="select-jardin">Jardín</label>
+              <select name="jardin-filtro" id="select-jardin" class="campo-seleccion">
+                <option value="">Elegir</option>
+                {% for jardin in jardines %}
+                <option value="{{ jardin.id }}">{{ jardin.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="torre-departamento">Torre</label>
+              <input type="text" id="torre-departamento" class="campo-entrada" readonly>
+            </div>
+            <div class="campo-formulario">
+              <label for="bloque-departamento">Bloque</label>
+              <input type="text" id="bloque-departamento" class="campo-entrada" readonly>
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_apartments.floor.id_for_label }}">{{ form_apartments.floor.label }}</label>
+              {{ form_apartments.floor }}
+              {{ form_apartments.floor.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Estado</legend>
+          <div class="fila-formulario fila-interruptor">
+            <div class="campo-formulario">
+              <label class="etiqueta-interruptor" for="toggle-ocupado">
+                Ocupado
+                <span class="interruptor">
+                  <input type="checkbox" id="toggle-ocupado" class="entrada-interruptor">
+                  <span class="deslizador-interruptor"></span>
+                </span>
+              </label>
+              <input type="hidden" name="status" id="id_status" value="{{ form_apartments.status.value|default:'empty' }}">
+            </div>
+          </div>
+        </div>
+
+        <div class="pie-formulario">
+          <button type="submit">Agregar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/departamentos.js' %}" defer></script>
+{% endblock %}

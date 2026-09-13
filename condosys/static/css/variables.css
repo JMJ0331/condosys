@@ -16,6 +16,8 @@
     --white-700: #acacac;
     --white-800: #858585;
     --white-900: #666666;
+    --white-50-hover: rgba(254, 254, 254, 0.2);
+    --white-50-active: rgba(254, 254, 254, 0.5);
 
 
 
