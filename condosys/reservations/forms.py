@@ -6,6 +6,7 @@ from structure.models import Apartment
 from residents.models import Resident
 from areas_comunes.models import AreaComun
 from .models import CommonArea, Reservation
+from condosys.forms_utils import placeholder
 
 
 class CommonAreaForm(forms.ModelForm):
@@ -79,7 +80,7 @@ class ReservationForm(forms.ModelForm):
         # select_related evita consultas extra al mostrar el apartamento de cada residente.
         self.fields['resident'].queryset = Resident.objects.select_related('apartment').all()
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
-        self.fields['status'].choices = [('', 'Elegir estado')] + list(self.fields['status'].choices)
+        placeholder(self.fields['status'], 'Elegir estado')
 
     def clean(self):
         cleaned_data = super().clean()

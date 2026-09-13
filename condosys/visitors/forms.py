@@ -4,6 +4,7 @@ from django.utils import timezone
 from accounts.models import User
 from structure.models import Apartment
 from .models import Visitor
+from condosys.forms_utils import placeholder
 
 TIPOS_DOCUMENTO = ('.jpg', '.jpeg', '.png', '.webp')
 MAX_DOCUMENTO_MB = 2
@@ -73,9 +74,9 @@ class VisitorForm(forms.ModelForm):
         self.fields['authorized_by'].queryset = User.objects.filter(is_active=True)
         self.fields['authorized_by'].empty_label = 'Elegir quien autorizó'
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
-        self.fields['type'].choices = [('', 'Elegir tipo de visitante')] + list(self.fields['type'].choices)
-        self.fields['document_type'].choices = [('', 'Elegir tipo de documento')] + list(self.fields['document_type'].choices)
-        self.fields['status'].choices = [('', 'Elegir estado')] + list(self.fields['status'].choices)
+        placeholder(self.fields['type'], 'Elegir tipo de visitante')
+        placeholder(self.fields['document_type'], 'Elegir tipo de documento')
+        placeholder(self.fields['status'], 'Elegir estado')
 
     def clean_document_image(self):
         archivo = self.cleaned_data.get('document_image')

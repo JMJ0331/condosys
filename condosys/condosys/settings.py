@@ -21,6 +21,11 @@ load_dotenv(BASE_DIR / '.env')
 
 DEBUG = os.getenv('DJANGO_DEBUG') == 'True'
 
+# Opción en blanco de los selects con choices: Django usa por defecto
+# "- Select an option -". Lo cambiamos al texto del proyecto.
+import django.db.models.fields as _django_fields
+_django_fields.BLANK_CHOICE_LABEL = "Selecciona una opción"
+
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 ALLOWED_HOSTS = [

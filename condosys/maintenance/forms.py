@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import MaintenanceCharge
+from condosys.forms_utils import placeholder
 
 TIPOS_FOTO = ('.jpg', '.jpeg', '.png', '.webp')
 MAX_FOTO_MB = 2
@@ -50,9 +51,9 @@ class MaintenanceChargeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
-        self.fields['concept'].choices = [('', 'Elegir concepto')] + list(self.fields['concept'].choices)
-        self.fields['periodicity'].choices = [('', 'Elegir periodicidad')] + list(self.fields['periodicity'].choices)
-        self.fields['payment_methods'].choices = [('', 'Elegir método de pago')] + list(self.fields['payment_methods'].choices)
+        placeholder(self.fields['concept'], 'Elegir concepto')
+        placeholder(self.fields['periodicity'], 'Elegir periodicidad')
+        placeholder(self.fields['payment_methods'], 'Elegir método de pago')
         # El cargo nuevo viene activo por defecto.
         self.fields['is_active'].initial = True
 

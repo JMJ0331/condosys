@@ -17,13 +17,24 @@ class Communication(models.Model):
         ('building', 'Por edificio'),
         ('resident', 'Para residente'),
     )
+
+    CATEGORY_CHOICES = (
+        ('aviso', 'Aviso'),
+        ('mantenimiento', 'Mantenimiento'),
+        ('evento', 'Evento'),
+        ('seguridad', 'Seguridad'),
+        ('piscinas', 'Piscinas'),
+        ('general', 'General'),
+    )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     garden = models.ForeignKey(Garden, on_delete=CASCADE, related_name='communications')
     sender = models.ForeignKey(User, on_delete=PROTECT, related_name='communications_sent')
     
     title = models.CharField(max_length=200)
+    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='general')
     body = models.TextField()
+    image = models.FileField(upload_to='comunicados/', blank=True, null=True)
     
     target_type = models.CharField(max_length=30, choices=TARGET_TYPE_CHOICES, default='general')
     target_id = models.UUIDField(blank=True, null=True)  # building_id o user_id según target_type

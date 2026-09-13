@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from structure.models import Garden
 from .models import Communication
 from .serializers import CommunicationSerializer
 from .forms import CommunicationForm
@@ -22,15 +23,16 @@ def app_index(request):
 # @login_required
 @require_POST
 def crear_comunicacion(request):
-    form = CommunicationForm(request.POST)
+    form = CommunicationForm(request.POST, request.FILES)
     if form.is_valid():
         comunicacion = form.save(commit=False)
         comunicacion.sender = request.user
+        comunicacion.garden = (Garden.objects.first())
         comunicacion.save()
         messages.success(request, 'Comunicado creado correctamente.')
     else:
         messages.error(request, 'No se pudo crear el comunicado. Revisa los datos enviados.')
-    return redirect('inicio')
+    return redirect('comunicados_index')
 
 
 class CommunicationViewSet(viewsets.ModelViewSet):

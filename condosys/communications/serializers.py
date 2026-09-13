@@ -11,8 +11,8 @@ class CommunicationSerializer(serializers.ModelSerializer):
         model = Communication
         fields = [
             'id', 'garden', 'garden_name', 'sender',
-            'sender_email', 'title', 'body', 'target_type',
-            'target_id', 'is_published', 'published_at',
+            'sender_email', 'title', 'category', 'body', 'image',
+            'target_type', 'target_id', 'is_published', 'published_at',
             'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'published_at']

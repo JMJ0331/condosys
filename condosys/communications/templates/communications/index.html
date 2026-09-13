@@ -1,12 +1,89 @@
-{% extends 'base.html' %} {% block mini-cards %}
+{% extends 'base.html' %}
+{% load static %}
+{% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  <form method="post" action="{% url 'crear_comunicacion' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
+
+  <div class="panel-acciones">
+    <div class="acciones">
+      <h3>Comunicar e Informar</h3>
+
+      <form method="post" action="{% url 'crear_comunicacion' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_communication.non_field_errors }}
+
+        <div class="seccion-formulario">
+          <legend>Información del comunicado</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_communication.title.id_for_label }}">{{ form_communication.title.label }}</label>
+              {{ form_communication.title }}
+              {{ form_communication.title.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_communication.category.id_for_label }}">{{ form_communication.category.label }}</label>
+              {{ form_communication.category }}
+              {{ form_communication.category.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Contenido</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_communication.body.id_for_label }}">{{ form_communication.body.label }}</label>
+              {{ form_communication.body }}
+              {{ form_communication.body.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_communication.image.id_for_label }}">{{ form_communication.image.label }}</label>
+              <label class="btn-subir-archivo" for="{{ form_communication.image.id_for_label }}">
+                {{ form_communication.image }}
+                <span class="texto-boton-archivo" data-texto-archivo>Subir imagen</span>
+              </label>
+              <small class="ayuda-formulario" data-ayuda-foto>JPG, PNG o WEBP — máx. 2 MB</small>
+              {{ form_communication.image.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Alcance y programación</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_communication.target_type.id_for_label }}">{{ form_communication.target_type.label }}</label>
+              {{ form_communication.target_type }}
+              {{ form_communication.target_type.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_communication.publication_date.id_for_label }}">{{ form_communication.publication_date.label }}</label>
+              {{ form_communication.publication_date }}
+              {{ form_communication.publication_date.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Estado</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_communication.estado.id_for_label }}">{{ form_communication.estado.label }}</label>
+              {{ form_communication.estado }}
+              {{ form_communication.estado.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="pie-formulario">
+          <button type="submit">Agregar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </main>
+<script src="{% static 'js/comunicados.js' %}" defer></script>
 {% endblock %}

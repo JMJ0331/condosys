@@ -1,5 +1,6 @@
 from django import forms
 from .models import AreaComun
+from condosys.forms_utils import placeholder
 
 
 class AreaComunForm(forms.ModelForm):
@@ -52,9 +53,9 @@ class AreaComunForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
-        self.fields['area_type'].choices = [('', 'Elegir tipo de área')] + list(self.fields['area_type'].choices)
-        self.fields['available_days'].choices = [('', 'Elegir días')] + list(self.fields['available_days'].choices)
-        self.fields['status'].choices = [('', 'Elegir estado')] + list(self.fields['status'].choices)
+        placeholder(self.fields['area_type'], 'Elegir tipo de área')
+        placeholder(self.fields['available_days'], 'Elegir días')
+        placeholder(self.fields['status'], 'Elegir estado')
 
     def clean(self):
         cleaned_data = super().clean()

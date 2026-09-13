@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from structure.models import Apartment
 from residents.models import Resident
 from .models import Incident, IncidentHistory, IncidentImage
+from condosys.forms_utils import placeholder
 
 TIPOS_EVIDENCIA = ('.jpg', '.jpeg', '.png', '.webp', '.pdf')
 MAX_EVIDENCIA_MB = 2
@@ -80,9 +81,9 @@ class IncidentForm(forms.ModelForm):
         # select_related evita consultas extra al mostrar el apartamento de cada residente.
         self.fields['resident'].queryset = Resident.objects.select_related('apartment').all()
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
-        self.fields['category'].choices = [('', 'Elegir tipo de incidencia')] + list(self.fields['category'].choices)
-        self.fields['priority'].choices = [('', 'Elegir prioridad')] + list(self.fields['priority'].choices)
-        self.fields['status'].choices = [('', 'Elegir estado')] + list(self.fields['status'].choices)
+        placeholder(self.fields['category'], 'Elegir tipo de incidencia')
+        placeholder(self.fields['priority'], 'Elegir prioridad')
+        placeholder(self.fields['status'], 'Elegir estado')
         # La fecha se rellena sola con la de hoy si el usuario no la cambia.
         self.fields['reported_date'].required = False
 
