@@ -1,178 +1,46 @@
 /* ============================================
-   Formulario de Residente
+   Módulo Residentes - estilos específicos.
+   Los estilos de formulario/paginación viven en
+   static/css/formularios.css, paginacion.css
+   (compartidos).
    ============================================ */
 
-.residente-form {
+.formulario-residente {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 1.2rem;
 	margin-top: 1.6rem;
 }
 
-.section-title {
+.titulo-seccion {
 	font-size: 1.6rem;
 	font-weight: 600;
 	color: var(--green-900);
 	margin: 0;
 }
 
-.form-section {
-	grid-column: 1 / -1;
-	border: 1px solid var(--green-600);
-	border-radius: var(--borderR-4);
-	padding: 1rem 1.2rem;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-}
-
-.form-section legend {
-	font-size: 1.3rem;
-	font-weight: 600;
-	color: var(--green-900);
-	padding: 0 0.6rem;
-}
-
-.form-row {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 1.2rem;
-}
-
-.form-field {
-	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
-	min-width: 0;
-}
-
-.form-field label {
-	font-size: 1.3rem;
-	font-weight: 500;
-	color: var(--black-400);
-}
-
-.residente-form input,
-.residente-form select {
-	width: 100%;
-	box-sizing: border-box;
-	height: 4rem;
-	outline: none;
-	border: 1px solid var(--green-600);
-	border-radius: var(--borderR-4);
-	padding: 0.4rem 1.2rem;
-	background: var(--white-50);
-	font: inherit;
-	font-size: 1.4rem;
-	font-weight: 520;
-	color: var(--black-300);
-}
-
-.residente-form input[type='file'] {
-	height: auto;
-	padding: 0.6rem 1.2rem;
-}
-
-.residente-form input:hover,
-.residente-form input:focus,
-.residente-form select:hover,
-.residente-form select:focus {
-	border-color: var(--green-900);
-}
-
-.form-switch-row {
-	border: none;
-	padding: 0;
-	gap: 0.6rem;
-}
-
-.switch-label {
+/* Encabezado del formulario nuevo: título + enlace de retorno */
+.fila-encabezado {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: 1rem;
-	font-size: 1.4rem;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.boton-volver {
+	color: #166534;
+	font-size: 13px;
 	font-weight: 500;
-	color: var(--black-400);
-	cursor: pointer;
+	text-decoration: none;
 }
 
-.switch {
-	position: relative;
-	display: inline-block;
-	width: 4.8rem;
-	height: 2.6rem;
-	flex-shrink: 0;
+.boton-volver:hover {
+	text-decoration: underline;
 }
 
-.switch input {
-	opacity: 0;
-	width: 0;
-	height: 0;
-}
-
-.switch-slider {
-	position: absolute;
-	inset: 0;
-	background: var(--black-300);
-	border-radius: 2.6rem;
-	transition: background 0.2s ease;
-}
-
-.switch-slider::before {
-	content: '';
-	position: absolute;
-	width: 2rem;
-	height: 2rem;
-	left: 0.3rem;
-	top: 0.3rem;
-	background: var(--white-50);
-	border-radius: 50%;
-	transition: transform 0.2s ease;
-}
-
-.switch input:checked + .switch-slider {
-	background: var(--green-600);
-}
-
-.switch input:checked + .switch-slider::before {
-	transform: translateX(2.2rem);
-}
-
-.dialog-footer {
-	grid-column: 1 / -1;
-	display: flex;
-	justify-content: flex-end;
-	gap: 1rem;
-	margin-top: 0.4rem;
-}
-
-.dialog-footer button {
-	grid-column: auto;
-	border: none;
-	border-radius: var(--borderR-4);
-	padding: 0.8rem 2rem;
-	background: var(--green-900);
-	color: var(--white-50);
-	font: inherit;
-	font-size: 1.3rem;
-	font-weight: 600;
-	cursor: pointer;
-}
-
-.dialog-footer button[type='reset'] {
-	background: transparent;
-	border: 1px solid var(--green-600);
-	color: var(--black-400);
-}
-
-/* ============================================
-   Listado de residentes (filtros + tabla)
-   Estilo basado en Apartamentos/Residentes/residentes.css
-   ============================================ */
-
-.filter-container {
+/* Filtros del listado */
+.contenedor-filtros {
 	padding: 4px 0 14px 0;
 	display: flex;
 	align-items: center;
@@ -183,21 +51,21 @@
 	margin-bottom: 18px;
 }
 
-.filter-container h2 {
+.contenedor-filtros h2 {
 	font-size: 14px;
 	font-weight: 600;
 	margin: 0;
 	color: #1f2933;
 }
 
-.filters {
+.filtros-tabla {
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	flex-wrap: wrap;
 }
 
-.filters select {
+.filtros-tabla select {
 	appearance: none;
 	-webkit-appearance: none;
 	background: #ffffff url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 10px center;
@@ -211,11 +79,11 @@
 	outline: none;
 }
 
-.filters select:focus {
+.filtros-tabla select:focus {
 	border-color: #16a34a;
 }
 
-.btn-nuevo-residente {
+.boton-nuevo-residente {
 	display: inline-flex;
 	align-items: center;
 	background: #14532d;
@@ -230,11 +98,11 @@
 	text-decoration: none;
 }
 
-.btn-nuevo-residente:hover {
+.boton-nuevo-residente:hover {
 	background: #163d21;
 }
 
-.filtered-table {
+.tabla-filtrada {
 	margin-top: 18px;
 	overflow-x: auto;
 }
@@ -293,7 +161,7 @@ table.tabla-residentes {
 	text-align: right;
 }
 
-.btn-acciones {
+.boton-acciones {
 	background: none;
 	border: none;
 	font-size: 0;
@@ -303,7 +171,7 @@ table.tabla-residentes {
 	position: relative;
 }
 
-.btn-acciones::before {
+.boton-acciones::before {
 	content: "\2022\2022\2022";
 	font-size: 16px;
 	letter-spacing: 2px;
@@ -317,101 +185,20 @@ table.tabla-residentes {
 	padding: 24px;
 }
 
-/* Paginación (componente) */
-.paginacion-tabla {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 12px;
-	flex-wrap: wrap;
-	padding-top: 16px;
-	margin-top: 18px;
-}
-
-.paginacion-numeros {
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	flex-wrap: wrap;
-}
-
-.pag-btn,
-.pag-num {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	min-width: 34px;
-	height: 34px;
-	padding: 0 10px;
-	border: 1px solid #e2e5ea;
-	border-radius: 8px;
-	background: #ffffff;
-	color: #4b5563;
-	font: inherit;
-	font-size: 12.5px;
-	font-weight: 500;
-	text-decoration: none;
-	cursor: pointer;
-}
-
-.pag-btn:hover,
-.pag-num:not(.activa):not(.puntos):hover {
-	border-color: #16a34a;
-	color: #166534;
-}
-
-.pag-btn.deshabilitada {
-	opacity: 0.45;
-	cursor: not-allowed;
-}
-
-.pag-num.activa {
-	background: #14532d;
-	border-color: #14532d;
-	color: #ffffff;
-}
-
-.pag-num.puntos {
-	border: none;
-	background: none;
-	cursor: default;
-}
-
-/* Formulario nuevo: fila de encabezado con enlace de retorno */
-.form-head-row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 12px;
-}
-
-.btn-volver {
-	color: #166534;
-	font-size: 13px;
-	font-weight: 500;
-	text-decoration: none;
-}
-
-.btn-volver:hover {
-	text-decoration: underline;
-}
-
 @media (max-width: 560px) {
-	.residente-form,
-	.form-row {
+	.formulario-residente {
 		grid-template-columns: 1fr;
 	}
 
-	.filter-container {
+	.contenedor-filtros {
 		align-items: flex-start;
 	}
 
-	.filters {
+	.filtros-tabla {
 		width: 100%;
 	}
 
-	.filters select {
+	.filtros-tabla select {
 		flex: 1 1 auto;
 		min-width: 0;
 	}

@@ -9,10 +9,10 @@
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 
 <main class="container-main-side2">
-  <div class="filter-container">
+  <div class="contenedor-filtros">
     <h2>Todos los residentes</h2>
 
-    <div class="filters">
+    <div class="filtros-tabla">
       <select id="filtro-columnas" name="columnas" aria-label="Cantidad de columnas visibles">
         <option value="0">Todas las columnas (9/9)</option>
         <option value="1">1/9</option>
@@ -25,14 +25,14 @@
         <option value="8">8/9</option>
       </select>
 
-      <form method="get" class="filters-form" id="filtros-residentes">
-        <select name="estado" id="filtro-estado" onchange="this.form.submit()">
+      <form method="get" class="formulario-filtros" id="filtros-residentes">
+        <select name="estado" id="filtro-estado">
           <option value="">Todos los estados</option>
           <option value="activo" {% if estado_actual == 'activo' %}selected{% endif %}>Activo</option>
           <option value="inactivo" {% if estado_actual == 'inactivo' %}selected{% endif %}>Inactivo</option>
         </select>
 
-        <select name="apartamento" id="filtro-apartamento" onchange="this.form.submit()">
+        <select name="apartamento" id="filtro-apartamento">
           <option value="">Todos los apartamentos</option>
           {% for apartamento in apartamentos %}
           <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
@@ -40,11 +40,11 @@
         </select>
       </form>
 
-      <a href="{% url 'nuevo_residente' %}" class="btn-nuevo-residente">+ Nuevo residente</a>
+      <a href="{% url 'nuevo_residente' %}" class="boton-nuevo-residente">+ Nuevo residente</a>
     </div>
   </div>
 
-  <div class="filtered-table">
+  <div class="tabla-filtrada">
     <table class="tabla-residentes">
       <thead>
         <tr>
@@ -79,7 +79,7 @@
           <td data-columna="relacion">{% if residente.apartment.owner_id == residente.id %}Propietario{% else %}Ocupante{% endif %}</td>
           <td data-columna="ingreso">{{ residente.created_at|date:"d/m/Y" }}</td>
           <td class="columna-acciones">
-            <button type="button" class="btn-acciones" aria-label="Acciones">&hellip;</button>
+            <button type="button" class="boton-acciones" aria-label="Acciones">&hellip;</button>
           </td>
         </tr>
         {% empty %}
@@ -93,22 +93,8 @@
 
   {% include "componentes/paginacion_tabla.html" with pagina=residentes %}
 </main>
+{% endblock %}
 
-<script>
-  const selectColumnas = document.getElementById('filtro-columnas');
-  const columnas = Array.from(document.querySelectorAll('th[data-columna]'))
-    .map((th) => th.dataset.columna);
-
-  function aplicarColumnas() {
-    const cantidad = Number(selectColumnas.value);
-    columnas.forEach((columna, index) => {
-      const visibles = (cantidad === 0) || (index < cantidad);
-      document.querySelectorAll(`[data-columna="${columna}"]`).forEach((celda) => {
-        celda.style.display = visibles ? '' : 'none';
-      });
-    });
-  }
-
-  selectColumnas.addEventListener('change', aplicarColumnas);
-</script>
+{% block scripts %}
+<script src="{% static 'js/residentes.js' %}" defer></script>
 {% endblock %}

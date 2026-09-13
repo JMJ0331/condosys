@@ -37,8 +37,8 @@ class ResidentForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'placeholder': '000-000-0000'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Correo electrónico'}),
             'emergency_contact': forms.TextInput(attrs={'placeholder': '000-000-0000'}),
-            'apartment': forms.Select(attrs={'class': 'select-field'}),
-            'is_active': forms.CheckboxInput(attrs={'class': 'switch-input'}),
+            'apartment': forms.Select(attrs={'class': 'campo-seleccion'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'entrada-interruptor'}),
         }
 
     photo = forms.ImageField(

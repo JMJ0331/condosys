@@ -2,46 +2,46 @@
 <nav class="paginacion-tabla" aria-label="Paginación">
   {% if pagina.has_previous %}
   <a
-    class="pag-btn"
+    class="boton-pagina"
     href="?page={{ pagina.previous_page_number }}{% if paginacion_query %}&{{ paginacion_query }}{% endif %}"
   >Anterior</a>
   {% else %}
-  <span class="pag-btn deshabilitada">Anterior</span>
+  <span class="boton-pagina deshabilitada">Anterior</span>
   {% endif %}
 
-  <div class="paginacion-numeros">
+  <div class="numeros-paginacion">
     {% if pagina.number > 3 %}
-    <a class="pag-num" href="?page=1{% if paginacion_query %}&{{ paginacion_query }}{% endif %}">1</a>
+    <a class="numero-pagina" href="?page=1{% if paginacion_query %}&{{ paginacion_query }}{% endif %}">1</a>
     {% if pagina.number > 4 %}
-    <span class="pag-num puntos">&hellip;</span>
+    <span class="numero-pagina puntos">&hellip;</span>
     {% endif %}
     {% endif %}
 
     {% for num in pagina.paginator.page_range %}
       {% if num >= pagina.number|add:"-2" and num <= pagina.number|add:"2" %}
         {% if num == pagina.number %}
-        <span class="pag-num activa">{{ num }}</span>
+        <span class="numero-pagina activa">{{ num }}</span>
         {% else %}
-        <a class="pag-num" href="?page={{ num }}{% if paginacion_query %}&{{ paginacion_query }}{% endif %}">{{ num }}</a>
+        <a class="numero-pagina" href="?page={{ num }}{% if paginacion_query %}&{{ paginacion_query }}{% endif %}">{{ num }}</a>
         {% endif %}
       {% endif %}
     {% endfor %}
 
     {% if pagina.number < pagina.paginator.num_pages|add:"-2" %}
     {% if pagina.number < pagina.paginator.num_pages|add:"-3" %}
-    <span class="pag-num puntos">&hellip;</span>
+    <span class="numero-pagina puntos">&hellip;</span>
     {% endif %}
-    <a class="pag-num" href="?page={{ pagina.paginator.num_pages }}{% if paginacion_query %}&{{ paginacion_query }}{% endif %}">{{ pagina.paginator.num_pages }}</a>
+    <a class="numero-pagina" href="?page={{ pagina.paginator.num_pages }}{% if paginacion_query %}&{{ paginacion_query }}{% endif %}">{{ pagina.paginator.num_pages }}</a>
     {% endif %}
   </div>
 
   {% if pagina.has_next %}
   <a
-    class="pag-btn"
+    class="boton-pagina"
     href="?page={{ pagina.next_page_number }}{% if paginacion_query %}&{{ paginacion_query }}{% endif %}"
   >Siguiente</a>
   {% else %}
-  <span class="pag-btn deshabilitada">Siguiente</span>
+  <span class="boton-pagina deshabilitada">Siguiente</span>
   {% endif %}
 </nav>
 {% endif %}
