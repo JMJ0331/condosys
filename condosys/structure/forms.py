@@ -33,8 +33,8 @@ class ApartmentsForm(forms.ModelForm):
         ]
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Nombre del departamento'}),
-            'building': forms.Select(attrs={'class': 'select-field'}),
-            'owner': forms.Select(attrs={'class': 'select-field', 'data-filtrar': 'owner'}),
+            'building': forms.Select(attrs={'class': 'campo-seleccion', 'data-departamento': 'edificio'}),
+            'owner': forms.Select(attrs={'class': 'campo-seleccion', 'data-departamento': 'propietario', 'data-filtrar': 'owner'}),
             'floor': forms.NumberInput(attrs={'placeholder': 'Piso'}),
             'status': forms.HiddenInput(),
         }

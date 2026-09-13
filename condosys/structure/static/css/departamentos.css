@@ -1,0 +1,17 @@
+/* ============================================
+   Módulo Departamentos - estilos específicos.
+   Los estilos de formulario/acciones/interruptor
+   viven en static/css/formularios.css y
+   acciones.css (compartidos).
+   ============================================ */
+
+.ubicacion-info {
+	font-size: 1.3rem;
+	color: var(--black-400);
+	font-weight: 500;
+}
+
+.ubicacion-info span {
+	color: var(--green-900);
+	font-weight: 600;
+}
