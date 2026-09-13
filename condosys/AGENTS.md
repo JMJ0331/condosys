@@ -6,7 +6,7 @@ Sistema de administración residencial **CONDYSOS** (Django 6.1 + DRF + Channels
 
 - El **repo Git vive en `tecnico\condosys\`** (un nivel arriba de la carpeta del proyecto). El proyecto Django (con `manage.py`) está en `tecnico\condosys\condosys\`.
 - Remoto `origin`: `https://github.com/JMJ0331/condosys.git`. Rama de trabajo: **`desarrollo`** (desarrollar ahí; `main` es estable).
-- Mensajes de commit en español con prefijos cortos: `add:`, `fix:`, `update:`.
+- Mensajes de commit en español con prefijos cortos: `add:`, `fix:`, `update:`, `refactor:`. Los mensajes se escriben **en pretérito indefinido** (ej. "a nivel de código: añadí", "agregué", "integré", "renombré", "arreglé", no en infinitivo ni presente).
 - `.gitignore` está dentro de `condosys\.gitignore` (protege `.env`, `db.sqlite3`, `.venv`, `__pycache__`).
 
 ## Comandos (Windows)
@@ -44,3 +44,14 @@ Sistema de administración residencial **CONDYSOS** (Django 6.1 + DRF + Channels
 - Cuidado con `settings.py`: duplica el bloque `REST_FRAMEWORK` (líneas 60 y 201); el segundo bloque define la auth/paginación reales.
 - Los `tests.py` de cada app son plantillas vacías; no asumas tests existentes.
 - Español en templates/comentarios; `LANGUAGE_CODE='es-es'`, `TIME_ZONE='America/Bogota'`.
+
+## Reglas de refactor frontend (obligatorias)
+
+1. **Nada de `<script>` inline ni estilos `style=` en HTML.** El único `<script>` permitido es `<script src="...">` para conectar el HTML con su JS. Los manejadores (`onchange`, `onclick`, ...) van dentro del archivo JS externo.
+2. **Estilos/JS compartidos entre apps viven en `static\css\` / `static\js\` del proyecto** (ej. `static\css\formularios.css`, `acciones.css`, `dialogos.css`, `paginacion.css`, `static\js\pagos.js`, `dialogos.js`). Lo específico de un módulo queda en su `static\` propio.
+3. **El HTML principal de cada módulo se llama siempre `index.html`**; los demás archivos se nombran por su contenido.
+4. **CSS en español, nombres claros y concisos**, tanto en archivos como en clases:
+   - `payments.css` → `pagos.css`; `structure.css` → `departamentos.css`; `inicio\static\css\index.css` → `inicio.css`; `residents.css` y `login.css` ya están en español.
+   - Mapeo de clases: `form-section`→`seccion-formulario`, `form-row`→`fila-formulario`, `form-field`→`campo-formulario`, `select-field`→`campo-seleccion`, `input-field`→`campo-entrada`, `form-switch-row`→`fila-interruptor`, `switch-label`→`etiqueta-interruptor`, `switch`→`interruptor`, `switch-slider`→`deslizador-interruptor`, `switch-input`→`entrada-interruptor`, `dialog-footer`→`pie-formulario`, `dialog-header`→`cabecera-dialogo`, `dialog-close`→`boton-cerrar`, `btn-generar-comprobante`→`btn-comprobante`, `Acciones-dashboard`→`panel-acciones`, `container-acciones`→`contenedor-acciones`, `pag-btn`→`boton-pagina`, `pag-num`→`numero-pagina`, `paginacion-numeros`→`numeros-paginacion`.
+   - El JS externo no puede usar etiquetas de plantilla Django (`{% url %}`, `{{ var }}`); el HTML le pasa esos valores con atributos `data-*` (ej. `data-url-comprobante`, `data-pago-apartamento`, `data-departamento`).
+   - Mantener la responsividad: los estilos compartidos incluyen media queries (breakpoints 560px/900px) usados por los formularios y las grid de acciones.
