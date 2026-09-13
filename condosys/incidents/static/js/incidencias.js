@@ -46,7 +46,7 @@
 
   // Muestro el nombre del archivo elegido sobre el botón de subida.
   function mostrarNombreArchivo() {
-    const span = inputEvidencia.closest('label')?.querySelector('[data-texto-evidencia]');
+    const span = inputEvidencia.closest('label')?.querySelector('[data-texto-archivo]');
     if (!span) return;
     if (inputEvidencia.files.length > 0) {
       span.textContent = inputEvidencia.files[0].name;

@@ -66,10 +66,10 @@
             <div class="fila-formulario">
               <div class="campo-formulario">
                 <label for="{{ form_incident.evidence.id_for_label }}">{{ form_incident.evidence.label }}</label>
-                <label class="btn-subir-evidencia" for="{{ form_incident.evidence.id_for_label }}">
-                  {{ form_incident.evidence }}
-                  <span class="texto-boton-evidencia" data-texto-evidencia>Subir imagen/archivo</span>
-                </label>
+<label class="btn-subir-archivo" for="{{ form_incident.evidence.id_for_label }}">
+                    {{ form_incident.evidence }}
+                    <span class="texto-boton-archivo" data-texto-archivo>Subir imagen/archivo</span>
+                  </label>
                 <small class="ayuda-formulario" data-ayuda-evidencia>JPG, PNG, WEBP o PDF — máx. 2 MB</small>
                 {{ form_incident.evidence.errors }}
               </div>
