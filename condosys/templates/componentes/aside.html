@@ -91,12 +91,21 @@
         </a>
 
         <a
+          class="opt-modulo{% if request.resolver_match.url_name == 'areas_comunes_index' %} active{% endif %}"
+          href="{% url 'areas_comunes_index' %}"
+        >
+
+        <img src="{% static 'images/icons/blancos/page_white.svg' %}" alt="area-icon"/>
+          <h4>Áreas Comunes</h4>
+        </a>
+
+        <a
           class="opt-modulo{% if request.resolver_match.url_name == 'reservas_index' %} active{% endif %}"
           href="{% url 'reservas_index' %}"
         >
 
         <img src="{% static 'images/icons/blancos/leaf_white.svg' %}" alt="neigh-icon"/>
-          <h4>Areas Comunes</h4>
+          <h4>Reservas</h4>
         </a>
 
         <a

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'accounts',
+    'areas_comunes',
     'chat',
     'communications',
     'incidents',
