@@ -1,32 +1,114 @@
-{% extends 'base.html' %} {% block mini-cards %}
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/incidencias.css' %}">
+{% endblock %}
+{% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 <main class="container-main-side2">
-  <form method="post" action="{% url 'crear_incidencia' %}">
-    {% csrf_token %}
-    {{ form_incident.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
+
+  <div class="panel-acciones">
+    <div class="acciones">
+      <h3>Registrar Incidencia</h3>
+
+      <form method="post" action="{% url 'crear_incidencia' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_incident.non_field_errors }}
+
+        <div class="contenido-incidencia">
+          <div class="seccion-formulario">
+            <legend>Información de la incidencia</legend>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_incident.apartment.id_for_label }}">{{ form_incident.apartment.label }}</label>
+                {{ form_incident.apartment }}
+                {{ form_incident.apartment.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_incident.resident.id_for_label }}">{{ form_incident.resident.label }}</label>
+                <select name="{{ form_incident.resident.html_name }}" id="{{ form_incident.resident.id_for_label }}" class="campo-seleccion" data-incidencia-residente>
+                  <option value="">Elegir residente</option>
+                  {% for res in residentes %}
+                  <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
+                  {% endfor %}
+                </select>
+                {{ form_incident.resident.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_incident.category.id_for_label }}">{{ form_incident.category.label }}</label>
+                {{ form_incident.category }}
+                {{ form_incident.category.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_incident.priority.id_for_label }}">{{ form_incident.priority.label }}</label>
+                {{ form_incident.priority }}
+                {{ form_incident.priority.errors }}
+              </div>
+            </div>
+          </div>
+
+          <div class="seccion-formulario">
+            <legend>Detalles</legend>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_incident.description.id_for_label }}">{{ form_incident.description.label }}</label>
+                {{ form_incident.description }}
+                {{ form_incident.description.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_incident.reported_date.id_for_label }}">{{ form_incident.reported_date.label }}</label>
+                {{ form_incident.reported_date }}
+                {{ form_incident.reported_date.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_incident.evidence.id_for_label }}">{{ form_incident.evidence.label }}</label>
+                <label class="btn-subir-evidencia" for="{{ form_incident.evidence.id_for_label }}">
+                  {{ form_incident.evidence }}
+                  <span class="texto-boton-evidencia" data-texto-evidencia>Subir imagen/archivo</span>
+                </label>
+                <small class="ayuda-formulario" data-ayuda-evidencia>JPG, PNG, WEBP o PDF — máx. 2 MB</small>
+                {{ form_incident.evidence.errors }}
+              </div>
+            </div>
+          </div>
+
+          <div class="seccion-formulario">
+            <legend>Seguimiento</legend>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_incident.comment.id_for_label }}">{{ form_incident.comment.label }}</label>
+                {{ form_incident.comment }}
+                {{ form_incident.comment.errors }}
+              </div>
+            </div>
+          </div>
+
+          <div class="seccion-formulario">
+            <legend>Estado</legend>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_incident.status.id_for_label }}">{{ form_incident.status.label }}</label>
+                {{ form_incident.status }}
+                {{ form_incident.status.errors }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pie-formulario">
+          <button type="submit">Agregar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
     </div>
-  </form>
-
-  <hr />
-
-  <form method="post" action="{% url 'crear_imagen_incidencia' %}">
-    {% csrf_token %}
-    {{ form_incident_image.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
-    </div>
-  </form>
-
-  <hr />
-
-  <form method="post" action="{% url 'crear_historial_incidencia' %}">
-    {% csrf_token %}
-    {{ form_incident_history.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
-    </div>
-  </form>
+  </div>
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/incidencias.js' %}" defer></script>
 {% endblock %}

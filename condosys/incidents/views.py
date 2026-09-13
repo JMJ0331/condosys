@@ -1,12 +1,12 @@
 from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Incident, IncidentHistory
 from accounts.permissions import CanModifyIncident
+from residents.models import Resident
 from .serializers import (
     IncidentListSerializer, IncidentDetailSerializer,
     IncidentHistorySerializer
@@ -14,33 +14,46 @@ from .serializers import (
 from .forms import IncidentForm, IncidentImageForm, IncidentHistoryForm
 
 
-@login_required
 def app_index(request):
     contexto = {
         'form_incident': IncidentForm(),
         'form_incident_image': IncidentImageForm(),
         'form_incident_history': IncidentHistoryForm(),
+        'residentes': Resident.objects.select_related('apartment').all(),
         'module_name': 'Incidencias'
     }
     return render(request, 'incidents/index.html', contexto)
 
 
-@login_required
 @require_POST
 def crear_incidencia(request):
-    form = IncidentForm(request.POST)
+    form = IncidentForm(request.POST, request.FILES)
     if form.is_valid():
         incidencia = form.save(commit=False)
         incidencia.reported_by = request.user
-        incidencia.status = 'new'
+        # Título no se pide en el formulario: se genera a partir del tipo y
+        # la descripción para que el registro nunca quede sin título.
+        if not incidencia.title:
+            base = f"{incidencia.get_category_display()}: {incidencia.description}"
+            incidencia.title = base[:200]
         incidencia.save()
+        # El comentario de "Seguimiento" queda guardado como primer registro
+        # del historial de la incidencia.
+        comentario = form.cleaned_data.get('comment')
+        if comentario:
+            IncidentHistory.objects.create(
+                incident=incidencia,
+                status_from=None,
+                status_to=incidencia.status,
+                changed_by=request.user,
+                comment=comentario,
+            )
         messages.success(request, 'Incidencia creada correctamente.')
     else:
         messages.error(request, 'No se pudo crear la incidencia. Revisa los datos enviados.')
     return redirect('inicio')
 
 
-@login_required
 @require_POST
 def crear_imagen_incidencia(request):
     form = IncidentImageForm(request.POST)
@@ -52,7 +65,6 @@ def crear_imagen_incidencia(request):
     return redirect('inicio')
 
 
-@login_required
 @require_POST
 def crear_historial_incidencia(request):
     form = IncidentHistoryForm(request.POST)

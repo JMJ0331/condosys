@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import CASCADE, PROTECT, SET_NULL
+from django.utils import timezone
 from structure.models import Apartment
+from residents.models import Resident
 from accounts.models import User
 import uuid
 
@@ -42,6 +44,13 @@ class Incident(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     apartment = models.ForeignKey(Apartment, on_delete=CASCADE, related_name='incidents')
+    resident = models.ForeignKey(
+        Resident,
+        on_delete=SET_NULL,
+        null=True,
+        blank=True,
+        related_name='incidents'
+    )
     reported_by = models.ForeignKey(User, on_delete=PROTECT, related_name='incidents_reported')
     assigned_to = models.ForeignKey(
         User,
@@ -56,6 +65,8 @@ class Incident(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='new')
+    reported_date = models.DateField(default=timezone.localdate)
+    evidence = models.FileField(upload_to='incidentes/evidencia/', null=True, blank=True)
     
     resolution_notes = models.TextField(blank=True, null=True)
     
