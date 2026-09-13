@@ -1,0 +1,21 @@
+@import url(variables.css);
+
+/* ============================================
+   Módulo de mantenimiento (cargos)
+   ============================================ */
+
+/* Selector múltiple de apartamentos más alto que un select simple */
+.campo-seleccion-multiple {
+	height: auto;
+	min-height: 10rem;
+	resize: vertical;
+}
+
+/* Campo que ocupa el ancho completo de su fila */
+.campo-ancho-completo {
+	grid-column: 1 / -1;
+}
+
+.campo-seleccion-multiple:focus {
+	border-color: var(--green-900);
+}

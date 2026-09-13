@@ -1,36 +1,21 @@
 from rest_framework import serializers
-from .models import MaintenanceOrder
+from .models import MaintenanceCharge
 
 
-class MaintenanceOrderListSerializer(serializers.ModelSerializer):
-    """Serializer simplificado para MaintenanceOrder (listados)"""
-    assigned_to_email = serializers.CharField(source='assigned_to.email', read_only=True)
-    apartment_name = serializers.CharField(source='apartment.name', read_only=True, allow_null=True)
-    
+class MaintenanceChargeListSerializer(serializers.ModelSerializer):
+    """Serializer simplificado para MaintenanceCharge (listados)"""
     class Meta:
-        model = MaintenanceOrder
+        model = MaintenanceCharge
         fields = [
-            'id', 'apartment', 'apartment_name', 'type', 'status',
-            'assigned_to', 'assigned_to_email',
-            'scheduled_date', 'completion_date', 'created_at'
+            'id', 'concept', 'periodicity', 'amount',
+            'effective_date', 'is_active', 'payment_methods', 'created_at',
         ]
-        read_only_fields = ['id', 'completion_date', 'created_at']
+        read_only_fields = ['id', 'payment_methods', 'created_at']
 
 
-class MaintenanceOrderDetailSerializer(serializers.ModelSerializer):
-    """Serializer detallado para MaintenanceOrder"""
-    assigned_to_email = serializers.CharField(source='assigned_to.email', read_only=True)
-    apartment_name = serializers.CharField(source='apartment.name', read_only=True, allow_null=True)
-    incident_id = serializers.CharField(source='incident.id', read_only=True, allow_null=True)
-    
+class MaintenanceChargeDetailSerializer(serializers.ModelSerializer):
+    """Serializer detallado para MaintenanceCharge"""
     class Meta:
-        model = MaintenanceOrder
-        fields = [
-            'id', 'incident', 'incident_id', 'apartment',
-            'apartment_name', 'type', 'description',
-            'assigned_to', 'assigned_to_email',
-            'status', 'scheduled_date', 'completion_date',
-            'estimated_cost', 'actual_cost', 'notes',
-            'created_at', 'updated_at'
-        ]
-        read_only_fields = ['id', 'completion_date', 'created_at', 'updated_at']
+        model = MaintenanceCharge
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at', 'updated_at']
