@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'reports',
     'reservations',
     'residents',
+    'solicitudes',
     'structure',
     'visitors',
     'inicio',

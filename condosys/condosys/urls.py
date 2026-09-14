@@ -35,6 +35,7 @@ urlpatterns = [
     path('reportes/', include('reports.urls')),
     path('reservas/', include('reservations.urls')),
     path('residentes/', include('residents.urls')),
+    path('solicitudes/', include('solicitudes.urls')),
     path('departamentos/', include('structure.urls')),
     path('visitantes/', include('visitors.urls')),
 ]

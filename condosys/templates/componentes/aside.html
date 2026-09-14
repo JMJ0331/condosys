@@ -82,6 +82,15 @@
         </a>
 
         <a
+          class="opt-modulo{% if request.resolver_match.url_name == 'solicitudes_index' or request.resolver_match.url_name == 'crear_solicitud' %} active{% endif %}"
+          href="{% url 'solicitudes_index' %}"
+        >
+
+        <img src="{% static 'images/icons/blancos/google-docs.svg' %}" alt="solicitud-icon"/>
+          <h4>Solicitudes</h4>
+        </a>
+
+        <a
           class="opt-modulo{% if request.resolver_match.url_name == 'visitantes_index' %} active{% endif %}"
           href="{% url 'visitantes_index' %}"
         >

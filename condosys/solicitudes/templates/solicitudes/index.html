@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+<main class="container-main-side2">
+
+  <div class="panel-acciones">
+    <div class="acciones">
+      <h3>Registrar Solicitud</h3>
+
+      <form method="post" action="{% url 'crear_solicitud' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_solicitud.non_field_errors }}
+
+        <div class="seccion-formulario">
+          <legend>Información de la solicitud</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.apartment.id_for_label }}">{{ form_solicitud.apartment.label }}</label>
+              {{ form_solicitud.apartment }}
+              {{ form_solicitud.apartment.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.resident.id_for_label }}">{{ form_solicitud.resident.label }}</label>
+              <select name="{{ form_solicitud.resident.html_name }}" id="{{ form_solicitud.resident.id_for_label }}" class="campo-seleccion" data-solicitud-residente>
+                <option value="">Elegir residente</option>
+                {% for res in residentes %}
+                <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
+                {% endfor %}
+              </select>
+              {{ form_solicitud.resident.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.request_type.id_for_label }}">{{ form_solicitud.request_type.label }}</label>
+              {{ form_solicitud.request_type }}
+              {{ form_solicitud.request_type.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Detalles</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.description.id_for_label }}">{{ form_solicitud.description.label }}</label>
+              {{ form_solicitud.description }}
+              {{ form_solicitud.description.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.request_date.id_for_label }}">{{ form_solicitud.request_date.label }}</label>
+              {{ form_solicitud.request_date }}
+              {{ form_solicitud.request_date.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.attachment.id_for_label }}">{{ form_solicitud.attachment.label }}</label>
+              <label class="btn-subir-archivo" for="{{ form_solicitud.attachment.id_for_label }}">
+                {{ form_solicitud.attachment }}
+                <span class="texto-boton-archivo" data-texto-archivo>Subir imagen/archivo</span>
+              </label>
+              <small class="ayuda-formulario" data-ayuda-solicitud>JPG, PNG, WEBP o PDF — máx. 2 MB</small>
+              {{ form_solicitud.attachment.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Seguimiento</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.tracking_response.id_for_label }}">{{ form_solicitud.tracking_response.label }}</label>
+              {{ form_solicitud.tracking_response }}
+              {{ form_solicitud.tracking_response.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-formulario">
+          <legend>Estado</legend>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.status.id_for_label }}">{{ form_solicitud.status.label }}</label>
+              {{ form_solicitud.status }}
+              {{ form_solicitud.status.errors }}
+            </div>
+          </div>
+        </div>
+
+        <div class="pie-formulario">
+          <button type="submit">Agregar</button>
+          <button type="reset">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/solicitudes.js' %}" defer></script>
+{% endblock %}
