@@ -482,7 +482,7 @@ input[data-departamento="foto"] {
 }
 
 .tarjeta-estado .interruptor input:checked + .deslizador-interruptor {
-	background: var(--white-400);
+	background: var(--green-100);
 }
 
 .tarjeta-estado .interruptor input:checked + .deslizador-interruptor::before {

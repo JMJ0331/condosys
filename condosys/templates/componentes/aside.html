@@ -86,7 +86,7 @@
           href="{% url 'solicitudes_index' %}"
         >
 
-        <img src="{% static 'images/icons/blancos/google-docs.svg' %}" alt="solicitud-icon"/>
+        <img src="{% static 'images/icons/blancos/page_white.svg' %}" alt="area-icon"/>
           <h4>Solicitudes</h4>
         </a>
 
@@ -104,7 +104,7 @@
           href="{% url 'areas_comunes_index' %}"
         >
 
-        <img src="{% static 'images/icons/blancos/page_white.svg' %}" alt="area-icon"/>
+        <img src="{% static 'images/icons/blancos/leaf_white.svg' %}" alt="neigh-icon"/>
           <h4>Áreas Comunes</h4>
         </a>
 
@@ -113,7 +113,7 @@
           href="{% url 'reservas_index' %}"
         >
 
-        <img src="{% static 'images/icons/blancos/leaf_white.svg' %}" alt="neigh-icon"/>
+        <img src="{% static 'images/icons/blancos/google-docs.svg' %}" alt="solicitud-icon"/>
           <h4>Reservas</h4>
         </a>
 
@@ -124,6 +124,15 @@
 
         <img src="{% static 'images/icons/blancos/voice_white.svg' %}" alt="chat-icon"/>
           <h4>Comunicados</h4>
+        </a>
+
+        <a
+          class="opt-modulo{% if request.resolver_match.url_name == 'reportes_index' %} active{% endif %}"
+          href="{% url 'reportes_index' %}"
+        >
+
+        <img src="{% static 'images/icons/blancos/reports_white.svg' %}" alt="reports-icon"/>
+          <h4>Reportes</h4>
         </a>
 
       
