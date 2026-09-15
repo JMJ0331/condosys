@@ -74,9 +74,60 @@ def agregar_departamento(request):
         'form_apartments': form,
         'jardines': Garden.objects.filter(is_active=True),
         'edificios': Building.objects.filter(is_active=True),
-        'module_name': 'Departamentos'
+        'module_name': 'Departamentos',
+        'titulo_modulo': 'Agregar departamento',
+        'url_form': 'agregar_departamento',
+        'url_form_args': [],
+        'texto_boton': 'Agregar',
     }
     return render(request, 'structure/agregar.html', contexto)
+
+
+# @login_required
+def actualizar_departamento(request, pk):
+    apartamento = Apartment.objects.filter(pk=pk).first()
+    if not apartamento:
+        messages.error(request, 'Departamento no encontrado.')
+        return redirect('departamentos_index')
+
+    if request.method == 'POST':
+        form = ApartmentsForm(request.POST, request.FILES, instance=apartamento)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Departamento actualizado correctamente.')
+            return redirect('departamentos_index')
+        messages.error(request, 'No se pudo actualizar el departamento. Revisa los datos enviados.')
+    else:
+        form = ApartmentsForm(instance=apartamento)
+
+    contexto = {
+        'form_apartments': form,
+        'jardines': Garden.objects.filter(is_active=True),
+        'edificios': Building.objects.filter(is_active=True),
+        'module_name': 'Departamentos',
+        'titulo_modulo': 'Actualizar departamento',
+        'url_form': 'actualizar_departamento',
+        'url_form_args': [str(apartamento.id)],
+        'texto_boton': 'Actualizar',
+    }
+    return render(request, 'structure/agregar.html', contexto)
+
+
+# @login_required
+def eliminar_departamento(request, pk):
+    apartamento = Apartment.objects.filter(pk=pk).first()
+    if not apartamento:
+        messages.error(request, 'Departamento no encontrado.')
+        return redirect('departamentos_index')
+
+    if request.method == 'POST':
+        nombre = apartamento.name
+        apartamento.delete()
+        messages.success(request, f'Departamento {nombre} eliminado correctamente.')
+        return redirect('departamentos_index')
+
+    # GET: no debería llegar aquí directo, pero por seguridad
+    return redirect('departamentos_index')
 
 
 class GardenViewSet(viewsets.ModelViewSet):

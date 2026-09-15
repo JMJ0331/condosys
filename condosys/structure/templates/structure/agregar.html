@@ -4,11 +4,11 @@
 <link rel="stylesheet" href="{% static 'css/departamentos.css' %}">
 {% endblock %}
 {% block mini-cards %}
-{% include "componentes/header.html" with nombre_modulo='Agregar departamento' url_volver='departamentos_index' %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='departamentos_index' %}
 
 <main class="container-main-side2">
   <div class="pagina-agregar">
-    <form method="post" action="{% url 'agregar_departamento' %}" enctype="multipart/form-data" class="formulario-agregar">
+    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
       {% csrf_token %}
       {{ form_apartments.non_field_errors }}
 
@@ -108,7 +108,7 @@
           </div>
         </section>
 
-        <button type="submit" class="boton-agregar">Agregar</button>
+        <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
         <a href="{% url 'departamentos_index' %}" class="boton-cancelar">Cancelar</a>
       </div>
     </form>

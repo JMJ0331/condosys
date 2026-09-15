@@ -1,0 +1,25 @@
+{% load static %}
+<div class="campo-foto-preview">
+  {% if widget.preview_url %}
+    <div class="foto-actual">
+      <label class="etiqueta-actual">Imagen actual</label>
+      <div class="preview-contenedor">
+        <img src="{{ widget.preview_url }}" alt="Foto actual" class="preview-imagen">
+      </div>
+    </div>
+  
+    <div class="eliminar-imagen">
+      <label class="etiqueta-eliminar" for="{{ widget.checkbox_id }}">Eliminar imagen actual</label>
+      <label class="etiqueta-interruptor" for="{{ widget.checkbox_id }}">
+        <span class="interruptor">
+          <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}" class="entrada-interruptor">
+          <span class="deslizador-interruptor"></span>
+        </span>
+      </label>
+    </div>
+  {% endif %}
+  <div class="nueva-foto">
+    <label for="{{ widget.input_id }}">{{ widget.label }}</label>
+    <input type="{{ widget.type }}" name="{{ widget.name }}" {% if widget.required %}required{% endif %}{% include "django/forms/widgets/attrs.html" %}>
+  </div>
+</div>

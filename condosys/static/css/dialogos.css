@@ -107,6 +107,79 @@ dialog form textarea:focus {
 	background: gray;
 }
 
+/* ============================================
+   Diálogo de confirmación para eliminar
+   (departamentos / residentes / propietarios)
+   ============================================ */
+
+dialog.dialogo-eliminar {
+	width: min(40rem, calc(100vw - 2.4rem));
+	padding: var(--padding-24);
+	text-align: center;
+}
+
+.dialogo-eliminar form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	grid-template-columns: none;
+	gap: var(--space-16);
+	margin-top: 0;
+}
+
+.dialogo-eliminar .icono-eliminar {
+	width: 2.4rem;
+	height: 2.4rem;
+}
+
+.dialogo-eliminar .titulo-eliminar {
+	margin: 0;
+	color: var(--red-700);
+	font-size: 1.8rem;
+	font-weight: 600;
+}
+
+.dialogo-eliminar .mensaje-eliminar {
+	display: block;
+	color: var(--black-400);
+	font-size: 1.4rem;
+}
+
+.dialogo-eliminar .acciones-eliminar {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: var(--space-8);
+}
+
+.dialogo-eliminar .boton-confirmar-eliminar {
+	border: 1px solid var(--red-700);
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--red-700);
+	color: var(--white-50);
+	font: inherit;
+	font-size: 1.4rem;
+	cursor: pointer;
+}
+
+.dialogo-eliminar .boton-confirmar-eliminar:hover,
+.dialogo-eliminar .boton-confirmar-eliminar:active {
+	background: var(--red-900);
+	border-color: var(--red-900);
+}
+
+.dialogo-eliminar .boton-cancelar-eliminar {
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--white-50);
+	color: var(--red-700);
+	font: inherit;
+	font-size: 1.4rem;
+	cursor: pointer;
+}
+
 @media (max-width: 560px) {
 	dialog {
 		width: calc(100vw - 1.6rem);

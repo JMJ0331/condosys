@@ -20,6 +20,16 @@ class Resident(models.Model):
         ('widowed', 'Viudo/a'),
         ('other', 'Otro'),
     )
+    RELATION_CHOICES = (
+        ('propietario', 'Propietario'),
+        ('inquilino', 'Inquilino'),
+        ('familiar', 'Familiar'),
+        ('ocupante', 'Ocupante'),
+    )
+    MASCOTA_CHOICES = (
+        ('si', 'Sí'),
+        ('no', 'No'),
+    )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
@@ -41,6 +51,11 @@ class Resident(models.Model):
     phone = models.CharField(max_length=20)
     email = models.EmailField(blank=True, null=True)
     emergency_contact = models.CharField(max_length=20, blank=True, null=True)
+
+    # Residencia
+    tipo_relacion = models.CharField(max_length=30, choices=RELATION_CHOICES, default='ocupante')
+    fecha_ingreso = models.DateField(blank=True, null=True)
+    mascotas = models.CharField(max_length=10, choices=MASCOTA_CHOICES, blank=True, default='')
 
     # Estado del registro
     is_active = models.BooleanField(default=True)

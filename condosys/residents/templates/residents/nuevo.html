@@ -6,85 +6,139 @@
 {% endblock %}
 
 {% block mini-cards %}
-{% include "componentes/header.html" with nombre_modulo=module_name %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='residentes_index' %}
 
 <main class="container-main-side2">
-  <div class="fila-encabezado">
-    <h2 class="titulo-seccion">Nuevo residente</h2>
-    <a href="{% url 'residentes_index' %}" class="boton-volver">&larr; Volver a residentes</a>
+  <div class="pagina-agregar">
+    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
+      {% csrf_token %}
+      {{ form_resident.non_field_errors }}
+
+      <div class="columna-principal">
+        <section class="tarjeta" aria-labelledby="titulo-personal">
+          <h3 class="cabecera-tarjeta" id="titulo-personal">Información del personal</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_resident.full_name.id_for_label }}">{{ form_resident.full_name.label }}</label>
+                {{ form_resident.full_name }}
+                {{ form_resident.full_name.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_resident.marital_status.id_for_label }}">{{ form_resident.marital_status.label }}</label>
+                {{ form_resident.marital_status }}
+                {{ form_resident.marital_status.errors }}
+              </div>
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_resident.cedula.id_for_label }}">{{ form_resident.cedula.label }}</label>
+              {{ form_resident.cedula }}
+              {{ form_resident.cedula.errors }}
+            </div>
+            <div class="campo-formulario">
+              <span class="etiqueta-campo" id="etiqueta-foto">{{ form_resident.photo.label }}</span>
+              <div class="zona-imagen" id="zona-imagen" role="button" tabindex="0" aria-labelledby="etiqueta-foto">
+                <img class="vista-previa-imagen" id="vista-previa-imagen" alt="" hidden>
+                <span class="contenido-zona" id="contenido-zona">
+                  <svg class="icono-zona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <circle cx="9" cy="9" r="2"></circle>
+                    <path d="m21 15-4.5-4.5L6 21"></path>
+                  </svg>
+                  <span class="texto-subir">Subir imagen</span>
+                  <span class="texto-ayuda">JPG, PNG, WEBP · máx. 2 MB</span>
+                </span>
+              </div>
+              {{ form_resident.photo }}
+              {{ form_resident.photo.errors }}
+              <span class="nombre-archivo" id="nombre-archivo" hidden></span>
+              <button type="button" class="boton-subir" id="boton-subir-imagen">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M12 16V4m0 0 4 4m-4-4-4 4"></path>
+                  <path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path>
+                </svg>
+                Subir imagen
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-contacto">
+          <h3 class="cabecera-tarjeta" id="titulo-contacto">Información de contacto</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label for="{{ form_resident.phone.id_for_label }}">{{ form_resident.phone.label }}</label>
+              {{ form_resident.phone }}
+              {{ form_resident.phone.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_resident.email.id_for_label }}">{{ form_resident.email.label }}</label>
+              {{ form_resident.email }}
+              {{ form_resident.email.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_resident.emergency_contact.id_for_label }}">{{ form_resident.emergency_contact.label }}</label>
+              {{ form_resident.emergency_contact }}
+              {{ form_resident.emergency_contact.errors }}
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-residencia">
+          <h3 class="cabecera-tarjeta" id="titulo-residencia">Residencia</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_resident.apartment.id_for_label }}">{{ form_resident.apartment.label }}</label>
+                {{ form_resident.apartment }}
+                {{ form_resident.apartment.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_resident.tipo_relacion.id_for_label }}">{{ form_resident.tipo_relacion.label }}</label>
+                {{ form_resident.tipo_relacion }}
+                {{ form_resident.tipo_relacion.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_resident.fecha_ingreso.id_for_label }}">{{ form_resident.fecha_ingreso.label }}</label>
+                {{ form_resident.fecha_ingreso }}
+                {{ form_resident.fecha_ingreso.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_resident.mascotas.id_for_label }}">{{ form_resident.mascotas.label }}</label>
+                {{ form_resident.mascotas }}
+                {{ form_resident.mascotas.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="columna-lateral">
+        <section class="tarjeta tarjeta-estado" aria-labelledby="titulo-estado">
+          <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
+          <div class="cuerpo-tarjeta">
+            <label class="etiqueta-interruptor" for="{{ form_resident.is_active.id_for_label }}">
+              Activo
+              <span class="interruptor">
+                {{ form_resident.is_active }}
+                <span class="deslizador-interruptor"></span>
+              </span>
+            </label>
+            {{ form_resident.is_active.errors }}
+          </div>
+        </section>
+
+        <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
+        <a href="{% url 'residentes_index' %}" class="boton-cancelar">Cancelar</a>
+      </div>
+    </form>
   </div>
-
-  <form method="post" action="{% url 'crear_residente' %}" enctype="multipart/form-data" class="formulario-residente">
-    {% csrf_token %}
-
-    <fieldset class="seccion-formulario">
-      <legend>Información del personal</legend>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ form_resident.full_name.id_for_label }}">{{ form_resident.full_name.label }}</label>
-          {{ form_resident.full_name }}
-        </div>
-        <div class="campo-formulario">
-          <label for="{{ form_resident.marital_status.id_for_label }}">{{ form_resident.marital_status.label }}</label>
-          {{ form_resident.marital_status }}
-        </div>
-      </div>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ form_resident.cedula.id_for_label }}">{{ form_resident.cedula.label }}</label>
-          {{ form_resident.cedula }}
-        </div>
-        <div class="campo-formulario">
-          <label for="{{ form_resident.photo.id_for_label }}">{{ form_resident.photo.label }}</label>
-          {{ form_resident.photo }}
-        </div>
-      </div>
-    </fieldset>
-
-    <fieldset class="seccion-formulario">
-      <legend>Información de contacto</legend>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ form_resident.phone.id_for_label }}">{{ form_resident.phone.label }}</label>
-          {{ form_resident.phone }}
-        </div>
-        <div class="campo-formulario">
-          <label for="{{ form_resident.email.id_for_label }}">{{ form_resident.email.label }}</label>
-          {{ form_resident.email }}
-        </div>
-      </div>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ form_resident.emergency_contact.id_for_label }}">{{ form_resident.emergency_contact.label }}</label>
-          {{ form_resident.emergency_contact }}
-        </div>
-      </div>
-    </fieldset>
-
-    <fieldset class="seccion-formulario">
-      <legend>Residencia</legend>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ form_resident.apartment.id_for_label }}">{{ form_resident.apartment.label }}</label>
-          {{ form_resident.apartment }}
-        </div>
-      </div>
-    </fieldset>
-
-    <div class="seccion-formulario fila-interruptor">
-      <label class="etiqueta-interruptor" for="{{ form_resident.is_active.id_for_label }}">
-        <span>{{ form_resident.is_active.label }} del registro</span>
-        <span class="interruptor">
-          {{ form_resident.is_active }}
-          <span class="deslizador-interruptor"></span>
-        </span>
-      </label>
-    </div>
-
-    <div class="pie-formulario">
-      <button type="submit">Crear</button>
-      <button type="reset">Cancelar</button>
-    </div>
-  </form>
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/mascaras.js' %}" defer></script>
+<script src="{% static 'js/nuevo-residente.js' %}" defer></script>
 {% endblock %}

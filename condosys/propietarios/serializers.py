@@ -1,20 +1,20 @@
 from rest_framework import serializers
-from residents.models import Resident
+from .models import Propietario
 from structure.serializers import ApartmentListSerializer
 
 
 class PropietarioSerializer(serializers.ModelSerializer):
-    """Serializer de propietarios: residentes dueños de apartamentos."""
-    apartment_detail = ApartmentListSerializer(source='apartment', read_only=True)
+    """Serializer de propietarios con sus apartamentos propios."""
     owned_apartments = serializers.SerializerMethodField()
     photo_url = serializers.SerializerMethodField()
 
     class Meta:
-        model = Resident
+        model = Propietario
         fields = [
-            'id', 'full_name', 'cedula', 'phone', 'email',
+            'id', 'user', 'full_name', 'marital_status', 'cedula',
+            'phone', 'email', 'emergency_contact',
             'photo', 'photo_url',
-            'apartment', 'apartment_detail', 'owned_apartments',
+            'owned_apartments',
             'is_active', 'created_at', 'updated_at',
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']

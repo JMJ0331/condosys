@@ -4,7 +4,7 @@
 
 :root {
   font-size: 50%; /* mobile base */
-  --sidebar-w: 0.21fr;
+  --sidebar-w: 0.1575fr;
 }
 
 @media (min-width: 426px) {
@@ -21,7 +21,7 @@
 
 @media (max-width: 768px) {
   :root {
-    --sidebar-w: 7.5rem;
+    --sidebar-w: 5.625rem;
   }
 }
 

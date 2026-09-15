@@ -27,8 +27,10 @@
   const toggleTodas = document.getElementById('toggle-todas-columnas');
 
   if (botonColumnas && panelColumnas) {
+    // Excluye "acciones" que siempre debe permanecer visible.
     const columnas = Array.from(document.querySelectorAll('th[data-columna]'))
-      .map((th) => ({ nombre: th.dataset.columna, texto: th.textContent.trim() }));
+      .map((th) => ({ nombre: th.dataset.columna, texto: th.textContent.trim() }))
+      .filter(({ nombre }) => nombre !== 'acciones');
 
     const casillas = new Map();
     columnas.forEach(({ nombre, texto }) => {

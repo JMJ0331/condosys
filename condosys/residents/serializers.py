@@ -17,6 +17,7 @@ class ResidentSerializer(serializers.ModelSerializer):
             'id', 'user', 'user_detail', 'apartment', 'apartment_detail',
             'full_name', 'marital_status', 'cedula', 'photo', 'photo_url',
             'phone', 'email', 'emergency_contact',
+            'tipo_relacion', 'fecha_ingreso', 'mascotas',
             'is_active', 'is_current', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']

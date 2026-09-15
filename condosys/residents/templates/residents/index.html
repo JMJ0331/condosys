@@ -9,21 +9,23 @@
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 
 <main class="container-main-side2">
+
+  <div class="panel-acciones panel-cuadricula">
+    <div class="acciones">
+
   <div class="contenedor-filtros">
     <h2>Todos los residentes</h2>
 
     <div class="filtros-tabla">
-      <select id="filtro-columnas" name="columnas" aria-label="Cantidad de columnas visibles">
-        <option value="0">Todas las columnas</option>
-        <option value="1">Máx. 1</option>
-        <option value="2">Máx. 2</option>
-        <option value="3">Máx. 3</option>
-        <option value="4">Máx. 4</option>
-        <option value="5">Máx. 5</option>
-        <option value="6">Máx. 6</option>
-        <option value="7">Máx. 7</option>
-        <option value="8">Máx. 8</option>
-      </select>
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
+        </div>
+      </div>
 
       <form method="get" class="formulario-filtros" id="filtros-residentes">
         <select name="estado" id="filtro-estado">
@@ -33,7 +35,7 @@
         </select>
 
         <select name="apartamento" id="filtro-apartamento">
-          <option value="">Todos los apartamentos</option>
+          <option value="">Todos los departamentos</option>
           {% for apartamento in apartamentos %}
           <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
           {% endfor %}
@@ -57,6 +59,8 @@
           <th data-columna="apartamento">Apartamento</th>
           <th data-columna="relacion">Relación</th>
           <th data-columna="ingreso">Fecha de ingreso</th>
+          <th data-columna="mascotas">Mascotas</th>
+          <th data-columna="estado">Estado</th>
           <th class="columna-acciones">Acciones</th>
         </tr>
       </thead>
@@ -70,31 +74,58 @@
             <span class="foto-placeholder" aria-hidden="true"></span>
             {% endif %}
           </td>
-          <td data-columna="nombre">{{ residente.full_name }}</td>
-          <td data-columna="cedula">{{ residente.cedula }}</td>
-          <td data-columna="civil">{{ residente.get_marital_status_display }}</td>
-          <td data-columna="telefono">{{ residente.phone }}</td>
-          <td data-columna="contacto">{{ residente.emergency_contact|default:"—" }}</td>
-          <td data-columna="apartamento">{{ residente.apartment.name }}</td>
-          <td data-columna="relacion">{% if residente.apartment.owner_id == residente.id %}Propietario{% else %}Ocupante{% endif %}</td>
-          <td data-columna="ingreso">{{ residente.created_at|date:"d/m/Y" }}</td>
+          <td data-columna="nombre" data-etiqueta="Nombre completo">{{ residente.full_name }}</td>
+          <td data-columna="cedula" data-etiqueta="Cédula">{{ residente.cedula }}</td>
+          <td data-columna="civil" data-etiqueta="Estado civil">{{ residente.get_marital_status_display }}</td>
+          <td data-columna="telefono" data-etiqueta="Teléfono">{{ residente.phone }}</td>
+          <td data-columna="contacto" data-etiqueta="Contacto de emergencia">{{ residente.emergency_contact|default:"—" }}</td>
+          <td data-columna="apartamento" data-etiqueta="Apartamento">{{ residente.apartment.name }}</td>
+          <td data-columna="relacion" data-etiqueta="Relación">{% if residente.tipo_relacion %}{{ residente.get_tipo_relacion_display }}{% elif residente.apartment.owner and residente.user_id and residente.apartment.owner.user_id == residente.user_id %}Propietario{% else %}Ocupante{% endif %}</td>
+          <td data-columna="ingreso" data-etiqueta="Fecha de ingreso">{% if residente.fecha_ingreso %}{{ residente.fecha_ingreso|date:"d/m/Y" }}{% else %}{{ residente.created_at|date:"d/m/Y" }}{% endif %}</td>
+          <td data-columna="mascotas" data-etiqueta="Mascotas">{{ residente.get_mascotas_display|default:"—" }}</td>
+          <td data-columna="estado" data-etiqueta="Estado">{% if residente.is_active %}Activo{% else %}Inactivo{% endif %}</td>
           <td class="columna-acciones">
-            <button type="button" class="boton-acciones" aria-label="Acciones">&hellip;</button>
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_residente' residente.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ residente.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
+            </div>
           </td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="10" class="sin-registros">Sin coincidencias.</td>
+          <td colspan="12" class="sin-registros">Sin coincidencias.</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
+  {% for residente in residentes %}
+  <dialog id="dialog-eliminar-{{ residente.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ residente.id }}">
+    <form method="post" action="{% url 'eliminar_residente' residente.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ residente.id }}" class="titulo-eliminar">Eliminar residente</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar al residente <strong>{{ residente.full_name }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
+
   {% include "componentes/paginacion_tabla.html" with pagina=residentes %}
+    </div>
+  </div>
 </main>
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'js/dialogos.js' %}" defer></script>
 <script src="{% static 'js/residentes.js' %}" defer></script>
 {% endblock %}

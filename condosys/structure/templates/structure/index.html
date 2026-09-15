@@ -72,23 +72,30 @@
       <tbody>
         {% for departamento in departamentos %}
         <tr>
-          <td data-columna="miniatura">
+          <td data-columna="miniatura" data-etiqueta="Miniatura">
             {% if departamento.photo %}
             <img src="{{ departamento.photo.url }}" alt="Foto de {{ departamento.name }}" class="foto-departamento">
             {% else %}
             <span class="foto-placeholder" aria-hidden="true"></span>
             {% endif %}
           </td>
-          <td data-columna="departamento">{{ departamento.name }}</td>
-          <td data-columna="edificio">{{ departamento.building.name }}</td>
-          <td data-columna="torre">{{ departamento.building.tower|default:"—" }}</td>
-          <td data-columna="bloque">{{ departamento.building.block|default:"—" }}</td>
-          <td data-columna="piso">{{ departamento.floor|default:"—" }}</td>
-          <td data-columna="jardin">{{ departamento.building.garden.name }}</td>
-          <td data-columna="propietario">{{ departamento.owner.full_name|default:"—" }}</td>
-          <td data-columna="ocupado">{{ departamento.get_status_display }}</td>
+          <td data-columna="departamento" data-etiqueta="Departamento">{{ departamento.name }}</td>
+          <td data-columna="edificio" data-etiqueta="Edificio">{{ departamento.building.name }}</td>
+          <td data-columna="torre" data-etiqueta="Torre">{{ departamento.building.tower|default:"—" }}</td>
+          <td data-columna="bloque" data-etiqueta="Bloque">{{ departamento.building.block|default:"—" }}</td>
+          <td data-columna="piso" data-etiqueta="Piso">{{ departamento.floor|default:"—" }}</td>
+          <td data-columna="jardin" data-etiqueta="Jardín">{{ departamento.building.garden.name }}</td>
+          <td data-columna="propietario" data-etiqueta="Propietario">{{ departamento.owner.full_name|default:"—" }}</td>
+          <td data-columna="ocupado" data-etiqueta="Estado">{{ departamento.get_status_display }}</td>
           <td class="columna-acciones">
-            <button type="button" class="boton-acciones" aria-label="Acciones">&hellip;</button>
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_departamento' departamento.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ departamento.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
+            </div>
           </td>
         </tr>
         {% empty %}
@@ -100,6 +107,21 @@
     </table>
   </div>
 
+  {% for departamento in departamentos %}
+  <dialog id="dialog-eliminar-{{ departamento.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ departamento.id }}">
+    <form method="post" action="{% url 'eliminar_departamento' departamento.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ departamento.id }}" class="titulo-eliminar">Eliminar departamento</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar el departamento <strong>{{ departamento.name }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
+
   {% include "componentes/paginacion_tabla.html" with pagina=departamentos %}
     </div>
   </div>
@@ -107,5 +129,6 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'js/dialogos.js' %}" defer></script>
 <script src="{% static 'js/departamentos.js' %}" defer></script>
 {% endblock %}

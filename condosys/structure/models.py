@@ -73,12 +73,12 @@ class Apartment(models.Model):
     building = models.ForeignKey(Building, on_delete=CASCADE, related_name='apartments')
     name = models.CharField(max_length=50, help_text='Nombre del departamento')
     owner = models.ForeignKey(
-        'residents.Resident',
+        'propietarios.Propietario',
         on_delete=SET_NULL,
         related_name='apartments_owned',
         null=True,
         blank=True,
-        help_text='Propietario/Residente del departamento',
+        help_text='Propietario del departamento',
     )
     photo = models.ImageField(
         upload_to='apartments/',

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from rest_framework import filters, viewsets
@@ -14,7 +15,8 @@ PAGINATE_BY = 15
 # @login_required
 def app_index(request):
     qs = Resident.objects.select_related(
-        'apartment__building__garden', 'user'
+        'apartment__building__garden', 'user',
+        'apartment__owner', 'apartment__owner__user',
     ).all()
 
     estado = request.GET.get('estado', '')
@@ -58,7 +60,7 @@ def crear_residente(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Residente registrado correctamente.')
-            return redirect('inicio')
+            return redirect('residentes_index')
         messages.error(request, 'No se pudo registrar el residente. Revisa los datos enviados.')
     else:
         form = ResidentForm()
@@ -66,8 +68,57 @@ def crear_residente(request):
     contexto = {
         'form_resident': form,
         'module_name': 'Residentes',
+        'titulo_modulo': 'Agregar residente',
+        'url_form': 'crear_residente',
+        'url_form_args': [],
+        'texto_boton': 'Agregar',
     }
     return render(request, 'residents/nuevo.html', contexto)
+
+
+# @login_required
+def actualizar_residente(request, pk):
+    residente = Resident.objects.filter(pk=pk).first()
+    if not residente:
+        messages.error(request, 'Residente no encontrado.')
+        return redirect('residentes_index')
+
+    if request.method == 'POST':
+        form = ResidentForm(request.POST, request.FILES, instance=residente)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Residente actualizado correctamente.')
+            return redirect('residentes_index')
+        messages.error(request, 'No se pudo actualizar el residente. Revisa los datos enviados.')
+    else:
+        form = ResidentForm(instance=residente)
+
+    contexto = {
+        'form_resident': form,
+        'module_name': 'Residentes',
+        'titulo_modulo': 'Actualizar residente',
+        'url_form': 'actualizar_residente',
+        'url_form_args': [str(residente.id)],
+        'texto_boton': 'Actualizar',
+    }
+    return render(request, 'residents/nuevo.html', contexto)
+
+
+# @login_required
+def eliminar_residente(request, pk):
+    residente = Resident.objects.filter(pk=pk).first()
+    if not residente:
+        messages.error(request, 'Residente no encontrado.')
+        return redirect('residentes_index')
+
+    if request.method == 'POST':
+        nombre = residente.full_name
+        residente.delete()
+        messages.success(request, f'Residente {nombre} eliminado correctamente.')
+        return redirect('residentes_index')
+
+    # GET: no debería llegar aquí directo, pero por seguridad
+    return redirect('residentes_index')
 
 
 class ResidentViewSet(viewsets.ModelViewSet):

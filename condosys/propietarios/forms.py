@@ -1,11 +1,23 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from PIL import Image
-from .models import Resident
+from .models import Propietario
 
-# Restricciones de imagen compartidas por todos los formularios que suben fotos.
 ALLOWED_FORMATS = ('JPEG', 'PNG', 'WEBP')
 MAX_SIZE_MB = 2
+
+
+class FotoPreviewWidget(forms.ClearableFileInput):
+    """Widget para foto con previsualización de la imagen actual."""
+    template_name = 'propietarios/widgets/foto_preview.html'
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        if value and hasattr(value, 'url'):
+            context['widget']['preview_url'] = value.url
+        return context
 
 
 def validate_photo(image):
@@ -15,7 +27,6 @@ def validate_photo(image):
     if image.size > MAX_SIZE_MB * 1024 * 1024:
         raise ValidationError(f"La imagen no puede superar {MAX_SIZE_MB} MB.")
     try:
-        # verify() abre y comprueba la integridad del archivo sin dejarlo en memoria.
         img = Image.open(image)
         img.verify()
         fmt = (img.format or '').upper()
@@ -25,14 +36,13 @@ def validate_photo(image):
         raise ValidationError("Solo se permiten imágenes JPG, PNG o WEBP.")
 
 
-class ResidentForm(forms.ModelForm):
-    """Formulario de alta/edición de residentes; usa estilos y clases compartidos."""
+class PropietarioForm(forms.ModelForm):
+    """Formulario de alta/edición de propietarios; usa estilos y clases compartidos."""
     class Meta:
-        model = Resident
+        model = Propietario
         fields = [
             'full_name', 'marital_status', 'cedula', 'photo',
             'phone', 'email', 'emergency_contact',
-            'apartment', 'tipo_relacion', 'fecha_ingreso', 'mascotas',
             'is_active'
         ]
         labels = {
@@ -42,10 +52,6 @@ class ResidentForm(forms.ModelForm):
             'phone': 'Teléfono',
             'email': 'Correo electrónico',
             'emergency_contact': 'Contacto de emergencia (opcional)',
-            'apartment': 'Departamento',
-            'tipo_relacion': 'Tipo de relación',
-            'fecha_ingreso': 'Fecha de ingreso',
-            'mascotas': 'Mascotas',
             'is_active': 'Activo',
         }
         widgets = {
@@ -55,38 +61,26 @@ class ResidentForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'placeholder': '(000)-000-0000', 'maxlength': '14', 'data-mascara': 'telefono'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Correo electrónico'}),
             'emergency_contact': forms.TextInput(attrs={'placeholder': '(000)-000-0000', 'maxlength': '14', 'data-mascara': 'telefono'}),
-            # Clases 'campo-seleccion' y 'entrada-interruptor' vienen de static/css/formularios.css.
-            'apartment': forms.Select(attrs={'class': 'campo-seleccion'}),
-            'tipo_relacion': forms.Select(attrs={'class': 'campo-seleccion'}),
-            'fecha_ingreso': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}),
-            'mascotas': forms.Select(attrs={'class': 'campo-seleccion'}),
+            # Clase 'entrada-interruptor' viene de static/css/formularios.css.
             'is_active': forms.CheckboxInput(attrs={'class': 'entrada-interruptor'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Textos guía ("Elegir...") como primera opción de cada selector.
+        # Texto guía ("Elegir...") como primera opción del selector.
         self.fields['marital_status'].choices = (
             [('', 'Elegir estado civil')] + list(self.fields['marital_status'].choices)
         )
-        self.fields['tipo_relacion'].choices = (
-            [('', 'Elegir tipo de relación')] + list(self.fields['tipo_relacion'].choices)
-        )
-        self.fields['mascotas'].choices = (
-            [('', 'Elegir')] + list(self.fields['mascotas'].choices)
-        )
-        self.fields['apartment'].empty_label = 'Elegir departamento'
         if not self.instance.pk:
-            # Formulario de alta: mostrar los "Elegir..." en vez de los valores por defecto.
+            # Formulario de alta: mostrar el "Elegir..." en vez del valor por defecto.
             self.fields['marital_status'].initial = ''
-            self.fields['tipo_relacion'].initial = ''
 
     photo = forms.ImageField(
         required=False,
         label='Foto de perfil',
         validators=[validate_photo],
-        widget=forms.ClearableFileInput(attrs={
+        widget=FotoPreviewWidget(attrs={
             'accept': 'image/jpeg,image/png,image/webp',
-            'data-residente': 'foto',
+            'data-propietario': 'foto',
         }),
     )
