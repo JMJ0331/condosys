@@ -51,7 +51,7 @@ class ResidentForm(forms.ModelForm):
         widgets = {
             'full_name': forms.TextInput(attrs={'placeholder': 'Nombre completo'}),
             'marital_status': forms.Select(attrs={'class': 'campo-seleccion'}),
-            'cedula': forms.TextInput(attrs={'placeholder': 'Cedula'}),
+            'cedula': forms.TextInput(attrs={'placeholder': '000-0000000-0', 'maxlength': '13', 'data-mascara': 'cedula'}),
             'phone': forms.TextInput(attrs={'placeholder': '(000)-000-0000', 'maxlength': '14', 'data-mascara': 'telefono'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Correo electrónico'}),
             'emergency_contact': forms.TextInput(attrs={'placeholder': '(000)-000-0000', 'maxlength': '14', 'data-mascara': 'telefono'}),
