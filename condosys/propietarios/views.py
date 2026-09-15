@@ -18,7 +18,7 @@ def app_index(request):
         Propietario.objects
         .select_related('user')
         .prefetch_related('apartments_owned__building__garden')
-        .all()
+        .order_by('-created_at')
     )
 
     estado = request.GET.get('estado', '')

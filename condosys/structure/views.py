@@ -19,7 +19,7 @@ PAGINATE_BY = 15
 def app_index(request):
     apartamentos_qs = (
         Apartment.objects.select_related('building__garden', 'owner')
-        .order_by('building__garden__name', 'building__name', 'floor', 'name')
+        .order_by('-created_at')
     )
 
     estado = request.GET.get('estado', '')

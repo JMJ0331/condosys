@@ -17,7 +17,7 @@ def app_index(request):
     qs = Resident.objects.select_related(
         'apartment__building__garden', 'user',
         'apartment__owner', 'apartment__owner__user',
-    ).all()
+    ).order_by('-created_at')
 
     estado = request.GET.get('estado', '')
     apartamento = request.GET.get('apartamento', '')
