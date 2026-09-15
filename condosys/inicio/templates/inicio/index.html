@@ -11,14 +11,14 @@
 
 <div class="container-main-side2">
   <div class="container-flex1">
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/city_green.svg" nombre_modulo="Departamentos" data="40"%}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/group_green.svg" nombre_modulo="Residentes" data="40"%}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/community_green.svg" nombre_modulo="Pagos" data="40"%}
-    {%include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/id_green.svg" nombre_modulo="Visitantes" data="40"%}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/city_green.svg" nombre_modulo="Departamentos" data=total_departamentos %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/group_green.svg" nombre_modulo="Residentes" data=total_residentes %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/community_green.svg" nombre_modulo="Pagos" data=total_pagos %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/id_green.svg" nombre_modulo="Visitantes" data=total_visitantes %}
   </div>
 
   <div class="container-flex" >
-    
+
     <div class="filtros">
 
       <form method="GET" action="{% url 'inicio' %}" class="contenedor-busqueda">
@@ -105,30 +105,18 @@
         <h3>Acciones rapidas</h3>
 
         <div class="contenedor-acciones">
-          <button
-            type="button"
-            class="accion"
-            data-dialog="dialog-pago"
-          >
+          <a class="accion" href="{% url 'pagos_index' %}">
             <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
             <span>Registrar Pago</span>
-          </button>
-          <button
-            type="button"
-            class="accion"
-            data-dialog="dialog-visitante"
-          >
+          </a>
+          <a class="accion" href="{% url 'visitantes_index' %}">
             <img src="{% static 'images/icons/verdes/container_green.svg' %}" alt="" />
             <span>Registrar Visitante</span>
-          </button>
-          <button
-            type="button"
-            class="accion"
-            data-dialog="dialog-incidencia"
-          >
+          </a>
+          <a class="accion" href="{% url 'incidencias_index' %}">
             <img src="{% static 'images/icons/verdes/warning-triangle_green.svg' %}" alt="" />
             <span>Crear incidencia</span>
-          </button>
+          </a>
 
           <a class="accion" href="{% url 'comunicados_index' %}">
             <img src="{% static 'images/icons/verdes/voice_green.svg' %}" alt="" />
@@ -144,138 +132,8 @@
 
   </div>
 </div>
-
-<dialog id="dialog-pago" aria-labelledby="dialog-pago-titulo">
-  <div class="cabecera-dialogo">
-    <h3 id="dialog-pago-titulo">Registrar Pago</h3>
-    <button type="button" class="boton-cerrar" data-dialog-close aria-label="Cerrar">&times;</button>
-  </div>
-  <form method="post" action="{% url 'crear_pago' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ payment_form.non_field_errors }}
-
-    <fieldset class="seccion-formulario">
-      <legend>Datos del pago</legend>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ payment_form.apartment.id_for_label }}">{{ payment_form.apartment.label }}</label>
-          {{ payment_form.apartment }}
-        </div>
-      </div>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ payment_form.resident.id_for_label }}">{{ payment_form.resident.label }}</label>
-          <select name="{{ payment_form.resident.html_name }}" id="{{ payment_form.resident.id_for_label }}" class="campo-seleccion" data-pago-residente>
-            <option value="">Elegir un propietario/residente</option>
-            {% for res in residentes_pago %}
-            <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ payment_form.amount.id_for_label }}">{{ payment_form.amount.label }}</label>
-          {{ payment_form.amount }}
-        </div>
-        <div class="campo-formulario">
-          <label for="{{ payment_form.concept.id_for_label }}">{{ payment_form.concept.label }}</label>
-          {{ payment_form.concept }}
-        </div>
-      </div>
-    </fieldset>
-
-    <fieldset class="seccion-formulario">
-      <legend>Detalles del pago</legend>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ payment_form.period.id_for_label }}">Periodo/Mes correspondiente</label>
-          {{ payment_form.period }}
-        </div>
-        <div class="campo-formulario">
-          <label for="{{ payment_form.payment_date.id_for_label }}">Fecha del pago</label>
-          {{ payment_form.payment_date }}
-        </div>
-      </div>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ payment_form.payment_method.id_for_label }}">Método de pago</label>
-          {{ payment_form.payment_method }}
-        </div>
-      </div>
-    </fieldset>
-
-    <fieldset class="seccion-formulario">
-      <legend>Comprobante</legend>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ payment_form.receipt_image.id_for_label }}">Foto del comprobante</label>
-          {{ payment_form.receipt_image }}
-          <small class="ayuda-formulario">Subir imagen (JPG, PNG o WEBP — máx. 2 MB)</small>
-        </div>
-      </div>
-    </fieldset>
-
-    <fieldset class="seccion-formulario">
-      <legend>Estado del pago</legend>
-      <div class="fila-formulario">
-        <div class="campo-formulario">
-          <label for="{{ payment_form.status.id_for_label }}">Estado</label>
-          {{ payment_form.status }}
-        </div>
-      </div>
-    </fieldset>
-
-    <div class="pie-formulario">
-      <button type="submit">Agregar</button>
-      <button
-        type="button"
-        id="btn-generar-comprobante"
-        class="btn-comprobante"
-        data-url-comprobante="{% url 'generar_comprobante' %}"
-        disabled
-      >
-        <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
-        Generar comprobante
-      </button>
-      <button type="button" data-dialog-close>Cancelar</button>
-    </div>
-  </form>
-</dialog>
-
-<dialog id="dialog-visitante" aria-labelledby="dialog-visitante-titulo">
-  <div class="cabecera-dialogo">
-    <h3 id="dialog-visitante-titulo">Registrar Visitante</h3>
-    <button type="button" class="boton-cerrar" data-dialog-close aria-label="Cerrar">&times;</button>
-  </div>
-  <form method="post" action="{% url 'crear_visitante' %}">
-    {% csrf_token %}
-    {{ visitor_form.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
-      <button type="button" data-dialog-close>Cancelar</button>
-    </div>
-  </form>
-</dialog>
-
-<dialog id="dialog-incidencia" aria-labelledby="dialog-incidencia-titulo">
-  <div class="cabecera-dialogo">
-    <h3 id="dialog-incidencia-titulo">Crear Incidencia</h3>
-    <button type="button" class="boton-cerrar" data-dialog-close aria-label="Cerrar">&times;</button>
-  </div>
-  <form method="post" action="{% url 'crear_incidencia' %}">
-    {% csrf_token %}
-    {{ incident_form.as_p }}
-    <div class="pie-formulario">
-      <button type="submit">Guardar</button>
-      <button type="button" data-dialog-close>Cancelar</button>
-    </div>
-  </form>
-</dialog>
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/dialogos.js' %}" defer></script>
-<script src="{% static 'js/pagos.js' %}" defer></script>
 <script src="{% static 'js/dashboard.js' %}" defer></script>
 {% endblock %}

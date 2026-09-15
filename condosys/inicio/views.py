@@ -1,11 +1,10 @@
 from django.db.models import Q
 from django.views.generic import ListView
 
-from incidents.forms import IncidentForm
-from payments.forms import PaymentForm
+from payments.models import Payment
 from residents.models import Resident
 from structure.models import Apartment, Building, Garden
-from visitors.forms import VisitorForm
+from visitors.models import Visitor
 
 
 class InicioView(ListView):
@@ -45,10 +44,6 @@ class InicioView(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['payment_form'] = PaymentForm()
-        ctx['visitor_form'] = VisitorForm()
-        ctx['incident_form'] = IncidentForm()
-        ctx['residentes_pago'] = Resident.objects.select_related('apartment').all()
         ctx['jardines'] = Garden.objects.filter(is_active=True)
         ctx['edificios'] = Building.objects.filter(is_active=True)
         ctx['departamentos'] = Apartment.objects.filter(is_active=True)
@@ -56,4 +51,8 @@ class InicioView(ListView):
         ctx['garden_actual'] = self.request.GET.get('garden', '')
         ctx['building_actual'] = self.request.GET.get('building', '')
         ctx['apartment_actual'] = self.request.GET.get('apartment', '')
+        ctx['total_departamentos'] = Apartment.objects.filter(is_active=True).count()
+        ctx['total_residentes'] = Resident.objects.filter(is_active=True).count()
+        ctx['total_pagos'] = Payment.objects.count()
+        ctx['total_visitantes'] = Visitor.objects.count()
         return ctx
