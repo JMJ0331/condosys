@@ -331,6 +331,15 @@ table.tabla-propietarios {
 	color: var(--black-400);
 }
 
+/* Radio de campos del formulario agregar/actualizar según maqueta. */
+.formulario-agregar .campo-formulario input,
+.formulario-agregar .campo-formulario select,
+.formulario-agregar .campo-formulario textarea,
+.formulario-agregar .campo-entrada,
+.formulario-agregar .campo-seleccion {
+	border-radius: var(--borderR-8);
+}
+
 /* Zona de foto con borde punteado */
 .zona-imagen {
 	display: flex;

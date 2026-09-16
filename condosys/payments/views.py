@@ -2,10 +2,11 @@ from decimal import Decimal, InvalidOperation
 from io import BytesIO
 
 from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
-from django.views.decorators.http import require_POST
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -24,32 +25,144 @@ from .models import Payment
 from .serializers import PaymentSerializer
 from .forms import PaymentForm
 from residents.models import Resident
+from propietarios.models import Propietario
 from structure.models import Apartment
+
+
+PAGINATE_BY = 15
 
 
 # @login_required
 def app_index(request):
+    pagos_qs = (
+        Payment.objects.select_related(
+            'apartment__building__garden', 'resident', 'registered_by'
+        ).order_by('-period', '-created_at')
+    )
+
+    estado = request.GET.get('estado', '')
+    concepto = request.GET.get('concepto', '')
+    apartamento = request.GET.get('apartamento', '')
+
+    if estado:
+        pagos_qs = pagos_qs.filter(status=estado)
+    if concepto:
+        pagos_qs = pagos_qs.filter(concept=concepto)
+    if apartamento:
+        pagos_qs = pagos_qs.filter(apartment_id=apartamento)
+
+    paginator = Paginator(pagos_qs, PAGINATE_BY)
+    pagina = request.GET.get('page')
+    try:
+        pagos = paginator.page(pagina)
+    except PageNotAnInteger:
+        pagos = paginator.page(1)
+    except EmptyPage:
+        pagos = paginator.page(paginator.num_pages)
+
+    query = request.GET.copy()
+    query.pop('page', None)
+
     contexto = {
-        'form_payment': PaymentForm(),
-        'residentes': Resident.objects.select_related('apartment').all(),
-        'apartamentos': Apartment.objects.filter(is_active=True),
-        'module_name': 'Pagos'
+        'pagos': pagos,
+        'apartamentos': Apartment.objects.filter(is_active=True).select_related('building__garden'),
+        'estado_actual': estado,
+        'concepto_actual': concepto,
+        'apartamento_actual': apartamento,
+        'paginacion_query': query.urlencode(),
+        'module_name': 'Pagos',
     }
     return render(request, 'payments/index.html', contexto)
 
 
 # @login_required
-@require_POST
-def crear_pago(request):
-    form = PaymentForm(request.POST, request.FILES)
-    if form.is_valid():
-        pago = form.save(commit=False)
-        pago.registered_by = request.user
-        pago.save()
-        messages.success(request, 'Pago registrado correctamente.')
+def agregar_pago(request):
+    if request.method == 'POST':
+        datos = request.POST.copy()
+        residente_id, error = _resolver_residente_id(
+            datos.get('resident'), datos.get('apartment')
+        )
+        if error:
+            messages.error(request, error)
+        if residente_id:
+            datos['resident'] = residente_id
+        form = PaymentForm(datos, request.FILES)
+        if not error and form.is_valid():
+            pago = form.save(commit=False)
+            pago.registered_by = request.user
+            pago.save()
+            messages.success(request, 'Pago registrado correctamente.')
+            return redirect('pagos_index')
+        if not error:
+            messages.error(request, 'No se pudo registrar el pago. Revisa los datos enviados.')
     else:
-        messages.error(request, 'No se pudo registrar el pago. Revisa los datos enviados.')
-    return redirect('inicio')
+        form = PaymentForm()
+
+    contexto = {
+        'form_payment': form,
+        'residentes': Resident.objects.select_related('apartment').all(),
+        'propietarios': Propietario.objects.filter(is_active=True),
+        'apartamentos': Apartment.objects.filter(is_active=True),
+        'module_name': 'Pagos',
+        'titulo_modulo': 'Agregar pago',
+        'url_form': 'agregar_pago',
+        'url_form_args': [],
+        'texto_boton': 'Agregar',
+    }
+    return render(request, 'payments/agregar.html', contexto)
+
+
+def _resolver_residente_id(resident_id, apartment_id):
+    """Devuelve (resident_id, error).
+
+    El desplegable mezcla Propietarios y Residentes, pero Payment.resident
+    apunta a Resident. Si el id elegido es un Propietario, se ubica o se crea
+    su ficha de Resident en el departamento y se devuelve ese id para que el
+    formulario valide y guarde sin cambios. Si ya es un Resident (o no hay
+    nada que resolver), se devuelve (None, None).
+    """
+    if not resident_id or not apartment_id:
+        return None, None
+    try:
+        if Resident.objects.filter(pk=resident_id).exists():
+            return None, None
+        propietario = Propietario.objects.filter(pk=resident_id).first()
+        apartment = Apartment.objects.filter(pk=apartment_id).first()
+    except (ValueError, ValidationError):
+        return None, None
+    if not propietario or not apartment:
+        return None, None
+    residente = Resident.objects.filter(
+        cedula=propietario.cedula, apartment=apartment
+    ).first()
+    if residente:
+        return str(residente.id), None
+    if Resident.objects.filter(cedula=propietario.cedula).exists():
+        return None, 'El propietario ya está registrado como residente en otro departamento.'
+    residente = Resident.objects.create(
+        apartment=apartment,
+        full_name=propietario.full_name,
+        cedula=propietario.cedula,
+        phone=propietario.phone,
+        email=propietario.email,
+        tipo_relacion='propietario',
+    )
+    return str(residente.id), None
+
+
+# @login_required
+def eliminar_pago(request, pk):
+    pago = Payment.objects.filter(pk=pk).first()
+    if not pago:
+        messages.error(request, 'Pago no encontrado.')
+        return redirect('pagos_index')
+
+    if request.method == 'POST':
+        pago.delete()
+        messages.success(request, 'Pago eliminado correctamente.')
+        return redirect('pagos_index')
+
+    return redirect('pagos_index')
 
 
 class PaymentViewSet(viewsets.ModelViewSet):

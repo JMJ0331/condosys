@@ -54,7 +54,7 @@
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'pagos_index' %} active{% endif %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'pagos_index' or request.resolver_match.url_name == 'agregar_pago' or request.resolver_match.url_name == 'eliminar_pago' %} active{% endif %}"
           href="{% url 'pagos_index' %}"
         >
 

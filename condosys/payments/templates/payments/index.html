@@ -5,105 +5,120 @@
 {% endblock %}
 {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+
 <main class="container-main-side2">
 
-  <div class="panel-acciones">
+  <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
-      <h3>Registrar Pago</h3>
 
-      <form method="post" action="{% url 'crear_pago' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form_payment.non_field_errors }}
+      <div class="contenedor-filtros">
+        <h2>Todos los pagos</h2>
 
-        <div class="seccion-formulario">
-          <legend>Datos del pago</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_payment.apartment.id_for_label }}">{{ form_payment.apartment.label }}</label>
-              {{ form_payment.apartment }}
-              {{ form_payment.apartment.errors }}
+        <div class="filtros-tabla">
+          <div class="selector-columnas">
+            <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+            <div class="panel-columnas" id="panel-columnas" hidden>
+              <label class="opcion-columna opcion-todas">
+                <input type="checkbox" id="toggle-todas-columnas">
+                <span>Todas</span>
+              </label>
             </div>
           </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_payment.resident.id_for_label }}">{{ form_payment.resident.label }}</label>
-              <select name="{{ form_payment.resident.html_name }}" id="{{ form_payment.resident.id_for_label }}" class="campo-seleccion" data-pago-residente>
-                <option value="">Elegir un propietario/residente</option>
-                {% for res in residentes %}
-                <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
-                {% endfor %}
-              </select>
-              {{ form_payment.resident.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_payment.amount.id_for_label }}">{{ form_payment.amount.label }}</label>
-              {{ form_payment.amount }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_payment.concept.id_for_label }}">{{ form_payment.concept.label }}</label>
-              {{ form_payment.concept }}
-            </div>
-          </div>
+
+          <form method="get" class="formulario-filtros" id="filtros-pagos">
+            <select name="apartamento" id="filtro-apartamento">
+              <option value="">Todos los apartamentos</option>
+              {% for apartamento in apartamentos %}
+              <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
+              {% endfor %}
+            </select>
+
+            <select name="concepto" id="filtro-concepto">
+              <option value="">Todos los conceptos</option>
+              <option value="maintenance" {% if concepto_actual == 'maintenance' %}selected{% endif %}>Mantenimiento</option>
+              <option value="extraordinary" {% if concepto_actual == 'extraordinary' %}selected{% endif %}>Cuota extraordinaria</option>
+              <option value="reservation" {% if concepto_actual == 'reservation' %}selected{% endif %}>Reserva</option>
+              <option value="parking" {% if concepto_actual == 'parking' %}selected{% endif %}>Parqueo</option>
+              <option value="services" {% if concepto_actual == 'services' %}selected{% endif %}>Servicios</option>
+              <option value="other" {% if concepto_actual == 'other' %}selected{% endif %}>Otro</option>
+            </select>
+
+            <select name="estado" id="filtro-estado">
+              <option value="">Todos los estados</option>
+              <option value="pending" {% if estado_actual == 'pending' %}selected{% endif %}>Pendiente</option>
+              <option value="at_risk" {% if estado_actual == 'at_risk' %}selected{% endif %}>En riesgo</option>
+              <option value="overdue" {% if estado_actual == 'overdue' %}selected{% endif %}>Vencido</option>
+              <option value="paid" {% if estado_actual == 'paid' %}selected{% endif %}>Pagado</option>
+              <option value="cancelled" {% if estado_actual == 'cancelled' %}selected{% endif %}>Anulado</option>
+            </select>
+          </form>
+
+          <a href="{% url 'agregar_pago' %}" class="boton-nuevo-pago">+ Agregar pago</a>
         </div>
+      </div>
 
-        <div class="seccion-formulario">
-          <legend>Detalles del pago</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_payment.period.id_for_label }}">Periodo/Mes correspondiente</label>
-              {{ form_payment.period }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_payment.payment_date.id_for_label }}">Fecha del pago</label>
-              {{ form_payment.payment_date }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_payment.payment_method.id_for_label }}">Método de pago</label>
-              {{ form_payment.payment_method }}
-            </div>
-          </div>
-        </div>
+      <div class="tabla-filtrada">
+        <table class="tabla-pagos">
+          <thead>
+            <tr>
+              <th data-columna="residente">Residente</th>
+              <th data-columna="apartamento">Apartamento</th>
+              <th data-columna="concepto">Concepto</th>
+              <th data-columna="monto">Monto</th>
+              <th data-columna="periodo">Periodo</th>
+              <th data-columna="fecha">Fecha de pago</th>
+              <th data-columna="metodo">Método</th>
+              <th data-columna="estado">Estado</th>
+              <th class="columna-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pago in pagos %}
+            <tr>
+              <td data-columna="residente" data-etiqueta="Residente">{{ pago.resident.full_name }}</td>
+              <td data-columna="apartamento" data-etiqueta="Apartamento">{{ pago.apartment.name }}</td>
+              <td data-columna="concepto" data-etiqueta="Concepto">{{ pago.get_concept_display }}</td>
+              <td data-columna="monto" data-etiqueta="Monto">{{ pago.amount }}</td>
+              <td data-columna="periodo" data-etiqueta="Periodo">{{ pago.period|date:"d/m/Y" }}</td>
+              <td data-columna="fecha" data-etiqueta="Fecha de pago">{{ pago.payment_date|date:"d/m/Y"|default:"—" }}</td>
+              <td data-columna="metodo" data-etiqueta="Método">{{ pago.get_payment_method_display|default:"—" }}</td>
+              <td data-columna="estado" data-etiqueta="Estado">{{ pago.get_status_display }}</td>
+              <td class="columna-acciones">
+                <div class="acciones-fila">
+                  <a href="{% url 'generar_comprobante' %}?apartment={{ pago.apartment_id }}&amp;resident={{ pago.resident_id }}&amp;amount={{ pago.amount }}&amp;concept={{ pago.concept }}&amp;period={{ pago.period|date:'Y-m-d' }}&amp;payment_date={{ pago.payment_date|date:'Y-m-d' }}&amp;payment_method={{ pago.payment_method }}&amp;status={{ pago.status }}" class="boton-accion" aria-label="Ver comprobante" target="_blank" rel="noopener">
+                    <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="Comprobante">
+                  </a>
+                  <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ pago.id }}">
+                    <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="9" class="sin-registros">Sin coincidencias.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-        <div class="seccion-formulario">
-          <legend>Comprobante</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_payment.receipt_image.id_for_label }}">Foto del comprobante</label>
-              {{ form_payment.receipt_image }}
-              <small class="ayuda-formulario">Subir imagen (JPG, PNG o WEBP — máx. 2 MB)</small>
-            </div>
+      {% for pago in pagos %}
+      <dialog id="dialog-eliminar-{{ pago.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ pago.id }}">
+        <form method="post" action="{% url 'eliminar_pago' pago.id %}">
+          {% csrf_token %}
+          <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+          <h3 id="dialog-eliminar-titulo-{{ pago.id }}" class="titulo-eliminar">Eliminar pago</h3>
+          <p class="mensaje-eliminar">¿Estás seguro de eliminar el pago de <strong>{{ pago.resident.full_name }}</strong> por <strong>{{ pago.amount }}</strong>?</p>
+          <div class="acciones-eliminar">
+            <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+            <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
           </div>
-        </div>
+        </form>
+      </dialog>
+      {% endfor %}
 
-        <div class="seccion-formulario">
-          <legend>Estado del pago</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_payment.status.id_for_label }}">Estado</label>
-              {{ form_payment.status }}
-            </div>
-          </div>
-        </div>
-
-        <div class="pie-formulario">
-          <button type="submit">Agregar</button>
-          <button
-            type="button"
-            id="btn-generar-comprobante"
-            class="btn-comprobante"
-            data-url-comprobante="{% url 'generar_comprobante' %}"
-            disabled
-          >
-            <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
-            Generar comprobante
-          </button>
-          <button type="reset">Cancelar</button>
-        </div>
-      </form>
+      {% include "componentes/paginacion_tabla.html" with pagina=pagos %}
     </div>
   </div>
 </main>
@@ -111,5 +126,5 @@
 
 {% block scripts %}
 <script src="{% static 'js/dialogos.js' %}" defer></script>
-<script src="{% static 'js/pagos.js' %}" defer></script>
+<script src="{% static 'js/pagos_lista.js' %}" defer></script>
 {% endblock %}
