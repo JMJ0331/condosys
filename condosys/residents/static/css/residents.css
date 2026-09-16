@@ -1,9 +1,11 @@
 /* ============================================
    Módulo Residentes - estilos específicos.
-   Los estilos de formulario/paginación viven en
-   static/css/formularios.css, paginacion.css
+   Los estilos de formulario/paginación/tabla viven en
+   static/css/formularios.css, paginacion.css, tablas.css
    (compartidos).
    ============================================ */
+
+@import url('../../../static/css/tablas.css');
 
 /* Página agregar: tarjetas + columna lateral con estado y acciones. */
 .pagina-agregar {
@@ -435,108 +437,6 @@ input[data-residente="foto"] {
 	background: var(--green-900);
 }
 
-.tabla-filtrada {
-	margin-top: 1.8rem;
-	overflow-x: auto;
-}
-
-table.tabla-residentes {
-	width: 100%;
-	border-collapse: collapse;
-	min-width: 100rem;
-}
-
-.tabla-residentes thead {
-	justify-content: space-between;
-	border-bottom: 1px solid var(--black-50);
-	background-color: var(--white-500);
-}
-
-.tabla-residentes th {
-	text-align: left;
-	font-weight: bold;
-	color: var(--black-400);
-	font-size: 1.2rem;
-	padding: var(--padding-8) 1.2rem;
-	white-space: nowrap;
-}
-
-.tabla-residentes td {
-	padding: 1.4rem;
-	font-size: 1.3rem;
-	color: var(--black-400);
-	border-bottom: 1px solid var(--white-400);
-	vertical-align: middle;
-	white-space: nowrap;
-}
-
-.tabla-residentes tbody tr:last-child td {
-	border-bottom: none;
-}
-
-.foto-residente {
-	display: inline-block;
-	width: 3.4rem;
-	height: 3.4rem;
-	border-radius: var(--borderR-8);
-	object-fit: cover;
-	vertical-align: middle;
-}
-
-.foto-placeholder {
-	display: inline-block;
-	width: 3.4rem;
-	height: 3.4rem;
-	background: var(--black-50);
-	border-radius: var(--borderR-8);
-	vertical-align: middle;
-}
-
-.tabla-residentes th.columna-acciones {
-	width: 1px;
-	white-space: nowrap;
-	text-align: right;
-}
-
-.tabla-residentes td.columna-acciones {
-	width: 1px;
-	white-space: nowrap;
-	text-align: right;
-}
-
-.acciones-fila {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--space-8);
-}
-
-.boton-accion {
-	background: none;
-	border: none;
-	cursor: pointer;
-	padding: 0.4rem;
-	color: var(--black-300);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.boton-accion:hover {
-	color: var(--green-900);
-}
-
-.boton-accion img {
-	width: 1.6rem;
-	height: 1.6rem;
-}
-
-.sin-registros {
-	text-align: center;
-	color: var(--white-700);
-	font-size: 1.3rem;
-	padding: 2.4rem;
-}
-
 @media (max-width: 900px) {
 	.formulario-agregar {
 		grid-template-columns: 1fr;
@@ -546,96 +446,6 @@ table.tabla-residentes {
 	   se oculta la cabecera y cada celda muestra su etiqueta. */
 	.panel-cuadricula .tabla-filtrada {
 		padding: 1.2rem;
-	}
-
-	table.tabla-residentes {
-		min-width: 0;
-	}
-
-	.tabla-residentes thead {
-		display: none;
-	}
-
-	.tabla-residentes tbody tr {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		box-sizing: border-box;
-		background: var(--white-50);
-		border: 1px solid var(--black-50);
-		border-radius: var(--borderR-8);
-		padding: 0.4rem 1.6rem;
-		margin-bottom: 1.2rem;
-	}
-
-	.tabla-residentes tbody td {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1.2rem;
-		padding: 1rem 0;
-		border-bottom: 1px solid var(--white-400);
-		white-space: normal;
-		text-align: right;
-	}
-
-	.tabla-residentes tbody td:last-child {
-		border-bottom: none;
-	}
-
-	.tabla-residentes tbody td::before {
-		content: attr(data-etiqueta);
-		font-size: 1.2rem;
-		font-weight: 600;
-		color: var(--black-400);
-		text-align: left;
-	}
-
-	.tabla-residentes tbody td[data-columna="foto"] {
-		justify-content: center;
-	}
-
-	.tabla-residentes tbody td[data-columna="foto"]::before,
-	.tabla-residentes tbody td.columna-acciones::before,
-	.tabla-residentes tbody td.sin-registros::before {
-		content: none;
-	}
-
-	.tabla-residentes tbody td.columna-acciones {
-		justify-content: flex-end;
-		width: auto;
-		white-space: normal;
-	}
-
-	/* En tablet/móvil: acciones en fila, alineadas a la derecha abajo */
-	.tabla-residentes tbody td.columna-acciones .acciones-fila {
-		display: flex;
-		flex-direction: row;
-		gap: var(--space-8);
-		align-items: center;
-		justify-content: flex-end;
-		margin-left: auto;
-	}
-
-	.tabla-residentes tbody td.columna-acciones .boton-accion {
-		padding: var(--space-4);
-		border-radius: var(--borderR-4);
-		background: transparent;
-	}
-
-	.tabla-residentes tbody td.columna-acciones .boton-accion:hover,
-	.tabla-residentes tbody td.columna-acciones .boton-accion:active {
-		background: transparent;
-	}
-
-	.tabla-residentes tbody td.columna-acciones .boton-accion img {
-		width: 2rem;
-		height: 2rem;
-	}
-
-	.tabla-residentes tbody td.sin-registros {
-		justify-content: center;
-		text-align: center;
 	}
 
 	/* En tablet/móvil cada fila es una tarjeta: la sección pierde

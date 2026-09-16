@@ -1,4 +1,5 @@
 @import url('../../../static/css/variables.css');
+@import url('../../../static/css/tablas.css');
 
 
 .container-main-side2 {
@@ -10,6 +11,10 @@
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 1.2rem;
+}
+
+.fila-minicards {
+	margin: 1.6rem 1.6rem 0.8rem;
 }
 
 .container-flex1 .app-info .opt-modulo img {
@@ -82,92 +87,17 @@
 	cursor: pointer;
 }
 
-.contenedor-residentes {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: 0.8rem;
-	margin-top: 1.2rem;
-	max-height: 56rem;
-	overflow-y: auto;
-	padding-right: 0.4rem;
-}
-
-.tarjeta-residente {
-	padding: 1rem;
-	border: 1px solid var(--black-50);
-	border-radius: 0.6rem;
-	background: var(--white-50);
-}
-
-.tarjeta-residente-nombre {
+.titulo-listado {
+	margin: 0 0 1rem;
+	color: var(--black-400);
 	font-size: 1.4rem;
 	font-weight: 600;
-	color: var(--black-400);
-	margin-bottom: 0.4rem;
 }
 
-.tarjeta-residente-detalle {
-	display: flex;
-	flex-direction: column;
-	gap: 0.2rem;
-	font-size: 1.2rem;
-	color: var(--black-300);
-}
-
-.sin-resultados {
-	padding: 1.2rem;
-	text-align: center;
-	color: var(--black-300);
-	font-size: 1.3rem;
-}
-
-.paginacion-tarjetas {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 1rem;
-	margin-top: 1.2rem;
-}
-
-.pagina-actual {
-	font-size: 1.2rem;
-	color: var(--black-300);
-}
-
-.paginacion-flechas {
-	display: flex;
-	gap: 0.6rem;
-}
-
-.flecha-paginacion {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 3.6rem;
-	height: 3.6rem;
-	border: 1px solid var(--green-600);
-	border-radius: var(--borderR-4);
-	background: var(--white-50);
-	color: var(--green-900);
-	font-size: 2rem;
-	line-height: 1;
-	font-weight: 600;
-	text-decoration: none;
-	cursor: pointer;
-	transition: background 0.2s ease, color 0.2s ease;
-}
-
-.flecha-paginacion:hover {
-	background: var(--green-600);
-	color: var(--white-50);
-}
-
-.flecha-paginacion.deshabilitada {
-	opacity: 0.4;
-	cursor: not-allowed;
-	background: var(--white-50);
-	color: var(--black-300);
-	border-color: var(--black-50);
+/* El panel del inicio es más estrecho que el del módulo residentes;
+   la tabla compartida pide un mínimo mayor y aquí no lo necesita. */
+.container-flex > .filtros table.tabla-residentes {
+	min-width: 60rem;
 }
 
 .actividad-reciente h2 {
@@ -180,6 +110,10 @@
 .actividad-reciente {
 	flex: 1;
 	min-height: 15rem;
+}
+
+.container-flex > .filtros .actividad-reciente {
+	margin-top: 1.2rem;
 }
 
 @media (max-width: 900px) {

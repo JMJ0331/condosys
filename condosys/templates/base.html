@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Condosys </title>
+    <title>{% block titulo %}Condosys{% endblock %}</title>
     <link rel="stylesheet" href="{% static "css/style.css" %}">
     <link rel="stylesheet" href="{% static "css/mediaquerys.css" %}">
     <link rel="stylesheet" href="{% static "css/formularios.css" %}">
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static "css/dialogos.css" %}">
     <link rel="stylesheet" href="{% static "css/paginacion.css" %}">
     <link rel="stylesheet" href="{% static "css/entradas.css" %}">
-    <link rel="icon" type="image/svg+xml" href="../static/images/logo_del_proyecto.svg">
+    <link rel="icon" type="image/svg+xml" href="{% static "images/logo_del_proyecto.svg" %}">
     {% block extra_css %}{% endblock %}
 
 </head>
@@ -20,9 +20,9 @@
 
     <div class="container">
 
-        {% include "componentes/aside.html" with nombre_residencial="Residencial Rialto" nombre_usuario="CJY" %}
+        {% include "componentes/aside.html" %}
 
-        <div class="main-layout">
+        <main class="main-layout">
 
             {% if messages %}
             <ul class="messages">
@@ -33,11 +33,12 @@
             {% endif %}
 
             {% block mini-cards %}
-
-                
             {% endblock %}
 
-        </div>
+            {% block contenido %}
+            {% endblock %}
+
+        </main>
 
     </div>
 

@@ -1,4 +1,6 @@
 from django.db.models import Q
+from django.http import Http404
+from django.shortcuts import redirect
 from django.views.generic import ListView
 
 from payments.models import Payment
@@ -11,7 +13,7 @@ class InicioView(ListView):
     template_name = 'inicio/index.html'
     context_object_name = 'residentes'
     model = Resident
-    paginate_by = 12
+    paginate_by = 10
 
     def get_queryset(self):
         qs = Resident.objects.select_related(
@@ -42,6 +44,17 @@ class InicioView(ListView):
 
         return qs
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            query = request.GET.copy()
+            query.pop('page', None)
+            url = request.path
+            if query:
+                url += '?' + query.urlencode()
+            return redirect(url)
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['jardines'] = Garden.objects.filter(is_active=True)
@@ -51,6 +64,9 @@ class InicioView(ListView):
         ctx['garden_actual'] = self.request.GET.get('garden', '')
         ctx['building_actual'] = self.request.GET.get('building', '')
         ctx['apartment_actual'] = self.request.GET.get('apartment', '')
+        query = self.request.GET.copy()
+        query.pop('page', None)
+        ctx['paginacion_query'] = query.urlencode()
         ctx['total_departamentos'] = Apartment.objects.filter(is_active=True).count()
         ctx['total_residentes'] = Resident.objects.filter(is_active=True).count()
         ctx['total_pagos'] = Payment.objects.count()
