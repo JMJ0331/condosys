@@ -62,18 +62,22 @@
               <select name="{{ form_apartments.building.html_name }}" id="{{ form_apartments.building.id_for_label }}" class="campo-seleccion" data-departamento="edificio">
                 <option value="">Edificio</option>
                 {% for edificio in edificios %}
-                <option value="{{ edificio.id }}" data-garden="{{ edificio.garden_id }}" data-torre="{{ edificio.tower|default:'' }}" data-bloque="{{ edificio.block|default:'' }}">{{ edificio.tower|default:'' }}{% if edificio.tower %} · {% endif %}{{ edificio.name }} · Bloque {{ edificio.block|default:'—' }}</option>
+                <option value="{{ edificio.id }}" data-garden="{{ edificio.garden_id }}" data-torre="{{ edificio.tower|default:'' }}" data-bloque="{{ edificio.block|default:'' }}"{% if form_apartments.building.value|stringformat:'s' == edificio.id|stringformat:'s' %} selected{% endif %}>{{ edificio.tower|default:'' }}{% if edificio.tower %} · {% endif %}{{ edificio.name }} · Bloque {{ edificio.block|default:'—' }}</option>
                 {% endfor %}
               </select>
               {{ form_apartments.building.errors }}
             </div>
             <div class="campo-formulario">
               <label for="torre-departamento">Torre</label>
-              <input type="text" id="torre-departamento" class="campo-entrada" placeholder="Torre" readonly>
+              <select name="torre-filtro" id="torre-departamento" class="campo-seleccion" data-departamento="torre" data-actual="{% if edificio_actual %}{{ edificio_actual.tower|default:'' }}{% endif %}">
+                <option value="">Torre</option>
+              </select>
             </div>
             <div class="campo-formulario">
               <label for="bloque-departamento">Bloque</label>
-              <input type="text" id="bloque-departamento" class="campo-entrada" placeholder="Bloque" readonly>
+              <select name="bloque-filtro" id="bloque-departamento" class="campo-seleccion" data-departamento="bloque" data-actual="{% if edificio_actual %}{{ edificio_actual.block|default:'' }}{% endif %}">
+                <option value="">Bloque</option>
+              </select>
             </div>
             <div class="campo-formulario">
               <label for="{{ form_apartments.floor.id_for_label }}">{{ form_apartments.floor.label }}</label>
@@ -82,7 +86,7 @@
             </div>
             <div class="campo-formulario">
               <label for="select-jardin">Jardín</label>
-              <select name="jardin-filtro" id="select-jardin" class="campo-seleccion">
+              <select name="jardin-filtro" id="select-jardin" class="campo-seleccion" data-actual="{% if edificio_actual %}{{ edificio_actual.garden_id }}{% endif %}">
                 <option value="">Jardín</option>
                 {% for jardin in jardines %}
                 <option value="{{ jardin.id }}">{{ jardin.name }}</option>

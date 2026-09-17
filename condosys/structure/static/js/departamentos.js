@@ -1,11 +1,15 @@
 /**
  * Lógica específica del módulo Departamentos (structure).
  * - Página index (#filtros-departamentos): selector de columnas + auto-submit filtros.
- * - Página agregar: filtro de jardín → edificio, zona de imagen e interruptor ocupado.
+ * - Página agregar: cascada Jardín → Torre/Bloque → Edificio, zona de
+ *   imagen e interruptor ocupado.
  *
  * La plantilla agregar.html debe usar:
  *   - <select id="select-jardin">
- *   - <select data-departamento="edificio">     (sus opciones llevan data-garden)
+ *   - <select id="torre-departamento" data-departamento="torre">
+ *   - <select id="bloque-departamento" data-departamento="bloque">
+ *   - <select data-departamento="edificio">     (sus opciones llevan
+ *     data-garden, data-torre y data-bloque)
  *   - <input type="file" data-departamento="foto">
  *   - <div id="zona-imagen"> + <img id="vista-previa-imagen"> + <span id="contenido-zona">
  *   - <button id="boton-subir-imagen">
@@ -90,10 +94,10 @@
 
   const selectJardin = document.getElementById('select-jardin');
   const selectEdificio = document.querySelector('[data-departamento="edificio"]');
+  const selectTorre = document.getElementById('torre-departamento');
+  const selectBloque = document.getElementById('bloque-departamento');
   const toggleOcupado = document.getElementById('toggle-ocupado');
   const inputStatus = document.getElementById('id_status');
-  const inputTorre = document.getElementById('torre-departamento');
-  const inputBloque = document.getElementById('bloque-departamento');
   const zonaImagen = document.getElementById('zona-imagen');
   const inputFoto = document.querySelector('[data-departamento="foto"]');
   const botonSubir = document.getElementById('boton-subir-imagen');
@@ -102,31 +106,90 @@
   const nombreArchivo = document.getElementById('nombre-archivo');
   let urlPrevia = null;
 
+  // Valores distintos de una dimensión (torre o bloque) entre los edificios
+  // del jardín elegido. Fuente temporal hasta que torre/bloque se administren
+  // desde el sidebar.
+  function valoresDimension(atributo) {
+    if (!selectEdificio) return [];
+    const jardin = selectJardin ? selectJardin.value : '';
+    const valores = new Set();
+    selectEdificio.querySelectorAll('option[data-garden]').forEach((opt) => {
+      if (jardin !== '' && opt.dataset.garden !== jardin) return;
+      const valor = (opt.dataset[atributo] || '').trim();
+      if (valor !== '') valores.add(valor);
+    });
+    return [...valores].sort((a, b) => a.localeCompare(b, 'es'));
+  }
+
+  // Reconstruye el select de una dimensión con los valores del jardín.
+  // Sin valores (el residencial no usa esa dimensión), queda deshabilitado
+  // con un texto que lo indica en vez de ocultarse.
+  function reconstruirDimension(select, atributo, placeholder, sinTexto) {
+    if (!select || !selectEdificio) return;
+    const actual = select.value;
+    const valores = valoresDimension(atributo);
+    select.innerHTML = '';
+    const inicial = document.createElement('option');
+    inicial.value = '';
+    if (valores.length === 0) {
+      inicial.textContent = sinTexto;
+      select.appendChild(inicial);
+      select.value = '';
+      select.disabled = true;
+      return;
+    }
+    inicial.textContent = placeholder;
+    select.appendChild(inicial);
+    valores.forEach((valor) => {
+      const opt = document.createElement('option');
+      opt.value = valor;
+      opt.textContent = valor;
+      select.appendChild(opt);
+    });
+    select.disabled = false;
+    select.value = valores.includes(actual) ? actual : '';
+  }
+
   function filtrarEdificios() {
     if (!selectJardin || !selectEdificio) return;
     const jardin = selectJardin.value;
+    const torre = selectTorre ? selectTorre.value : '';
+    const bloque = selectBloque ? selectBloque.value : '';
     selectEdificio.querySelectorAll('option[data-garden]').forEach((opt) => {
-      opt.hidden = jardin !== '' && opt.dataset.garden !== jardin;
+      const coincideJardin = jardin === '' || opt.dataset.garden === jardin;
+      const coincideTorre = torre === '' || (opt.dataset.torre || '').trim() === torre;
+      const coincideBloque = bloque === '' || (opt.dataset.bloque || '').trim() === bloque;
+      opt.hidden = !(coincideJardin && coincideTorre && coincideBloque);
     });
-    if (
-      selectEdificio.value !== '' &&
-      selectEdificio.selectedOptions[0]?.dataset.garden &&
-      selectEdificio.selectedOptions[0].dataset.garden !== jardin
-    ) {
+    const elegida = selectEdificio.selectedOptions[0];
+    if (elegida && elegida.value !== '' && elegida.hidden) {
       selectEdificio.value = '';
     }
-    mostrarUbicacion();
   }
 
-  function mostrarUbicacion() {
-    if (!selectEdificio) return;
-    const opt = selectEdificio.selectedOptions[0];
-    if (inputTorre) {
-      inputTorre.value = opt ? opt.dataset.torre || '' : '';
-    }
-    if (inputBloque) {
-      inputBloque.value = opt ? opt.dataset.bloque || '' : '';
-    }
+  // Jardín reconstruye las dimensiones y filtra edificios;
+  // torre/bloque solo filtran edificios.
+  function filtrarUbicacion() {
+    reconstruirDimension(selectTorre, 'torre', 'Torre', 'Sin torres');
+    reconstruirDimension(selectBloque, 'bloque', 'Bloque', 'Sin bloques');
+    filtrarEdificios();
+  }
+
+  // En actualizar, la plantilla marca el jardín/torre/bloque del departamento
+  // en data-actual: se preseleccionan una vez al cargar sin tocar lo que el
+  // usuario ya haya elegido.
+  function preseleccionarUbicacion() {
+    if (!selectJardin || selectJardin.value !== '' || !selectJardin.dataset.actual) return;
+    selectJardin.value = selectJardin.dataset.actual;
+    filtrarUbicacion();
+    [[selectTorre], [selectBloque]].forEach(([select]) => {
+      if (!select || !select.dataset.actual) return;
+      const valor = select.dataset.actual;
+      if ([...select.options].some((opt) => opt.value === valor)) {
+        select.value = valor;
+      }
+    });
+    filtrarEdificios();
   }
 
   function sincronizarEstado() {
@@ -153,10 +216,17 @@
   }
 
   if (selectJardin && selectEdificio) {
-    selectJardin.addEventListener('change', filtrarEdificios);
-    selectEdificio.addEventListener('change', mostrarUbicacion);
-    filtrarEdificios();
-    mostrarUbicacion();
+    selectJardin.addEventListener('change', filtrarUbicacion);
+    filtrarUbicacion();
+    preseleccionarUbicacion();
+  }
+
+  if (selectTorre && selectEdificio) {
+    selectTorre.addEventListener('change', filtrarEdificios);
+  }
+
+  if (selectBloque && selectEdificio) {
+    selectBloque.addEventListener('change', filtrarEdificios);
   }
 
   if (toggleOcupado && inputStatus) {

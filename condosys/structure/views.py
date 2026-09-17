@@ -85,7 +85,7 @@ def agregar_departamento(request):
 
 # @login_required
 def actualizar_departamento(request, pk):
-    apartamento = Apartment.objects.filter(pk=pk).first()
+    apartamento = Apartment.objects.select_related('building__garden').filter(pk=pk).first()
     if not apartamento:
         messages.error(request, 'Departamento no encontrado.')
         return redirect('departamentos_index')
@@ -104,6 +104,7 @@ def actualizar_departamento(request, pk):
         'form_apartments': form,
         'jardines': Garden.objects.filter(is_active=True),
         'edificios': Building.objects.filter(is_active=True),
+        'edificio_actual': apartamento.building,
         'module_name': 'Departamentos',
         'titulo_modulo': 'Actualizar departamento',
         'url_form': 'actualizar_departamento',
