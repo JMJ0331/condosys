@@ -61,13 +61,14 @@
         <table class="tabla-pagos">
           <thead>
             <tr>
-              <th data-columna="residente">Residente</th>
-              <th data-columna="apartamento">Apartamento</th>
+              <th data-columna="comprobante">Comprobante</th>
+              <th data-columna="departamento">Departamento</th>
+              <th data-columna="persona">Propietario/Residente</th>
               <th data-columna="concepto">Concepto</th>
               <th data-columna="monto">Monto</th>
-              <th data-columna="periodo">Periodo</th>
+              <th data-columna="periodo">Periodo/Mes correspondiente</th>
               <th data-columna="fecha">Fecha de pago</th>
-              <th data-columna="metodo">Método</th>
+              <th data-columna="metodo">Metodo de pago</th>
               <th data-columna="estado">Estado</th>
               <th class="columna-acciones">Acciones</th>
             </tr>
@@ -75,13 +76,20 @@
           <tbody>
             {% for pago in pagos %}
             <tr>
-              <td data-columna="residente" data-etiqueta="Residente">{{ pago.resident.full_name }}</td>
-              <td data-columna="apartamento" data-etiqueta="Apartamento">{{ pago.apartment.name }}</td>
+              <td data-columna="comprobante" data-etiqueta="Comprobante">
+                {% if pago.receipt_image %}
+                <img src="{{ pago.receipt_image.url }}" alt="Comprobante de {{ pago.resident.full_name }}" class="foto-comprobante">
+                {% else %}
+                <span class="foto-placeholder" aria-hidden="true"></span>
+                {% endif %}
+              </td>
+              <td data-columna="departamento" data-etiqueta="Departamento">{{ pago.apartment.name }}</td>
+              <td data-columna="persona" data-etiqueta="Propietario/Residente">{{ pago.resident.full_name }}</td>
               <td data-columna="concepto" data-etiqueta="Concepto">{{ pago.get_concept_display }}</td>
               <td data-columna="monto" data-etiqueta="Monto">{{ pago.amount }}</td>
-              <td data-columna="periodo" data-etiqueta="Periodo">{{ pago.period|date:"d/m/Y" }}</td>
+              <td data-columna="periodo" data-etiqueta="Periodo/Mes correspondiente">{{ pago.period|date:"d/m/Y" }}</td>
               <td data-columna="fecha" data-etiqueta="Fecha de pago">{{ pago.payment_date|date:"d/m/Y"|default:"—" }}</td>
-              <td data-columna="metodo" data-etiqueta="Método">{{ pago.get_payment_method_display|default:"—" }}</td>
+              <td data-columna="metodo" data-etiqueta="Metodo de pago">{{ pago.get_payment_method_display|default:"—" }}</td>
               <td data-columna="estado" data-etiqueta="Estado">{{ pago.get_status_display }}</td>
               <td class="columna-acciones">
                 <div class="acciones-fila">
@@ -96,7 +104,7 @@
             </tr>
             {% empty %}
             <tr>
-              <td colspan="9" class="sin-registros">Sin coincidencias.</td>
+              <td colspan="10" class="sin-registros">Sin coincidencias.</td>
             </tr>
             {% endfor %}
           </tbody>

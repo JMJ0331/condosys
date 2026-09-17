@@ -213,6 +213,24 @@ table.tabla-pagos {
 	border-bottom: none;
 }
 
+.foto-comprobante {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	border-radius: var(--borderR-8);
+	object-fit: cover;
+	vertical-align: middle;
+}
+
+.foto-placeholder {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	background: var(--black-50);
+	border-radius: var(--borderR-8);
+	vertical-align: middle;
+}
+
 .tabla-pagos th.columna-acciones {
 	width: 1px;
 	white-space: nowrap;
@@ -325,6 +343,17 @@ table.tabla-pagos {
 .formulario-agregar .campo-entrada,
 .formulario-agregar .campo-seleccion {
 	border-radius: var(--borderR-8);
+}
+
+/* Desplegable de persona en espera de quien paga: etiqueta y control en gris. */
+.campo-deshabilitado label {
+	color: var(--white-700);
+}
+
+.campo-deshabilitado .campo-seleccion {
+	background: var(--white-400);
+	color: var(--white-700);
+	cursor: not-allowed;
 }
 
 /* Rejillas internas de la tarjeta de información y detalles. */
@@ -549,6 +578,11 @@ input[data-pago-foto] {
 		text-align: left;
 	}
 
+	.tabla-pagos tbody td[data-columna="comprobante"] {
+		justify-content: center;
+	}
+
+	.tabla-pagos tbody td[data-columna="comprobante"]::before,
 	.tabla-pagos tbody td.columna-acciones::before,
 	.tabla-pagos tbody td.sin-registros::before {
 		content: none;
