@@ -82,3 +82,69 @@ class ResidencialViewTests(TestCase):
 
         opciones = [valor for valor, _ in ResidencialForm().fields['distribucion'].choices if valor]
         self.assertEqual(opciones, ['torres', 'edificios'])
+
+    def test_distribucion_no_se_puede_actualizar(self):
+        crear_usuario('manager@test.com', 'manager')
+        self.client.force_login(User.objects.get(email='manager@test.com'))
+        self.client.post(reverse('residencial_index'), DATOS_VALIDOS)
+        datos = dict(DATOS_VALIDOS, distribucion='edificios', nombre='Otro nombre')
+        self.client.post(reverse('residencial_index'), datos)
+        unico = Residencial.objects.get()
+        self.assertEqual(unico.distribucion, 'torres')
+        self.assertEqual(unico.nombre, 'Otro nombre')
+
+    def test_distribucion_deshabilitada_al_editar(self):
+        crear_usuario('manager@test.com', 'manager')
+        self.client.force_login(User.objects.get(email='manager@test.com'))
+        self.client.post(reverse('residencial_index'), DATOS_VALIDOS)
+        respuesta = self.client.get(reverse('residencial_index'))
+        self.assertContains(respuesta, 'disabled')
+        self.assertContains(respuesta, 'campo-deshabilitado')
+
+    def test_admin_sin_config_es_redirigido(self):
+        from accounts.models import User
+
+        User.objects.create_user(
+            email='admin@test.com', password='Clave12345',
+            role='admin', status='active',
+        )
+        self.client.force_login(User.objects.get(email='admin@test.com'))
+        respuesta = self.client.get(reverse('departamentos_index'))
+        self.assertEqual(respuesta.status_code, 302)
+        self.assertTrue(respuesta['Location'].endswith(reverse('residencial_index')))
+
+    def test_admin_con_config_navega_libre(self):
+        from accounts.models import User
+
+        User.objects.create_user(
+            email='admin@test.com', password='Clave12345',
+            role='admin', status='active',
+        )
+        Residencial.objects.create(nombre='Residencial Rialto', distribucion='torres')
+        self.client.force_login(User.objects.get(email='admin@test.com'))
+        respuesta = self.client.get(reverse('departamentos_index'))
+        self.assertEqual(respuesta.status_code, 200)
+
+    def test_sidebar_bloqueado_sin_config(self):
+        from accounts.models import User
+
+        User.objects.create_user(
+            email='admin@test.com', password='Clave12345',
+            role='admin', status='active',
+        )
+        self.client.force_login(User.objects.get(email='admin@test.com'))
+        respuesta = self.client.get(reverse('residencial_index'))
+        self.assertContains(respuesta, 'container-links bloqueado')
+
+    def test_login_manda_a_residencial_sin_config(self):
+        from accounts.models import User
+
+        User.objects.create_user(
+            email='nuevo@test.com', password='Clave12345',
+            role='manager', status='active',
+        )
+        respuesta = self.client.post(reverse('login'), {
+            'email': 'nuevo@test.com', 'password': 'Clave12345',
+        })
+        self.assertEqual(respuesta.status_code, 302)
+        self.assertTrue(respuesta['Location'].endswith(reverse('residencial_index')))

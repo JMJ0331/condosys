@@ -101,7 +101,7 @@
         <section class="tarjeta" aria-labelledby="titulo-estructura">
           <h3 class="cabecera-tarjeta" id="titulo-estructura">Estructura del residencial</h3>
           <div class="cuerpo-tarjeta">
-            <div class="campo-formulario">
+            <div class="campo-formulario{% if distribucion_bloqueada %} campo-deshabilitado{% endif %}">
               <label for="{{ form.distribucion.id_for_label }}">{{ form.distribucion.label }}</label>
               {{ form.distribucion }}
               {{ form.distribucion.errors }}

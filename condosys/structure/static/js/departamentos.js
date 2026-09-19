@@ -122,9 +122,10 @@
   }
 
   // Reconstruye el select de una dimensión con los valores del jardín.
-  // Sin valores (el residencial no usa esa dimensión), queda deshabilitado
-  // con un texto que lo indica en vez de ocultarse.
-  function reconstruirDimension(select, atributo, placeholder, sinTexto) {
+  // Sin valores y con bloqueo, queda deshabilitado con un texto que lo
+  // indica; sin bloqueo (bloques) queda como select vacío con su texto
+  // de "Elegir..." en vez de deshabilitarse.
+  function reconstruirDimension(select, atributo, placeholder, sinTexto, bloquearVacio = true) {
     if (!select || !selectEdificio) return;
     const actual = select.value;
     const valores = valoresDimension(atributo);
@@ -132,10 +133,10 @@
     const inicial = document.createElement('option');
     inicial.value = '';
     if (valores.length === 0) {
-      inicial.textContent = sinTexto;
+      inicial.textContent = bloquearVacio ? sinTexto : placeholder;
       select.appendChild(inicial);
       select.value = '';
-      select.disabled = true;
+      select.disabled = bloquearVacio;
       return;
     }
     inicial.textContent = placeholder;
@@ -170,8 +171,8 @@
   // Jardín reconstruye las dimensiones y filtra edificios;
   // torre/bloque solo filtran edificios.
   function filtrarUbicacion() {
-    reconstruirDimension(selectTorre, 'torre', 'Torre', 'Sin torres');
-    reconstruirDimension(selectBloque, 'bloque', 'Bloque', 'Sin bloques');
+    reconstruirDimension(selectTorre, 'torre', 'Elegir torre', 'Sin torres');
+    reconstruirDimension(selectBloque, 'bloque', 'Elegir bloque', 'Sin bloques', false);
     filtrarEdificios();
   }
 

@@ -118,6 +118,19 @@ class Residencial(models.Model):
     def __str__(self):
         return self.nombre
 
+    def save(self, *args, **kwargs):
+        # La distribución solo se guarda una vez: en actualizaciones se
+        # conserva el valor original aunque se intente cambiar (form, API o admin).
+        if self.pk:
+            original = (
+                type(self).objects.filter(pk=self.pk)
+                .values_list('distribucion', flat=True)
+                .first()
+            )
+            if original:
+                self.distribucion = original
+        super().save(*args, **kwargs)
+
     @classmethod
     def obtener_unico(cls):
         """Devuelve el único registro del residencial, o None si no existe."""

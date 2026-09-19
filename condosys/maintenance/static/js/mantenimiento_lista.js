@@ -1,14 +1,13 @@
 /**
- * Lógica de la cuadrícula de pagos (/pagos/).
- * - Auto-submit de filtros (#filtros-pagos).
+ * Lógica de la cuadrícula de mantenimientos (/mantenimientos/).
+ * - Auto-submit de filtros (#filtros-mantenimientos).
  * - Selector de columnas visibles (#boton-columnas / #panel-columnas).
- * - Calendarios de mes y año (#boton-mes / #panel-mes, #boton-anio / #panel-anio):
- *   rejilla de meses y lista de años que filtran al elegir.
+ * - Calendarios de mes y año (#boton-mes / #panel-mes, #boton-anio / #panel-anio).
  *
  * Sin etiquetas de plantilla Django: solo usa IDs y atributos data-*.
  */
 (() => {
-  const formularioFiltros = document.getElementById('filtros-pagos');
+  const formularioFiltros = document.getElementById('filtros-mantenimientos');
   if (formularioFiltros) {
     formularioFiltros.querySelectorAll('select').forEach((select) => {
       select.addEventListener('change', () => formularioFiltros.submit());

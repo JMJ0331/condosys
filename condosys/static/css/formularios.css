@@ -88,6 +88,17 @@
 	font-size: 1.2rem;
 }
 
+/* Campo en espera/deshabilitado: etiqueta y control en gris. */
+.campo-deshabilitado label {
+	color: var(--white-700);
+}
+
+.campo-deshabilitado .campo-seleccion {
+	background: var(--white-400);
+	color: var(--white-700);
+	cursor: not-allowed;
+}
+
 .ayuda-formulario {
 	font-size: 1.1rem;
 	color: var(--black-300);

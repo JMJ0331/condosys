@@ -5,96 +5,152 @@
 {% endblock %}
 {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+
 <main class="container-main-side2">
 
-  <div class="panel-acciones">
+  <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
-      <h3>Registrar Cargo de Mantenimiento</h3>
 
-      <form method="post" action="{% url 'crear_cargo_mantenimiento' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form_cargo_mantenimiento.non_field_errors }}
+  <div class="contenedor-filtros">
+    <h2>Todos los mantenimientos</h2>
 
-        <div class="seccion-formulario">
-          <legend>Información del cargo</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_cargo_mantenimiento.concept.id_for_label }}">{{ form_cargo_mantenimiento.concept.label }}</label>
-              {{ form_cargo_mantenimiento.concept }}
-              {{ form_cargo_mantenimiento.concept.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_cargo_mantenimiento.periodicity.id_for_label }}">{{ form_cargo_mantenimiento.periodicity.label }}</label>
-              {{ form_cargo_mantenimiento.periodicity }}
-              {{ form_cargo_mantenimiento.periodicity.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_cargo_mantenimiento.amount.id_for_label }}">{{ form_cargo_mantenimiento.amount.label }}</label>
-              {{ form_cargo_mantenimiento.amount }}
-              {{ form_cargo_mantenimiento.amount.errors }}
+    <div class="filtros-tabla">
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
+        </div>
+      </div>
+
+      <form method="get" class="formulario-filtros" id="filtros-mantenimientos">
+        <select name="apartamento" id="filtro-apartamento">
+          <option value="">Todos los departamentos</option>
+          {% for apartamento in apartamentos %}
+          <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="estado" id="filtro-estado">
+          <option value="">Todos los estados</option>
+          <option value="activo" {% if estado_actual == 'activo' %}selected{% endif %}>Activo</option>
+          <option value="inactivo" {% if estado_actual == 'inactivo' %}selected{% endif %}>Inactivo</option>
+        </select>
+
+        <div class="selector-calendario">
+          <button type="button" class="boton-calendario" id="boton-mes" aria-haspopup="true" aria-expanded="false">{{ mes_actual_nombre }}</button>
+          <div class="panel-calendario" id="panel-mes" hidden>
+            <input type="hidden" name="mes" id="valor-mes" value="{{ mes_actual }}">
+            <div class="rejilla-calendario">
+              <button type="button" class="opcion-calendario{% if not mes_actual %} seleccionada{% endif %}" data-mes="">Todos</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '1' %} seleccionada{% endif %}" data-mes="1">Ene</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '2' %} seleccionada{% endif %}" data-mes="2">Feb</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '3' %} seleccionada{% endif %}" data-mes="3">Mar</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '4' %} seleccionada{% endif %}" data-mes="4">Abr</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '5' %} seleccionada{% endif %}" data-mes="5">May</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '6' %} seleccionada{% endif %}" data-mes="6">Jun</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '7' %} seleccionada{% endif %}" data-mes="7">Jul</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '8' %} seleccionada{% endif %}" data-mes="8">Ago</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '9' %} seleccionada{% endif %}" data-mes="9">Sep</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '10' %} seleccionada{% endif %}" data-mes="10">Oct</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '11' %} seleccionada{% endif %}" data-mes="11">Nov</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '12' %} seleccionada{% endif %}" data-mes="12">Dic</button>
             </div>
           </div>
         </div>
 
-        <div class="seccion-formulario">
-          <legend>Aplicación</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_cargo_mantenimiento.payment_methods.id_for_label }}">{{ form_cargo_mantenimiento.payment_methods.label }}</label>
-              {{ form_cargo_mantenimiento.payment_methods }}
-              {{ form_cargo_mantenimiento.payment_methods.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_cargo_mantenimiento.effective_date.id_for_label }}">{{ form_cargo_mantenimiento.effective_date.label }}</label>
-              {{ form_cargo_mantenimiento.effective_date }}
-              {{ form_cargo_mantenimiento.effective_date.errors }}
+        <div class="selector-calendario">
+          <button type="button" class="boton-calendario" id="boton-anio" aria-haspopup="true" aria-expanded="false">{% if anio_actual %}{{ anio_actual }}{% else %}Todos los años{% endif %}</button>
+          <div class="panel-calendario" id="panel-anio" hidden>
+            <input type="hidden" name="anio" id="valor-anio" value="{{ anio_actual }}">
+            <div class="rejilla-calendario">
+              <button type="button" class="opcion-calendario{% if not anio_actual %} seleccionada{% endif %}" data-anio="">Todos</button>
+              {% for anio_opcion in anios %}
+              <button type="button" class="opcion-calendario{% if anio_actual == anio_opcion|stringformat:'s' %} seleccionada{% endif %}" data-anio="{{ anio_opcion }}">{{ anio_opcion }}</button>
+              {% endfor %}
             </div>
           </div>
-        </div>
-
-        <div class="seccion-formulario">
-          <legend>Prueba del mantenimiento</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_cargo_mantenimiento.photo.id_for_label }}">{{ form_cargo_mantenimiento.photo.label }}</label>
-              <label class="btn-subir-archivo" for="{{ form_cargo_mantenimiento.photo.id_for_label }}">
-                {{ form_cargo_mantenimiento.photo }}
-                <span class="texto-boton-archivo" data-texto-archivo>Subir imagen</span>
-              </label>
-              <small class="ayuda-formulario" data-ayuda-foto>JPG, PNG o WEBP — máx. 2 MB</small>
-              {{ form_cargo_mantenimiento.photo.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="seccion-formulario">
-          <legend>Estado</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label class="etiqueta-interruptor" for="{{ form_cargo_mantenimiento.is_active.id_for_label }}">
-                <span>Activo</span>
-                <span class="interruptor">
-                  {{ form_cargo_mantenimiento.is_active }}
-                  <span class="deslizador-interruptor"></span>
-                </span>
-              </label>
-              {{ form_cargo_mantenimiento.is_active.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="pie-formulario">
-          <button type="submit">Actualizar</button>
-          <button type="reset">Cancelar</button>
         </div>
       </form>
+
+      <a href="{% url 'agregar_mantenimiento' %}" class="boton-nuevo-mantenimiento">+ Agregar mantenimiento</a>
+    </div>
+  </div>
+
+  <div class="tabla-filtrada">
+    <table class="tabla-mantenimientos">
+      <thead>
+        <tr>
+          <th data-columna="foto">Foto</th>
+          <th data-columna="concepto">Concepto</th>
+          <th data-columna="monto">Monto</th>
+          <th data-columna="periodicidad">Periodicidad</th>
+          <th data-columna="departamento">Departamento</th>
+          <th data-columna="fecha">Fecha de generación</th>
+          <th data-columna="estado">Estado</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cargo in cargos %}
+        <tr>
+          <td data-columna="foto" data-etiqueta="Foto">
+            {% if cargo.photo %}
+            <img src="{{ cargo.photo.url }}" alt="Foto de {{ cargo.get_concept_display }}" class="foto-mantenimiento">
+            {% else %}
+            <span class="foto-marcador" aria-hidden="true"></span>
+            {% endif %}
+          </td>
+          <td data-columna="concepto" data-etiqueta="Concepto">{{ cargo.get_concept_display }}</td>
+          <td data-columna="monto" data-etiqueta="Monto">{{ cargo.amount }}</td>
+          <td data-columna="periodicidad" data-etiqueta="Periodicidad">{{ cargo.get_periodicity_display }}</td>
+          <td data-columna="departamento" data-etiqueta="Departamento">{{ cargo.apartment.name|default:"Todos" }}</td>
+          <td data-columna="fecha" data-etiqueta="Fecha de generación">{{ cargo.effective_date|date:"d/m/Y" }}</td>
+          <td data-columna="estado" data-etiqueta="Estado">{% if cargo.is_active %}Activo{% else %}Inactivo{% endif %}</td>
+          <td class="columna-acciones">
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_mantenimiento' cargo.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ cargo.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="sin-registros">Sin coincidencias.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% for cargo in cargos %}
+  <dialog id="dialog-eliminar-{{ cargo.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ cargo.id }}">
+    <form method="post" action="{% url 'eliminar_mantenimiento' cargo.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ cargo.id }}" class="titulo-eliminar">Eliminar mantenimiento</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar el cargo <strong>{{ cargo.get_concept_display }}</strong> por <strong>{{ cargo.amount }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
+
+  {% include "componentes/paginacion_tabla.html" with pagina=cargos %}
     </div>
   </div>
 </main>
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/mantenimiento.js' %}" defer></script>
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/mantenimiento_lista.js' %}" defer></script>
 {% endblock %}

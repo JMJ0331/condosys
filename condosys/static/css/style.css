@@ -501,6 +501,13 @@ aside .opt-modulo.active img {
     opacity: 1;
 }
 
+/* Sidebar bloqueado hasta configurar el residencial (ver
+   ResidencialSetupMiddleware): todo en gris salvo Residencial. */
+.container-links.bloqueado .opt-modulo:not(.opt-residencial) {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
 aside .opt-modulo h4 {
     font-size: 1.5rem;
     font-weight: 500;

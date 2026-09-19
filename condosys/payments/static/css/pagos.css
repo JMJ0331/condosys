@@ -159,6 +159,86 @@
 	font-weight: 600;
 }
 
+/* Selectores tipo calendario para mes y año */
+.selector-calendario {
+	position: relative;
+}
+
+.boton-calendario {
+	appearance: none;
+	-webkit-appearance: none;
+	box-sizing: border-box;
+	margin: 0;
+	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+	font: inherit;
+	font-size: 1.25rem;
+	line-height: 1.4;
+	color: var(--black-400);
+	cursor: pointer;
+	min-width: 15rem;
+	outline: none;
+	text-align: left;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.boton-calendario:hover {
+	border-color: var(--green-900);
+}
+
+.boton-calendario:focus,
+.boton-calendario[aria-expanded="true"] {
+	border-color: var(--green-900);
+	outline: none;
+	box-shadow: 0 0 0 2px var(--green-200);
+}
+
+.panel-calendario {
+	position: absolute;
+	top: calc(100% + 0.4rem);
+	left: 0;
+	z-index: 30;
+	min-width: 20rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8);
+}
+
+.panel-calendario[hidden] {
+	display: none;
+}
+
+.rejilla-calendario {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.4rem;
+}
+
+.opcion-calendario {
+	border: 1px solid transparent;
+	border-radius: var(--borderR-4);
+	background: transparent;
+	padding: 0.8rem 0.4rem;
+	font: inherit;
+	font-size: 1.25rem;
+	color: var(--black-400);
+	cursor: pointer;
+	text-align: center;
+}
+
+.opcion-calendario:hover {
+	background: var(--green-100);
+}
+
+.opcion-calendario.seleccionada {
+	background: var(--green-900);
+	color: var(--white-50);
+	font-weight: 600;
+}
+
 .boton-nuevo-pago {
 	display: inline-flex;
 	align-items: center;
@@ -172,6 +252,10 @@
 	cursor: pointer;
 	white-space: nowrap;
 	text-decoration: none;
+}
+
+.boton-nuevo-pago:hover {
+	background: var(--green-700);
 }
 
 .tabla-filtrada {
@@ -343,17 +427,6 @@ table.tabla-pagos {
 .formulario-agregar .campo-entrada,
 .formulario-agregar .campo-seleccion {
 	border-radius: var(--borderR-8);
-}
-
-/* Desplegable de persona en espera de quien paga: etiqueta y control en gris. */
-.campo-deshabilitado label {
-	color: var(--white-700);
-}
-
-.campo-deshabilitado .campo-seleccion {
-	background: var(--white-400);
-	color: var(--white-700);
-	cursor: not-allowed;
 }
 
 /* Rejillas internas de la tarjeta de información y detalles. */
@@ -651,8 +724,13 @@ input[data-pago-foto] {
 		width: 100%;
 	}
 
+	.selector-calendario {
+		width: 100%;
+	}
+
 	.filtros-tabla select,
 	.boton-columnas,
+	.boton-calendario,
 	.boton-nuevo-pago {
 		width: 100%;
 		flex: 1 1 auto;

@@ -436,7 +436,7 @@ input[data-residente="foto"] {
 }
 
 .boton-nuevo-residente:hover {
-	background: var(--green-900);
+	background: var(--green-700);
 }
 
 .tabla-filtrada {

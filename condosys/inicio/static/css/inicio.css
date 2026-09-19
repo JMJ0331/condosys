@@ -135,11 +135,14 @@ table.tabla-inicio {
 .enlace-ver-todos {
 	align-self: flex-start;
 	margin-top: auto;
-	padding: 1.2rem;
 	color: var(--green-800);
 	font-size: 1.3rem;
 	font-weight: 500;
 	text-decoration: none;
+}
+
+.panel-pagos .enlace-ver-todos {
+	padding: 1.2rem;
 }
 
 .enlace-ver-todos:hover {
@@ -168,6 +171,7 @@ table.tabla-inicio {
 	align-items: center;
 	justify-content: space-between;
 	gap: 1.2rem;
+	height: fit-content;
 	margin: 0;
 	padding: 1.2rem 1.2rem 1.4rem 1.2rem;
 	border-bottom: 1px solid var(--black-50);

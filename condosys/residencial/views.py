@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from rest_framework import filters, viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import filters, viewsets  # type: ignore[reportMissingImports]
+from rest_framework.permissions import IsAuthenticated  # type: ignore[reportMissingImports]
 
 from accounts.permissions import IsManager
 
@@ -47,6 +47,7 @@ def app_index(request):
         'form': form,
         'residencial': residencial,
         'existe_registro': residencial is not None,
+        'distribucion_bloqueada': bool(residencial and residencial.distribucion),
         'puede_editar': puede_editar,
         'texto_boton': 'Actualizar' if residencial else 'Agregar',
         'municipios_por_provincia': MUNICIPIOS_POR_PROVINCIA,

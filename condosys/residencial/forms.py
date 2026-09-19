@@ -77,6 +77,11 @@ class ResidencialForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # La distribución solo se elige una vez: si ya hay valor guardado,
+        # el select queda deshabilitado (los disabled conservan su valor).
+        instancia = getattr(self, 'instance', None)
+        if instancia is not None and instancia.pk and instancia.distribucion:
+            self.fields['distribucion'].disabled = True
         # empty_label solo funciona en ModelChoiceField; en ChoiceField la
         # opción vacía se antepone a mano para respetar la maqueta.
         self.fields['provincia'].choices = [('', 'Elegir provincia')] + list(PROVINCIAS_RD)
