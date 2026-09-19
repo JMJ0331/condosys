@@ -1,104 +1,139 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/solicitudes.css' %}">
+{% endblock %}
 {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+
 <main class="container-main-side2">
 
-  <div class="panel-acciones">
+  <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
-      <h3>Registrar Solicitud</h3>
 
-      <form method="post" action="{% url 'crear_solicitud' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form_solicitud.non_field_errors }}
+  <div class="contenedor-filtros">
+    <h2>Todas las solicitudes</h2>
 
-        <div class="seccion-formulario">
-          <legend>Información de la solicitud</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_solicitud.apartment.id_for_label }}">{{ form_solicitud.apartment.label }}</label>
-              {{ form_solicitud.apartment }}
-              {{ form_solicitud.apartment.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_solicitud.resident.id_for_label }}">{{ form_solicitud.resident.label }}</label>
-              <select name="{{ form_solicitud.resident.html_name }}" id="{{ form_solicitud.resident.id_for_label }}" class="campo-seleccion" data-solicitud-residente>
-                <option value="">Elegir residente</option>
-                {% for res in residentes %}
-                <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
-                {% endfor %}
-              </select>
-              {{ form_solicitud.resident.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_solicitud.request_type.id_for_label }}">{{ form_solicitud.request_type.label }}</label>
-              {{ form_solicitud.request_type }}
-              {{ form_solicitud.request_type.errors }}
-            </div>
-          </div>
+    <div class="filtros-tabla">
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
         </div>
+      </div>
 
-        <div class="seccion-formulario">
-          <legend>Detalles</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_solicitud.description.id_for_label }}">{{ form_solicitud.description.label }}</label>
-              {{ form_solicitud.description }}
-              {{ form_solicitud.description.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_solicitud.request_date.id_for_label }}">{{ form_solicitud.request_date.label }}</label>
-              {{ form_solicitud.request_date }}
-              {{ form_solicitud.request_date.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_solicitud.attachment.id_for_label }}">{{ form_solicitud.attachment.label }}</label>
-              <label class="btn-subir-archivo" for="{{ form_solicitud.attachment.id_for_label }}">
-                {{ form_solicitud.attachment }}
-                <span class="texto-boton-archivo" data-texto-archivo>Subir imagen/archivo</span>
-              </label>
-              <small class="ayuda-formulario" data-ayuda-solicitud>JPG, PNG, WEBP o PDF — máx. 2 MB</small>
-              {{ form_solicitud.attachment.errors }}
-            </div>
-          </div>
-        </div>
+      <form method="get" class="formulario-filtros" id="filtros-solicitudes">
+        <select name="estado" id="filtro-estado">
+          <option value="">Todos los estados</option>
+          <option value="pendiente" {% if estado_actual == 'pendiente' %}selected{% endif %}>Pendiente</option>
+          <option value="en_proceso" {% if estado_actual == 'en_proceso' %}selected{% endif %}>En proceso</option>
+          <option value="aprobada" {% if estado_actual == 'aprobada' %}selected{% endif %}>Aprobada</option>
+          <option value="rechazada" {% if estado_actual == 'rechazada' %}selected{% endif %}>Rechazada</option>
+          <option value="completada" {% if estado_actual == 'completada' %}selected{% endif %}>Completada</option>
+        </select>
 
-        <div class="seccion-formulario">
-          <legend>Seguimiento</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_solicitud.tracking_response.id_for_label }}">{{ form_solicitud.tracking_response.label }}</label>
-              {{ form_solicitud.tracking_response }}
-              {{ form_solicitud.tracking_response.errors }}
-            </div>
-          </div>
-        </div>
+        <select name="apartamento" id="filtro-apartamento">
+          <option value="">Todos los departamentos</option>
+          {% for apartamento in apartamentos %}
+          <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
+          {% endfor %}
+        </select>
 
-        <div class="seccion-formulario">
-          <legend>Estado</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_solicitud.status.id_for_label }}">{{ form_solicitud.status.label }}</label>
-              {{ form_solicitud.status }}
-              {{ form_solicitud.status.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="pie-formulario">
-          <button type="submit">Agregar</button>
-          <button type="reset">Cancelar</button>
-        </div>
+        <select name="residente" id="filtro-residente">
+          <option value="">Todos los residentes</option>
+          {% for residente in residentes %}
+          <option value="{{ residente.id }}" {% if residente_actual == residente.id|stringformat:'s' %}selected{% endif %}>{{ residente.full_name }}</option>
+          {% endfor %}
+        </select>
       </form>
+
+      <a href="{% url 'agregar_solicitud' %}" class="boton-nueva-solicitud">+ Agregar solicitud</a>
+    </div>
+  </div>
+
+  <div class="tabla-filtrada">
+    <table class="tabla-solicitudes">
+      <thead>
+        <tr>
+          <th data-columna="evidencia">Evidencia</th>
+          <th data-columna="departamento">Departamento</th>
+          <th data-columna="residente">Residente</th>
+          <th data-columna="tipo">Tipo de solicitud</th>
+          <th data-columna="descripcion">Descripción</th>
+          <th data-columna="fecha">Fecha de solicitud</th>
+          <th data-columna="comentarios">Comentarios/Respuesta</th>
+          <th data-columna="estado">Estado</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitud in solicitudes %}
+        <tr>
+          <td data-columna="evidencia" data-etiqueta="Evidencia">
+            {% if solicitud.attachment %}
+            {% if '.pdf' in solicitud.attachment.url %}
+            <a href="{{ solicitud.attachment.url }}" target="_blank" rel="noopener" class="boton-accion" aria-label="Ver documento">
+              <img src="{% static 'images/icons/verdes/reports_green.svg' %}" alt="Documento">
+            </a>
+            {% else %}
+            <img src="{{ solicitud.attachment.url }}" alt="Evidencia de {{ solicitud.get_request_type_display }}" class="foto-evidencia">
+            {% endif %}
+            {% else %}
+            <span class="foto-marcador" aria-hidden="true"></span>
+            {% endif %}
+          </td>
+          <td data-columna="departamento" data-etiqueta="Departamento">{{ solicitud.apartment.name }}</td>
+          <td data-columna="residente" data-etiqueta="Residente">{{ solicitud.resident.full_name|default:"—" }}</td>
+          <td data-columna="tipo" data-etiqueta="Tipo de solicitud">{{ solicitud.get_request_type_display }}</td>
+          <td data-columna="descripcion" data-etiqueta="Descripción">{{ solicitud.description|truncatechars:80 }}</td>
+          <td data-columna="fecha" data-etiqueta="Fecha de solicitud">{{ solicitud.request_date|date:"d/m/Y" }}</td>
+          <td data-columna="comentarios" data-etiqueta="Comentarios/Respuesta">{{ solicitud.tracking_response|default:"—"|truncatechars:60 }}</td>
+          <td data-columna="estado" data-etiqueta="Estado">{{ solicitud.get_status_display }}</td>
+          <td class="columna-acciones">
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_solicitud' solicitud.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ solicitud.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="sin-registros">Sin coincidencias.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% for solicitud in solicitudes %}
+  <dialog id="dialog-eliminar-{{ solicitud.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ solicitud.id }}">
+    <form method="post" action="{% url 'eliminar_solicitud' solicitud.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ solicitud.id }}" class="titulo-eliminar">Eliminar solicitud</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar la solicitud <strong>{{ solicitud.get_request_type_display }}</strong> del departamento <strong>{{ solicitud.apartment.name }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
+
+  {% include "componentes/paginacion_tabla.html" with pagina=solicitudes %}
     </div>
   </div>
 </main>
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/solicitudes.js' %}" defer></script>
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/solicitudes_lista.js' %}" defer></script>
 {% endblock %}

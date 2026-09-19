@@ -1,17 +1,10 @@
 @import url('/static/css/variables.css');
 
 /* ============================================
-   Módulo Incidencias - estilos específicos.
+   Módulo Visitantes - estilos específicos.
    Los estilos de formulario/acciones/diálogos
    viven en static/css (compartidos).
    ============================================ */
-
-/* Áreas de texto más altas que el campo simple */
-.texto-area {
-	height: auto;
-	min-height: 8rem;
-	resize: vertical;
-}
 
 /* Campo que ocupa el ancho completo de su fila */
 .campo-ancho-completo {
@@ -72,6 +65,7 @@
 }
 
 .filtros-tabla select,
+.filtros-tabla input[type="date"],
 .boton-columnas {
 	appearance: none;
 	-webkit-appearance: none;
@@ -92,12 +86,20 @@
 	transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
 }
 
+.filtros-tabla input[type="date"] {
+	background-image: none;
+	padding-right: 1.2rem;
+	min-width: 0;
+}
+
 .filtros-tabla select:hover,
+.filtros-tabla input[type="date"]:hover,
 .boton-columnas:hover {
 	border-color: var(--green-900);
 }
 
 .filtros-tabla select:focus,
+.filtros-tabla input[type="date"]:focus,
 .boton-columnas:focus,
 .boton-columnas[aria-expanded="true"] {
 	border-color: var(--green-900);
@@ -168,7 +170,87 @@
 	font-weight: 600;
 }
 
-.boton-nueva-incidencia {
+/* Selectores tipo calendario para mes y año (igual que en pagos) */
+.selector-calendario {
+	position: relative;
+}
+
+.boton-calendario {
+	appearance: none;
+	-webkit-appearance: none;
+	box-sizing: border-box;
+	margin: 0;
+	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+	font: inherit;
+	font-size: 1.25rem;
+	line-height: 1.4;
+	color: var(--black-400);
+	cursor: pointer;
+	min-width: 15rem;
+	outline: none;
+	text-align: left;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.boton-calendario:hover {
+	border-color: var(--green-900);
+}
+
+.boton-calendario:focus,
+.boton-calendario[aria-expanded="true"] {
+	border-color: var(--green-900);
+	outline: none;
+	box-shadow: 0 0 0 2px var(--green-200);
+}
+
+.panel-calendario {
+	position: absolute;
+	top: calc(100% + 0.4rem);
+	left: 0;
+	z-index: 30;
+	min-width: 20rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8);
+}
+
+.panel-calendario[hidden] {
+	display: none;
+}
+
+.rejilla-calendario {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.4rem;
+}
+
+.opcion-calendario {
+	border: 1px solid transparent;
+	border-radius: var(--borderR-4);
+	background: transparent;
+	padding: 0.8rem 0.4rem;
+	font: inherit;
+	font-size: 1.25rem;
+	color: var(--black-400);
+	cursor: pointer;
+	text-align: center;
+}
+
+.opcion-calendario:hover {
+	background: var(--green-100);
+}
+
+.opcion-calendario.seleccionada {
+	background: var(--green-900);
+	color: var(--white-50);
+	font-weight: 600;
+}
+
+.boton-nuevo-visitante {
 	display: inline-flex;
 	align-items: center;
 	background: var(--green-900);
@@ -183,7 +265,7 @@
 	text-decoration: none;
 }
 
-.boton-nueva-incidencia:hover {
+.boton-nuevo-visitante:hover {
 	background: var(--green-700);
 }
 
@@ -192,19 +274,19 @@
 	overflow-x: auto;
 }
 
-table.tabla-incidencias {
+table.tabla-visitantes {
 	width: 100%;
 	border-collapse: collapse;
 	min-width: 120rem;
 }
 
-.tabla-incidencias thead {
+.tabla-visitantes thead {
 	justify-content: space-between;
 	border-bottom: 1px solid var(--black-50);
 	background-color: var(--white-500);
 }
 
-.tabla-incidencias th {
+.tabla-visitantes th {
 	text-align: left;
 	font-weight: bold;
 	color: var(--black-400);
@@ -213,7 +295,7 @@ table.tabla-incidencias {
 	white-space: nowrap;
 }
 
-.tabla-incidencias td {
+.tabla-visitantes td {
 	padding: 1.4rem;
 	font-size: 1.3rem;
 	color: var(--black-400);
@@ -222,35 +304,17 @@ table.tabla-incidencias {
 	white-space: nowrap;
 }
 
-.tabla-incidencias tbody tr:last-child td {
+.tabla-visitantes tbody tr:last-child td {
 	border-bottom: none;
 }
 
-.foto-evidencia {
-	display: inline-block;
-	width: 3.4rem;
-	height: 3.4rem;
-	border-radius: var(--borderR-8);
-	object-fit: cover;
-	vertical-align: middle;
-}
-
-.foto-marcador {
-	display: inline-block;
-	width: 3.4rem;
-	height: 3.4rem;
-	background: var(--black-50);
-	border-radius: var(--borderR-8);
-	vertical-align: middle;
-}
-
-.tabla-incidencias th.columna-acciones {
+.tabla-visitantes th.columna-acciones {
 	width: 1px;
 	white-space: nowrap;
 	text-align: right;
 }
 
-.tabla-incidencias td.columna-acciones {
+.tabla-visitantes td.columna-acciones {
 	width: 1px;
 	white-space: nowrap;
 	text-align: right;
@@ -356,12 +420,12 @@ table.tabla-incidencias {
 	border-radius: var(--borderR-8);
 }
 
-/* Zona de evidencia con borde punteado */
+/* Zona de documento con borde punteado (compacta: foto de documento) */
 .zona-imagen {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 20rem;
+	min-height: 28rem;
 	padding: 1.6rem;
 	background: var(--white-100);
 	border: 1px dashed var(--black-100);
@@ -419,7 +483,7 @@ table.tabla-incidencias {
 	display: none;
 }
 
-input[data-evidencia] {
+input[data-documento-visitante] {
 	position: absolute;
 	width: 0.1rem;
 	height: 0.1rem;
@@ -515,15 +579,15 @@ input[data-evidencia] {
 		padding: 1.2rem;
 	}
 
-	table.tabla-incidencias {
+	table.tabla-visitantes {
 		min-width: 0;
 	}
 
-	.tabla-incidencias thead {
+	.tabla-visitantes thead {
 		display: none;
 	}
 
-	.tabla-incidencias tbody tr {
+	.tabla-visitantes tbody tr {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
@@ -535,7 +599,7 @@ input[data-evidencia] {
 		margin-bottom: 1.2rem;
 	}
 
-	.tabla-incidencias tbody td {
+	.tabla-visitantes tbody td {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -546,11 +610,11 @@ input[data-evidencia] {
 		text-align: right;
 	}
 
-	.tabla-incidencias tbody td:last-child {
+	.tabla-visitantes tbody td:last-child {
 		border-bottom: none;
 	}
 
-	.tabla-incidencias tbody td::before {
+	.tabla-visitantes tbody td::before {
 		content: attr(data-etiqueta);
 		font-size: 1.2rem;
 		font-weight: 600;
@@ -558,17 +622,17 @@ input[data-evidencia] {
 		text-align: left;
 	}
 
-	.tabla-incidencias tbody td.columna-acciones {
+	.tabla-visitantes tbody td.columna-acciones {
 		justify-content: flex-end;
 		width: auto;
 		white-space: normal;
 	}
 
-	.tabla-incidencias tbody td.columna-acciones::before {
+	.tabla-visitantes tbody td.columna-acciones::before {
 		content: none;
 	}
 
-	.tabla-incidencias tbody td.columna-acciones .acciones-fila {
+	.tabla-visitantes tbody td.columna-acciones .acciones-fila {
 		display: flex;
 		flex-direction: row;
 		gap: var(--space-8);
@@ -577,18 +641,18 @@ input[data-evidencia] {
 		margin-left: auto;
 	}
 
-	.tabla-incidencias tbody td.columna-acciones .boton-accion {
+	.tabla-visitantes tbody td.columna-acciones .boton-accion {
 		padding: var(--space-4);
 		border-radius: var(--borderR-4);
 		background: transparent;
 	}
 
-	.tabla-incidencias tbody td.sin-registros {
+	.tabla-visitantes tbody td.sin-registros {
 		justify-content: center;
 		text-align: center;
 	}
 
-	.tabla-incidencias tbody td.sin-registros::before {
+	.tabla-visitantes tbody td.sin-registros::before {
 		content: none;
 	}
 }
@@ -606,13 +670,16 @@ input[data-evidencia] {
 		align-items: stretch;
 	}
 
-	.selector-columnas {
+	.selector-columnas,
+	.selector-calendario {
 		width: 100%;
 	}
 
 	.filtros-tabla select,
+	.filtros-tabla input[type="date"],
 	.boton-columnas,
-	.boton-nueva-incidencia {
+	.boton-calendario,
+	.boton-nuevo-visitante {
 		width: 100%;
 		flex: 1 1 auto;
 		min-width: 0;

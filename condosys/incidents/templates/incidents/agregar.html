@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/incidencias.css' %}">
+{% endblock %}
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='incidencias_index' %}
+
+<main class="container-main-side2">
+  <div class="pagina-agregar">
+    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
+      {% csrf_token %}
+      {{ form_incident.non_field_errors }}
+
+      <div class="columna-principal">
+        <section class="tarjeta" aria-labelledby="titulo-informacion">
+          <h3 class="cabecera-tarjeta" id="titulo-informacion">Información de la incidencia</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_incident.apartment.id_for_label }}">{{ form_incident.apartment.label }}</label>
+                {{ form_incident.apartment }}
+                {{ form_incident.apartment.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_incident.resident.id_for_label }}">{{ form_incident.resident.label }}</label>
+                <select name="{{ form_incident.resident.html_name }}" id="{{ form_incident.resident.id_for_label }}" class="campo-seleccion" data-incidencia-residente>
+                  <option value="">Elegir residente</option>
+                  {% for res in residentes %}
+                  <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}"{% if form_incident.resident.value|stringformat:'s' == res.id|stringformat:'s' %} selected{% endif %}>{{ res.full_name }}</option>
+                  {% endfor %}
+                </select>
+                {{ form_incident.resident.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_incident.category.id_for_label }}">{{ form_incident.category.label }}</label>
+                {{ form_incident.category }}
+                {{ form_incident.category.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_incident.priority.id_for_label }}">{{ form_incident.priority.label }}</label>
+                {{ form_incident.priority }}
+                {{ form_incident.priority.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-detalles">
+          <h3 class="cabecera-tarjeta" id="titulo-detalles">Detalles</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_incident.description.id_for_label }}">{{ form_incident.description.label }}</label>
+                {{ form_incident.description }}
+                {{ form_incident.description.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_incident.reported_date.id_for_label }}">{{ form_incident.reported_date.label }}</label>
+                {{ form_incident.reported_date }}
+                {{ form_incident.reported_date.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <span class="etiqueta-campo" id="etiqueta-evidencia">{{ form_incident.evidence.label }}</span>
+                <div class="zona-imagen" id="zona-imagen" role="button" tabindex="0" aria-labelledby="etiqueta-evidencia">
+                  {% if incidencia and incidencia.evidence and '.pdf' not in incidencia.evidence.url %}
+                  <img class="vista-previa-imagen" id="vista-previa-imagen" src="{{ incidencia.evidence.url }}" alt="Evidencia de la incidencia">
+                  <span class="contenido-zona" id="contenido-zona" hidden>
+                  {% else %}
+                  <img class="vista-previa-imagen" id="vista-previa-imagen" alt="" hidden>
+                  <span class="contenido-zona" id="contenido-zona">
+                  {% endif %}
+                    <svg class="icono-zona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                      <circle cx="9" cy="9" r="2"></circle>
+                      <path d="m21 15-4.5-4.5L6 21"></path>
+                    </svg>
+                    <span class="texto-subir">Subir imagen/archivo</span>
+                    <span class="texto-ayuda">JPG, PNG, WEBP, PDF · máx. 2 MB</span>
+                  </span>
+                </div>
+                {{ form_incident.evidence }}
+                {{ form_incident.evidence.errors }}
+                {% if incidencia and incidencia.evidence and '.pdf' in incidencia.evidence.url %}
+                <span class="nombre-archivo" id="nombre-archivo">{{ incidencia.evidence.name }}</span>
+                {% else %}
+                <span class="nombre-archivo" id="nombre-archivo" hidden></span>
+                {% endif %}
+                <button type="button" class="boton-subir" id="boton-subir-imagen">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 16V4m0 0 4 4m-4-4-4 4"></path>
+                    <path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path>
+                  </svg>
+                  Subir imagen/archivo
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-seguimiento">
+          <h3 class="cabecera-tarjeta" id="titulo-seguimiento">Seguimiento</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_incident.comment.id_for_label }}">{{ form_incident.comment.label }}</label>
+                {{ form_incident.comment }}
+                {{ form_incident.comment.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="columna-lateral">
+        <section class="tarjeta" aria-labelledby="titulo-estado">
+          <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label for="{{ form_incident.status.id_for_label }}">{{ form_incident.status.label }}</label>
+              {{ form_incident.status }}
+              {{ form_incident.status.errors }}
+            </div>
+          </div>
+        </section>
+
+        <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
+        <a href="{% url 'incidencias_index' %}" class="boton-cancelar">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/incidencias.js' %}" defer></script>
+{% endblock %}

@@ -73,7 +73,7 @@
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'incidencias_index' %} active{% endif %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'incidencias_index' or request.resolver_match.url_name == 'agregar_incidencia' or request.resolver_match.url_name == 'actualizar_incidencia' %} active{% endif %}"
           href="{% url 'incidencias_index' %}"
         >
 
@@ -82,7 +82,7 @@
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'solicitudes_index' or request.resolver_match.url_name == 'crear_solicitud' %} active{% endif %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'solicitudes_index' or request.resolver_match.url_name == 'agregar_solicitud' or request.resolver_match.url_name == 'actualizar_solicitud' %} active{% endif %}"
           href="{% url 'solicitudes_index' %}"
         >
 
@@ -91,7 +91,7 @@
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'visitantes_index' %} active{% endif %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'visitantes_index' or request.resolver_match.url_name == 'agregar_visitante' or request.resolver_match.url_name == 'actualizar_visitante' %} active{% endif %}"
           href="{% url 'visitantes_index' %}"
         >
 

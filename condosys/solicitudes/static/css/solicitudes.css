@@ -1,7 +1,7 @@
 @import url('/static/css/variables.css');
 
 /* ============================================
-   Módulo Incidencias - estilos específicos.
+   Módulo Solicitudes - estilos específicos.
    Los estilos de formulario/acciones/diálogos
    viven en static/css (compartidos).
    ============================================ */
@@ -168,7 +168,7 @@
 	font-weight: 600;
 }
 
-.boton-nueva-incidencia {
+.boton-nueva-solicitud {
 	display: inline-flex;
 	align-items: center;
 	background: var(--green-900);
@@ -183,7 +183,7 @@
 	text-decoration: none;
 }
 
-.boton-nueva-incidencia:hover {
+.boton-nueva-solicitud:hover {
 	background: var(--green-700);
 }
 
@@ -192,19 +192,19 @@
 	overflow-x: auto;
 }
 
-table.tabla-incidencias {
+table.tabla-solicitudes {
 	width: 100%;
 	border-collapse: collapse;
-	min-width: 120rem;
+	min-width: 110rem;
 }
 
-.tabla-incidencias thead {
+.tabla-solicitudes thead {
 	justify-content: space-between;
 	border-bottom: 1px solid var(--black-50);
 	background-color: var(--white-500);
 }
 
-.tabla-incidencias th {
+.tabla-solicitudes th {
 	text-align: left;
 	font-weight: bold;
 	color: var(--black-400);
@@ -213,7 +213,7 @@ table.tabla-incidencias {
 	white-space: nowrap;
 }
 
-.tabla-incidencias td {
+.tabla-solicitudes td {
 	padding: 1.4rem;
 	font-size: 1.3rem;
 	color: var(--black-400);
@@ -222,7 +222,7 @@ table.tabla-incidencias {
 	white-space: nowrap;
 }
 
-.tabla-incidencias tbody tr:last-child td {
+.tabla-solicitudes tbody tr:last-child td {
 	border-bottom: none;
 }
 
@@ -244,13 +244,13 @@ table.tabla-incidencias {
 	vertical-align: middle;
 }
 
-.tabla-incidencias th.columna-acciones {
+.tabla-solicitudes th.columna-acciones {
 	width: 1px;
 	white-space: nowrap;
 	text-align: right;
 }
 
-.tabla-incidencias td.columna-acciones {
+.tabla-solicitudes td.columna-acciones {
 	width: 1px;
 	white-space: nowrap;
 	text-align: right;
@@ -356,12 +356,12 @@ table.tabla-incidencias {
 	border-radius: var(--borderR-8);
 }
 
-/* Zona de evidencia con borde punteado */
+/* Zona de documento con borde punteado */
 .zona-imagen {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 20rem;
+	min-height: 28rem;
 	padding: 1.6rem;
 	background: var(--white-100);
 	border: 1px dashed var(--black-100);
@@ -419,7 +419,7 @@ table.tabla-incidencias {
 	display: none;
 }
 
-input[data-evidencia] {
+input[data-solicitud-documento] {
 	position: absolute;
 	width: 0.1rem;
 	height: 0.1rem;
@@ -515,15 +515,15 @@ input[data-evidencia] {
 		padding: 1.2rem;
 	}
 
-	table.tabla-incidencias {
+	table.tabla-solicitudes {
 		min-width: 0;
 	}
 
-	.tabla-incidencias thead {
+	.tabla-solicitudes thead {
 		display: none;
 	}
 
-	.tabla-incidencias tbody tr {
+	.tabla-solicitudes tbody tr {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
@@ -535,7 +535,7 @@ input[data-evidencia] {
 		margin-bottom: 1.2rem;
 	}
 
-	.tabla-incidencias tbody td {
+	.tabla-solicitudes tbody td {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -546,11 +546,11 @@ input[data-evidencia] {
 		text-align: right;
 	}
 
-	.tabla-incidencias tbody td:last-child {
+	.tabla-solicitudes tbody td:last-child {
 		border-bottom: none;
 	}
 
-	.tabla-incidencias tbody td::before {
+	.tabla-solicitudes tbody td::before {
 		content: attr(data-etiqueta);
 		font-size: 1.2rem;
 		font-weight: 600;
@@ -558,17 +558,17 @@ input[data-evidencia] {
 		text-align: left;
 	}
 
-	.tabla-incidencias tbody td.columna-acciones {
+	.tabla-solicitudes tbody td.columna-acciones {
 		justify-content: flex-end;
 		width: auto;
 		white-space: normal;
 	}
 
-	.tabla-incidencias tbody td.columna-acciones::before {
+	.tabla-solicitudes tbody td.columna-acciones::before {
 		content: none;
 	}
 
-	.tabla-incidencias tbody td.columna-acciones .acciones-fila {
+	.tabla-solicitudes tbody td.columna-acciones .acciones-fila {
 		display: flex;
 		flex-direction: row;
 		gap: var(--space-8);
@@ -577,18 +577,18 @@ input[data-evidencia] {
 		margin-left: auto;
 	}
 
-	.tabla-incidencias tbody td.columna-acciones .boton-accion {
+	.tabla-solicitudes tbody td.columna-acciones .boton-accion {
 		padding: var(--space-4);
 		border-radius: var(--borderR-4);
 		background: transparent;
 	}
 
-	.tabla-incidencias tbody td.sin-registros {
+	.tabla-solicitudes tbody td.sin-registros {
 		justify-content: center;
 		text-align: center;
 	}
 
-	.tabla-incidencias tbody td.sin-registros::before {
+	.tabla-solicitudes tbody td.sin-registros::before {
 		content: none;
 	}
 }
@@ -612,7 +612,7 @@ input[data-evidencia] {
 
 	.filtros-tabla select,
 	.boton-columnas,
-	.boton-nueva-incidencia {
+	.boton-nueva-solicitud {
 		width: 100%;
 		flex: 1 1 auto;
 		min-width: 0;

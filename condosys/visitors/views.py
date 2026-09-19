@@ -1,5 +1,8 @@
-from django.db.models import Q
+from datetime import datetime
+
 from django.contrib import messages
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
@@ -8,32 +11,159 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from accounts.permissions import CanModifyVisitor
+from structure.models import Apartment
 from .models import Visitor
 from .serializers import VisitorSerializer
 from .forms import VisitorForm
 
+PAGINATE_BY = 15
+
+MESES_NOMBRE = {
+    1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril',
+    5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto',
+    9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre',
+}
+
+
+def _anios_con_visitas():
+    """Años con visitas programadas (desc), incluyendo el año actual."""
+    anios = {fecha.year for fecha in Visitor.objects.dates('scheduled_entry', 'year')}
+    anios.add(timezone.localdate().year)
+    return sorted(anios, reverse=True)
+
 
 # @login_required
 def app_index(request):
+    visitas_qs = (
+        Visitor.objects
+        .select_related('apartment__building', 'authorized_by')
+        .order_by('-scheduled_entry')
+    )
+
+    estado = request.GET.get('estado', '')
+    apartamento = request.GET.get('apartamento', '')
+    tipo = request.GET.get('tipo', '')
+    dia = request.GET.get('dia', '')
+    mes = request.GET.get('mes', '')
+    anio = request.GET.get('anio', '')
+
+    if estado:
+        visitas_qs = visitas_qs.filter(status=estado)
+    if apartamento:
+        visitas_qs = visitas_qs.filter(apartment_id=apartamento)
+    if tipo:
+        visitas_qs = visitas_qs.filter(type=tipo)
+    try:
+        fecha_dia = datetime.strptime(dia, '%Y-%m-%d').date() if dia else None
+    except ValueError:
+        fecha_dia = None
+        dia = ''
+    if fecha_dia:
+        visitas_qs = visitas_qs.filter(scheduled_entry__date=fecha_dia)
+    if mes.isdigit() and 1 <= int(mes) <= 12:
+        visitas_qs = visitas_qs.filter(scheduled_entry__month=int(mes))
+    else:
+        mes = ''
+    if anio.isdigit():
+        visitas_qs = visitas_qs.filter(scheduled_entry__year=int(anio))
+    else:
+        anio = ''
+
+    paginator = Paginator(visitas_qs, PAGINATE_BY)
+    pagina = request.GET.get('page')
+    try:
+        visitas = paginator.page(pagina)
+    except PageNotAnInteger:
+        visitas = paginator.page(1)
+    except EmptyPage:
+        visitas = paginator.page(paginator.num_pages)
+
+    query = request.GET.copy()
+    query.pop('page', None)
+
     contexto = {
-        'form_visitor': VisitorForm(),
-        'module_name': 'Visitantes'
+        'visitas': visitas,
+        'apartamentos': Apartment.objects.filter(is_active=True),
+        'estado_actual': estado,
+        'apartamento_actual': apartamento,
+        'tipo_actual': tipo,
+        'dia_actual': dia,
+        'mes_actual': mes,
+        'anio_actual': anio,
+        'mes_actual_nombre': MESES_NOMBRE.get(int(mes), 'Todos los meses') if mes else 'Todos los meses',
+        'anios': _anios_con_visitas(),
+        'paginacion_query': query.urlencode(),
+        'module_name': 'Visitantes',
     }
     return render(request, 'visitors/index.html', contexto)
 
 
 # @login_required
-@require_POST
-def crear_visitante(request):
-    form = VisitorForm(request.POST)
-    if form.is_valid():
-        visitante = form.save(commit=False)
-        visitante.registered_by = request.user
-        visitante.save()
-        messages.success(request, 'Visitante registrado correctamente.')
-    else:
+def agregar_visitante(request):
+    if request.method == 'POST':
+        form = VisitorForm(request.POST, request.FILES)
+        if form.is_valid():
+            visitante = form.save(commit=False)
+            visitante.registered_by = request.user
+            visitante.save()
+            messages.success(request, 'Visitante registrado correctamente.')
+            return redirect('visitantes_index')
         messages.error(request, 'No se pudo registrar el visitante. Revisa los datos enviados.')
-    return redirect('inicio')
+    else:
+        form = VisitorForm()
+
+    contexto = {
+        'form_visitor': form,
+        'module_name': 'Visitantes',
+        'titulo_modulo': 'Agregar visitante',
+        'url_form': 'agregar_visitante',
+        'url_form_args': [],
+        'texto_boton': 'Agregar',
+    }
+    return render(request, 'visitors/agregar.html', contexto)
+
+
+# @login_required
+def actualizar_visitante(request, pk):
+    visita = Visitor.objects.filter(pk=pk).first()
+    if not visita:
+        messages.error(request, 'Visita no encontrada.')
+        return redirect('visitantes_index')
+
+    if request.method == 'POST':
+        form = VisitorForm(request.POST, request.FILES, instance=visita)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Visita actualizada correctamente.')
+            return redirect('visitantes_index')
+        messages.error(request, 'No se pudo actualizar la visita. Revisa los datos enviados.')
+    else:
+        form = VisitorForm(instance=visita)
+
+    contexto = {
+        'form_visitor': form,
+        'visita': visita,
+        'module_name': 'Visitantes',
+        'titulo_modulo': 'Actualizar visitante',
+        'url_form': 'actualizar_visitante',
+        'url_form_args': [str(visita.id)],
+        'texto_boton': 'Actualizar',
+    }
+    return render(request, 'visitors/agregar.html', contexto)
+
+
+# @login_required
+@require_POST
+def eliminar_visitante(request, pk):
+    visita = Visitor.objects.filter(pk=pk).first()
+    if not visita:
+        messages.error(request, 'Visita no encontrada.')
+        return redirect('visitantes_index')
+
+    detalle = f'{visita.name} - {visita.apartment.name}'
+    visita.delete()
+    messages.success(request, f'Visita {detalle} eliminada correctamente.')
+    return redirect('visitantes_index')
 
 
 class VisitorViewSet(viewsets.ModelViewSet):
@@ -102,4 +232,3 @@ class VisitorViewSet(viewsets.ModelViewSet):
         visitor.status = 'completed'
         visitor.save()
         return Response(self.get_serializer(visitor).data)
-

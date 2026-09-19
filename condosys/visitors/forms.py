@@ -44,10 +44,10 @@ class VisitorForm(forms.ModelForm):
             }),
             'type': forms.Select(attrs={'class': 'campo-seleccion'}),
             'document_type': forms.Select(attrs={'class': 'campo-seleccion'}),
-            'document_image': forms.ClearableFileInput(attrs={
-                'class': 'campo-entrada',
+            'document_image': forms.FileInput(attrs={
                 'accept': 'image/jpeg,image/png,image/webp',
                 'data-documento-visitante': '',
+                'tabindex': '-1',
             }),
             'apartment': forms.Select(attrs={'class': 'campo-seleccion'}),
             'authorized_by': forms.Select(attrs={'class': 'campo-seleccion'}),
@@ -59,18 +59,29 @@ class VisitorForm(forms.ModelForm):
             'type': 'Tipo de visitante',
             'document_type': 'Documento de identidad',
             'document_image': 'Foto del documento',
-            'apartment': 'Apartamento a visitar',
+            'apartment': 'Departamento a visitar',
             'authorized_by': 'Autorizado por',
             'status': 'Estado',
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # En actualizar se precargan las fechas desde scheduled_entry/exit
+        # (no son campos del modelo editables directo).
+        instancia = getattr(self, 'instance', None)
+        if instancia is not None and instancia.pk and instancia.scheduled_entry:
+            self.initial.setdefault(
+                'fecha_entrada', instancia.scheduled_entry.strftime('%Y-%m-%dT%H:%M')
+            )
+            if instancia.scheduled_exit:
+                self.initial.setdefault(
+                    'fecha_salida', instancia.scheduled_exit.strftime('%Y-%m-%dT%H:%M')
+                )
         # Solo apartamentos activos para registrar visitas.
         self.fields['apartment'].queryset = (
             Apartment.objects.filter(is_active=True).select_related('building')
         )
-        self.fields['apartment'].empty_label = 'Elegir apartamento'
+        self.fields['apartment'].empty_label = 'Elegir departamento'
         self.fields['authorized_by'].queryset = User.objects.filter(is_active=True)
         self.fields['authorized_by'].empty_label = 'Elegir quien autorizó'
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
