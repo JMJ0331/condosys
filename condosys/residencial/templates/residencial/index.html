@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/residencial.css' %}">
+{% endblock %}
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+
+<main class="container-main-side2">
+  <div class="pagina-residencial">
+    <form method="post" action="{% url 'residencial_index' %}" class="formulario-residencial" id="formulario-residencial"{% if not puede_editar %} data-solo-lectura="1"{% endif %}>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div class="columna-principal">
+        <section class="tarjeta" aria-labelledby="titulo-informacion">
+          <h3 class="cabecera-tarjeta" id="titulo-informacion">Información general del residencial</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form.nombre.id_for_label }}">{{ form.nombre.label }}</label>
+                {{ form.nombre }}
+                {{ form.nombre.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form.rnc.id_for_label }}">{{ form.rnc.label }}</label>
+                {{ form.rnc }}
+                {{ form.rnc.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-direccion">
+          <h3 class="cabecera-tarjeta" id="titulo-direccion">Dirección</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form.nombre_via.id_for_label }}">{{ form.nombre_via.label }}</label>
+                {{ form.nombre_via }}
+                {{ form.nombre_via.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form.numero_edificacion.id_for_label }}">{{ form.numero_edificacion.label }}</label>
+                {{ form.numero_edificacion }}
+                {{ form.numero_edificacion.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form.sector.id_for_label }}">{{ form.sector.label }}</label>
+                {{ form.sector }}
+                {{ form.sector.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form.codigo_postal.id_for_label }}">{{ form.codigo_postal.label }}</label>
+                {{ form.codigo_postal }}
+                {{ form.codigo_postal.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form.municipio.id_for_label }}">{{ form.municipio.label }}</label>
+                <select name="{{ form.municipio.html_name }}" id="{{ form.municipio.id_for_label }}" class="campo-seleccion" data-residencial="municipio">
+                  <option value="">Elegir municipio/ciudad</option>
+                  {% for provincia, municipios in municipios_por_provincia.items %}
+                  {% for municipio in municipios %}
+                  <option value="{{ municipio }}" data-provincia="{{ provincia }}"{% if form.municipio.value == municipio %} selected{% endif %}>{{ municipio }}</option>
+                  {% endfor %}
+                  {% endfor %}
+                </select>
+                {{ form.municipio.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form.provincia.id_for_label }}">{{ form.provincia.label }}</label>
+                {{ form.provincia }}
+                {{ form.provincia.errors }}
+              </div>
+            </div>
+            <div class="campo-formulario campo-mapa">
+              <label for="{{ form.mapa_iframe.id_for_label }}">{{ form.mapa_iframe.label }}</label>
+              {{ form.mapa_iframe }}
+              {{ form.mapa_iframe.errors }}
+              <div
+                class="zona-mapa"
+                id="zona-mapa"
+              >
+                <div class="vista-previa-mapa" id="vista-previa-mapa" hidden></div>
+                <span class="contenido-zona" id="contenido-zona-mapa">
+                  <svg class="icono-zona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"></path>
+                    <circle cx="12" cy="10" r="2.5"></circle>
+                  </svg>
+                  <span class="texto-subir">Subir iframe</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-estructura">
+          <h3 class="cabecera-tarjeta" id="titulo-estructura">Estructura del residencial</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label for="{{ form.distribucion.id_for_label }}">{{ form.distribucion.label }}</label>
+              {{ form.distribucion }}
+              {{ form.distribucion.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form.cantidad_edificios.id_for_label }}" id="etiqueta-cantidad-edificios">{{ form.cantidad_edificios.label }}</label>
+              {{ form.cantidad_edificios }}
+              {{ form.cantidad_edificios.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form.cantidad_pisos.id_for_label }}" id="etiqueta-cantidad-pisos">{{ form.cantidad_pisos.label }}</label>
+              {{ form.cantidad_pisos }}
+              {{ form.cantidad_pisos.errors }}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="columna-lateral">
+        <section class="tarjeta" aria-labelledby="titulo-contacto">
+          <h3 class="cabecera-tarjeta" id="titulo-contacto">Contacto y administración</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label for="{{ form.telefono.id_for_label }}">{{ form.telefono.label }}</label>
+              {{ form.telefono }}
+              {{ form.telefono.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form.correo.id_for_label }}">{{ form.correo.label }}</label>
+              {{ form.correo }}
+              {{ form.correo.errors }}
+            </div>
+          </div>
+        </section>
+
+        {% if puede_editar %}
+        <button type="submit" class="boton-guardar">{{ texto_boton }}</button>
+        <button type="reset" class="boton-cancelar" id="boton-cancelar-residencial">Cancelar</button>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/mascaras.js' %}" defer></script>
+<script src="{% static 'js/residencial.js' %}" defer></script>
+{% endblock %}

@@ -27,7 +27,7 @@
 
           <form method="get" class="formulario-filtros" id="filtros-pagos">
             <select name="apartamento" id="filtro-apartamento">
-              <option value="">Todos los apartamentos</option>
+              <option value="">Todos los departamentos</option>
               {% for apartamento in apartamentos %}
               <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
               {% endfor %}

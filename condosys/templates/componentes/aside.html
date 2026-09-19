@@ -135,6 +135,15 @@
           <h4>Reportes</h4>
         </a>
 
+        <a
+          class="opt-modulo{% if request.resolver_match.url_name == 'residencial_index' %} active{% endif %}"
+          href="{% url 'residencial_index' %}"
+        >
+
+        <img src="{% static 'images/icons/blancos/residencial.svg' %}" alt="residencial-icon"/>
+          <h4>Residencial</h4>
+        </a>
+
       
 
       </div>

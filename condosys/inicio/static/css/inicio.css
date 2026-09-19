@@ -1,9 +1,21 @@
-@import url('../../../static/css/variables.css');
+@import url('/static/css/variables.css');
 
+/* ============================================
+   Módulo Inicio - estilos específicos.
+   Réplica de inicio.png: tarjetas de conteo,
+   tabla de pagos pendientes, acciones rápidas
+   y actividad reciente.
+   ============================================ */
 
 .container-main-side2 {
 	gap: 1.2rem;
 	padding: 1.6rem;
+	flex: 1;
+}
+
+/* Espacio entre el icono y el título del encabezado */
+.titulo-encabezado {
+	gap: var(--space-8);
 }
 
 .container-flex1 {
@@ -20,166 +32,198 @@
 	background: var(--green-50);
 }
 
+.container-flex1 .app-info .opt-modulo h4 {
+	font-size: 1.5rem;
+}
+
+.container-flex1 .app-info .data {
+	font-size: 3rem;
+	font-weight: 600;
+}
+
+/* Variantes de color de las tarjetas de conteo */
+.container-flex1 .app-info.alerta .opt-modulo img {
+	background: var(--yellow-100);
+}
+
+.container-flex1 .app-info.alerta .opt-modulo h4 {
+	color: var(--yellow-700);
+}
+
+.container-flex1 .app-info.peligro .opt-modulo img {
+	background: var(--red-100);
+}
+
+.container-flex1 .app-info.peligro .opt-modulo h4 {
+	color: var(--red-500);
+}
+
 .container-flex {
 	display: grid;
 	grid-template-columns: minmax(0, 1.7fr) minmax(22rem, 0.8fr);
 	gap: 1.2rem;
-	min-height: 32rem;
+	align-items: stretch;
 }
 
-.container-flex > .filtros,
-.actividad-reciente {
-	padding: 1.2rem;
+/* Panel de pagos pendientes por vencer: misma estructura que la
+   cuadrícula de departamentos (tabla de borde a borde, título con
+   línea divisoria). */
+.panel-pagos {
 	border: 1px solid var(--black-50);
-	border-radius: 0.8rem;
+	border-radius: var(--borderR-8);
 	background: var(--white-50);
-}
-
-.contenedor-busqueda > .filtros {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: var(--space-8);
-}
-
-#search-input,
-#garden-select,
-#building-select,
-#apartment-select,
-.btn-buscar {
-	height: 3.5rem;
-	padding: 0 0.9rem;
-	border: 1px solid var(--black-50);
-	border-radius: 8px;
-	background: var(--white-50);
-	color: var(--black-400);
-	font: inherit;
-	vertical-align: middle;
-}
-
-#search-input {
-	padding: 1rem 1.2rem;
-	font-size: 1.3rem;
-	flex: 1 1 18rem;
 	min-width: 0;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
-#garden-select,
-#building-select,
-#apartment-select {
-	flex: 0 1 auto;
-	min-width: 7rem;
-	padding: var(--padding-8);
-	font-size: 1.3rem;
-}
-
-.btn-buscar {
-	flex: 0 1 auto;
-	border: none;
-	background: var(--green-100);
+.panel-pagos h2 {
+	margin: 0;
+	padding: 1.2rem 1.2rem 1.4rem 1.2rem;
 	color: var(--black-400);
-	font-size: 1.3rem;
-	cursor: pointer;
-}
-
-.contenedor-residentes {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: 0.8rem;
-	margin-top: 1.2rem;
-	max-height: 56rem;
-	overflow-y: auto;
-	padding-right: 0.4rem;
-}
-
-.tarjeta-residente {
-	padding: 1rem;
-	border: 1px solid var(--black-50);
-	border-radius: 0.6rem;
-	background: var(--white-50);
-}
-
-.tarjeta-residente-nombre {
 	font-size: 1.4rem;
 	font-weight: 600;
-	color: var(--black-400);
-	margin-bottom: 0.4rem;
+	border-bottom: 1px solid var(--black-50);
 }
 
-.tarjeta-residente-detalle {
+.tabla-filtrada {
+	overflow-x: auto;
+}
+
+table.tabla-inicio {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 100rem;
+}
+
+.tabla-inicio thead {
+	border-bottom: 1px solid var(--black-50);
+	background-color: var(--white-500);
+}
+
+.tabla-inicio th {
+	text-align: left;
+	font-weight: bold;
+	color: var(--black-400);
+	font-size: 1.2rem;
+	padding: var(--padding-8) 1.2rem;
+	white-space: nowrap;
+}
+
+.tabla-inicio td {
+	padding: 1.4rem;
+	font-size: 1.3rem;
+	color: var(--black-400);
+	border-bottom: 1px solid var(--white-400);
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.tabla-inicio tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.sin-registros {
+	text-align: center;
+	color: var(--white-700);
+	font-size: 1.3rem;
+	padding: 2.4rem;
+	list-style: none;
+}
+
+.enlace-ver-todos {
+	align-self: flex-start;
+	margin-top: auto;
+	padding: 1.2rem;
+	color: var(--green-800);
+	font-size: 1.3rem;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.enlace-ver-todos:hover {
+	text-decoration: underline;
+}
+
+/* Tarjeta ancha dentro de la cuadrícula de acciones */
+.accion-ancha {
+	grid-column: 1 / -1;
+	min-height: 9rem;
+}
+
+/* Panel de actividad reciente (ancho completo) */
+.panel-actividad {
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	background: var(--white-50);
+	flex: 1;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.cabecera-actividad {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.2rem;
+	margin: 0;
+	padding: 1.2rem 1.2rem 1.4rem 1.2rem;
+	border-bottom: 1px solid var(--black-50);
+}
+
+.cabecera-actividad h2 {
+	margin: 0;
+	color: var(--black-400);
+	font-size: 1.4rem;
+	font-weight: 600;
+}
+
+.lista-actividad {
+	list-style: none;
+	margin: 0;
+	padding: 1.2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.item-actividad {
+	display: flex;
+	align-items: flex-start;
+	gap: 1rem;
+}
+
+.punto-actividad {
+	flex-shrink: 0;
+	width: 0.8rem;
+	height: 0.8rem;
+	margin-top: 0.4rem;
+	border-radius: 50%;
+	background: var(--green-600);
+}
+
+.punto-actividad.punto-incidencia {
+	background: var(--yellow-700);
+}
+
+.detalle-actividad {
 	display: flex;
 	flex-direction: column;
 	gap: 0.2rem;
-	font-size: 1.2rem;
-	color: var(--black-300);
+	min-width: 0;
 }
 
-.sin-resultados {
-	padding: 1.2rem;
-	text-align: center;
-	color: var(--black-300);
+.texto-actividad {
+	margin: 0;
 	font-size: 1.3rem;
-}
-
-.paginacion-tarjetas {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 1rem;
-	margin-top: 1.2rem;
-}
-
-.pagina-actual {
-	font-size: 1.2rem;
-	color: var(--black-300);
-}
-
-.paginacion-flechas {
-	display: flex;
-	gap: 0.6rem;
-}
-
-.flecha-paginacion {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 3.6rem;
-	height: 3.6rem;
-	border: 1px solid var(--green-600);
-	border-radius: var(--borderR-4);
-	background: var(--white-50);
-	color: var(--green-900);
-	font-size: 2rem;
-	line-height: 1;
-	font-weight: 600;
-	text-decoration: none;
-	cursor: pointer;
-	transition: background 0.2s ease, color 0.2s ease;
-}
-
-.flecha-paginacion:hover {
-	background: var(--green-600);
-	color: var(--white-50);
-}
-
-.flecha-paginacion.deshabilitada {
-	opacity: 0.4;
-	cursor: not-allowed;
-	background: var(--white-50);
-	color: var(--black-300);
-	border-color: var(--black-50);
-}
-
-.actividad-reciente h2 {
-	margin: 0 0 1rem;
 	color: var(--black-400);
-	font-size: 1.4rem;
-	font-weight: 600;
 }
 
-.actividad-reciente {
-	flex: 1;
-	min-height: 15rem;
+.tiempo-actividad {
+	font-size: 1.2rem;
+	color: var(--white-700);
 }
 
 @media (max-width: 900px) {
@@ -190,6 +234,67 @@
 	.container-flex {
 		grid-template-columns: 1fr;
 	}
+
+	.panel-pagos .tabla-filtrada {
+		padding: var(--padding-16);
+	}
+
+	table.tabla-inicio {
+		min-width: 0;
+	}
+
+	.tabla-inicio thead {
+		display: none;
+	}
+
+	.tabla-inicio,
+	.tabla-inicio tbody,
+	.tabla-inicio tr,
+	.tabla-inicio td {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.tabla-inicio tbody tr {
+		background: var(--white-50);
+		border: 1px solid var(--black-50);
+		border-radius: var(--borderR-8);
+		padding: 0.4rem 1.6rem;
+		margin-bottom: 1.2rem;
+	}
+
+	.tabla-inicio tbody td {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.2rem;
+		padding: 1rem 0;
+		border-bottom: 1px solid var(--white-400);
+		white-space: normal;
+		text-align: right;
+	}
+
+	.tabla-inicio tbody td:last-child {
+		border-bottom: none;
+	}
+
+	.tabla-inicio tbody td::before {
+		content: attr(data-etiqueta);
+		font-size: 1.2rem;
+		font-weight: 600;
+		color: var(--black-400);
+		text-align: left;
+	}
+
+	.tabla-inicio tbody td.sin-registros {
+		justify-content: center;
+		text-align: center;
+	}
+
+	.tabla-inicio tbody td.sin-registros::before {
+		content: none;
+	}
 }
 
 @media (max-width: 560px) {
@@ -197,19 +302,7 @@
 		padding: 1rem;
 	}
 
-	.container-flex1,
-	.contenedor-busqueda > .filtros {
+	.container-flex1 {
 		grid-template-columns: 1fr;
-		flex-direction: column;
-		align-items: stretch;
-	}
-
-	#search-input,
-	#garden-select,
-	#building-select,
-	#apartment-select,
-	.btn-buscar {
-		width: 100%;
-		flex-basis: auto;
 	}
 }

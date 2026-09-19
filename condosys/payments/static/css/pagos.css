@@ -502,6 +502,11 @@ input[data-pago-foto] {
 	text-decoration: none;
 }
 
+.boton-agregar:hover,
+.boton-agregar:active {
+	background: var(--green-700);
+}
+
 .boton-cancelar {
 	display: inline-flex;
 	align-items: center;
@@ -518,6 +523,10 @@ input[data-pago-foto] {
 	font-weight: 500;
 	cursor: pointer;
 	text-decoration: none;
+}
+
+.boton-cancelar:hover {
+	border-color: var(--red-500);
 }
 
 @media (max-width: 900px) {

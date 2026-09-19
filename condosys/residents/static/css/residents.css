@@ -245,6 +245,10 @@ input[data-residente="foto"] {
 	text-decoration: none;
 }
 
+.boton-cancelar:hover {
+	border-color: var(--red-500);
+}
+
 .titulo-seccion {
 	font-size: 1.6rem;
 	font-weight: 600;

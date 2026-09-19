@@ -1,6 +1,6 @@
 {%load static%}
 
-<div class="app-info">
+<div class="app-info {{ variante|default:'' }}">
   <div class="opt-modulo">
     <img src="{% static url_imagen %}" alt="icon" />
     <h4>{{nombre_modulo}}</h4>

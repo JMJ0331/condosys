@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'payments',
     'propietarios',
     'reports',
+    'residencial',
     'reservations',
     'residents',
     'solicitudes',

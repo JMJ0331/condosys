@@ -511,6 +511,10 @@ input[data-propietario="foto"] {
 	text-decoration: none;
 }
 
+.boton-cancelar:hover {
+	border-color: var(--red-500);
+}
+
 @media (max-width: 900px) {
 	.formulario-agregar {
 		grid-template-columns: 1fr;

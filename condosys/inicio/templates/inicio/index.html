@@ -7,133 +7,103 @@
 
 {% block mini-cards %}
 
-{% include "componentes/header.html" with nombre_modulo="Dashboard" %}
+{% include "componentes/header.html" with nombre_modulo="Inicio" icono="images/icons/verdes/Container_green.svg" %}
 
 <div class="container-main-side2">
   <div class="container-flex1">
     {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/city_green.svg" nombre_modulo="Departamentos" data=total_departamentos %}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/group_green.svg" nombre_modulo="Residentes" data=total_residentes %}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/community_green.svg" nombre_modulo="Pagos" data=total_pagos %}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/id_green.svg" nombre_modulo="Visitantes" data=total_visitantes %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/amarillos/warning-triangle_900.svg" nombre_modulo="Incidencias abiertas" data=incidencias_abiertas variante="alerta" %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/rojos/lot-of-cash_900.svg" nombre_modulo="Pagos pendientes" data=pagos_pendientes variante="peligro" %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/google-docs_green900.svg" nombre_modulo="Reservas pendientes" data=reservas_pendientes %}
   </div>
 
-  <div class="container-flex" >
+  <div class="container-flex">
 
-    <div class="filtros">
+    <div class="panel-pagos">
+      <h2>Pagos pendientes por vencer</h2>
 
-      <form method="GET" action="{% url 'inicio' %}" class="contenedor-busqueda">
-        <div class="filtros">
-          <input
-            type="text"
-            name="search"
-            placeholder="Buscar residentes"
-            id="search-input"
-            value="{{ search_actual }}"
-            aria-label="Buscar residentes"
-          />
-
-          <select name="garden" id="garden-select">
-            <option value="">Jardines</option>
-            {% for jardin in jardines %}
-              <option value="{{ jardin.id }}" {% if garden_actual == jardin.id|stringformat:'s' %}selected{% endif %}>{{ jardin.name }}</option>
+      <div class="tabla-filtrada">
+        <table class="tabla-inicio">
+          <thead>
+            <tr>
+              <th>Departamento</th>
+              <th>Propietario/Residente</th>
+              <th>Monto</th>
+              <th>Vence</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pago in pagos_por_vencer %}
+            <tr>
+              <td data-etiqueta="Departamento">{{ pago.apartment.name }}</td>
+              <td data-etiqueta="Propietario/Residente">{{ pago.resident.full_name }}</td>
+              <td data-etiqueta="Monto">{{ pago.amount }}</td>
+              <td data-etiqueta="Vence">{{ pago.period|date:"d/m/Y" }}</td>
+              <td data-etiqueta="Estado">{{ pago.get_status_display }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="sin-registros">Sin pagos pendientes.</td>
+            </tr>
             {% endfor %}
-          </select>
-          <select name="building" id="building-select">
-            <option value="">Edificios</option>
-            {% for edificio in edificios %}
-              <option value="{{ edificio.id }}" {% if building_actual == edificio.id|stringformat:'s' %}selected{% endif %}>{{ edificio.name }}</option>
-            {% endfor %}
-          </select>
-          <select name="apartment" id="apartment-select">
-            <option value="">Departamentos</option>
-            {% for depto in departamentos %}
-              <option value="{{ depto.id }}" {% if apartment_actual == depto.id|stringformat:'s' %}selected{% endif %}>{{ depto.name }}</option>
-            {% endfor %}
-          </select>
-
-          {% comment %} <button type="submit" class="btn-buscar">Buscar</button> {% endcomment %}
-        </div>
-      </form>
-
-      <div class="contenedor-residentes">
-        {% for residente in residentes %}
-        <div class="tarjeta-residente">
-          <div class="tarjeta-residente-nombre">{{ residente.full_name }}</div>
-          <div class="tarjeta-residente-detalle">
-            <span>{{ residente.email }}</span>
-            <span>{{ residente.apartment.building.garden.name }} — {{ residente.apartment.building.name }}</span>
-            <span>Depto {{ residente.apartment.name }} · C.C. {{ residente.cedula }}</span>
-          </div>
-        </div>
-        {% empty %}
-        <p class="sin-resultados">No se encontraron residentes.</p>
-        {% endfor %}
+          </tbody>
+        </table>
       </div>
 
-      {% if is_paginated %}
-      <div class="paginacion-tarjetas">
-        <span class="pagina-actual">
-          Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
-        </span>
-        <div class="paginacion-flechas">
-          {% if page_obj.has_previous %}
-          <a
-            href="?page={{ page_obj.previous_page_number }}&search={{ search_actual }}&garden={{ garden_actual }}&building={{ building_actual }}&apartment={{ apartment_actual }}"
-            class="flecha-paginacion"
-            aria-label="Página anterior"
-          >‹</a>
-          {% else %}
-          <span class="flecha-paginacion deshabilitada" aria-hidden="true">‹</span>
-          {% endif %}
-
-          {% if page_obj.has_next %}
-          <a
-            href="?page={{ page_obj.next_page_number }}&search={{ search_actual }}&garden={{ garden_actual }}&building={{ building_actual }}&apartment={{ apartment_actual }}"
-            class="flecha-paginacion"
-            aria-label="Página siguiente"
-          >›</a>
-          {% else %}
-          <span class="flecha-paginacion deshabilitada" aria-hidden="true">›</span>
-          {% endif %}
-        </div>
-      </div>
-      {% endif %}
+      <a href="{% url 'pagos_index' %}?estado=pending" class="enlace-ver-todos">Ver todos los pagos pendientes &gt;</a>
     </div>
 
     <div class="panel-acciones">
       <div class="acciones">
-        <h3>Acciones rapidas</h3>
+        <h3>Acciones Rápidas</h3>
 
         <div class="contenedor-acciones">
           <a class="accion" href="{% url 'agregar_pago' %}">
             <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
             <span>Registrar Pago</span>
           </a>
-          <a class="accion" href="{% url 'visitantes_index' %}">
-            <img src="{% static 'images/icons/verdes/container_green.svg' %}" alt="" />
+          <a class="accion" href="{% url 'crear_visitante' %}">
+            <img src="{% static 'images/icons/verdes/id_green.svg' %}" alt="" />
             <span>Registrar Visitante</span>
           </a>
-          <a class="accion" href="{% url 'incidencias_index' %}">
+          <a class="accion" href="{% url 'crear_incidencia' %}">
             <img src="{% static 'images/icons/verdes/warning-triangle_green.svg' %}" alt="" />
-            <span>Crear incidencia</span>
+            <span>Crear Incidencia</span>
           </a>
 
-          <a class="accion" href="{% url 'comunicados_index' %}">
+          <a class="accion" href="{% url 'crear_comunicacion' %}">
             <img src="{% static 'images/icons/verdes/voice_green.svg' %}" alt="" />
             <span>Comunicado</span>
           </a>
+          <a class="accion accion-ancha" href="{% url 'reservas_index' %}">
+            <img src="{% static 'images/icons/verdes/google-docs_green900.svg' %}" alt="" />
+            <span>Aprobar reservas ({{ reservas_pendientes }} pendientes)</span>
+          </a>
         </div>
-      </div>
-
-      <div class="actividad-reciente">
-        <h2>Actividad Reciente</h2>
       </div>
     </div>
 
   </div>
-</div>
-{% endblock %}
 
-{% block scripts %}
-<script src="{% static 'js/dashboard.js' %}" defer></script>
+  <div class="panel-actividad">
+    <div class="cabecera-actividad">
+      <h2>Actividad Reciente</h2>
+      <a href="/actividad/" class="enlace-ver-todos">Ver todo &gt;</a>
+    </div>
+    <ul class="lista-actividad">
+      {% for item in actividad_reciente %}
+      <li class="item-actividad">
+        <span class="punto-actividad punto-{{ item.tipo }}" aria-hidden="true"></span>
+        <div class="detalle-actividad">
+          <p class="texto-actividad">{{ item.texto }}</p>
+          <span class="tiempo-actividad">Hace {{ item.fecha|timesince }}</span>
+        </div>
+      </li>
+      {% empty %}
+      <li class="sin-registros">Sin actividad reciente.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 {% endblock %}

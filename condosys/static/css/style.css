@@ -131,6 +131,12 @@ aside .opt-modulo h4, .otras-opciones{
     gap: 1.2rem;
 }
 
+.titulo-icono {
+    width: 2.4rem;
+    height: 2.4rem;
+    flex-shrink: 0;
+}
+
 .boton-volver-flecha {
     display: inline-flex;
     align-items: center;

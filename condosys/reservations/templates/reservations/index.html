@@ -1,100 +1,97 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reservas.css' %}">
+{% endblock %}
 {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+
 <main class="container-main-side2">
 
-  <div class="panel-acciones">
+  <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
-      <h3>Registrar Reserva</h3>
 
-      <form method="post" action="{% url 'crear_reserva' %}" data-form-reserva>
-        {% csrf_token %}
-        {{ form_reservation.non_field_errors }}
+  <div class="contenedor-filtros">
+    <h2>Todas las reservas</h2>
 
-        <div class="seccion-formulario">
-          <legend>Información de la reserva</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_reservation.common_area.id_for_label }}">{{ form_reservation.common_area.label }}</label>
-              <select name="{{ form_reservation.common_area.html_name }}" id="{{ form_reservation.common_area.id_for_label }}" class="campo-seleccion" data-reserva-area>
-                <option value="">Elegir área común</option>
-                {% for area in areas %}
-                <option value="{{ area.id }}" data-horario="{% if area.available_from and area.available_until %}{{ area.available_from|time:'H:i' }} - {{ area.available_until|time:'H:i' }}{% endif %}" data-dias-val="{{ area.available_days }}" data-dias="{{ area.get_available_days_display }}">{{ area.name }}</option>
-                {% endfor %}
-              </select>
-              <p class="aviso-horario" id="aviso-horario-area" role="status"></p>
-              {{ form_reservation.common_area.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_reservation.apartment.id_for_label }}">{{ form_reservation.apartment.label }}</label>
-              {{ form_reservation.apartment }}
-              {{ form_reservation.apartment.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_reservation.reserved_by.id_for_label }}">{{ form_reservation.reserved_by.label }}</label>
-              {{ form_reservation.reserved_by }}
-              {{ form_reservation.reserved_by.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_reservation.resident.id_for_label }}">{{ form_reservation.resident.label }}</label>
-              <select name="{{ form_reservation.resident.html_name }}" id="{{ form_reservation.resident.id_for_label }}" class="campo-seleccion" data-reserva-residente>
-                <option value="">Elegir un propietario/residente</option>
-                {% for res in residentes %}
-                <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
-                {% endfor %}
-              </select>
-              {{ form_reservation.resident.errors }}
-            </div>
-          </div>
-        </div>
+    <div class="filtros-tabla">
+      <a href="{% url 'agregar_reserva' %}" class="boton-nueva-reserva">+ Agregar reserva</a>
+    </div>
+  </div>
 
-        <div class="seccion-formulario">
-          <legend>Horario</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario campo-ancho-completo">
-              <label for="{{ form_reservation.fecha_reserva.id_for_label }}">{{ form_reservation.fecha_reserva.label }}</label>
-              {{ form_reservation.fecha_reserva }}
-              {{ form_reservation.fecha_reserva.errors }}
+  <div class="tabla-filtrada">
+    <table class="tabla-reservas">
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th>Propietario/Residente</th>
+          <th>Área común</th>
+          <th>Departamento</th>
+          <th>Fecha de reserva</th>
+          <th>Hora de inicio</th>
+          <th>Hora de fin</th>
+          <th>Estado</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reserva in reservas %}
+        <tr>
+          <td data-etiqueta="Foto">
+            {% if reserva.resident and reserva.resident.photo %}
+            <img src="{{ reserva.resident.photo.url }}" alt="Foto de {{ reserva.resident.full_name }}" class="foto-reserva">
+            {% else %}
+            <span class="foto-marcador" aria-hidden="true"></span>
+            {% endif %}
+          </td>
+          <td data-etiqueta="Propietario/Residente">{{ reserva.resident.full_name|default:"—" }}</td>
+          <td data-etiqueta="Área común">{{ reserva.common_area.name }}</td>
+          <td data-etiqueta="Departamento">{{ reserva.apartment.name|default:"—" }}</td>
+          <td data-etiqueta="Fecha de reserva">{{ reserva.start_time|date:"d/m/Y" }}</td>
+          <td data-etiqueta="Hora de inicio">{{ reserva.start_time|date:"H:i" }}</td>
+          <td data-etiqueta="Hora de fin">{{ reserva.end_time|date:"H:i" }}</td>
+          <td data-etiqueta="Estado">{{ reserva.get_status_display }}</td>
+          <td class="columna-acciones">
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_reserva' reserva.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ reserva.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
             </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_reservation.hora_inicio.id_for_label }}">{{ form_reservation.hora_inicio.label }}</label>
-              {{ form_reservation.hora_inicio }}
-              {{ form_reservation.hora_inicio.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_reservation.hora_fin.id_for_label }}">{{ form_reservation.hora_fin.label }}</label>
-              {{ form_reservation.hora_fin }}
-              {{ form_reservation.hora_fin.errors }}
-            </div>
-          </div>
-        </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="sin-registros">Sin coincidencias.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-        <div class="seccion-formulario">
-          <legend>Estado</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_reservation.status.id_for_label }}">{{ form_reservation.status.label }}</label>
-              {{ form_reservation.status }}
-              {{ form_reservation.status.errors }}
-            </div>
-          </div>
-        </div>
+  {% for reserva in reservas %}
+  <dialog id="dialog-eliminar-{{ reserva.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ reserva.id }}">
+    <form method="post" action="{% url 'eliminar_reserva' reserva.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ reserva.id }}" class="titulo-eliminar">Eliminar reserva</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar la reserva de <strong>{{ reserva.common_area.name }}</strong> del <strong>{{ reserva.start_time|date:"d/m/Y" }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
 
-        <div class="pie-formulario">
-          <button type="submit">Agregar</button>
-          <button type="reset">Cancelar</button>
-        </div>
-      </form>
+  {% include "componentes/paginacion_tabla.html" with pagina=reservas %}
     </div>
   </div>
 </main>
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/reservas.js' %}" defer></script>
+<script src="{% static 'js/dialogos.js' %}" defer></script>
 {% endblock %}
