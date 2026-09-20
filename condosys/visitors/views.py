@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
@@ -17,6 +15,7 @@ from .serializers import VisitorSerializer
 from .forms import VisitorForm
 
 PAGINATE_BY = 15
+
 
 MESES_NOMBRE = {
     1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril',
@@ -43,7 +42,6 @@ def app_index(request):
     estado = request.GET.get('estado', '')
     apartamento = request.GET.get('apartamento', '')
     tipo = request.GET.get('tipo', '')
-    dia = request.GET.get('dia', '')
     mes = request.GET.get('mes', '')
     anio = request.GET.get('anio', '')
 
@@ -53,13 +51,6 @@ def app_index(request):
         visitas_qs = visitas_qs.filter(apartment_id=apartamento)
     if tipo:
         visitas_qs = visitas_qs.filter(type=tipo)
-    try:
-        fecha_dia = datetime.strptime(dia, '%Y-%m-%d').date() if dia else None
-    except ValueError:
-        fecha_dia = None
-        dia = ''
-    if fecha_dia:
-        visitas_qs = visitas_qs.filter(scheduled_entry__date=fecha_dia)
     if mes.isdigit() and 1 <= int(mes) <= 12:
         visitas_qs = visitas_qs.filter(scheduled_entry__month=int(mes))
     else:
@@ -87,7 +78,6 @@ def app_index(request):
         'estado_actual': estado,
         'apartamento_actual': apartamento,
         'tipo_actual': tipo,
-        'dia_actual': dia,
         'mes_actual': mes,
         'anio_actual': anio,
         'mes_actual_nombre': MESES_NOMBRE.get(int(mes), 'Todos los meses') if mes else 'Todos los meses',

@@ -1,16 +1,17 @@
 /**
  * Lógica de la cuadrícula de visitantes (/visitantes/).
- * - Auto-submit de filtros (#filtros-visitantes, selects y fecha).
+ * - Auto-submit de filtros (#filtros-visitantes).
  * - Selector de columnas visibles (#boton-columnas / #panel-columnas).
- * - Calendarios de mes y año (#boton-mes / #panel-mes, #boton-anio / #panel-anio).
+ * - Calendarios de mes y año (#boton-mes / #panel-mes, #boton-anio / #panel-anio):
+ *   rejilla de meses y lista de años que filtran al elegir.
  *
  * Sin etiquetas de plantilla Django: solo usa IDs y atributos data-*.
  */
 (() => {
   const formularioFiltros = document.getElementById('filtros-visitantes');
   if (formularioFiltros) {
-    formularioFiltros.querySelectorAll('select, input[type="date"]').forEach((campo) => {
-      campo.addEventListener('change', () => formularioFiltros.submit());
+    formularioFiltros.querySelectorAll('select').forEach((select) => {
+      select.addEventListener('change', () => formularioFiltros.submit());
     });
   }
 

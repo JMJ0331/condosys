@@ -55,13 +55,9 @@ class VisitantesViewTests(TestCase):
         )
         self.assertContains(respuesta, '15/09/2026')
 
-    def test_filtra_por_dia_mes_anio(self):
+    def test_filtra_por_mes_anio(self):
         base = crear_base()
         crear_visita(base)
-        respuesta = self.client.get(reverse('visitantes_index'), {'dia': '2026-09-15'})
-        self.assertContains(respuesta, 'Pedro Visita')
-        respuesta = self.client.get(reverse('visitantes_index'), {'dia': '2026-09-16'})
-        self.assertNotContains(respuesta, 'Pedro Visita')
         respuesta = self.client.get(reverse('visitantes_index'), {'mes': '9', 'anio': '2026'})
         self.assertContains(respuesta, 'Pedro Visita')
         respuesta = self.client.get(reverse('visitantes_index'), {'anio': '2025'})

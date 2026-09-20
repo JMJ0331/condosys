@@ -170,7 +170,7 @@
 	font-weight: 600;
 }
 
-/* Selectores tipo calendario para mes y año (igual que en pagos) */
+/* Selectores tipo calendario para mes y año */
 .selector-calendario {
 	position: relative;
 }
@@ -253,6 +253,7 @@
 .boton-nuevo-visitante {
 	display: inline-flex;
 	align-items: center;
+	gap: var(--space-4);
 	background: var(--green-900);
 	color: var(--white-50);
 	border: none;
@@ -263,6 +264,12 @@
 	cursor: pointer;
 	white-space: nowrap;
 	text-decoration: none;
+}
+
+.boton-nuevo-visitante img {
+	width: 1.8rem;
+	height: 1.8rem;
+	flex: none;
 }
 
 .boton-nuevo-visitante:hover {
@@ -670,13 +677,15 @@ input[data-documento-visitante] {
 		align-items: stretch;
 	}
 
-	.selector-columnas,
+	.selector-columnas {
+		width: 100%;
+	}
+
 	.selector-calendario {
 		width: 100%;
 	}
 
 	.filtros-tabla select,
-	.filtros-tabla input[type="date"],
 	.boton-columnas,
 	.boton-calendario,
 	.boton-nuevo-visitante {

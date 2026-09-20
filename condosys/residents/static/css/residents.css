@@ -423,6 +423,7 @@ input[data-residente="foto"] {
 .boton-nuevo-residente {
 	display: inline-flex;
 	align-items: center;
+	gap: var(--space-4);
 	background: var(--green-900);
 	color: var(--white-50);
 	border: none;
@@ -433,6 +434,12 @@ input[data-residente="foto"] {
 	cursor: pointer;
 	white-space: nowrap;
 	text-decoration: none;
+}
+
+.boton-nuevo-residente img {
+	width: 1.8rem;
+	height: 1.8rem;
+	flex: none;
 }
 
 .boton-nuevo-residente:hover {

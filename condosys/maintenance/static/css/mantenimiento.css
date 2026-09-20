@@ -244,6 +244,7 @@
 .boton-nuevo-mantenimiento {
 	display: inline-flex;
 	align-items: center;
+	gap: var(--space-4);
 	background: var(--green-900);
 	color: var(--white-50);
 	border: none;
@@ -254,6 +255,12 @@
 	cursor: pointer;
 	white-space: nowrap;
 	text-decoration: none;
+}
+
+.boton-nuevo-mantenimiento img {
+	width: 1.8rem;
+	height: 1.8rem;
+	flex: none;
 }
 
 .boton-nuevo-mantenimiento:hover {

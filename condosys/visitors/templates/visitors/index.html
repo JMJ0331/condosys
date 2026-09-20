@@ -51,8 +51,6 @@
           <option value="other" {% if tipo_actual == 'other' %}selected{% endif %}>Otro</option>
         </select>
 
-        <input type="date" name="dia" id="filtro-dia" class="campo-fecha" value="{{ dia_actual }}" aria-label="Filtrar por día">
-
         <div class="selector-calendario">
           <button type="button" class="boton-calendario" id="boton-mes" aria-haspopup="true" aria-expanded="false">{{ mes_actual_nombre }}</button>
           <div class="panel-calendario" id="panel-mes" hidden>
@@ -89,7 +87,7 @@
         </div>
       </form>
 
-      <a href="{% url 'agregar_visitante' %}" class="boton-nuevo-visitante">+ Agregar visitante</a>
+      <a href="{% url 'agregar_visitante' %}" class="boton-nuevo-visitante"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar visitante</a>
     </div>
   </div>
 
