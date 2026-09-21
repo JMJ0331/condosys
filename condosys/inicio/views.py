@@ -1,47 +1,63 @@
+<<<<<<< HEAD
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect
 from django.views.generic import ListView
+=======
+from django.shortcuts import render
+>>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19
 
+from incidents.models import Incident
 from payments.models import Payment
-from residents.models import Resident
-from structure.models import Apartment, Building, Garden
-from visitors.models import Visitor
+from reservations.models import Reservation
+from structure.models import Apartment
+
+ESTADOS_INCIDENCIA_ABIERTA = ['new', 'assigned', 'in_progress']
+ESTADOS_PAGO_PENDIENTE = ['pending', 'at_risk', 'overdue']
+LIMITE_PAGOS_POR_VENCER = 5
+LIMITE_ACTIVIDAD = 5
 
 
+<<<<<<< HEAD
 class InicioView(ListView):
     template_name = 'inicio/index.html'
     context_object_name = 'residentes'
     model = Resident
     paginate_by = 10
+=======
+# @login_required
+def app_index(request):
+    """Panel de inicio: conteos, pagos pendientes por vencer y actividad reciente."""
+    pagos_pendientes_qs = Payment.objects.filter(status__in=ESTADOS_PAGO_PENDIENTE)
+>>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19
 
-    def get_queryset(self):
-        qs = Resident.objects.select_related(
-            'user',
-            'apartment__building__garden',
-        ).all()
+    contexto = {
+        'total_departamentos': Apartment.objects.filter(is_active=True).count(),
+        'incidencias_abiertas': Incident.objects.filter(status__in=ESTADOS_INCIDENCIA_ABIERTA).count(),
+        'pagos_pendientes': pagos_pendientes_qs.count(),
+        'reservas_pendientes': Reservation.objects.filter(status='requested').count(),
+        'pagos_por_vencer': (
+            pagos_pendientes_qs
+            .select_related('apartment', 'resident')
+            .order_by('period')[:LIMITE_PAGOS_POR_VENCER]
+        ),
+        'actividad_reciente': _actividad_reciente(),
+    }
+    return render(request, 'inicio/index.html', contexto)
 
-        search = self.request.GET.get('search', '').strip()
-        garden = self.request.GET.get('garden', '')
-        building = self.request.GET.get('building', '')
-        apartment = self.request.GET.get('apartment', '')
 
-        if search:
-            qs = qs.filter(
-                Q(full_name__icontains=search)
-                | Q(cedula__icontains=search)
-                | Q(email__icontains=search)
-                | Q(user__first_name__icontains=search)
-                | Q(user__last_name__icontains=search)
-                | Q(user__email__icontains=search)
-            )
-        if garden:
-            qs = qs.filter(apartment__building__garden_id=garden)
-        if building:
-            qs = qs.filter(apartment__building_id=building)
-        if apartment:
-            qs = qs.filter(apartment_id=apartment)
+def _actividad_reciente():
+    """Últimos pagos e incidencias de todos los usuarios (incluye admin/manager)."""
+    pagos = (
+        Payment.objects.select_related('resident', 'apartment', 'registered_by')
+        .order_by('-created_at')[:LIMITE_ACTIVIDAD]
+    )
+    incidencias = (
+        Incident.objects.select_related('apartment__building', 'reported_by')
+        .order_by('-created_at')[:LIMITE_ACTIVIDAD]
+    )
 
+<<<<<<< HEAD
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -72,3 +88,27 @@ class InicioView(ListView):
         ctx['total_pagos'] = Payment.objects.count()
         ctx['total_visitantes'] = Visitor.objects.count()
         return ctx
+=======
+    actividad = [
+        {
+            'tipo': 'pago',
+            'texto': f'{pago.resident.full_name} registró un pago.',
+            'fecha': pago.created_at,
+        }
+        for pago in pagos
+    ]
+    actividad += [
+        {
+            'tipo': 'incidencia',
+            'texto': (
+                'Nueva incidencia reportada en '
+                f'{incidencia.apartment.building.tower or incidencia.apartment.building.name} '
+                f'{incidencia.apartment.name}.'
+            ),
+            'fecha': incidencia.created_at,
+        }
+        for incidencia in incidencias
+    ]
+    actividad.sort(key=lambda item: item['fecha'], reverse=True)
+    return actividad[:LIMITE_ACTIVIDAD]
+>>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19

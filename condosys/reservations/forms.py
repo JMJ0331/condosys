@@ -66,6 +66,14 @@ class ReservationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # En actualizar, la plantilla no pinta fecha/hora desde la instancia
+        # (no son campos del modelo): se precargan aquí desde start/end_time.
+        instancia = getattr(self, 'instance', None)
+        if instancia is not None and instancia.pk and instancia.start_time:
+            self.initial.setdefault('fecha_reserva', instancia.start_time.date())
+            self.initial.setdefault('hora_inicio', instancia.start_time.strftime('%H:%M'))
+            if instancia.end_time:
+                self.initial.setdefault('hora_fin', instancia.end_time.strftime('%H:%M'))
         # El select de área se renderiza manualmente en la plantilla (con
         # data-horario / data-dias para el aviso y la validación del JS); aquí
         # solo se define el queryset de áreas disponibles para reservar.

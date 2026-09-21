@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'base.html' %}
 
 {% block mini-cards %}{% endblock %}
@@ -12,9 +13,138 @@
       <button type="submit">Guardar</button>
     </div>
   </form>
+=======
+{% extends 'base.html' %} {% load static %}
 
-  <hr />
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reportes.css' %}?v=3">
+{% endblock %}
 
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+
+<main class="container-main-side2">
+>>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19
+
+  <div class="rejilla-kpis">
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/lot-of-cash_green.svg" nombre_modulo="Ingresos del mes" data=kpi_ingresos_mes %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/no-credit-card.svg" nombre_modulo="Morosidad" data=kpi_morosidad %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/home-simple-door.svg" nombre_modulo="Ocupación" data=kpi_ocupacion %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/amarillos/warning-triangle_900.svg" nombre_modulo="Incidencias abiertas" data=kpi_incidencias %}
+  </div>
+
+  <section class="panel-generar">
+    <h2>Generar reporte</h2>
+    <form method="get" class="formulario-reporte" id="filtros-reportes">
+      <div class="campo-reporte">
+        <label for="filtro-tipo">Tipo de reporte</label>
+        <select name="tipo" id="filtro-tipo" class="campo-seleccion">
+          {% for clave, etiqueta in tipos %}
+          <option value="{{ clave }}" {% if tipo_actual == clave %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="campo-reporte">
+        <span class="etiqueta-rango" id="etiqueta-rango">Rango de fechas</span>
+        <div class="rango-fechas" role="group" aria-labelledby="etiqueta-rango">
+          <input type="date" name="desde" class="campo-entrada" value="{{ desde_actual }}" aria-label="Fecha inicial">
+          <input type="date" name="hasta" class="campo-entrada" value="{{ hasta_actual }}" aria-label="Fecha final">
+        </div>
+      </div>
+
+      <div class="campo-reporte">
+        <label for="filtro-edificio">{{ etiqueta_plural }}</label>
+        <select name="edificio" id="filtro-edificio" class="campo-seleccion">
+          <option value="">{{ placeholder_todas }}</option>
+          {% for edificio in edificios %}
+          <option value="{{ edificio.id }}" {% if edificio_actual == edificio.id|stringformat:'s' %}selected{% endif %}>{{ edificio.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="acciones-reporte">
+        <button type="submit" class="boton-generar">Generar reporte</button>
+        <button type="submit" name="formato" value="csv" class="boton-exportar"><img src="{% static 'images/icons/verdes/page-flip.svg' %}" alt="" aria-hidden="true">Exportar CSV</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="contenedor-reportes">
+    <section class="panel-vista" aria-live="polite">
+      {% if grafico %}
+      <h2>Vista previa: {{ tipo_etiqueta|lower }}</h2>
+      <p class="subtitulo-vista">{{ grafico.subtitulo }}</p>
+      <div class="grafico-barras">
+        {% for barra in grafico.barras %}
+        <div class="columna-barra">
+          <span class="valor-barra">{{ barra.total_corto }}</span>
+          <div class="pista-barra">
+            <div class="relleno-barra{% if forloop.last %} ultima{% endif %}" data-altura="{{ barra.altura }}"></div>
+          </div>
+          <span class="etiqueta-barra{% if forloop.last %} actual{% endif %}">{{ barra.etiqueta }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% if resumen %}
+      <dl class="resumen-vista">
+        <div>
+          <dt>Mes seleccionado</dt>
+          <dd>{{ resumen.mes }}</dd>
+        </div>
+        <div>
+          <dt>Pagos recibidos</dt>
+          <dd>{{ resumen.pagos }}</dd>
+        </div>
+        <div>
+          <dt>Total</dt>
+          <dd>{{ resumen.total }}</dd>
+        </div>
+      </dl>
+      {% endif %}
+      {% else %}
+      <h2>Vista previa: {{ tipo_etiqueta|lower }}</h2>
+      <p class="subtitulo-vista">{{ filas|length }} registro{{ filas|length|pluralize }}</p>
+      <div class="tabla-filtrada">
+        <table class="tabla-reportes">
+          <thead>
+            <tr>
+              {% for columna in columnas %}
+              <th>{{ columna }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for fila in filas %}
+            <tr>
+              {% for celda in fila %}
+              <td>{{ celda }}</td>
+              {% endfor %}
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="{{ columnas|length }}" class="sin-registros">Sin coincidencias.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </section>
+
+    <aside class="panel-disponibles">
+      <h2>Reportes disponibles</h2>
+      <ul class="lista-reportes">
+        {% for clave, etiqueta in tipos %}
+        <li>
+          <button type="button" class="enlace-reporte{% if tipo_actual == clave %} activo{% endif %}" data-tipo="{{ clave }}">{{ etiqueta }}</button>
+        </li>
+        {% endfor %}
+      </ul>
+    </aside>
+  </div>
+
+<<<<<<< HEAD
   <form method="post" action="{% url 'crear_detalle_bitacora' %}">
     {% csrf_token %}
     {{ form_audit_log_detail.as_p }}
@@ -24,3 +154,11 @@
   </form>
 </div>
 {% endblock %}
+=======
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/reportes.js' %}?v=3" defer></script>
+{% endblock %}
+>>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19

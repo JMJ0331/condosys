@@ -159,9 +159,90 @@
 	font-weight: 600;
 }
 
+/* Selectores tipo calendario para mes y año */
+.selector-calendario {
+	position: relative;
+}
+
+.boton-calendario {
+	appearance: none;
+	-webkit-appearance: none;
+	box-sizing: border-box;
+	margin: 0;
+	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+	font: inherit;
+	font-size: 1.25rem;
+	line-height: 1.4;
+	color: var(--black-400);
+	cursor: pointer;
+	min-width: 15rem;
+	outline: none;
+	text-align: left;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.boton-calendario:hover {
+	border-color: var(--green-900);
+}
+
+.boton-calendario:focus,
+.boton-calendario[aria-expanded="true"] {
+	border-color: var(--green-900);
+	outline: none;
+	box-shadow: 0 0 0 2px var(--green-200);
+}
+
+.panel-calendario {
+	position: absolute;
+	top: calc(100% + 0.4rem);
+	left: 0;
+	z-index: 30;
+	min-width: 20rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8);
+}
+
+.panel-calendario[hidden] {
+	display: none;
+}
+
+.rejilla-calendario {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.4rem;
+}
+
+.opcion-calendario {
+	border: 1px solid transparent;
+	border-radius: var(--borderR-4);
+	background: transparent;
+	padding: 0.8rem 0.4rem;
+	font: inherit;
+	font-size: 1.25rem;
+	color: var(--black-400);
+	cursor: pointer;
+	text-align: center;
+}
+
+.opcion-calendario:hover {
+	background: var(--green-100);
+}
+
+.opcion-calendario.seleccionada {
+	background: var(--green-900);
+	color: var(--white-50);
+	font-weight: 600;
+}
+
 .boton-nuevo-pago {
 	display: inline-flex;
 	align-items: center;
+	gap: var(--space-4);
 	background: var(--green-900);
 	color: var(--white-50);
 	border: none;
@@ -172,6 +253,16 @@
 	cursor: pointer;
 	white-space: nowrap;
 	text-decoration: none;
+}
+
+.boton-nuevo-pago img {
+	width: 1.8rem;
+	height: 1.8rem;
+	flex: none;
+}
+
+.boton-nuevo-pago:hover {
+	background: var(--green-700);
 }
 
 .tabla-filtrada {
@@ -211,6 +302,24 @@ table.tabla-pagos {
 
 .tabla-pagos tbody tr:last-child td {
 	border-bottom: none;
+}
+
+.foto-comprobante {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	border-radius: var(--borderR-8);
+	object-fit: cover;
+	vertical-align: middle;
+}
+
+.foto-placeholder {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	background: var(--black-50);
+	border-radius: var(--borderR-8);
+	vertical-align: middle;
 }
 
 .tabla-pagos th.columna-acciones {
@@ -473,6 +582,11 @@ input[data-pago-foto] {
 	text-decoration: none;
 }
 
+.boton-agregar:hover,
+.boton-agregar:active {
+	background: var(--green-700);
+}
+
 .boton-cancelar {
 	display: inline-flex;
 	align-items: center;
@@ -489,6 +603,10 @@ input[data-pago-foto] {
 	font-weight: 500;
 	cursor: pointer;
 	text-decoration: none;
+}
+
+.boton-cancelar:hover {
+	border-color: var(--red-500);
 }
 
 @media (max-width: 900px) {
@@ -549,6 +667,11 @@ input[data-pago-foto] {
 		text-align: left;
 	}
 
+	.tabla-pagos tbody td[data-columna="comprobante"] {
+		justify-content: center;
+	}
+
+	.tabla-pagos tbody td[data-columna="comprobante"]::before,
 	.tabla-pagos tbody td.columna-acciones::before,
 	.tabla-pagos tbody td.sin-registros::before {
 		content: none;
@@ -608,8 +731,13 @@ input[data-pago-foto] {
 		width: 100%;
 	}
 
+	.selector-calendario {
+		width: 100%;
+	}
+
 	.filtros-tabla select,
 	.boton-columnas,
+	.boton-calendario,
 	.boton-nuevo-pago {
 		width: 100%;
 		flex: 1 1 auto;

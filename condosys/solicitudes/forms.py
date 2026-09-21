@@ -37,10 +37,10 @@ class SolicitudForm(forms.ModelForm):
                 'class': 'campo-entrada',
                 'placeholder': 'mm/dd/yyyy',
             }),
-            'attachment': forms.ClearableFileInput(attrs={
-                'class': 'campo-entrada',
+            'attachment': forms.FileInput(attrs={
                 'accept': 'image/jpeg,image/png,image/webp,application/pdf',
                 'data-solicitud-documento': '',
+                'tabindex': '-1',
             }),
             'tracking_response': forms.Textarea(attrs={
                 'class': 'campo-entrada texto-area',

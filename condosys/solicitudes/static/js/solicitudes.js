@@ -1,40 +1,41 @@
 /**
- * Lógica del formulario de solicitudes.
+ * Lógica del formulario de solicitudes (agregar/actualizar).
  *
- * La plantilla debe insertar en el formulario:
+ * La plantilla agregar.html debe usar:
  *   - un <select> con data-solicitud-apartamento
  *   - un <select> con data-solicitud-residente (sus opciones llevan data-apartment)
- *   - un input[type="file"] con data-solicitud-documento y un span data-texto-archivo
+ *   - un input[type="file"] con data-solicitud-documento
+ *   - <div id="zona-imagen"> + <img id="vista-previa-imagen"> + <span id="contenido-zona">
+ *   - <button id="boton-subir-imagen"> + <span id="nombre-archivo">
  *
- * No usa variables de plantilla directamente para poder vivir en static/js.
+ * Filtra residentes por apartamento y gestiona la zona de documento
+ * (clic, teclado y arrastrar/soltar) con vista previa para imágenes
+ * (los PDF solo muestran su nombre). No usa variables de plantilla.
  */
-
 (() => {
-  const inputDocumento = document.querySelector('[data-solicitud-documento]');
-  if (!inputDocumento) return;
+  const formulario = document.querySelector('.formulario-agregar');
+  if (!formulario) return;
 
-  // Subimos al <form> que contiene al input de documento para filtrar los
-  // campos dentro de él (evita tocar otros formularios de la página).
-  const formSolicitud = inputDocumento.closest('form');
-  if (!formSolicitud) return;
+  const selectApartamento = formulario.querySelector('[data-solicitud-apartamento]');
+  const selectResidente = formulario.querySelector('[data-solicitud-residente]');
+  const inputDocumento = formulario.querySelector('[data-solicitud-documento]');
+  const zonaImagen = document.getElementById('zona-imagen');
+  const vistaPrevia = document.getElementById('vista-previa-imagen');
+  const contenidoZona = document.getElementById('contenido-zona');
+  const nombreArchivo = document.getElementById('nombre-archivo');
+  const botonSubir = document.getElementById('boton-subir-imagen');
+  let urlPrevia = null;
 
-  const selectApartamento = formSolicitud.querySelector('[data-solicitud-apartamento]');
-  const selectResidente = formSolicitud.querySelector('[data-solicitud-residente]');
-
-  // Muestra solo los residentes del apartamento elegido (cada <option> declara
-  // su apartamento en data-apartment). Si el residente seleccionado ya no
-  // corresponde, lo deseleccionamos para forzar una elección válida.
+  // Muestra solo los residentes del apartamento elegido (cada <option>
+  // declara su apartamento en data-apartment).
   function filtrarResidentes() {
     if (!selectApartamento || !selectResidente) return;
     const apartamento = selectApartamento.value;
     selectResidente.querySelectorAll('option[data-apartment]').forEach((opt) => {
       opt.hidden = apartamento !== '' && opt.dataset.apartment !== apartamento;
     });
-    if (
-      selectResidente.selectedOptions[0]?.dataset.apartment &&
-      selectResidente.value !== '' &&
-      selectResidente.selectedOptions[0].dataset.apartment !== apartamento
-    ) {
+    const elegida = selectResidente.selectedOptions[0];
+    if (elegida && elegida.value !== '' && (elegida.dataset.apartment || '') !== apartamento && apartamento !== '') {
       selectResidente.value = '';
     }
   }
@@ -44,16 +45,63 @@
     filtrarResidentes();
   }
 
-  // Muestro el nombre del archivo elegido sobre el botón de subida.
-  function mostrarNombreArchivo() {
-    const span = inputDocumento.closest('label')?.querySelector('[data-texto-archivo]');
-    if (!span) return;
-    if (inputDocumento.files.length > 0) {
-      span.textContent = inputDocumento.files[0].name;
+  function mostrarNombreArchivo(archivo) {
+    if (!nombreArchivo || !archivo) return;
+    nombreArchivo.textContent = archivo.name;
+    nombreArchivo.hidden = false;
+  }
+
+  function mostrarVistaPrevia(archivo) {
+    if (!archivo) return;
+    mostrarNombreArchivo(archivo);
+    if (!vistaPrevia) return;
+    const esImagen = (archivo.type || '').startsWith('image/');
+    if (esImagen) {
+      if (urlPrevia) URL.revokeObjectURL(urlPrevia);
+      urlPrevia = URL.createObjectURL(archivo);
+      vistaPrevia.src = urlPrevia;
+      vistaPrevia.hidden = false;
+      if (contenidoZona) contenidoZona.hidden = true;
     } else {
-      span.textContent = 'Subir imagen/archivo';
+      vistaPrevia.removeAttribute('src');
+      vistaPrevia.hidden = true;
+      if (contenidoZona) contenidoZona.hidden = false;
     }
   }
 
-  inputDocumento.addEventListener('change', mostrarNombreArchivo);
+  function abrirSelectorDocumento() {
+    if (inputDocumento) inputDocumento.click();
+  }
+
+  if (zonaImagen && inputDocumento) {
+    zonaImagen.addEventListener('click', abrirSelectorDocumento);
+    zonaImagen.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Enter' || evento.key === ' ') {
+        evento.preventDefault();
+        abrirSelectorDocumento();
+      }
+    });
+    zonaImagen.addEventListener('dragover', (evento) => {
+      evento.preventDefault();
+      zonaImagen.classList.add('zona-activa');
+    });
+    zonaImagen.addEventListener('dragleave', () => {
+      zonaImagen.classList.remove('zona-activa');
+    });
+    zonaImagen.addEventListener('drop', (evento) => {
+      evento.preventDefault();
+      zonaImagen.classList.remove('zona-activa');
+      if (evento.dataTransfer.files.length > 0) {
+        inputDocumento.files = evento.dataTransfer.files;
+        mostrarVistaPrevia(evento.dataTransfer.files[0]);
+      }
+    });
+    inputDocumento.addEventListener('change', () => {
+      if (inputDocumento.files.length > 0) mostrarVistaPrevia(inputDocumento.files[0]);
+    });
+  }
+
+  if (botonSubir) {
+    botonSubir.addEventListener('click', abrirSelectorDocumento);
+  }
 })();

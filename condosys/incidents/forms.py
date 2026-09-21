@@ -61,7 +61,7 @@ class IncidentForm(forms.ModelForm):
         }
 
         labels = {
-            'apartment': 'Apartamento',
+            'apartment': 'Departamento',
             'resident': 'Residente',
             'category': 'Tipo de incidencia',
             'priority': 'Prioridad',
@@ -77,7 +77,7 @@ class IncidentForm(forms.ModelForm):
         self.fields['apartment'].queryset = (
             Apartment.objects.filter(is_active=True).select_related('building')
         )
-        self.fields['apartment'].empty_label = 'Elegir apartamento'
+        self.fields['apartment'].empty_label = 'Elegir departamento'
         # select_related evita consultas extra al mostrar el apartamento de cada residente.
         self.fields['resident'].queryset = Resident.objects.select_related('apartment').all()
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.

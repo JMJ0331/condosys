@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import CanAccessApartment
+from residencial.models import Residencial
 from .models import Garden, Building, Apartment
 from .serializers import (
     GardenSerializer, BuildingSerializer,
@@ -13,6 +14,12 @@ from .serializers import (
 from .forms import ApartmentsForm
 
 PAGINATE_BY = 15
+
+
+def distribucion_residencial():
+    """Modo de organización del residencial ('torres'|'edificios'|'')."""
+    residencial = Residencial.obtener_unico()
+    return residencial.distribucion if residencial else ''
 
 
 # @login_required
@@ -49,6 +56,7 @@ def app_index(request):
         'departamentos': departamentos,
         'jardines': Garden.objects.filter(is_active=True),
         'edificios': Building.objects.filter(is_active=True),
+        'distribucion_residencial': distribucion_residencial(),
         'estado_actual': estado,
         'jardin_actual': jardin,
         'edificio_actual': edificio,
@@ -74,6 +82,7 @@ def agregar_departamento(request):
         'form_apartments': form,
         'jardines': Garden.objects.filter(is_active=True),
         'edificios': Building.objects.filter(is_active=True),
+        'distribucion_residencial': distribucion_residencial(),
         'module_name': 'Departamentos',
         'titulo_modulo': 'Agregar departamento',
         'url_form': 'agregar_departamento',
@@ -85,7 +94,7 @@ def agregar_departamento(request):
 
 # @login_required
 def actualizar_departamento(request, pk):
-    apartamento = Apartment.objects.filter(pk=pk).first()
+    apartamento = Apartment.objects.select_related('building__garden').filter(pk=pk).first()
     if not apartamento:
         messages.error(request, 'Departamento no encontrado.')
         return redirect('departamentos_index')
@@ -104,6 +113,8 @@ def actualizar_departamento(request, pk):
         'form_apartments': form,
         'jardines': Garden.objects.filter(is_active=True),
         'edificios': Building.objects.filter(is_active=True),
+        'edificio_actual': apartamento.building,
+        'distribucion_residencial': distribucion_residencial(),
         'module_name': 'Departamentos',
         'titulo_modulo': 'Actualizar departamento',
         'url_form': 'actualizar_departamento',

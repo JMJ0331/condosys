@@ -1,0 +1,631 @@
+@import url('/static/css/variables.css');
+
+/* ============================================
+   Módulo Solicitudes - estilos específicos.
+   Los estilos de formulario/acciones/diálogos
+   viven en static/css (compartidos).
+   ============================================ */
+
+/* Áreas de texto más altas que el campo simple */
+.texto-area {
+	height: auto;
+	min-height: 8rem;
+	resize: vertical;
+}
+
+/* Campo que ocupa el ancho completo de su fila */
+.campo-ancho-completo {
+	grid-column: 1 / -1;
+}
+
+/* Cuadrícula dentro del panel de la página index */
+.panel-cuadricula .acciones {
+	gap: 0;
+	padding: 0;
+}
+
+.panel-cuadricula .contenedor-filtros {
+	padding: 1.2rem 1.2rem 1.4rem 1.2rem;
+	margin-bottom: 0;
+}
+
+.panel-cuadricula .tabla-filtrada {
+	margin-top: 0;
+	padding: 0;
+}
+
+.panel-cuadricula .paginacion-tabla {
+	padding: 0 1.2rem;
+}
+
+/* Filtros del listado */
+.contenedor-filtros {
+	padding: 0.4rem 0 1.4rem 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1.2rem;
+	border-bottom: 1px solid var(--black-50);
+	margin-bottom: 1.8rem;
+}
+
+.contenedor-filtros h2 {
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin: 0;
+	color: var(--black-400);
+}
+
+.filtros-tabla {
+	display: flex;
+	align-items: center;
+	gap: var(--space-16);
+	flex-wrap: wrap;
+}
+
+.formulario-filtros {
+	display: flex;
+	align-items: center;
+	gap: var(--space-16);
+	flex-wrap: wrap;
+}
+
+.filtros-tabla select,
+.boton-columnas {
+	appearance: none;
+	-webkit-appearance: none;
+	box-sizing: border-box;
+	margin: 0;
+	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+	font: inherit;
+	font-size: 1.25rem;
+	line-height: 1.4;
+	color: var(--black-400);
+	cursor: pointer;
+	min-width: 15rem;
+	outline: none;
+	text-align: left;
+	transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filtros-tabla select:hover,
+.boton-columnas:hover {
+	border-color: var(--green-900);
+}
+
+.filtros-tabla select:focus,
+.boton-columnas:focus,
+.boton-columnas[aria-expanded="true"] {
+	border-color: var(--green-900);
+	border-width: 1px;
+	outline: none;
+	box-shadow: 0 0 0 2px var(--green-200);
+}
+
+.selector-columnas {
+	position: relative;
+}
+
+.panel-columnas {
+	position: absolute;
+	top: calc(100% + 0.4rem);
+	left: 0;
+	z-index: 30;
+	min-width: 16rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8);
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+
+.panel-columnas[hidden] {
+	display: none;
+}
+
+.opcion-columna {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+	font: inherit;
+	font-size: 1.25rem;
+	color: var(--black-400);
+	cursor: pointer;
+	padding: 0.4rem 0.6rem;
+}
+
+.opcion-columna:hover {
+	background: var(--green-100);
+	border-radius: var(--borderR-4);
+}
+
+.opcion-columna input {
+	accent-color: var(--green-900);
+	width: 1.6rem;
+	height: 1.6rem;
+}
+
+.panel-columnas .opcion-columna input:focus,
+.panel-columnas .opcion-columna input:active {
+	border-color: var(--black-50);
+	border-width: 1px;
+	box-shadow: none;
+	outline: none;
+}
+
+.opcion-columna span {
+	white-space: nowrap;
+}
+
+.opcion-columna.opcion-todas {
+	border-bottom: 1px solid var(--black-50);
+	font-weight: 600;
+}
+
+.boton-nueva-solicitud {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-4);
+	background: var(--green-900);
+	color: var(--white-50);
+	border: none;
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8) var(--padding-16);
+	font-size: 1.25rem;
+	font-weight: 500;
+	cursor: pointer;
+	white-space: nowrap;
+	text-decoration: none;
+}
+
+.boton-nueva-solicitud img {
+	width: 1.8rem;
+	height: 1.8rem;
+	flex: none;
+}
+
+.boton-nueva-solicitud:hover {
+	background: var(--green-700);
+}
+
+.tabla-filtrada {
+	margin-top: 1.8rem;
+	overflow-x: auto;
+}
+
+table.tabla-solicitudes {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 110rem;
+}
+
+.tabla-solicitudes thead {
+	justify-content: space-between;
+	border-bottom: 1px solid var(--black-50);
+	background-color: var(--white-500);
+}
+
+.tabla-solicitudes th {
+	text-align: left;
+	font-weight: bold;
+	color: var(--black-400);
+	font-size: 1.2rem;
+	padding: var(--padding-8) 1.2rem;
+	white-space: nowrap;
+}
+
+.tabla-solicitudes td {
+	padding: 1.4rem;
+	font-size: 1.3rem;
+	color: var(--black-400);
+	border-bottom: 1px solid var(--white-400);
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.tabla-solicitudes tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.foto-evidencia {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	border-radius: var(--borderR-8);
+	object-fit: cover;
+	vertical-align: middle;
+}
+
+.foto-marcador {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	background: var(--black-50);
+	border-radius: var(--borderR-8);
+	vertical-align: middle;
+}
+
+.tabla-solicitudes th.columna-acciones {
+	width: 1px;
+	white-space: nowrap;
+	text-align: right;
+}
+
+.tabla-solicitudes td.columna-acciones {
+	width: 1px;
+	white-space: nowrap;
+	text-align: right;
+}
+
+.acciones-fila {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-8);
+}
+
+.boton-accion {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.4rem;
+	color: var(--black-300);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.boton-accion:hover {
+	color: var(--green-900);
+}
+
+.boton-accion img {
+	width: 1.6rem;
+	height: 1.6rem;
+}
+
+.sin-registros {
+	text-align: center;
+	color: var(--white-700);
+	font-size: 1.3rem;
+	padding: 2.4rem;
+}
+
+/* Página agregar/actualizar */
+.pagina-agregar {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+}
+
+.formulario-agregar {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 30rem;
+	gap: 1.6rem;
+	align-items: start;
+}
+
+.columna-principal {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+	min-width: 0;
+}
+
+.columna-lateral {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 1.2rem;
+	min-width: 0;
+	background: var(--white-50);
+}
+
+.tarjeta {
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	overflow: hidden;
+}
+
+.cabecera-tarjeta {
+	margin: 0;
+	padding: 1.2rem 1.6rem;
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: var(--black-400);
+	border-bottom: 1px solid var(--black-50);
+}
+
+.cuerpo-tarjeta {
+	padding: 1.6rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.etiqueta-campo {
+	font-size: 1.3rem;
+	font-weight: 500;
+	color: var(--black-400);
+}
+
+.formulario-agregar .campo-formulario input,
+.formulario-agregar .campo-formulario select,
+.formulario-agregar .campo-formulario textarea,
+.formulario-agregar .campo-entrada,
+.formulario-agregar .campo-seleccion {
+	border-radius: var(--borderR-8);
+}
+
+/* Zona de documento con borde punteado */
+.zona-imagen {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 28rem;
+	padding: 1.6rem;
+	background: var(--white-100);
+	border: 1px dashed var(--black-100);
+	border-radius: var(--borderR-8);
+	cursor: pointer;
+}
+
+.zona-imagen:focus {
+	border-color: var(--green-900);
+	outline: none;
+}
+
+.zona-activa {
+	border-color: var(--green-900);
+	background: var(--green-25);
+}
+
+.contenido-zona {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	text-align: center;
+}
+
+.contenido-zona[hidden] {
+	display: none;
+}
+
+.icono-zona {
+	width: 2.4rem;
+	height: 2.4rem;
+	color: var(--white-700);
+}
+
+.texto-subir {
+	font-size: 1.2rem;
+	font-weight: 500;
+	color: var(--white-700);
+}
+
+.texto-ayuda {
+	font-size: 1.1rem;
+	color: var(--white-700);
+}
+
+.vista-previa-imagen {
+	max-width: 100%;
+	max-height: 26rem;
+	object-fit: contain;
+	border-radius: var(--borderR-4);
+}
+
+.vista-previa-imagen[hidden] {
+	display: none;
+}
+
+input[data-solicitud-documento] {
+	position: absolute;
+	width: 0.1rem;
+	height: 0.1rem;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.nombre-archivo {
+	font-size: 1.2rem;
+	color: var(--black-300);
+}
+
+.nombre-archivo[hidden] {
+	display: none;
+}
+
+.boton-subir {
+	align-self: flex-start;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-4);
+	padding: 0.4rem 1.2rem;
+	font: inherit;
+	font-size: 1.3rem;
+	font-weight: 500;
+	color: var(--green-900);
+	cursor: pointer;
+}
+
+.boton-subir svg {
+	width: 1.6rem;
+	height: 1.6rem;
+}
+
+.boton-agregar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	box-sizing: border-box;
+	height: fit-content;
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--green-900);
+	color: var(--white-50);
+	border: none;
+	border-radius: var(--borderR-8);
+	font: inherit;
+	font-size: 1.4rem;
+	font-weight: 600;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.boton-agregar:hover,
+.boton-agregar:active {
+	background: var(--green-700);
+}
+
+.boton-cancelar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	box-sizing: border-box;
+	height: fit-content;
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--white-50);
+	color: var(--red-500);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	font-size: 1.4rem;
+	font-weight: 500;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.boton-cancelar:hover {
+	border-color: var(--red-500);
+}
+
+@media (max-width: 900px) {
+	.formulario-agregar {
+		grid-template-columns: 1fr;
+	}
+
+	.panel-cuadricula .tabla-filtrada {
+		padding: 1.2rem;
+	}
+
+	table.tabla-solicitudes {
+		min-width: 0;
+	}
+
+	.tabla-solicitudes thead {
+		display: none;
+	}
+
+	.tabla-solicitudes tbody tr {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		box-sizing: border-box;
+		background: var(--white-50);
+		border: 1px solid var(--black-50);
+		border-radius: var(--borderR-8);
+		padding: 0.4rem 1.6rem;
+		margin-bottom: 1.2rem;
+	}
+
+	.tabla-solicitudes tbody td {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.2rem;
+		padding: 1rem 0;
+		border-bottom: 1px solid var(--white-400);
+		white-space: normal;
+		text-align: right;
+	}
+
+	.tabla-solicitudes tbody td:last-child {
+		border-bottom: none;
+	}
+
+	.tabla-solicitudes tbody td::before {
+		content: attr(data-etiqueta);
+		font-size: 1.2rem;
+		font-weight: 600;
+		color: var(--black-400);
+		text-align: left;
+	}
+
+	.tabla-solicitudes tbody td.columna-acciones {
+		justify-content: flex-end;
+		width: auto;
+		white-space: normal;
+	}
+
+	.tabla-solicitudes tbody td.columna-acciones::before {
+		content: none;
+	}
+
+	.tabla-solicitudes tbody td.columna-acciones .acciones-fila {
+		display: flex;
+		flex-direction: row;
+		gap: var(--space-8);
+		align-items: center;
+		justify-content: flex-end;
+		margin-left: auto;
+	}
+
+	.tabla-solicitudes tbody td.columna-acciones .boton-accion {
+		padding: var(--space-4);
+		border-radius: var(--borderR-4);
+		background: transparent;
+	}
+
+	.tabla-solicitudes tbody td.sin-registros {
+		justify-content: center;
+		text-align: center;
+	}
+
+	.tabla-solicitudes tbody td.sin-registros::before {
+		content: none;
+	}
+}
+
+@media (max-width: 560px) {
+	.contenedor-filtros {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.filtros-tabla,
+	.formulario-filtros {
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.selector-columnas {
+		width: 100%;
+	}
+
+	.filtros-tabla select,
+	.boton-columnas,
+	.boton-nueva-solicitud {
+		width: 100%;
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	.cuerpo-tarjeta {
+		padding: 1.2rem;
+	}
+}

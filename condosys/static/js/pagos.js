@@ -64,6 +64,7 @@
 
   // Cambia la etiqueta y el placeholder del desplegable de residentes
   // al mismo tiempo que se filtra (quien paga -> propietario/residente).
+  // Sin quien paga elegido, el desplegable queda deshabilitado en gris.
   function actualizarTextosResidente() {
     if (!selectResidente || !selectQuien) return;
     const textos = textosResidente[selectQuien.value] || textosResidente[''];
@@ -72,6 +73,10 @@
     if (etiqueta) etiqueta.textContent = textos.etiqueta;
     const placeholder = selectResidente.querySelector('option[value=""]');
     if (placeholder) placeholder.textContent = textos.placeholder;
+    const deshabilitado = selectQuien.value === '';
+    if (deshabilitado && selectResidente.value !== '') selectResidente.value = '';
+    selectResidente.disabled = deshabilitado;
+    if (campo) campo.classList.toggle('campo-deshabilitado', deshabilitado);
   }
 
   // Enlazamos los filtros: apartamento o tipo re-filtran residentes.

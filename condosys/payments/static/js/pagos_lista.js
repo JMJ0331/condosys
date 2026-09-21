@@ -2,6 +2,8 @@
  * Lógica de la cuadrícula de pagos (/pagos/).
  * - Auto-submit de filtros (#filtros-pagos).
  * - Selector de columnas visibles (#boton-columnas / #panel-columnas).
+ * - Calendarios de mes y año (#boton-mes / #panel-mes, #boton-anio / #panel-anio):
+ *   rejilla de meses y lista de años que filtran al elegir.
  *
  * Sin etiquetas de plantilla Django: solo usa IDs y atributos data-*.
  */
@@ -79,4 +81,49 @@
       if (!evento.target.closest('.selector-columnas')) cerrarPanel();
     });
   }
+
+  // --- Calendarios de mes y año: rejilla que filtra al elegir ---
+  const calendarios = [
+    { boton: 'boton-mes', panel: 'panel-mes', valor: 'valor-mes', opcion: 'mes' },
+    { boton: 'boton-anio', panel: 'panel-anio', valor: 'valor-anio', opcion: 'anio' },
+  ];
+
+  function cerrarCalendarios(excepto) {
+    calendarios.forEach(({ boton, panel }) => {
+      if (panel === excepto) return;
+      const panelEl = document.getElementById(panel);
+      const botonEl = document.getElementById(boton);
+      if (panelEl) panelEl.hidden = true;
+      if (botonEl) botonEl.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  calendarios.forEach(({ boton, panel, valor, opcion }) => {
+    const botonEl = document.getElementById(boton);
+    const panelEl = document.getElementById(panel);
+    const valorEl = document.getElementById(valor);
+    if (!botonEl || !panelEl || !valorEl || !formularioFiltros) return;
+
+    botonEl.addEventListener('click', () => {
+      const abierto = !panelEl.hidden;
+      cerrarCalendarios(panel);
+      panelEl.hidden = abierto;
+      botonEl.setAttribute('aria-expanded', String(!abierto));
+    });
+
+    panelEl.querySelectorAll(`[data-${opcion}]`).forEach((opcionEl) => {
+      opcionEl.addEventListener('click', () => {
+        valorEl.value = opcionEl.dataset[opcion];
+        formularioFiltros.submit();
+      });
+    });
+  });
+
+  document.addEventListener('click', (evento) => {
+    if (!evento.target.closest('.selector-calendario')) cerrarCalendarios(null);
+  });
+
+  document.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Escape') cerrarCalendarios(null);
+  });
 })();

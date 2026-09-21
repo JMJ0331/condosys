@@ -1,0 +1,195 @@
+@import url('/static/css/variables.css');
+
+/* ============================================
+   Módulo Residencial - estilos específicos.
+   Réplica de residencial.png: tarjetas de
+   información, dirección, estructura y contacto.
+   Los campos base viven en formularios.css.
+   ============================================ */
+
+.pagina-residencial {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+}
+
+.formulario-residencial {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 30rem;
+	gap: 1.6rem;
+	align-items: start;
+}
+
+.columna-principal {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+	min-width: 0;
+}
+
+.columna-lateral {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 1.2rem;
+	min-width: 0;
+	background: var(--white-50);
+}
+
+.tarjeta {
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	overflow: hidden;
+}
+
+.cabecera-tarjeta {
+	margin: 0;
+	padding: 1.2rem 1.6rem;
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: var(--black-400);
+	border-bottom: 1px solid var(--black-50);
+}
+
+.cuerpo-tarjeta {
+	padding: 1.6rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+/* Radio de campos según maqueta (tarjetas con bordes suaves). */
+.formulario-residencial .campo-formulario input,
+.formulario-residencial .campo-formulario select,
+.formulario-residencial .campo-formulario textarea,
+.formulario-residencial .campo-entrada,
+.formulario-residencial .campo-seleccion {
+	border-radius: var(--borderR-8);
+}
+
+.formulario-residencial .campo-formulario textarea {
+	min-height: 9rem;
+	resize: vertical;
+}
+
+/* Zona del mapa con borde punteado como en la imagen. */
+.campo-mapa {
+	gap: 0.8rem;
+}
+
+.zona-mapa {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 28rem;
+	padding: 1.6rem;
+	background: var(--white-100);
+	border: 1px dashed var(--black-100);
+	border-radius: var(--borderR-8);
+	overflow: hidden;
+}
+
+.zona-mapa.con-mapa {
+	padding: 0;
+	border-style: solid;
+}
+
+.contenido-zona {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	text-align: center;
+}
+
+.contenido-zona[hidden] {
+	display: none;
+}
+
+.icono-zona {
+	width: 2.4rem;
+	height: 2.4rem;
+	color: var(--white-700);
+}
+
+.texto-subir {
+	font-size: 1.2rem;
+	font-weight: 500;
+	color: var(--white-700);
+}
+
+.vista-previa-mapa {
+	width: 100%;
+	min-height: 28rem;
+}
+
+.vista-previa-mapa[hidden] {
+	display: none;
+}
+
+.vista-previa-mapa iframe {
+	width: 100%;
+	min-height: 28rem;
+	border: 0;
+	display: block;
+}
+
+/* Lateral: acción principal + cancelar (ancho del contenedor). */
+.boton-guardar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	box-sizing: border-box;
+	height: fit-content;
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--green-900);
+	color: var(--white-50);
+	border: none;
+	border-radius: var(--borderR-8);
+	font: inherit;
+	font-size: 1.4rem;
+	font-weight: 600;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.boton-guardar:hover,
+.boton-guardar:active {
+	background: var(--green-700);
+}
+
+.boton-cancelar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	box-sizing: border-box;
+	height: fit-content;
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--white-50);
+	color: var(--red-500);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	font-size: 1.4rem;
+	font-weight: 500;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.boton-cancelar:hover {
+	border-color: var(--red-500);
+}
+
+@media (max-width: 900px) {
+	.formulario-residencial {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 560px) {
+	.cuerpo-tarjeta {
+		padding: 1.2rem;
+	}
+}

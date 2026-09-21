@@ -34,9 +34,9 @@
         </select>
 
         <select name="edificio" id="filtro-edificio">
-          <option value="">Todos los edificios</option>
+          <option value="">{% if distribucion_residencial == 'torres' %}Todas las torres{% else %}Todos los edificios{% endif %}</option>
           {% for edificio in edificios %}
-          <option value="{{ edificio.id }}" {% if edificio_actual == edificio.id|stringformat:'s' %}selected{% endif %}>{{ edificio.name }}</option>
+          <option value="{{ edificio.id }}" {% if edificio_actual == edificio.id|stringformat:'s' %}selected{% endif %}>{% if distribucion_residencial == 'torres' %}{{ edificio.tower|default:edificio.name }}{% else %}{{ edificio.name }}{% endif %}</option>
           {% endfor %}
         </select>
 
@@ -49,7 +49,7 @@
         </select>
       </form>
 
-      <a href="{% url 'agregar_departamento' %}" class="boton-nuevo-departamento">+ Agregar departamento</a>
+      <a href="{% url 'agregar_departamento' %}" class="boton-nuevo-departamento"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar departamento</a>
     </div>
   </div>
 
@@ -59,8 +59,12 @@
         <tr>
           <th data-columna="miniatura">Miniatura</th>
           <th data-columna="departamento">Departamento</th>
+          {% if distribucion_residencial != 'torres' %}
           <th data-columna="edificio">Edificio</th>
+          {% endif %}
+          {% if distribucion_residencial != 'edificios' %}
           <th data-columna="torre">Torre</th>
+          {% endif %}
           <th data-columna="bloque">Bloque</th>
           <th data-columna="piso">Piso</th>
           <th data-columna="jardin">Jardin</th>
@@ -80,8 +84,12 @@
             {% endif %}
           </td>
           <td data-columna="departamento" data-etiqueta="Departamento">{{ departamento.name }}</td>
+          {% if distribucion_residencial != 'torres' %}
           <td data-columna="edificio" data-etiqueta="Edificio">{{ departamento.building.name }}</td>
+          {% endif %}
+          {% if distribucion_residencial != 'edificios' %}
           <td data-columna="torre" data-etiqueta="Torre">{{ departamento.building.tower|default:"—" }}</td>
+          {% endif %}
           <td data-columna="bloque" data-etiqueta="Bloque">{{ departamento.building.block|default:"—" }}</td>
           <td data-columna="piso" data-etiqueta="Piso">{{ departamento.floor|default:"—" }}</td>
           <td data-columna="jardin" data-etiqueta="Jardín">{{ departamento.building.garden.name }}</td>
@@ -100,7 +108,7 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="10" class="sin-registros">Sin coincidencias.</td>
+          <td colspan="{% if distribucion_residencial == 'torres' or distribucion_residencial == 'edificios' %}9{% else %}10{% endif %}" class="sin-registros">Sin coincidencias.</td>
         </tr>
         {% endfor %}
       </tbody>

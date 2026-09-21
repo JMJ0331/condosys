@@ -35,6 +35,8 @@ class AreaComunForm(forms.ModelForm):
             'usage_conditions': forms.Textarea(attrs={
                 'class': 'campo-area-texto',
                 'placeholder': 'Detallar condiciones de uso y/o reglas de uso',
+                'maxlength': '400',
+                'data-contador': 'contador-condiciones',
             }),
             'status': forms.Select(attrs={'class': 'campo-seleccion'}),
         }
@@ -56,6 +58,12 @@ class AreaComunForm(forms.ModelForm):
         placeholder(self.fields['area_type'], 'Elegir tipo de área')
         placeholder(self.fields['available_days'], 'Elegir días')
         placeholder(self.fields['status'], 'Elegir estado')
+
+    def clean_usage_conditions(self):
+        condiciones = self.cleaned_data.get('usage_conditions') or ''
+        if len(condiciones) > 400:
+            raise forms.ValidationError('Las condiciones de uso no pueden superar los 400 caracteres.')
+        return condiciones
 
     def clean(self):
         cleaned_data = super().clean()

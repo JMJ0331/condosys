@@ -44,6 +44,15 @@ class MaintenanceCharge(models.Model):
     concept = models.CharField(max_length=30, choices=CONCEPT_CHOICES)
     periodicity = models.CharField(max_length=20, choices=PERIODICITY_CHOICES, default='monthly')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    apartment = models.ForeignKey(
+        'structure.Apartment',
+        on_delete=models.SET_NULL,
+        related_name='maintenance_charges',
+        null=True,
+        blank=True,
+        verbose_name='Departamento (si es aplicable)',
+        help_text='Vacío = aplica a todos los departamentos.',
+    )
 
     payment_methods = models.CharField(
         max_length=20,

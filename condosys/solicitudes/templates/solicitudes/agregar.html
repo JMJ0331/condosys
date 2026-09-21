@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/solicitudes.css' %}">
+{% endblock %}
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='solicitudes_index' %}
+
+<main class="container-main-side2">
+  <div class="pagina-agregar">
+    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
+      {% csrf_token %}
+      {{ form_solicitud.non_field_errors }}
+
+      <div class="columna-principal">
+        <section class="tarjeta" aria-labelledby="titulo-informacion">
+          <h3 class="cabecera-tarjeta" id="titulo-informacion">Información de la solicitud</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_solicitud.apartment.id_for_label }}">{{ form_solicitud.apartment.label }}</label>
+                {{ form_solicitud.apartment }}
+                {{ form_solicitud.apartment.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_solicitud.resident.id_for_label }}">{{ form_solicitud.resident.label }}</label>
+                <select name="{{ form_solicitud.resident.html_name }}" id="{{ form_solicitud.resident.id_for_label }}" class="campo-seleccion" data-solicitud-residente>
+                  <option value="">Elegir residente</option>
+                  {% for res in residentes %}
+                  <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}"{% if form_solicitud.resident.value|stringformat:'s' == res.id|stringformat:'s' %} selected{% endif %}>{{ res.full_name }}</option>
+                  {% endfor %}
+                </select>
+                {{ form_solicitud.resident.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_solicitud.request_type.id_for_label }}">{{ form_solicitud.request_type.label }}</label>
+                {{ form_solicitud.request_type }}
+                {{ form_solicitud.request_type.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-detalles">
+          <h3 class="cabecera-tarjeta" id="titulo-detalles">Detalles</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_solicitud.description.id_for_label }}">{{ form_solicitud.description.label }}</label>
+                {{ form_solicitud.description }}
+                {{ form_solicitud.description.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_solicitud.request_date.id_for_label }}">{{ form_solicitud.request_date.label }}</label>
+                {{ form_solicitud.request_date }}
+                {{ form_solicitud.request_date.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <span class="etiqueta-campo" id="etiqueta-documento">{{ form_solicitud.attachment.label }}</span>
+                <div class="zona-imagen" id="zona-imagen" role="button" tabindex="0" aria-labelledby="etiqueta-documento">
+                  <span class="contenido-zona" id="contenido-zona">
+                    <svg class="icono-zona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                      <circle cx="9" cy="9" r="2"></circle>
+                      <path d="m21 15-4.5-4.5L6 21"></path>
+                    </svg>
+                    <span class="texto-subir">Subir imagen/archivo</span>
+                    <span class="texto-ayuda">JPG, PNG, WEBP, PDF · máx. 2 MB</span>
+                  </span>
+                  <img class="vista-previa-imagen" id="vista-previa-imagen" alt="" hidden>
+                </div>
+                {{ form_solicitud.attachment }}
+                {{ form_solicitud.attachment.errors }}
+                <span class="nombre-archivo" id="nombre-archivo" hidden></span>
+                <button type="button" class="boton-subir" id="boton-subir-imagen">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 16V4m0 0 4 4m-4-4-4 4"></path>
+                    <path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path>
+                  </svg>
+                  Subir imagen/archivo
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-seguimiento">
+          <h3 class="cabecera-tarjeta" id="titulo-seguimiento">Seguimiento</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_solicitud.tracking_response.id_for_label }}">{{ form_solicitud.tracking_response.label }}</label>
+                {{ form_solicitud.tracking_response }}
+                {{ form_solicitud.tracking_response.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="columna-lateral">
+        <section class="tarjeta" aria-labelledby="titulo-estado">
+          <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label for="{{ form_solicitud.status.id_for_label }}">{{ form_solicitud.status.label }}</label>
+              {{ form_solicitud.status }}
+              {{ form_solicitud.status.errors }}
+            </div>
+          </div>
+        </section>
+
+        <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
+        <a href="{% url 'solicitudes_index' %}" class="boton-cancelar">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/solicitudes.js' %}" defer></script>
+{% endblock %}

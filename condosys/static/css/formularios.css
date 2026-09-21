@@ -88,6 +88,17 @@
 	font-size: 1.2rem;
 }
 
+/* Campo en espera/deshabilitado: etiqueta y control en gris. */
+.campo-deshabilitado label {
+	color: var(--white-700);
+}
+
+.campo-deshabilitado .campo-seleccion {
+	background-color: var(--white-400);
+	color: var(--white-700);
+	cursor: not-allowed;
+}
+
 .ayuda-formulario {
 	font-size: 1.1rem;
 	color: var(--black-300);
@@ -112,6 +123,16 @@
 .campo-seleccion:hover,
 .campo-seleccion:focus {
 	border-color: var(--green-900);
+}
+
+/* Flecha propia en los selects de agregar/actualizar: la misma de los
+   filtros de las cuadrículas, en vez de la nativa del sistema. */
+.campo-formulario select,
+.campo-seleccion {
+	appearance: none;
+	-webkit-appearance: none;
+	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+	padding-right: 2.8rem;
 }
 
 /* Interruptor on/off */

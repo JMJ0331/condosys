@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/comunicados.css' %}">
+{% endblock %}
+{% block contenido %}
+{% include "componentes/header.html" with nombre_modulo=module_name url_volver='comunicados_index' %}
+
+<main class="container-main-side2">
+  <div class="pagina-agregar">
+    <form method="post" action="{% url 'crear_comunicado' %}" enctype="multipart/form-data" class="formulario-agregar">
+      {% csrf_token %}
+      {{ form_communication.non_field_errors }}
+
+      <div class="columna-principal">
+        <section class="tarjeta" aria-labelledby="titulo-informacion">
+          <h3 class="cabecera-tarjeta" id="titulo-informacion">Información del comunicado</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="rejilla-doble">
+              <div class="campo-formulario">
+                <label for="{{ form_communication.title.id_for_label }}">{{ form_communication.title.label }}</label>
+                {{ form_communication.title }}
+                {{ form_communication.title.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_communication.category.id_for_label }}">{{ form_communication.category.label }}</label>
+                {{ form_communication.category }}
+                {{ form_communication.category.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-contenido">
+          <h3 class="cabecera-tarjeta" id="titulo-contenido">Contenido</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label for="{{ form_communication.body.id_for_label }}">{{ form_communication.body.label }}</label>
+              {{ form_communication.body }}
+              {{ form_communication.body.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_communication.image.id_for_label }}">{{ form_communication.image.label }}</label>
+              <label class="btn-subir-archivo" for="{{ form_communication.image.id_for_label }}">
+                {{ form_communication.image }}
+                <span class="texto-boton-archivo" data-texto-archivo>Subir imagen</span>
+              </label>
+              <small class="ayuda-formulario" data-ayuda-foto>JPG, PNG o WEBP — máx. 2 MB</small>
+              {{ form_communication.image.errors }}
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-alcance">
+          <h3 class="cabecera-tarjeta" id="titulo-alcance">Alcance y programación</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="rejilla-doble">
+              <div class="campo-formulario">
+                <label for="{{ form_communication.target_type.id_for_label }}">{{ form_communication.target_type.label }}</label>
+                {{ form_communication.target_type }}
+                {{ form_communication.target_type.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_communication.publication_date.id_for_label }}">{{ form_communication.publication_date.label }}</label>
+                {{ form_communication.publication_date }}
+                {{ form_communication.publication_date.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="columna-lateral">
+        <section class="tarjeta tarjeta-estado" aria-labelledby="titulo-estado">
+          <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label for="{{ form_communication.estado.id_for_label }}">{{ form_communication.estado.label }}</label>
+              {{ form_communication.estado }}
+              {{ form_communication.estado.errors }}
+            </div>
+          </div>
+        </section>
+
+        <button type="submit" class="boton-agregar">Agregar</button>
+        <a href="{% url 'comunicados_index' %}" class="boton-cancelar">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/comunicados.js' %}" defer></script>
+{% endblock %}

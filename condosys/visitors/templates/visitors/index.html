@@ -1,97 +1,170 @@
 {% extends 'base.html' %}
+<<<<<<< HEAD
 {% block contenido %}
+=======
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/visitantes.css' %}">
+{% endblock %}
+{% block mini-cards %}
+>>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+
 <main class="container-main-side2">
 
-  <div class="panel-acciones">
+  <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
-      <h3>Registrar Visitante</h3>
 
-      <form method="post" action="{% url 'crear_visitante' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form_visitor.non_field_errors }}
+  <div class="contenedor-filtros">
+    <h2>Todas las visitas</h2>
 
-        <div class="seccion-formulario">
-          <legend>Información del visitante</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.name.id_for_label }}">{{ form_visitor.name.label }}</label>
-              {{ form_visitor.name }}
-              {{ form_visitor.name.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.type.id_for_label }}">{{ form_visitor.type.label }}</label>
-              {{ form_visitor.type }}
-              {{ form_visitor.type.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.document_type.id_for_label }}">{{ form_visitor.document_type.label }}</label>
-              {{ form_visitor.document_type }}
-              {{ form_visitor.document_type.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.document_image.id_for_label }}">{{ form_visitor.document_image.label }}</label>
-              <label class="btn-subir-archivo" for="{{ form_visitor.document_image.id_for_label }}">
-                {{ form_visitor.document_image }}
-                <span class="texto-boton-archivo" data-texto-archivo>Subir imagen</span>
-              </label>
-              <small class="ayuda-formulario" data-ayuda-foto>JPG, PNG o WEBP — máx. 2 MB</small>
-              {{ form_visitor.document_image.errors }}
+    <div class="filtros-tabla">
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
+        </div>
+      </div>
+
+      <form method="get" class="formulario-filtros" id="filtros-visitantes">
+        <select name="estado" id="filtro-estado">
+          <option value="">Todos los estados</option>
+          <option value="pending" {% if estado_actual == 'pending' %}selected{% endif %}>Esperando</option>
+          <option value="authorized" {% if estado_actual == 'authorized' %}selected{% endif %}>Autorizado</option>
+          <option value="rejected" {% if estado_actual == 'rejected' %}selected{% endif %}>Rechazado</option>
+          <option value="completed" {% if estado_actual == 'completed' %}selected{% endif %}>Completado</option>
+          <option value="cancelled" {% if estado_actual == 'cancelled' %}selected{% endif %}>Cancelado</option>
+        </select>
+
+        <select name="apartamento" id="filtro-apartamento">
+          <option value="">Todos los departamentos</option>
+          {% for apartamento in apartamentos %}
+          <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="tipo" id="filtro-tipo">
+          <option value="">Todos los tipos de visitantes</option>
+          <option value="family" {% if tipo_actual == 'family' %}selected{% endif %}>Familiar</option>
+          <option value="delivery" {% if tipo_actual == 'delivery' %}selected{% endif %}>Delivery</option>
+          <option value="technician" {% if tipo_actual == 'technician' %}selected{% endif %}>Técnico</option>
+          <option value="provider" {% if tipo_actual == 'provider' %}selected{% endif %}>Proveedor</option>
+          <option value="other" {% if tipo_actual == 'other' %}selected{% endif %}>Otro</option>
+        </select>
+
+        <div class="selector-calendario">
+          <button type="button" class="boton-calendario" id="boton-mes" aria-haspopup="true" aria-expanded="false">{{ mes_actual_nombre }}</button>
+          <div class="panel-calendario" id="panel-mes" hidden>
+            <input type="hidden" name="mes" id="valor-mes" value="{{ mes_actual }}">
+            <div class="rejilla-calendario">
+              <button type="button" class="opcion-calendario{% if not mes_actual %} seleccionada{% endif %}" data-mes="">Todos</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '1' %} seleccionada{% endif %}" data-mes="1">Ene</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '2' %} seleccionada{% endif %}" data-mes="2">Feb</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '3' %} seleccionada{% endif %}" data-mes="3">Mar</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '4' %} seleccionada{% endif %}" data-mes="4">Abr</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '5' %} seleccionada{% endif %}" data-mes="5">May</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '6' %} seleccionada{% endif %}" data-mes="6">Jun</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '7' %} seleccionada{% endif %}" data-mes="7">Jul</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '8' %} seleccionada{% endif %}" data-mes="8">Ago</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '9' %} seleccionada{% endif %}" data-mes="9">Sep</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '10' %} seleccionada{% endif %}" data-mes="10">Oct</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '11' %} seleccionada{% endif %}" data-mes="11">Nov</button>
+              <button type="button" class="opcion-calendario{% if mes_actual == '12' %} seleccionada{% endif %}" data-mes="12">Dic</button>
             </div>
           </div>
         </div>
 
-        <div class="seccion-formulario">
-          <legend>Destino y autorización</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.apartment.id_for_label }}">{{ form_visitor.apartment.label }}</label>
-              {{ form_visitor.apartment }}
-              {{ form_visitor.apartment.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.authorized_by.id_for_label }}">{{ form_visitor.authorized_by.label }}</label>
-              {{ form_visitor.authorized_by }}
-              {{ form_visitor.authorized_by.errors }}
+        <div class="selector-calendario">
+          <button type="button" class="boton-calendario" id="boton-anio" aria-haspopup="true" aria-expanded="false">{% if anio_actual %}{{ anio_actual }}{% else %}Todos los años{% endif %}</button>
+          <div class="panel-calendario" id="panel-anio" hidden>
+            <input type="hidden" name="anio" id="valor-anio" value="{{ anio_actual }}">
+            <div class="rejilla-calendario">
+              <button type="button" class="opcion-calendario{% if not anio_actual %} seleccionada{% endif %}" data-anio="">Todos</button>
+              {% for anio_opcion in anios %}
+              <button type="button" class="opcion-calendario{% if anio_actual == anio_opcion|stringformat:'s' %} seleccionada{% endif %}" data-anio="{{ anio_opcion }}">{{ anio_opcion }}</button>
+              {% endfor %}
             </div>
           </div>
-        </div>
-
-        <div class="seccion-formulario">
-          <legend>Registro de acceso</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.fecha_entrada.id_for_label }}">{{ form_visitor.fecha_entrada.label }}</label>
-              {{ form_visitor.fecha_entrada }}
-              {{ form_visitor.fecha_entrada.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.fecha_salida.id_for_label }}">{{ form_visitor.fecha_salida.label }}</label>
-              {{ form_visitor.fecha_salida }}
-              {{ form_visitor.fecha_salida.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="seccion-formulario">
-          <legend>Estado</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_visitor.status.id_for_label }}">{{ form_visitor.status.label }}</label>
-              {{ form_visitor.status }}
-              {{ form_visitor.status.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="pie-formulario">
-          <button type="submit">Agregar</button>
-          <button type="reset">Cancelar</button>
         </div>
       </form>
+
+      <a href="{% url 'agregar_visitante' %}" class="boton-nuevo-visitante"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar visitante</a>
+    </div>
+  </div>
+
+  <div class="tabla-filtrada">
+    <table class="tabla-visitantes">
+      <thead>
+        <tr>
+          <th data-columna="nombre">Nombre completo</th>
+          <th data-columna="tipo">Tipo de visitante</th>
+          <th data-columna="tipo-documento">Tipo de documento</th>
+          <th data-columna="documento">Documento</th>
+          <th data-columna="departamento">Departamento a visitar</th>
+          <th data-columna="autorizado">Autorizado por</th>
+          <th data-columna="entrada">Fecha de entrada</th>
+          <th data-columna="salida">Fecha de salida</th>
+          <th data-columna="estado">Estado</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for visita in visitas %}
+        <tr>
+          <td data-columna="nombre" data-etiqueta="Nombre completo">{{ visita.name }}</td>
+          <td data-columna="tipo" data-etiqueta="Tipo de visitante">{{ visita.get_type_display }}</td>
+          <td data-columna="tipo-documento" data-etiqueta="Tipo de documento">{{ visita.get_document_type_display|default:"—" }}</td>
+          <td data-columna="documento" data-etiqueta="Documento">{{ visita.document|default:"—" }}</td>
+          <td data-columna="departamento" data-etiqueta="Departamento a visitar">{{ visita.apartment.name }}</td>
+          <td data-columna="autorizado" data-etiqueta="Autorizado por">{{ visita.authorized_by.full_name|default:"—" }}</td>
+          <td data-columna="entrada" data-etiqueta="Fecha de entrada">{{ visita.scheduled_entry|date:"d/m/Y H:i" }}</td>
+          <td data-columna="salida" data-etiqueta="Fecha de salida">{{ visita.scheduled_exit|date:"d/m/Y H:i"|default:"—" }}</td>
+          <td data-columna="estado" data-etiqueta="Estado">{{ visita.get_status_display }}</td>
+          <td class="columna-acciones">
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_visitante' visita.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ visita.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="10" class="sin-registros">Sin coincidencias.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% for visita in visitas %}
+  <dialog id="dialog-eliminar-{{ visita.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ visita.id }}">
+    <form method="post" action="{% url 'eliminar_visitante' visita.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ visita.id }}" class="titulo-eliminar">Eliminar visita</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar la visita de <strong>{{ visita.name }}</strong> al departamento <strong>{{ visita.apartment.name }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
+
+  {% include "componentes/paginacion_tabla.html" with pagina=visitas %}
     </div>
   </div>
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/visitantes_lista.js' %}" defer></script>
 {% endblock %}

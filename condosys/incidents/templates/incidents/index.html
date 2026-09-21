@@ -5,110 +5,138 @@
 {% endblock %}
 {% block contenido %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+
 <main class="container-main-side2">
 
-  <div class="panel-acciones">
+  <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
-      <h3>Registrar Incidencia</h3>
 
-      <form method="post" action="{% url 'crear_incidencia' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form_incident.non_field_errors }}
+  <div class="contenedor-filtros">
+    <h2>Todas las incidencias</h2>
 
-        <div class="contenido-incidencia">
-          <div class="seccion-formulario">
-            <legend>Información de la incidencia</legend>
-            <div class="fila-formulario">
-              <div class="campo-formulario">
-                <label for="{{ form_incident.apartment.id_for_label }}">{{ form_incident.apartment.label }}</label>
-                {{ form_incident.apartment }}
-                {{ form_incident.apartment.errors }}
-              </div>
-              <div class="campo-formulario">
-                <label for="{{ form_incident.resident.id_for_label }}">{{ form_incident.resident.label }}</label>
-                <select name="{{ form_incident.resident.html_name }}" id="{{ form_incident.resident.id_for_label }}" class="campo-seleccion" data-incidencia-residente>
-                  <option value="">Elegir residente</option>
-                  {% for res in residentes %}
-                  <option value="{{ res.id }}" data-apartment="{{ res.apartment_id }}">{{ res.full_name }}</option>
-                  {% endfor %}
-                </select>
-                {{ form_incident.resident.errors }}
-              </div>
-            </div>
-            <div class="fila-formulario">
-              <div class="campo-formulario">
-                <label for="{{ form_incident.category.id_for_label }}">{{ form_incident.category.label }}</label>
-                {{ form_incident.category }}
-                {{ form_incident.category.errors }}
-              </div>
-              <div class="campo-formulario">
-                <label for="{{ form_incident.priority.id_for_label }}">{{ form_incident.priority.label }}</label>
-                {{ form_incident.priority }}
-                {{ form_incident.priority.errors }}
-              </div>
-            </div>
-          </div>
-
-          <div class="seccion-formulario">
-            <legend>Detalles</legend>
-            <div class="fila-formulario">
-              <div class="campo-formulario">
-                <label for="{{ form_incident.description.id_for_label }}">{{ form_incident.description.label }}</label>
-                {{ form_incident.description }}
-                {{ form_incident.description.errors }}
-              </div>
-              <div class="campo-formulario">
-                <label for="{{ form_incident.reported_date.id_for_label }}">{{ form_incident.reported_date.label }}</label>
-                {{ form_incident.reported_date }}
-                {{ form_incident.reported_date.errors }}
-              </div>
-            </div>
-            <div class="fila-formulario">
-              <div class="campo-formulario">
-                <label for="{{ form_incident.evidence.id_for_label }}">{{ form_incident.evidence.label }}</label>
-<label class="btn-subir-archivo" for="{{ form_incident.evidence.id_for_label }}">
-                    {{ form_incident.evidence }}
-                    <span class="texto-boton-archivo" data-texto-archivo>Subir imagen/archivo</span>
-                  </label>
-                <small class="ayuda-formulario" data-ayuda-evidencia>JPG, PNG, WEBP o PDF — máx. 2 MB</small>
-                {{ form_incident.evidence.errors }}
-              </div>
-            </div>
-          </div>
-
-          <div class="seccion-formulario">
-            <legend>Seguimiento</legend>
-            <div class="fila-formulario">
-              <div class="campo-formulario">
-                <label for="{{ form_incident.comment.id_for_label }}">{{ form_incident.comment.label }}</label>
-                {{ form_incident.comment }}
-                {{ form_incident.comment.errors }}
-              </div>
-            </div>
-          </div>
-
-          <div class="seccion-formulario">
-            <legend>Estado</legend>
-            <div class="fila-formulario">
-              <div class="campo-formulario">
-                <label for="{{ form_incident.status.id_for_label }}">{{ form_incident.status.label }}</label>
-                {{ form_incident.status }}
-                {{ form_incident.status.errors }}
-              </div>
-            </div>
-          </div>
+    <div class="filtros-tabla">
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
         </div>
+      </div>
 
-        <div class="pie-formulario">
-          <button type="submit">Agregar</button>
-          <button type="reset">Cancelar</button>
-        </div>
+      <form method="get" class="formulario-filtros" id="filtros-incidencias">
+        <select name="estado" id="filtro-estado">
+          <option value="">Todos los estados</option>
+          <option value="new" {% if estado_actual == 'new' %}selected{% endif %}>Nueva</option>
+          <option value="assigned" {% if estado_actual == 'assigned' %}selected{% endif %}>Asignada</option>
+          <option value="in_progress" {% if estado_actual == 'in_progress' %}selected{% endif %}>En progreso</option>
+          <option value="resolved" {% if estado_actual == 'resolved' %}selected{% endif %}>Resuelta</option>
+          <option value="closed" {% if estado_actual == 'closed' %}selected{% endif %}>Cerrada</option>
+          <option value="rejected" {% if estado_actual == 'rejected' %}selected{% endif %}>Rechazada</option>
+        </select>
+
+        <select name="apartamento" id="filtro-apartamento">
+          <option value="">Todos los departamentos</option>
+          {% for apartamento in apartamentos %}
+          <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="residente" id="filtro-residente">
+          <option value="">Todos los residentes</option>
+          {% for residente in residentes %}
+          <option value="{{ residente.id }}" {% if residente_actual == residente.id|stringformat:'s' %}selected{% endif %}>{{ residente.full_name }}</option>
+          {% endfor %}
+        </select>
       </form>
+
+      <a href="{% url 'agregar_incidencia' %}" class="boton-nueva-incidencia"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar incidencia</a>
+    </div>
+  </div>
+
+  <div class="tabla-filtrada">
+    <table class="tabla-incidencias">
+      <thead>
+        <tr>
+          <th data-columna="evidencia">Evidencia</th>
+          <th data-columna="departamento">Departamento</th>
+          <th data-columna="residente">Residente</th>
+          <th data-columna="tipo">Tipo de incidencia</th>
+          <th data-columna="prioridad">Prioridad</th>
+          <th data-columna="fecha">Fecha de reporte</th>
+          <th data-columna="descripcion">Descripción</th>
+          <th data-columna="comentarios">Comentarios/Actualizaciones</th>
+          <th data-columna="estado">Estado</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for incidencia in incidencias %}
+        <tr>
+          <td data-columna="evidencia" data-etiqueta="Evidencia">
+            {% if incidencia.evidence %}
+            {% if '.pdf' in incidencia.evidence.url %}
+            <a href="{{ incidencia.evidence.url }}" target="_blank" rel="noopener" class="boton-accion" aria-label="Ver evidencia">
+              <img src="{% static 'images/icons/verdes/reports_green.svg' %}" alt="Documento">
+            </a>
+            {% else %}
+            <img src="{{ incidencia.evidence.url }}" alt="Evidencia de {{ incidencia.get_category_display }}" class="foto-evidencia">
+            {% endif %}
+            {% else %}
+            <span class="foto-marcador" aria-hidden="true"></span>
+            {% endif %}
+          </td>
+          <td data-columna="departamento" data-etiqueta="Departamento">{{ incidencia.apartment.name }}</td>
+          <td data-columna="residente" data-etiqueta="Residente">{{ incidencia.resident.full_name|default:"—" }}</td>
+          <td data-columna="tipo" data-etiqueta="Tipo de incidencia">{{ incidencia.get_category_display }}</td>
+          <td data-columna="prioridad" data-etiqueta="Prioridad">{{ incidencia.get_priority_display }}</td>
+          <td data-columna="fecha" data-etiqueta="Fecha de reporte">{{ incidencia.reported_date|date:"d/m/Y" }}</td>
+          <td data-columna="descripcion" data-etiqueta="Descripción">{{ incidencia.description|truncatechars:80 }}</td>
+          <td data-columna="comentarios" data-etiqueta="Comentarios/Actualizaciones">{{ incidencia.ultimo_comentario|default:"—"|truncatechars:60 }}</td>
+          <td data-columna="estado" data-etiqueta="Estado">{{ incidencia.get_status_display }}</td>
+          <td class="columna-acciones">
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_incidencia' incidencia.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ incidencia.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="10" class="sin-registros">Sin coincidencias.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% for incidencia in incidencias %}
+  <dialog id="dialog-eliminar-{{ incidencia.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ incidencia.id }}">
+    <form method="post" action="{% url 'eliminar_incidencia' incidencia.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ incidencia.id }}" class="titulo-eliminar">Eliminar incidencia</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar la incidencia <strong>{{ incidencia.get_category_display }}</strong> del departamento <strong>{{ incidencia.apartment.name }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
+
+  {% include "componentes/paginacion_tabla.html" with pagina=incidencias %}
     </div>
   </div>
 </main>
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/incidencias.js' %}" defer></script>
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/incidencias_lista.js' %}" defer></script>
 {% endblock %}

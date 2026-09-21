@@ -131,6 +131,12 @@ aside .opt-modulo h4, .otras-opciones{
     gap: 1.2rem;
 }
 
+.titulo-icono {
+    width: 2.4rem;
+    height: 2.4rem;
+    flex-shrink: 0;
+}
+
 .boton-volver-flecha {
     display: inline-flex;
     align-items: center;
@@ -493,6 +499,13 @@ aside .opt-modulo img {
 
 aside .opt-modulo.active img {
     opacity: 1;
+}
+
+/* Sidebar bloqueado hasta configurar el residencial (ver
+   ResidencialSetupMiddleware): todo en gris salvo Residencial. */
+.container-links.bloqueado .opt-modulo:not(.opt-residencial) {
+    opacity: 0.35;
+    pointer-events: none;
 }
 
 aside .opt-modulo h4 {

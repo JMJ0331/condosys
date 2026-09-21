@@ -27,7 +27,7 @@
 
           <form method="get" class="formulario-filtros" id="filtros-pagos">
             <select name="apartamento" id="filtro-apartamento">
-              <option value="">Todos los apartamentos</option>
+              <option value="">Todos los departamentos</option>
               {% for apartamento in apartamentos %}
               <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
               {% endfor %}
@@ -51,9 +51,44 @@
               <option value="paid" {% if estado_actual == 'paid' %}selected{% endif %}>Pagado</option>
               <option value="cancelled" {% if estado_actual == 'cancelled' %}selected{% endif %}>Anulado</option>
             </select>
+
+            <div class="selector-calendario">
+              <button type="button" class="boton-calendario" id="boton-mes" aria-haspopup="true" aria-expanded="false">{{ mes_actual_nombre }}</button>
+              <div class="panel-calendario" id="panel-mes" hidden>
+                <input type="hidden" name="mes" id="valor-mes" value="{{ mes_actual }}">
+                <div class="rejilla-calendario">
+                  <button type="button" class="opcion-calendario{% if not mes_actual %} seleccionada{% endif %}" data-mes="">Todos</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '1' %} seleccionada{% endif %}" data-mes="1">Ene</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '2' %} seleccionada{% endif %}" data-mes="2">Feb</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '3' %} seleccionada{% endif %}" data-mes="3">Mar</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '4' %} seleccionada{% endif %}" data-mes="4">Abr</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '5' %} seleccionada{% endif %}" data-mes="5">May</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '6' %} seleccionada{% endif %}" data-mes="6">Jun</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '7' %} seleccionada{% endif %}" data-mes="7">Jul</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '8' %} seleccionada{% endif %}" data-mes="8">Ago</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '9' %} seleccionada{% endif %}" data-mes="9">Sep</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '10' %} seleccionada{% endif %}" data-mes="10">Oct</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '11' %} seleccionada{% endif %}" data-mes="11">Nov</button>
+                  <button type="button" class="opcion-calendario{% if mes_actual == '12' %} seleccionada{% endif %}" data-mes="12">Dic</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="selector-calendario">
+              <button type="button" class="boton-calendario" id="boton-anio" aria-haspopup="true" aria-expanded="false">{% if anio_actual %}{{ anio_actual }}{% else %}Todos los años{% endif %}</button>
+              <div class="panel-calendario" id="panel-anio" hidden>
+                <input type="hidden" name="anio" id="valor-anio" value="{{ anio_actual }}">
+                <div class="rejilla-calendario">
+                  <button type="button" class="opcion-calendario{% if not anio_actual %} seleccionada{% endif %}" data-anio="">Todos</button>
+                  {% for anio_opcion in anios %}
+                  <button type="button" class="opcion-calendario{% if anio_actual == anio_opcion|stringformat:'s' %} seleccionada{% endif %}" data-anio="{{ anio_opcion }}">{{ anio_opcion }}</button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
           </form>
 
-          <a href="{% url 'agregar_pago' %}" class="boton-nuevo-pago">+ Agregar pago</a>
+          <a href="{% url 'agregar_pago' %}" class="boton-nuevo-pago"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar pago</a>
         </div>
       </div>
 
@@ -61,13 +96,14 @@
         <table class="tabla-pagos">
           <thead>
             <tr>
-              <th data-columna="residente">Residente</th>
-              <th data-columna="apartamento">Apartamento</th>
+              <th data-columna="comprobante">Comprobante</th>
+              <th data-columna="departamento">Departamento</th>
+              <th data-columna="persona">Propietario/Residente</th>
               <th data-columna="concepto">Concepto</th>
               <th data-columna="monto">Monto</th>
-              <th data-columna="periodo">Periodo</th>
+              <th data-columna="periodo">Periodo/Mes correspondiente</th>
               <th data-columna="fecha">Fecha de pago</th>
-              <th data-columna="metodo">Método</th>
+              <th data-columna="metodo">Metodo de pago</th>
               <th data-columna="estado">Estado</th>
               <th class="columna-acciones">Acciones</th>
             </tr>
@@ -75,13 +111,20 @@
           <tbody>
             {% for pago in pagos %}
             <tr>
-              <td data-columna="residente" data-etiqueta="Residente">{{ pago.resident.full_name }}</td>
-              <td data-columna="apartamento" data-etiqueta="Apartamento">{{ pago.apartment.name }}</td>
+              <td data-columna="comprobante" data-etiqueta="Comprobante">
+                {% if pago.receipt_image %}
+                <img src="{{ pago.receipt_image.url }}" alt="Comprobante de {{ pago.resident.full_name }}" class="foto-comprobante">
+                {% else %}
+                <span class="foto-placeholder" aria-hidden="true"></span>
+                {% endif %}
+              </td>
+              <td data-columna="departamento" data-etiqueta="Departamento">{{ pago.apartment.name }}</td>
+              <td data-columna="persona" data-etiqueta="Propietario/Residente">{{ pago.resident.full_name }}</td>
               <td data-columna="concepto" data-etiqueta="Concepto">{{ pago.get_concept_display }}</td>
               <td data-columna="monto" data-etiqueta="Monto">{{ pago.amount }}</td>
-              <td data-columna="periodo" data-etiqueta="Periodo">{{ pago.period|date:"d/m/Y" }}</td>
+              <td data-columna="periodo" data-etiqueta="Periodo/Mes correspondiente">{{ pago.period|date:"d/m/Y" }}</td>
               <td data-columna="fecha" data-etiqueta="Fecha de pago">{{ pago.payment_date|date:"d/m/Y"|default:"—" }}</td>
-              <td data-columna="metodo" data-etiqueta="Método">{{ pago.get_payment_method_display|default:"—" }}</td>
+              <td data-columna="metodo" data-etiqueta="Metodo de pago">{{ pago.get_payment_method_display|default:"—" }}</td>
               <td data-columna="estado" data-etiqueta="Estado">{{ pago.get_status_display }}</td>
               <td class="columna-acciones">
                 <div class="acciones-fila">
@@ -96,7 +139,7 @@
             </tr>
             {% empty %}
             <tr>
-              <td colspan="9" class="sin-registros">Sin coincidencias.</td>
+              <td colspan="10" class="sin-registros">Sin coincidencias.</td>
             </tr>
             {% endfor %}
           </tbody>

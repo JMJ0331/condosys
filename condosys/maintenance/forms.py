@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from structure.models import Apartment
 from .models import MaintenanceCharge
 from condosys.forms_utils import placeholder
 
@@ -11,13 +12,16 @@ class MaintenanceChargeForm(forms.ModelForm):
     class Meta:
         model = MaintenanceCharge
         fields = [
-            'concept', 'periodicity', 'amount',
-            'payment_methods', 'effective_date', 'photo', 'is_active',
+            'concept', 'periodicity', 'amount', 'apartment',
+            'effective_date', 'photo', 'is_active',
         ]
         widgets = {
             'concept': forms.Select(attrs={'class': 'campo-seleccion'}),
             'periodicity': forms.Select(attrs={'class': 'campo-seleccion'}),
-            'payment_methods': forms.Select(attrs={'class': 'campo-seleccion'}),
+            'apartment': forms.Select(attrs={
+                'class': 'campo-seleccion',
+                'data-mantenimiento': 'departamento',
+            }),
             'amount': forms.NumberInput(attrs={
                 'class': 'campo-entrada',
                 'placeholder': 'Ejemplo: $15,000',
@@ -28,10 +32,10 @@ class MaintenanceChargeForm(forms.ModelForm):
                 'type': 'date',
                 'class': 'campo-entrada',
             }),
-            'photo': forms.ClearableFileInput(attrs={
-                'class': 'campo-entrada',
+            'photo': forms.FileInput(attrs={
                 'accept': 'image/jpeg,image/png,image/webp',
                 'data-foto-mantenimiento': '',
+                'tabindex': '-1',
             }),
             'is_active': forms.CheckboxInput(attrs={
                 'class': 'entrada-interruptor',
@@ -42,8 +46,8 @@ class MaintenanceChargeForm(forms.ModelForm):
             'concept': 'Concepto',
             'periodicity': 'Periodicidad',
             'amount': 'Monto',
-            'payment_methods': 'Método de pago',
-            'effective_date': 'Fecha de generación/vigencia',
+            'apartment': 'Departamentos (si es aplicable)',
+            'effective_date': 'Fecha de generación',
             'photo': 'Foto del mantenimiento',
             'is_active': 'Activo',
         }
@@ -53,7 +57,8 @@ class MaintenanceChargeForm(forms.ModelForm):
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
         placeholder(self.fields['concept'], 'Elegir concepto')
         placeholder(self.fields['periodicity'], 'Elegir periodicidad')
-        placeholder(self.fields['payment_methods'], 'Elegir método de pago')
+        self.fields['apartment'].queryset = Apartment.objects.filter(is_active=True)
+        self.fields['apartment'].empty_label = 'Elegir departamento'
         # El cargo nuevo viene activo por defecto.
         self.fields['is_active'].initial = True
 

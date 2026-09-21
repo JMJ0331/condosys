@@ -32,6 +32,20 @@ from structure.models import Apartment
 PAGINATE_BY = 15
 
 
+def _anios_con_pagos():
+    """Años con pagos registrados (desc), incluyendo el año actual."""
+    anios = {fecha.year for fecha in Payment.objects.dates('period', 'year')}
+    anios.add(timezone.localdate().year)
+    return sorted(anios, reverse=True)
+
+
+MESES_NOMBRE = {
+    1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril',
+    5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto',
+    9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre',
+}
+
+
 # @login_required
 def app_index(request):
     pagos_qs = (
@@ -43,6 +57,8 @@ def app_index(request):
     estado = request.GET.get('estado', '')
     concepto = request.GET.get('concepto', '')
     apartamento = request.GET.get('apartamento', '')
+    mes = request.GET.get('mes', '')
+    anio = request.GET.get('anio', '')
 
     if estado:
         pagos_qs = pagos_qs.filter(status=estado)
@@ -50,6 +66,14 @@ def app_index(request):
         pagos_qs = pagos_qs.filter(concept=concepto)
     if apartamento:
         pagos_qs = pagos_qs.filter(apartment_id=apartamento)
+    if mes.isdigit() and 1 <= int(mes) <= 12:
+        pagos_qs = pagos_qs.filter(period__month=int(mes))
+    else:
+        mes = ''
+    if anio.isdigit():
+        pagos_qs = pagos_qs.filter(period__year=int(anio))
+    else:
+        anio = ''
 
     paginator = Paginator(pagos_qs, PAGINATE_BY)
     pagina = request.GET.get('page')
@@ -69,6 +93,10 @@ def app_index(request):
         'estado_actual': estado,
         'concepto_actual': concepto,
         'apartamento_actual': apartamento,
+        'mes_actual': mes,
+        'anio_actual': anio,
+        'mes_actual_nombre': MESES_NOMBRE.get(int(mes), 'Todos los meses') if mes else 'Todos los meses',
+        'anios': _anios_con_pagos(),
         'paginacion_query': query.urlencode(),
         'module_name': 'Pagos',
     }
