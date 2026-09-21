@@ -100,7 +100,7 @@
         </a>
 
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'areas_comunes_index' %} active{% endif %}"
+          class="opt-modulo{% if request.resolver_match.url_name == 'areas_comunes_index' or request.resolver_match.url_name == 'agregar_area_comun' or request.resolver_match.url_name == 'actualizar_area_comun' %} active{% endif %}"
           href="{% url 'areas_comunes_index' %}"
         >
 

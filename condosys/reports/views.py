@@ -68,8 +68,8 @@ def _etiquetas_edificio():
     residencial = Residencial.obtener_unico()
     distribucion = getattr(residencial, 'distribucion', '') or ''
     if distribucion == 'edificios':
-        return 'Edificio', 'edificios', 'Todos los edificios'
-    return 'Torre', 'torres', 'Todas las torres'
+        return 'Edificio', 'Edificios', 'Todos los edificios'
+    return 'Torre', 'Torres', 'Todas las torres'
 
 
 def _filtrar_por_edificio(queryset, edificio_id, ruta='apartment__building_id'):

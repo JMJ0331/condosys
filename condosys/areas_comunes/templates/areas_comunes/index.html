@@ -1,109 +1,116 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/areas_comunes.css' %}">
+{% endblock %}
 {% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+
 <main class="container-main-side2">
 
-  <div class="panel-acciones">
+  <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
-      <h3>Registrar Área Común</h3>
 
-      <form method="post" action="{% url 'crear_area_comun' %}">
-        {% csrf_token %}
-        {{ form_area.non_field_errors }}
+  <div class="contenedor-filtros">
+    <h2>Todas las áreas comunes</h2>
 
-        <div class="seccion-formulario">
-          <legend>Información del área</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_area.name.id_for_label }}">{{ form_area.name.label }}</label>
-              {{ form_area.name }}
-              {{ form_area.name.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_area.area_type.id_for_label }}">{{ form_area.area_type.label }}</label>
-              {{ form_area.area_type }}
-              {{ form_area.area_type.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_area.capacity.id_for_label }}">{{ form_area.capacity.label }}</label>
-              {{ form_area.capacity }}
-              {{ form_area.capacity.errors }}
-            </div>
-          </div>
+    <div class="filtros-tabla">
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
         </div>
+      </div>
 
-        <div class="seccion-formulario">
-          <legend>Disponibilidad</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_area.available_from.id_for_label }}">{{ form_area.available_from.label }}</label>
-              {{ form_area.available_from }}
-              {{ form_area.available_from.errors }}
-            </div>
-            <div class="campo-formulario">
-              <label for="{{ form_area.available_until.id_for_label }}">{{ form_area.available_until.label }}</label>
-              {{ form_area.available_until }}
-              {{ form_area.available_until.errors }}
-            </div>
-          </div>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_area.available_days.id_for_label }}">{{ form_area.available_days.label }}</label>
-              {{ form_area.available_days }}
-              {{ form_area.available_days.errors }}
-            </div>
-          </div>
-        </div>
+      <form method="get" class="formulario-filtros" id="filtros-areas">
+        <select name="tipo" id="filtro-tipo">
+          <option value="">Todos los tipos de áreas</option>
+          {% for valor, etiqueta in tipos_area %}
+          <option value="{{ valor }}" {% if tipo_actual == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
 
-        <div class="seccion-formulario">
-          <legend>Reglas de uso</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario campo-ancho-completo">
-              <label for="{{ form_area.usage_conditions.id_for_label }}">{{ form_area.usage_conditions.label }}</label>
-              {{ form_area.usage_conditions }}
-              {{ form_area.usage_conditions.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="seccion-formulario">
-          <legend>Estado</legend>
-          <div class="fila-formulario">
-            <div class="campo-formulario">
-              <label for="{{ form_area.status.id_for_label }}">{{ form_area.status.label }}</label>
-              {{ form_area.status }}
-              {{ form_area.status.errors }}
-            </div>
-          </div>
-        </div>
-
-        <div class="pie-formulario">
-          <button type="submit">Agregar</button>
-          <button type="reset">Cancelar</button>
-        </div>
+        <select name="estado" id="filtro-estado">
+          <option value="">Todos los estados</option>
+          {% for valor, etiqueta in estados_area %}
+          <option value="{{ valor }}" {% if estado_actual == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
       </form>
+
+      <a href="{% url 'agregar_area_comun' %}" class="boton-nueva-area"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar área común</a>
     </div>
   </div>
 
-  {% if areas %}
-  <div class="panel-acciones">
-    <div class="acciones">
-      <h3>Todas las Áreas Comunes</h3>
-      <ul class="lista-areas">
+  <div class="tabla-filtrada">
+    <table class="tabla-areas">
+      <thead>
+        <tr>
+          <th data-columna="nombre">Nombre</th>
+          <th data-columna="tipo">Tipo de área</th>
+          <th data-columna="capacidad">Capacidad</th>
+          <th data-columna="horario">Horario disponible</th>
+          <th data-columna="dias">Días habilitados</th>
+          <th data-columna="condiciones">Condiciones de uso</th>
+          <th data-columna="estado">Estado</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for area in areas %}
-        <li>
-          <strong>{{ area.name }}</strong> —
-          {{ area.get_area_type_display }}
-          {% if area.capacity %}(Capacidad: {{ area.capacity }}){% endif %}
-          — Días: {{ area.get_available_days_display }}
-          — Estado: {{ area.get_status_display }}
-        </li>
+        <tr>
+          <td data-columna="nombre" data-etiqueta="Nombre">{{ area.name }}</td>
+          <td data-columna="tipo" data-etiqueta="Tipo de área">{{ area.get_area_type_display }}</td>
+          <td data-columna="capacidad" data-etiqueta="Capacidad">{{ area.capacity|default:"—" }}</td>
+          <td data-columna="horario" data-etiqueta="Horario disponible">{% if area.available_from and area.available_until %}{{ area.available_from|time:"H:i" }} - {{ area.available_until|time:"H:i" }}{% else %}—{% endif %}</td>
+          <td data-columna="dias" data-etiqueta="Días habilitados">{{ area.get_available_days_display }}</td>
+          <td data-columna="condiciones" data-etiqueta="Condiciones de uso" title="{{ area.usage_conditions|default:'' }}">{{ area.usage_conditions|default:"—"|truncatechars:50 }}</td>
+          <td data-columna="estado" data-etiqueta="Estado">{{ area.get_status_display }}</td>
+          <td class="columna-acciones">
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_area_comun' area.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ area.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="sin-registros">Sin coincidencias.</td>
+        </tr>
         {% endfor %}
-      </ul>
+      </tbody>
+    </table>
+  </div>
+
+  {% for area in areas %}
+  <dialog id="dialog-eliminar-{{ area.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ area.id }}">
+    <form method="post" action="{% url 'eliminar_area_comun' area.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ area.id }}" class="titulo-eliminar">Eliminar área común</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar el área <strong>{{ area.name }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+  {% endfor %}
+
+  {% include "componentes/paginacion_tabla.html" with pagina=areas %}
     </div>
   </div>
-  {% endif %}
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/areas_comunes.js' %}" defer></script>
 {% endblock %}

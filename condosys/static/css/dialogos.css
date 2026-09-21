@@ -68,7 +68,7 @@ dialog form select {
 
 dialog form textarea {
 	min-height: 8rem;
-	resize: none;
+	resize: vertical;
 }
 
 dialog form input:hover,

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/areas_comunes.css' %}">
+{% endblock %}
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='areas_comunes_index' %}
+
+<main class="container-main-side2">
+  <div class="pagina-agregar">
+    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" class="formulario-agregar">
+      {% csrf_token %}
+      {{ form_area.non_field_errors }}
+
+      <div class="columna-principal">
+        <section class="tarjeta" aria-labelledby="titulo-informacion">
+          <h3 class="cabecera-tarjeta" id="titulo-informacion">Información del área</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_area.name.id_for_label }}">{{ form_area.name.label }}</label>
+                {{ form_area.name }}
+                {{ form_area.name.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_area.area_type.id_for_label }}">{{ form_area.area_type.label }}</label>
+                {{ form_area.area_type }}
+                {{ form_area.area_type.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_area.capacity.id_for_label }}">{{ form_area.capacity.label }}</label>
+                {{ form_area.capacity }}
+                {{ form_area.capacity.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-disponibilidad">
+          <h3 class="cabecera-tarjeta" id="titulo-disponibilidad">Disponibilidad</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_area.available_from.id_for_label }}">{{ form_area.available_from.label }}</label>
+                {{ form_area.available_from }}
+                {{ form_area.available_from.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_area.available_until.id_for_label }}">{{ form_area.available_until.label }}</label>
+                {{ form_area.available_until }}
+                {{ form_area.available_until.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_area.available_days.id_for_label }}">{{ form_area.available_days.label }}</label>
+                {{ form_area.available_days }}
+                {{ form_area.available_days.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-reglas">
+          <h3 class="cabecera-tarjeta" id="titulo-reglas">Reglas de uso</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_area.usage_conditions.id_for_label }}">{{ form_area.usage_conditions.label }}</label>
+                {{ form_area.usage_conditions }}
+                <p class="contador-caracteres" id="contador-condiciones" role="status"><span data-contador-numero>0</span> / <span data-contador-maximo>400</span> caracteres</p>
+                {{ form_area.usage_conditions.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="columna-lateral">
+        <section class="tarjeta" aria-labelledby="titulo-estado">
+          <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label for="{{ form_area.status.id_for_label }}">{{ form_area.status.label }}</label>
+              {{ form_area.status }}
+              {{ form_area.status.errors }}
+            </div>
+          </div>
+        </section>
+
+        <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
+        <a href="{% url 'areas_comunes_index' %}" class="boton-cancelar">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/areas_comunes.js' %}" defer></script>
+{% endblock %}
