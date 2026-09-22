@@ -58,7 +58,7 @@ class ResidentForm(forms.ModelForm):
             # Clases 'campo-seleccion' y 'entrada-interruptor' vienen de static/css/formularios.css.
             'apartment': forms.Select(attrs={'class': 'campo-seleccion'}),
             'tipo_relacion': forms.Select(attrs={'class': 'campo-seleccion'}),
-            'fecha_ingreso': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}),
+            'fecha_ingreso': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}, format='%Y-%m-%d'),
             'mascotas': forms.Select(attrs={'class': 'campo-seleccion'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'entrada-interruptor'}),
         }
@@ -72,8 +72,11 @@ class ResidentForm(forms.ModelForm):
         self.fields['tipo_relacion'].choices = (
             [('', 'Elegir tipo de relación')] + list(self.fields['tipo_relacion'].choices)
         )
+        # El modelo ya aporta la opción vacía (BLANK_CHOICE_LABEL); se renombra
+        # en vez de agregar otra para no duplicarla.
         self.fields['mascotas'].choices = (
-            [('', 'Elegir')] + list(self.fields['mascotas'].choices)
+            [('', 'Selecciona una opción')]
+            + [(valor, etiqueta) for valor, etiqueta in self.fields['mascotas'].choices if valor]
         )
         self.fields['apartment'].empty_label = 'Elegir departamento'
         if not self.instance.pk:

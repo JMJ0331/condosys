@@ -36,7 +36,6 @@ class AreaComunForm(forms.ModelForm):
                 'class': 'campo-area-texto',
                 'placeholder': 'Detallar condiciones de uso y/o reglas de uso',
                 'maxlength': '400',
-                'data-contador': 'contador-condiciones',
             }),
             'status': forms.Select(attrs={'class': 'campo-seleccion'}),
         }

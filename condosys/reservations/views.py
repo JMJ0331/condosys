@@ -6,6 +6,7 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import CommonArea, Reservation
 from residents.models import Resident
+from structure.models import Apartment
 from areas_comunes.models import AreaComun
 from .serializers import (
     CommonAreaSerializer, ReservationListSerializer,
@@ -24,6 +25,14 @@ def app_index(request):
         .order_by('-start_time')
     )
 
+    estado = request.GET.get('estado', '')
+    apartamento = request.GET.get('apartamento', '')
+
+    if estado:
+        reservas_qs = reservas_qs.filter(status=estado)
+    if apartamento:
+        reservas_qs = reservas_qs.filter(apartment_id=apartamento)
+
     paginator = Paginator(reservas_qs, PAGINATE_BY)
     pagina = request.GET.get('page')
     try:
@@ -33,8 +42,16 @@ def app_index(request):
     except EmptyPage:
         reservas = paginator.page(paginator.num_pages)
 
+    query = request.GET.copy()
+    query.pop('page', None)
+
     contexto = {
         'reservas': reservas,
+        'apartamentos': Apartment.objects.filter(is_active=True).order_by('name'),
+        'estados_reserva': Reservation.STATUS_CHOICES,
+        'estado_actual': estado,
+        'apartamento_actual': apartamento,
+        'paginacion_query': query.urlencode(),
         'module_name': 'Reservas',
     }
     return render(request, 'reservations/index.html', contexto)

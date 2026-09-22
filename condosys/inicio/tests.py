@@ -95,7 +95,7 @@ class InicioViewTests(TestCase):
         self.assertContains(respuesta, reverse('agregar_pago'))
         self.assertContains(respuesta, reverse('crear_visitante'))
         self.assertContains(respuesta, reverse('crear_incidencia'))
-        self.assertContains(respuesta, reverse('crear_comunicacion'))
+        self.assertContains(respuesta, reverse('agregar_comunicado'))
 
     def test_conteos_reales(self):
         apartamento = crear_estructura()

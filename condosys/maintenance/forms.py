@@ -31,7 +31,7 @@ class MaintenanceChargeForm(forms.ModelForm):
             'effective_date': forms.DateInput(attrs={
                 'type': 'date',
                 'class': 'campo-entrada',
-            }),
+            }, format='%Y-%m-%d'),
             'photo': forms.FileInput(attrs={
                 'accept': 'image/jpeg,image/png,image/webp',
                 'data-foto-mantenimiento': '',

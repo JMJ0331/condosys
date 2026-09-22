@@ -58,8 +58,8 @@ class PaymentForm(forms.ModelForm):
                 'min': '0',
             }),
             'concept': forms.Select(attrs={'class': 'campo-seleccion', 'placeholder': 'Elegir concepto'}),
-            'period': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}),
-            'payment_date': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}),
+            'period': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}, format='%Y-%m-%d'),
+            'payment_date': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}, format='%Y-%m-%d'),
             'payment_method': forms.Select(attrs={'class': 'campo-seleccion', 'placeholder': 'Elegir método de pago'}),
             'receipt_image': forms.ClearableFileInput(attrs={
                 'class': 'campo-entrada',

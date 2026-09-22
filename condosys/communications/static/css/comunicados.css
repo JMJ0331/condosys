@@ -1,17 +1,12 @@
-@import url('/static/css/variables.css');
-
 /* ============================================
-   Módulo Visitantes - estilos específicos.
+   Módulo Comunicados - estilos específicos.
    Los estilos de formulario/acciones/diálogos
-   viven en static/css (compartidos).
+   viven en static/css/formularios.css,
+   acciones.css y dialogos.css (compartidos).
    ============================================ */
 
-/* Campo que ocupa el ancho completo de su fila */
-.campo-ancho-completo {
-	grid-column: 1 / -1;
-}
-
-/* Cuadrícula dentro del panel de la página index */
+/* Cuadrícula dentro del panel de la página index: sin padding en .acciones,
+   el espaciado lateral lo aportan sus elementos internos. */
 .panel-cuadricula .acciones {
 	gap: 0;
 	padding: 0;
@@ -64,8 +59,8 @@
 	flex-wrap: wrap;
 }
 
+/* Filtros del listado + selector de columnas: mismo estilo en ambos. */
 .filtros-tabla select,
-.filtros-tabla input[type="date"],
 .boton-columnas {
 	appearance: none;
 	-webkit-appearance: none;
@@ -86,20 +81,12 @@
 	transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
 }
 
-.filtros-tabla input[type="date"] {
-	background-image: none;
-	padding-right: 1.2rem;
-	min-width: 0;
-}
-
 .filtros-tabla select:hover,
-.filtros-tabla input[type="date"]:hover,
 .boton-columnas:hover {
 	border-color: var(--green-900);
 }
 
 .filtros-tabla select:focus,
-.filtros-tabla input[type="date"]:focus,
 .boton-columnas:focus,
 .boton-columnas[aria-expanded="true"] {
 	border-color: var(--green-900);
@@ -108,6 +95,7 @@
 	box-shadow: 0 0 0 2px var(--green-200);
 }
 
+/* Contenedor del selector de columnas visibles */
 .selector-columnas {
 	position: relative;
 }
@@ -155,10 +143,10 @@
 
 .panel-columnas .opcion-columna input:focus,
 .panel-columnas .opcion-columna input:active {
-	border-color: var(--black-50);
-	border-width: 1px;
-	box-shadow: none;
-	outline: none;
+	border-color: var(--black-50) !important;
+	border-width: 1px !important;
+	box-shadow: none !important;
+	outline: none !important;
 }
 
 .opcion-columna span {
@@ -170,87 +158,7 @@
 	font-weight: 600;
 }
 
-/* Selectores tipo calendario para mes y año */
-.selector-calendario {
-	position: relative;
-}
-
-.boton-calendario {
-	appearance: none;
-	-webkit-appearance: none;
-	box-sizing: border-box;
-	margin: 0;
-	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
-	border: 1px solid var(--black-50);
-	border-radius: var(--borderR-8);
-	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
-	font: inherit;
-	font-size: 1.25rem;
-	line-height: 1.4;
-	color: var(--black-400);
-	cursor: pointer;
-	min-width: 15rem;
-	outline: none;
-	text-align: left;
-	transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.boton-calendario:hover {
-	border-color: var(--green-900);
-}
-
-.boton-calendario:focus,
-.boton-calendario[aria-expanded="true"] {
-	border-color: var(--green-900);
-	outline: none;
-	box-shadow: 0 0 0 2px var(--green-200);
-}
-
-.panel-calendario {
-	position: absolute;
-	top: calc(100% + 0.4rem);
-	left: 0;
-	z-index: 30;
-	min-width: 20rem;
-	background: var(--white-50);
-	border: 1px solid var(--black-50);
-	border-radius: var(--borderR-8);
-	padding: var(--padding-8);
-}
-
-.panel-calendario[hidden] {
-	display: none;
-}
-
-.rejilla-calendario {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 0.4rem;
-}
-
-.opcion-calendario {
-	border: 1px solid transparent;
-	border-radius: var(--borderR-4);
-	background: transparent;
-	padding: 0.8rem 0.4rem;
-	font: inherit;
-	font-size: 1.25rem;
-	color: var(--black-400);
-	cursor: pointer;
-	text-align: center;
-}
-
-.opcion-calendario:hover {
-	background: var(--green-100);
-}
-
-.opcion-calendario.seleccionada {
-	background: var(--green-900);
-	color: var(--white-50);
-	font-weight: 600;
-}
-
-.boton-nuevo-visitante {
+.boton-nuevo-comunicado {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--space-4);
@@ -266,13 +174,13 @@
 	text-decoration: none;
 }
 
-.boton-nuevo-visitante img {
+.boton-nuevo-comunicado img {
 	width: 1.8rem;
 	height: 1.8rem;
 	flex: none;
 }
 
-.boton-nuevo-visitante:hover {
+.boton-nuevo-comunicado:hover {
 	background: var(--green-700);
 }
 
@@ -281,19 +189,19 @@
 	overflow-x: auto;
 }
 
-table.tabla-visitantes {
+table.tabla-comunicados {
 	width: 100%;
 	border-collapse: collapse;
-	min-width: 120rem;
+	min-width: 100rem;
 }
 
-.tabla-visitantes thead {
+.tabla-comunicados thead {
 	justify-content: space-between;
 	border-bottom: 1px solid var(--black-50);
 	background-color: var(--white-500);
 }
 
-.tabla-visitantes th {
+.tabla-comunicados th {
 	text-align: left;
 	font-weight: bold;
 	color: var(--black-400);
@@ -302,7 +210,7 @@ table.tabla-visitantes {
 	white-space: nowrap;
 }
 
-.tabla-visitantes td {
+.tabla-comunicados td {
 	padding: 1.4rem;
 	font-size: 1.3rem;
 	color: var(--black-400);
@@ -311,17 +219,44 @@ table.tabla-visitantes {
 	white-space: nowrap;
 }
 
-.tabla-visitantes tbody tr:last-child td {
+.tabla-comunicados tbody tr:last-child td {
 	border-bottom: none;
 }
 
-.tabla-visitantes th.columna-acciones {
+/* El mensaje puede ser largo: se muestra recortado con salto de línea
+   y se parten las palabras largas para no invadir otras columnas. */
+.tabla-comunicados td[data-columna="mensaje"] {
+	white-space: normal;
+	min-width: 0;
+	max-width: 28rem;
+	overflow-wrap: anywhere;
+}
+
+.foto-comunicado {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	border-radius: var(--borderR-8);
+	object-fit: cover;
+	vertical-align: middle;
+}
+
+.foto-marcador {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	background: var(--black-50);
+	border-radius: var(--borderR-8);
+	vertical-align: middle;
+}
+
+.tabla-comunicados th.columna-acciones {
 	width: 1px;
 	white-space: nowrap;
 	text-align: right;
 }
 
-.tabla-visitantes td.columna-acciones {
+.tabla-comunicados td.columna-acciones {
 	width: 1px;
 	white-space: nowrap;
 	text-align: right;
@@ -360,7 +295,12 @@ table.tabla-visitantes {
 	padding: 2.4rem;
 }
 
-/* Página agregar/actualizar */
+/* Campo que ocupa el ancho completo de su fila */
+.campo-ancho-completo {
+	grid-column: 1 / -1;
+}
+
+/* Página agregar */
 .pagina-agregar {
 	display: flex;
 	flex-direction: column;
@@ -413,12 +353,7 @@ table.tabla-visitantes {
 	gap: 1.2rem;
 }
 
-.etiqueta-campo {
-	font-size: 1.3rem;
-	font-weight: 500;
-	color: var(--black-400);
-}
-
+/* Radio de campos del formulario agregar/actualizar según maqueta. */
 .formulario-agregar .campo-formulario input,
 .formulario-agregar .campo-formulario select,
 .formulario-agregar .campo-formulario textarea,
@@ -427,7 +362,7 @@ table.tabla-visitantes {
 	border-radius: var(--borderR-8);
 }
 
-/* Zona de documento con borde punteado (compacta: foto de documento) */
+/* Zona de imagen con borde punteado */
 .zona-imagen {
 	display: flex;
 	align-items: center;
@@ -494,7 +429,9 @@ table.tabla-visitantes {
 	display: none;
 }
 
-input[data-documento-visitante] {
+/* Input nativo de imagen: fuera del layout pero funcional para que la
+   zona y el botón abran el selector con JS. */
+input[data-imagen-comunicado] {
 	position: absolute;
 	width: 0.1rem;
 	height: 0.1rem;
@@ -535,6 +472,8 @@ input[data-documento-visitante] {
 	height: 1.6rem;
 }
 
+/* Lateral: acción principal + cancelar (ancho del contenedor,
+   alto según contenido) */
 .boton-agregar {
 	display: inline-flex;
 	align-items: center;
@@ -586,19 +525,21 @@ input[data-documento-visitante] {
 		grid-template-columns: 1fr;
 	}
 
+	/* En tablet/móvil cada fila del listado es una tarjeta:
+	   se oculta la cabecera y cada celda muestra su etiqueta. */
 	.panel-cuadricula .tabla-filtrada {
 		padding: 1.2rem;
 	}
 
-	table.tabla-visitantes {
+	table.tabla-comunicados {
 		min-width: 0;
 	}
 
-	.tabla-visitantes thead {
+	.tabla-comunicados thead {
 		display: none;
 	}
 
-	.tabla-visitantes tbody tr {
+	.tabla-comunicados tbody tr {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
@@ -610,7 +551,7 @@ input[data-documento-visitante] {
 		margin-bottom: 1.2rem;
 	}
 
-	.tabla-visitantes tbody td {
+	.tabla-comunicados tbody td {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -621,11 +562,11 @@ input[data-documento-visitante] {
 		text-align: right;
 	}
 
-	.tabla-visitantes tbody td:last-child {
+	.tabla-comunicados tbody td:last-child {
 		border-bottom: none;
 	}
 
-	.tabla-visitantes tbody td::before {
+	.tabla-comunicados tbody td::before {
 		content: attr(data-etiqueta);
 		font-size: 1.2rem;
 		font-weight: 600;
@@ -633,17 +574,19 @@ input[data-documento-visitante] {
 		text-align: left;
 	}
 
-	.tabla-visitantes tbody td.columna-acciones {
+	.tabla-comunicados tbody td.columna-acciones::before,
+	.tabla-comunicados tbody td.sin-registros::before {
+		content: none;
+	}
+
+	.tabla-comunicados tbody td.columna-acciones {
 		justify-content: flex-end;
 		width: auto;
 		white-space: normal;
 	}
 
-	.tabla-visitantes tbody td.columna-acciones::before {
-		content: none;
-	}
-
-	.tabla-visitantes tbody td.columna-acciones .acciones-fila {
+	/* En tablet/móvil: acciones en fila, alineadas a la derecha abajo */
+	.tabla-comunicados tbody td.columna-acciones .acciones-fila {
 		display: flex;
 		flex-direction: row;
 		gap: var(--space-8);
@@ -652,19 +595,25 @@ input[data-documento-visitante] {
 		margin-left: auto;
 	}
 
-	.tabla-visitantes tbody td.columna-acciones .boton-accion {
+	.tabla-comunicados tbody td.columna-acciones .boton-accion {
 		padding: var(--space-4);
 		border-radius: var(--borderR-4);
 		background: transparent;
 	}
 
-	.tabla-visitantes tbody td.sin-registros {
-		justify-content: center;
-		text-align: center;
+	.tabla-comunicados tbody td.columna-acciones .boton-accion:hover,
+	.tabla-comunicados tbody td.columna-acciones .boton-accion:active {
+		background: transparent;
 	}
 
-	.tabla-visitantes tbody td.sin-registros::before {
-		content: none;
+	.tabla-comunicados tbody td.columna-acciones .boton-accion img {
+		width: 2rem;
+		height: 2rem;
+	}
+
+	.tabla-comunicados tbody td.sin-registros {
+		justify-content: center;
+		text-align: center;
 	}
 }
 
@@ -685,20 +634,11 @@ input[data-documento-visitante] {
 		width: 100%;
 	}
 
-	.selector-calendario {
-		width: 100%;
-	}
-
 	.filtros-tabla select,
 	.boton-columnas,
-	.boton-calendario,
-	.boton-nuevo-visitante {
+	.boton-nuevo-comunicado {
 		width: 100%;
 		flex: 1 1 auto;
 		min-width: 0;
-	}
-
-	.cuerpo-tarjeta {
-		padding: 1.2rem;
 	}
 }

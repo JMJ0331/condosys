@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/reportes.css' %}?v=3">
+<link rel="stylesheet" href="{% static 'css/reportes.css' %}?v=4">
 {% endblock %}
 
 {% block mini-cards %}
@@ -13,7 +13,7 @@
     {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/lot-of-cash_green.svg" nombre_modulo="Ingresos del mes" data=kpi_ingresos_mes %}
     {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/no-credit-card.svg" nombre_modulo="Morosidad" data=kpi_morosidad %}
     {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/home-simple-door.svg" nombre_modulo="Ocupación" data=kpi_ocupacion %}
-    {% include 'componentes/mini_card.html' with url_imagen="images/icons/amarillos/warning-triangle_900.svg" nombre_modulo="Incidencias abiertas" data=kpi_incidencias %}
+    {% include 'componentes/mini_card.html' with url_imagen="images/icons/verdes/warning-triangle_green-900.svg" nombre_modulo="Incidencias abiertas" data=kpi_incidencias %}
   </div>
 
   <section class="panel-generar">
@@ -61,30 +61,24 @@
       <div class="grafico-barras">
         {% for barra in grafico.barras %}
         <div class="columna-barra">
-          <span class="valor-barra">{{ barra.total_corto }}</span>
+          <span class="valor-barra">{% if barra.total > 0 %}{{ barra.total_corto }}{% else %}RD $0{% endif %}</span>
           <div class="pista-barra">
-            <div class="relleno-barra{% if forloop.last %} ultima{% endif %}" data-altura="{{ barra.altura }}"></div>
+            <div class="relleno-barra" data-altura="{{ barra.altura }}"></div>
           </div>
-          <span class="etiqueta-barra{% if forloop.last %} actual{% endif %}">{{ barra.etiqueta }}</span>
+          <span class="etiqueta-barra">{{ barra.etiqueta }}</span>
         </div>
         {% endfor %}
       </div>
-      {% if resumen %}
-      <dl class="resumen-vista">
-        <div>
-          <dt>Mes seleccionado</dt>
-          <dd>{{ resumen.mes }}</dd>
-        </div>
-        <div>
-          <dt>Pagos recibidos</dt>
-          <dd>{{ resumen.pagos }}</dd>
-        </div>
-        <div>
-          <dt>Total</dt>
-          <dd>{{ resumen.total }}</dd>
-        </div>
-      </dl>
-      {% endif %}
+      <div class="pie-vista">
+        <label class="selector-mes" for="selector-mes">Seleccionar mes:
+          <select id="selector-mes" class="campo-seleccion">
+            {% for barra in grafico.barras %}
+            <option value="{{ barra.nombre }}" data-total="{{ barra.total_corto }}"{% if forloop.last %} selected{% endif %}>{{ barra.nombre }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <p class="total-vista">Total: <span id="total-mes">{% with ultima=grafico.barras|last %}{{ ultima.total_corto }}{% endwith %}</span></p>
+      </div>
       {% else %}
       <h2>Vista previa: {{ tipo_etiqueta|lower }}</h2>
       <p class="subtitulo-vista">{{ filas|length }} registro{{ filas|length|pluralize }}</p>
@@ -131,5 +125,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/reportes.js' %}?v=3" defer></script>
+<script src="{% static 'js/reportes.js' %}?v=4" defer></script>
 {% endblock %}

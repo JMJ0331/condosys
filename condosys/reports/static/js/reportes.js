@@ -22,4 +22,13 @@
     const altura = Number.parseInt(barra.dataset.altura, 10);
     barra.style.height = `${Number.isNaN(altura) ? 0 : Math.min(Math.max(altura, 0), 100)}%`;
   });
+
+  const selectorMes = document.getElementById('selector-mes');
+  const totalMes = document.getElementById('total-mes');
+  if (selectorMes && totalMes) {
+    selectorMes.addEventListener('change', () => {
+      const elegida = selectorMes.selectedOptions[0];
+      if (elegida && elegida.dataset.total) totalMes.textContent = elegida.dataset.total;
+    });
+  }
 })();
