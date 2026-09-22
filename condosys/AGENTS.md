@@ -36,6 +36,71 @@ Sistema de administración residencial **CONDYSOS** (Django 6.1 + DRF + Channels
 - Roles en `user.role`: `admin`, `manager`, `resident`, `maintenance`, `security`. Estados en `user.status`: `active`, `inactive`, `pending`. El login manual (`login\views.py`) rechaza a quien no tenga `status == 'active'`.
 - Los permisos DRF por rol viven en `accounts\permissions.py` (`IsManager`, `IsResident`, ...). Úsalos en los ViewSets en lugar de repetir chequeos de rol.
 
+## Permisos por rol de usuario
+
+### **1. Administrador**
+**Lo que podrá hacer:**
+
+* Gestionar todo el sistema con acceso completo.
+* Autorizar el registro de nuevos usuarios.
+* Gestionar roles y permisos del sistema.
+* Registrar, editar, consultar y asociar apartamentos a propietarios o residentes.
+* Definir y cambiar el estado del apartamento (ocupado, vacío, alquilado, en mantenimiento).
+* Registrar y gestionar datos de propietarios, inquilinos y residentes (activar/desactivar, consultar historial).
+* Registrar cuotas de mantenimiento, pagos realizados, mora y otros cargos (parqueo, basura, seguridad, penalidades).
+* Consultar y filtrar pagos pendientes o vencidos, y generar comprobantes de pago.
+* Asignar estado, agregar comentarios, hacer seguimiento y ver el historial de incidencias.
+* Gestionar visitantes, accesos y reservas de áreas comunes.
+* Generar reportes administrativos.
+
+**Lo que NO podrá hacer:**
+
+* No tiene restricciones explícitas dentro del sistema (posee acceso completo a todos los módulos).
+
+### **2. Personal Administrativo**
+**Lo que podrá hacer:**
+
+* Registrar cuotas de mantenimiento, pagos recibidos y otros cargos aplicables.
+* Consultar y filtrar estados de pago (pendientes, vencidos) y emitir comprobantes.
+* Registrar y actualizar la información de propietarios, inquilinos y residentes.
+* Consultar e interactuar con el módulo de incidencias (seguimiento y comentarios).
+* Realizar consultas generales en los módulos del sistema.
+
+**Lo que NO podrá hacer:**
+
+* No puede autorizar el registro de usuarios en el sistema ni gestionar roles/permisos globales.
+* No tiene acceso a la administración total o configuración estructural del sistema (reservado para Administrador).
+
+### **3. Seguridad / Portería**
+**Lo que podrá hacer:**
+
+* Registrar la entrada y salida de visitantes con fecha y hora.
+* Registrar y controlar los accesos al residencial.
+
+**Lo que NO podrá hacer:**
+
+* No puede registrar ni gestionar pagos, cuotas ni cobros.
+* No puede crear, modificar ni eliminar información de residentes o propietarios.
+* No puede cambiar estados de incidencias, administrar reservas de áreas comunes ni ver reportes financieros/administrativos.
+* No puede autorizar ni gestionar usuarios en la plataforma.
+
+### **4. Residente / Propietario**
+**Lo que podrá hacer:**
+
+* Iniciar sesión, cerrar sesión y cambiar o recuperar su contraseña.
+* Consultar sus pagos realizados, pagos pendientes y comprobantes de mantenimiento u otros cargos.
+* Reportar incidencias o reclamos clasificándolas por tipo (electricidad, agua, seguridad, limpieza, ruido, infraestructura, otros).
+* Consultar el historial y seguimiento de sus incidencias reportadas.
+* Reservar áreas comunes.
+
+**Lo que NO podrá hacer:**
+
+* No puede registrar o modificar información de otros apartamentos ni de otros residentes.
+* No puede autorizar o validar sus propios pagos directamente en el sistema.
+* No puede cambiar el estado de las incidencias (solo puede crearlas y comentar/dar seguimiento).
+* No puede registrar visitantes desde el módulo de seguridad ni controlar accesos.
+* No tiene acceso a reportes globales ni a la administración del sistema.
+
 ## Gotchas verificados
 
 - **WebSockets no arrancan**: existe `chat\routing.py` + `chat\consumers.py` y `ASGI_APPLICATION = 'condosys.asgi.application'`, pero `condosys\asgi.py` solo llama a `get_asgi_application()` sin `ProtocolTypeRouter`. Cualquier trabajo en chat/notificaciones requiere cablear el routing en `asgi.py` antes.
