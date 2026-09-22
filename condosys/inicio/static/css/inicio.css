@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-@import url('../../../static/css/variables.css');
-@import url('../../../static/css/tablas.css');
-=======
 @import url('/static/css/variables.css');
->>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19
 
 /* ============================================
-   Módulo Inicio - estilos específicos.
-   Réplica de inicio.png: tarjetas de conteo,
-   tabla de pagos pendientes, acciones rápidas
+   M├│dulo Inicio - estilos espec├¡ficos.
+   R├®plica de inicio.png: tarjetas de conteo,
+   tabla de pagos pendientes, acciones r├ípidas
    y actividad reciente.
    ============================================ */
 
@@ -18,7 +13,7 @@
 	flex: 1;
 }
 
-/* Espacio entre el icono y el título del encabezado */
+/* Espacio entre el icono y el t├¡tulo del encabezado */
 .titulo-encabezado {
 	gap: var(--space-8);
 }
@@ -29,8 +24,15 @@
 	gap: 1.2rem;
 }
 
-.fila-minicards {
-	margin: 1.6rem 1.6rem 0.8rem;
+.container-flex1 .app-info {
+	box-shadow: var(--shadow-100);
+}
+
+/* Paneles contenedores con la misma sombra que los KPIs */
+.panel-pagos,
+.panel-actividad,
+.panel-acciones .acciones {
+	box-shadow: var(--shadow-100);
 }
 
 .container-flex1 .app-info .opt-modulo img {
@@ -75,8 +77,8 @@
 }
 
 /* Panel de pagos pendientes por vencer: misma estructura que la
-   cuadrícula de departamentos (tabla de borde a borde, título con
-   línea divisoria). */
+   cuadr├¡cula de departamentos (tabla de borde a borde, t├¡tulo con
+   l├¡nea divisoria). */
 .panel-pagos {
 	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-8);
@@ -91,27 +93,6 @@
 	margin: 0;
 	padding: 1.2rem 1.2rem 1.4rem 1.2rem;
 	color: var(--black-400);
-<<<<<<< HEAD
-	font-size: 1.3rem;
-	cursor: pointer;
-}
-
-.titulo-listado {
-	margin: 0 0 1rem;
-	color: var(--black-400);
-	font-size: 1.4rem;
-	font-weight: 600;
-}
-
-/* El panel del inicio es más estrecho que el del módulo residentes;
-   la tabla compartida pide un mínimo mayor y aquí no lo necesita. */
-.container-flex > .filtros table.tabla-residentes {
-	min-width: 60rem;
-}
-
-.actividad-reciente h2 {
-	margin: 0 0 1rem;
-=======
 	font-size: 1.4rem;
 	font-weight: 600;
 	border-bottom: 1px solid var(--black-50);
@@ -179,7 +160,7 @@ table.tabla-inicio {
 	text-decoration: underline;
 }
 
-/* Tarjeta ancha dentro de la cuadrícula de acciones */
+/* Tarjeta ancha dentro de la cuadr├¡cula de acciones */
 .accion-ancha {
 	grid-column: 1 / -1;
 	min-height: 9rem;
@@ -252,17 +233,12 @@ table.tabla-inicio {
 .texto-actividad {
 	margin: 0;
 	font-size: 1.3rem;
->>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19
 	color: var(--black-400);
 }
 
 .tiempo-actividad {
 	font-size: 1.2rem;
 	color: var(--white-700);
-}
-
-.container-flex > .filtros .actividad-reciente {
-	margin-top: 1.2rem;
 }
 
 @media (max-width: 900px) {
@@ -300,6 +276,7 @@ table.tabla-inicio {
 		border: 1px solid var(--black-50);
 		border-radius: var(--borderR-8);
 		padding: 0.4rem 1.6rem;
+		box-shadow: var(--shadow-100);
 		margin-bottom: 1.2rem;
 	}
 

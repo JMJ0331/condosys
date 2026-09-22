@@ -369,6 +369,8 @@ table.tabla-incidencias {
 	align-items: center;
 	justify-content: center;
 	min-height: 20rem;
+	max-height: 29.9rem;
+	overflow: hidden;
 	padding: 1.6rem;
 	background: var(--white-100);
 	border: 1px dashed var(--black-100);
@@ -416,9 +418,11 @@ table.tabla-incidencias {
 }
 
 .vista-previa-imagen {
-	max-width: 100%;
-	max-height: 26rem;
-	object-fit: contain;
+	display: block;
+	width: 100%;
+	min-height: inherit;
+	max-height: 23rem;
+	object-fit: cover;
 	border-radius: var(--borderR-4);
 }
 

@@ -52,6 +52,112 @@
 	flex-wrap: wrap;
 }
 
+.formulario-filtros {
+	display: flex;
+	align-items: center;
+	gap: var(--space-16);
+	flex-wrap: wrap;
+}
+
+/* Filtros del listado + selector de columnas: mismo estilo en ambos. */
+.filtros-tabla select,
+.boton-columnas {
+	appearance: none;
+	-webkit-appearance: none;
+	box-sizing: border-box;
+	margin: 0;
+	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+	font: inherit;
+	font-size: 1.25rem;
+	line-height: 1.4;
+	color: var(--black-400);
+	cursor: pointer;
+	min-width: 15rem;
+	outline: none;
+	text-align: left;
+	transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filtros-tabla select:hover,
+.boton-columnas:hover {
+	border-color: var(--green-900);
+}
+
+.filtros-tabla select:focus,
+.boton-columnas:focus,
+.boton-columnas[aria-expanded="true"] {
+	border-color: var(--green-900);
+	border-width: 1px;
+	outline: none;
+	box-shadow: 0 0 0 2px var(--green-200);
+}
+
+/* Contenedor del selector de columnas visibles */
+.selector-columnas {
+	position: relative;
+}
+
+.panel-columnas {
+	position: absolute;
+	top: calc(100% + 0.4rem);
+	left: 0;
+	z-index: 30;
+	min-width: 16rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8);
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+
+.panel-columnas[hidden] {
+	display: none;
+}
+
+.opcion-columna {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+	font: inherit;
+	font-size: 1.25rem;
+	color: var(--black-400);
+	cursor: pointer;
+	padding: 0.4rem 0.6rem;
+}
+
+.opcion-columna:hover {
+	background: var(--green-100);
+	border-radius: var(--borderR-4);
+}
+
+.opcion-columna input {
+	accent-color: var(--green-900);
+	width: 1.6rem;
+	height: 1.6rem;
+}
+
+.panel-columnas .opcion-columna input:focus,
+.panel-columnas .opcion-columna input:active {
+	border-color: var(--black-50) !important;
+	border-width: 1px !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+.opcion-columna span {
+	white-space: nowrap;
+}
+
+.opcion-columna.opcion-todas {
+	border-bottom: 1px solid var(--black-50);
+	font-weight: 600;
+}
+
 .boton-nueva-reserva {
 	display: inline-flex;
 	align-items: center;
@@ -381,6 +487,19 @@ table.tabla-reservas {
 	}
 
 	.filtros-tabla,
+	.formulario-filtros,
+	.boton-nueva-reserva {
+		width: 100%;
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	.selector-columnas {
+		width: 100%;
+	}
+
+	.filtros-tabla select,
+	.boton-columnas,
 	.boton-nueva-reserva {
 		width: 100%;
 		flex: 1 1 auto;

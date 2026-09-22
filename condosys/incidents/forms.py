@@ -18,6 +18,7 @@ class IncidentForm(forms.ModelForm):
             'class': 'campo-entrada texto-area',
             'rows': 4,
             'placeholder': 'Descripción',
+            'maxlength': '400',
         }),
         label='Comentarios/actualizaciones',
     )
@@ -45,11 +46,12 @@ class IncidentForm(forms.ModelForm):
                 'class': 'campo-entrada texto-area',
                 'rows': 4,
                 'placeholder': 'Descripción',
+                'maxlength': '400',
             }),
             'reported_date': forms.DateInput(attrs={
                 'type': 'date',
                 'class': 'campo-entrada',
-            }),
+            }, format='%Y-%m-%d'),
             'evidence': forms.ClearableFileInput(attrs={
                 'class': 'campo-entrada',
                 'accept': 'image/jpeg,image/png,image/webp,application/pdf',
@@ -97,6 +99,18 @@ class IncidentForm(forms.ModelForm):
         if extension not in TIPOS_EVIDENCIA:
             raise ValidationError('Formato no permitido. Usa JPG, PNG, WEBP o PDF.')
         return archivo
+
+    def clean_comment(self):
+        comentario = self.cleaned_data.get('comment') or ''
+        if len(comentario) > 400:
+            raise ValidationError('El comentario no puede superar los 400 caracteres.')
+        return comentario
+
+    def clean_description(self):
+        descripcion = self.cleaned_data.get('description') or ''
+        if len(descripcion) > 400:
+            raise ValidationError('La descripción no puede superar los 400 caracteres.')
+        return descripcion
 
     def clean(self):
         cleaned_data = super().clean()

@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-<<<<<<< HEAD
-{% block contenido %}
-=======
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/solicitudes.css' %}">
 {% endblock %}
 {% block mini-cards %}
->>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 
 <main class="container-main-side2">
@@ -66,7 +62,7 @@
           <th data-columna="departamento">Departamento</th>
           <th data-columna="residente">Residente</th>
           <th data-columna="tipo">Tipo de solicitud</th>
-          <th data-columna="descripcion">Descripción</th>
+          <th data-columna="descripcion">Descripci├│n</th>
           <th data-columna="fecha">Fecha de solicitud</th>
           <th data-columna="comentarios">Comentarios/Respuesta</th>
           <th data-columna="estado">Estado</th>
@@ -90,11 +86,11 @@
             {% endif %}
           </td>
           <td data-columna="departamento" data-etiqueta="Departamento">{{ solicitud.apartment.name }}</td>
-          <td data-columna="residente" data-etiqueta="Residente">{{ solicitud.resident.full_name|default:"—" }}</td>
+          <td data-columna="residente" data-etiqueta="Residente">{{ solicitud.resident.full_name|default:"ÔÇö" }}</td>
           <td data-columna="tipo" data-etiqueta="Tipo de solicitud">{{ solicitud.get_request_type_display }}</td>
-          <td data-columna="descripcion" data-etiqueta="Descripción">{{ solicitud.description|truncatechars:80 }}</td>
+          <td data-columna="descripcion" data-etiqueta="Descripci├│n">{{ solicitud.description|truncatechars:80 }}</td>
           <td data-columna="fecha" data-etiqueta="Fecha de solicitud">{{ solicitud.request_date|date:"d/m/Y" }}</td>
-          <td data-columna="comentarios" data-etiqueta="Comentarios/Respuesta">{{ solicitud.tracking_response|default:"—"|truncatechars:60 }}</td>
+          <td data-columna="comentarios" data-etiqueta="Comentarios/Respuesta">{{ solicitud.tracking_response|default:"ÔÇö"|truncatechars:60 }}</td>
           <td data-columna="estado" data-etiqueta="Estado">{{ solicitud.get_status_display }}</td>
           <td class="columna-acciones">
             <div class="acciones-fila">
@@ -122,9 +118,9 @@
       {% csrf_token %}
       <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
       <h3 id="dialog-eliminar-titulo-{{ solicitud.id }}" class="titulo-eliminar">Eliminar solicitud</h3>
-      <p class="mensaje-eliminar">¿Estás seguro de eliminar la solicitud <strong>{{ solicitud.get_request_type_display }}</strong> del departamento <strong>{{ solicitud.apartment.name }}</strong>?</p>
+      <p class="mensaje-eliminar">┬┐Est├ís seguro de eliminar la solicitud <strong>{{ solicitud.get_request_type_display }}</strong> del departamento <strong>{{ solicitud.apartment.name }}</strong>?</p>
       <div class="acciones-eliminar">
-        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="submit" class="boton-confirmar-eliminar">S├¡, Eliminar</button>
         <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
       </div>
     </form>

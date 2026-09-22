@@ -126,7 +126,7 @@
       const params = new URLSearchParams();
       [
         'apartment', 'resident', 'amount', 'concept',
-        'period', 'payment_date', 'payment_method', 'status',
+        'period', 'payment_date', 'payment_method', 'status', 'recibo',
       ].forEach((nombre) => {
         const el = formPago.querySelector(`[name="${nombre}"]`);
         if (el && el.value) params.set(nombre, el.value);

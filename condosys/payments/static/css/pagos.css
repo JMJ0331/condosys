@@ -461,6 +461,8 @@ table.tabla-pagos {
 	align-items: center;
 	justify-content: center;
 	min-height: 28rem;
+	max-height: 39.1rem;
+	overflow: hidden;
 	padding: 1.6rem;
 	background: var(--white-100);
 	border: 1px dashed var(--black-100);
@@ -508,9 +510,11 @@ table.tabla-pagos {
 }
 
 .vista-previa-comprobante {
-	max-width: 100%;
-	max-height: 26rem;
-	object-fit: contain;
+	display: block;
+	width: 100%;
+	min-height: inherit;
+	max-height: 32.2rem;
+	object-fit: cover;
 	border-radius: var(--borderR-4);
 }
 
@@ -585,6 +589,40 @@ input[data-pago-foto] {
 .boton-agregar:hover,
 .boton-agregar:active {
 	background: var(--green-700);
+}
+
+.btn-comprobante {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-4);
+	width: 100%;
+	box-sizing: border-box;
+	height: fit-content;
+	padding: var(--padding-8) var(--padding-16);
+	background: var(--white-50);
+	color: var(--green-900);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	font: inherit;
+	font-size: 1.4rem;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+.btn-comprobante:hover {
+	border-color: var(--green-900);
+}
+
+.btn-comprobante:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+.btn-comprobante img {
+	width: 1.8rem;
+	height: 1.8rem;
+	flex: none;
 }
 
 .boton-cancelar {

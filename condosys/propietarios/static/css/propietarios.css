@@ -353,6 +353,8 @@ table.tabla-propietarios {
 	align-items: center;
 	justify-content: center;
 	min-height: 28rem;
+	max-height: 39.1rem;
+	overflow: hidden;
 	padding: 1.6rem;
 	background: var(--white-100);
 	border: 1px dashed var(--black-100);
@@ -400,9 +402,11 @@ table.tabla-propietarios {
 }
 
 .vista-previa-imagen {
-	max-width: 100%;
-	max-height: 26rem;
-	object-fit: contain;
+	display: block;
+	width: 100%;
+	min-height: inherit;
+	max-height: 32.2rem;
+	object-fit: cover;
 	border-radius: var(--borderR-4);
 }
 

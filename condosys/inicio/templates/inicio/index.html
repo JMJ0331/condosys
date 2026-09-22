@@ -7,7 +7,7 @@
 
 {% block mini-cards %}
 
-{% include "componentes/header.html" with nombre_modulo="Inicio" icono="images/icons/verdes/Container_green.svg" %}
+{% include "componentes/header.html" with nombre_modulo="Inicio" %}
 
 <div class="container-main-side2">
   <div class="container-flex1">
@@ -61,24 +61,24 @@
         <div class="contenedor-acciones">
           <a class="accion" href="{% url 'agregar_pago' %}">
             <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" />
-            <span>Registrar Pago</span>
+            <span>Agregar pago</span>
           </a>
-          <a class="accion" href="{% url 'crear_visitante' %}">
-            <img src="{% static 'images/icons/verdes/id_green.svg' %}" alt="" />
-            <span>Registrar Visitante</span>
-          </a>
-          <a class="accion" href="{% url 'crear_incidencia' %}">
+          <a class="accion" href="{% url 'agregar_incidencia' %}">
             <img src="{% static 'images/icons/verdes/warning-triangle_green.svg' %}" alt="" />
-            <span>Crear Incidencia</span>
+            <span>Agregar incidencia</span>
+          </a>
+          <a class="accion" href="{% url 'agregar_visitante' %}">
+            <img src="{% static 'images/icons/verdes/id_green.svg' %}" alt="" />
+            <span>Agregar visitante</span>
           </a>
 
-          <a class="accion" href="{% url 'crear_comunicado' %}">
+<a class="accion" href="{% url 'agregar_comunicado' %}">
             <img src="{% static 'images/icons/verdes/voice_green.svg' %}" alt="" />
-            <span>Comunicado</span>
+            <span>Agregar comunicado</span>
           </a>
-          <a class="accion accion-ancha" href="{% url 'reservas_index' %}">
+          <a class="accion accion-ancha" href="{% url 'reservas_index' %}?estado=requested">
             <img src="{% static 'images/icons/verdes/google-docs_green900.svg' %}" alt="" />
-            <span>Aprobar reservas ({{ reservas_pendientes }} pendientes)</span>
+            <span>{{ reservas_pendientes }} reserva{{ reservas_pendientes|pluralize }} solicitada{{ reservas_pendientes|pluralize }} esperando aprobación</span>
           </a>
         </div>
       </div>

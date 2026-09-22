@@ -148,7 +148,7 @@ def _ingresos_por_mes(meses, edificio_id=None):
             'nombre': f'{MESES_NOMBRE[mes]} {anio}',
             'total': total_f,
             'total_texto': _formatear_monto(total_f),
-            'total_corto': f'RD$ {total_f / 1000:,.0f}k'.replace(',', '.'),
+            'total_corto': f"RD ${('%.1f' % (total_f / 1000)).rstrip('0').rstrip('.').replace('.', ',')}k",
             'pagos': conteo,
             'altura': altura,
         })

@@ -59,6 +59,18 @@
 	font-size: 1.2rem;
 }
 
+/* Hover de los iconos editar/eliminar de las cuadrículas (compartido por
+   todos los módulos; distingue por aria-label). */
+.boton-accion[aria-label="Editar"]:hover {
+	background: var(--blue-50);
+	border-radius: var(--borderR-4);
+}
+
+.boton-accion[aria-label="Eliminar"]:hover {
+	background: var(--red-50);
+	border-radius: var(--borderR-4);
+}
+
 @media (max-width: 560px) {
 	.contenedor-acciones {
 		grid-template-columns: 1fr;

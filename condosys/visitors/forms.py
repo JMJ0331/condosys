@@ -19,7 +19,7 @@ class VisitorForm(forms.ModelForm):
             'type': 'datetime-local',
             'class': 'campo-entrada',
             'placeholder': 'mm/dd/yyyy --:--',
-        }),
+        }, format='%Y-%m-%dT%H:%M'),
     )
     fecha_salida = forms.DateTimeField(
         label='Fecha de salida',
@@ -28,7 +28,7 @@ class VisitorForm(forms.ModelForm):
             'type': 'datetime-local',
             'class': 'campo-entrada',
             'placeholder': 'mm/dd/yyyy --:--',
-        }),
+        }, format='%Y-%m-%dT%H:%M'),
     )
 
     class Meta:

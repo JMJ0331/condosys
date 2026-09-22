@@ -21,7 +21,7 @@ class CommunicationForm(forms.ModelForm):
             'type': 'datetime-local',
             'class': 'campo-entrada',
             'placeholder': 'mm/dd/yyyy --:--',
-        }),
+        }, format='%Y-%m-%dT%H:%M'),
     )
     estado = forms.ChoiceField(
         label='Estado',
@@ -42,6 +42,7 @@ class CommunicationForm(forms.ModelForm):
                 'class': 'campo-entrada campo-textarea',
                 'rows': 5,
                 'placeholder': 'Detallar Mensaje',
+                'maxlength': '400',
             }),
             'image': forms.ClearableFileInput(attrs={
                 'class': 'campo-entrada',
@@ -64,6 +65,12 @@ class CommunicationForm(forms.ModelForm):
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
         placeholder(self.fields['category'], 'Elegir categoría')
         placeholder(self.fields['target_type'], 'Elegir a quien va dirigido')
+
+    def clean_body(self):
+        mensaje = self.cleaned_data.get('body') or ''
+        if len(mensaje) > 400:
+            raise ValidationError('El mensaje no puede superar los 400 caracteres.')
+        return mensaje
 
     def clean_image(self):
         archivo = self.cleaned_data.get('image')

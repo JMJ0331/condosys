@@ -282,19 +282,6 @@ table.tabla-areas {
 	grid-column: 1 / -1;
 }
 
-/* Contador de caracteres bajo los textareas */
-.contador-caracteres {
-	margin: 0;
-	font-size: 1.2rem;
-	color: var(--black-300);
-	text-align: right;
-}
-
-.contador-caracteres.limite-alcanzado {
-	color: var(--red-500);
-	font-weight: 600;
-}
-
 /* Página agregar */
 .pagina-agregar {
 	display: flex;

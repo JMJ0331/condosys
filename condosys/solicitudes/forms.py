@@ -31,12 +31,13 @@ class SolicitudForm(forms.ModelForm):
                 'class': 'campo-entrada texto-area',
                 'rows': 4,
                 'placeholder': 'Descripción',
+                'maxlength': '400',
             }),
             'request_date': forms.DateInput(attrs={
                 'type': 'date',
                 'class': 'campo-entrada',
                 'placeholder': 'mm/dd/yyyy',
-            }),
+            }, format='%Y-%m-%d'),
             'attachment': forms.FileInput(attrs={
                 'accept': 'image/jpeg,image/png,image/webp,application/pdf',
                 'data-solicitud-documento': '',
@@ -46,6 +47,7 @@ class SolicitudForm(forms.ModelForm):
                 'class': 'campo-entrada texto-area',
                 'rows': 4,
                 'placeholder': 'Descripción',
+                'maxlength': '400',
             }),
             'status': forms.Select(attrs={
                 'class': 'campo-seleccion',
@@ -89,6 +91,18 @@ class SolicitudForm(forms.ModelForm):
         if extension not in TIPOS_DOCUMENTO:
             raise ValidationError('Formato no permitido. Usa JPG, PNG, WEBP o PDF.')
         return archivo
+
+    def clean_description(self):
+        descripcion = self.cleaned_data.get('description') or ''
+        if len(descripcion) > 400:
+            raise ValidationError('La descripción no puede superar los 400 caracteres.')
+        return descripcion
+
+    def clean_tracking_response(self):
+        respuesta = self.cleaned_data.get('tracking_response') or ''
+        if len(respuesta) > 400:
+            raise ValidationError('La respuesta no puede superar los 400 caracteres.')
+        return respuesta
 
     def clean(self):
         cleaned_data = super().clean()

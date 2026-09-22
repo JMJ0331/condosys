@@ -23,7 +23,7 @@ class ReservationForm(forms.ModelForm):
             'type': 'date',
             'class': 'campo-entrada',
             'placeholder': 'mm/dd/yyyy',
-        }),
+        }, format='%Y-%m-%d'),
     )
     hora_inicio = forms.TimeField(
         label='Hora de inicio',

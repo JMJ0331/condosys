@@ -8,9 +8,12 @@
 
 <main class="container-main-side2">
   <div class="pagina-agregar">
-    <form method="post" action="{% url url_form %}" enctype="multipart/form-data" class="formulario-agregar">
+    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
       {% csrf_token %}
       {{ form_payment.non_field_errors }}
+      {% if url_form == 'actualizar_pago' %}
+      <input type="hidden" name="recibo" value="{{ form_payment.instance.id.hex|slice:'-6:'|upper }}">
+      {% endif %}
 
       <div class="columna-principal">
         <section class="tarjeta" aria-labelledby="titulo-informacion">
@@ -32,10 +35,10 @@
                 <select name="{{ form_payment.resident.html_name }}" id="{{ form_payment.resident.id_for_label }}" class="campo-seleccion" data-pago-residente>
                   <option value="">Elegir un propietario/residente</option>
                   {% for prop in propietarios %}
-                  <option value="{{ prop.id }}" data-origen="propietario" data-tipo="propietario">{{ prop.full_name }}</option>
+                  <option value="{{ prop.id }}" data-origen="propietario" data-tipo="propietario"{% if form_payment.resident.value|stringformat:'s' == prop.id|stringformat:'s' %} selected{% endif %}>{{ prop.full_name }}</option>
                   {% endfor %}
                   {% for res in residentes %}
-                  <option value="{{ res.id }}" data-origen="residente" data-apartment="{{ res.apartment_id }}" data-tipo="{{ res.tipo_relacion }}">{{ res.full_name }}</option>
+                  <option value="{{ res.id }}" data-origen="residente" data-apartment="{{ res.apartment_id }}" data-tipo="{{ res.tipo_relacion }}"{% if form_payment.resident.value|stringformat:'s' == res.id|stringformat:'s' %} selected{% endif %}>{{ res.full_name }}</option>
                   {% endfor %}
                 </select>
                 {{ form_payment.resident.errors }}
@@ -85,8 +88,13 @@
             <div class="campo-formulario">
               <span class="etiqueta-campo" id="etiqueta-comprobante">{{ form_payment.receipt_image.label }}</span>
               <div class="zona-comprobante" id="zona-comprobante" role="button" tabindex="0" aria-labelledby="etiqueta-comprobante">
+                {% if form_payment.instance.receipt_image %}
+                <img class="vista-previa-comprobante" id="vista-previa-comprobante" src="{{ form_payment.instance.receipt_image.url }}" alt="Comprobante actual">
+                <span class="contenido-zona-comprobante" id="contenido-zona-comprobante" hidden>
+                {% else %}
                 <img class="vista-previa-comprobante" id="vista-previa-comprobante" alt="" hidden>
                 <span class="contenido-zona-comprobante" id="contenido-zona-comprobante">
+                {% endif %}
                   <svg class="icono-zona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                     <rect x="3" y="3" width="18" height="18" rx="2"></rect>
                     <circle cx="9" cy="9" r="2"></circle>
@@ -124,6 +132,9 @@
         </section>
 
         <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
+        {% if url_form == 'actualizar_pago' %}
+        <button type="button" class="btn-comprobante" data-url-comprobante="{% url 'generar_comprobante' %}"><img src="{% static 'images/icons/verdes/page-flip.svg' %}" alt="" aria-hidden="true">Generar comprobante</button>
+        {% endif %}
         <a href="{% url 'pagos_index' %}" class="boton-cancelar">Cancelar</a>
       </div>
     </form>

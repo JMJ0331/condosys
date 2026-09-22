@@ -8,10 +8,8 @@
  *     + <input id="toggle-todas-columnas">
  *   - <th data-columna="..."> en la tabla (salvo acciones)
  *
- * La plantilla agregar.html debe usar:
- *   - <textarea data-contador="id-del-contador"> (el valor de maxlength
- *     es el límite) + <p id="id-del-contador"> con [data-contador-numero]
- *     y [data-contador-maximo].
+ * El contador de caracteres de los textareas lo pone el script
+ * compartido static/js/contadores.js (cargado en base.html).
  */
 (() => {
   const formularioFiltros = document.getElementById('filtros-areas');
@@ -84,25 +82,4 @@
       if (!evento.target.closest('.selector-columnas')) cerrarPanel();
     });
   }
-
-  // --- Páginas agregar/actualizar: contador de caracteres ---
-  document.querySelectorAll('textarea[data-contador]').forEach((campo) => {
-    const contador = document.getElementById(campo.dataset.contador);
-    if (!contador) return;
-    const numero = contador.querySelector('[data-contador-numero]');
-    const maximo = contador.querySelector('[data-contador-maximo]');
-    const limite = Number.parseInt(campo.getAttribute('maxlength'), 10);
-
-    function actualizar() {
-      if (numero) numero.textContent = String(campo.value.length);
-      if (maximo && !Number.isNaN(limite)) maximo.textContent = String(limite);
-      contador.classList.toggle(
-        'limite-alcanzado',
-        !Number.isNaN(limite) && campo.value.length >= limite
-      );
-    }
-
-    campo.addEventListener('input', actualizar);
-    actualizar();
-  });
 })();

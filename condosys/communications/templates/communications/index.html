@@ -3,7 +3,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/comunicados.css' %}">
 {% endblock %}
-{% block contenido %}
+{% block mini-cards %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 
 <main class="container-main-side2">
@@ -11,97 +11,108 @@
   <div class="panel-acciones panel-cuadricula">
     <div class="acciones">
 
-      <div class="contenedor-filtros">
-        <h2>Todos los comunicados</h2>
+  <div class="contenedor-filtros">
+    <h2>Todos los comunicados</h2>
 
-        <div class="filtros-tabla">
-          <div class="selector-columnas">
-            <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
-            <div class="panel-columnas" id="panel-columnas" hidden>
-              <label class="opcion-columna opcion-todas">
-                <input type="checkbox" id="toggle-todas-columnas">
-                <span>Todas</span>
-              </label>
-            </div>
-          </div>
-
-          <form method="get" class="formulario-filtros" id="filtros-comunicados">
-            <select name="categoria" id="filtro-categoria">
-              <option value="">Todas las categorías</option>
-              <option value="aviso" {% if categoria_actual == 'aviso' %}selected{% endif %}>Aviso</option>
-              <option value="mantenimiento" {% if categoria_actual == 'mantenimiento' %}selected{% endif %}>Mantenimiento</option>
-              <option value="evento" {% if categoria_actual == 'evento' %}selected{% endif %}>Evento</option>
-              <option value="seguridad" {% if categoria_actual == 'seguridad' %}selected{% endif %}>Seguridad</option>
-              <option value="piscinas" {% if categoria_actual == 'piscinas' %}selected{% endif %}>Piscinas</option>
-              <option value="general" {% if categoria_actual == 'general' %}selected{% endif %}>General</option>
-            </select>
-
-            <select name="estado" id="filtro-estado">
-              <option value="">Todos los estados</option>
-              <option value="published" {% if estado_actual == 'published' %}selected{% endif %}>Publicado</option>
-              <option value="draft" {% if estado_actual == 'draft' %}selected{% endif %}>Borrador</option>
-            </select>
-          </form>
-
-          <a href="{% url 'crear_comunicado' %}" class="boton-nuevo-comunicado">+ Nuevo comunicado</a>
+    <div class="filtros-tabla">
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
         </div>
       </div>
 
-      <div class="tabla-filtrada">
-        <table class="tabla-comunicados">
-          <thead>
-            <tr>
-              <th data-columna="titulo">Título</th>
-              <th data-columna="categoria">Categoría</th>
-              <th data-columna="dirigido">Dirigido a</th>
-              <th data-columna="fecha">Fecha de publicación</th>
-              <th data-columna="estado">Estado</th>
-              <th data-columna="acciones" class="columna-acciones">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for comunicado in comunicados %}
-            <tr>
-              <td data-columna="titulo" data-etiqueta="Título">{{ comunicado.title }}</td>
-              <td data-columna="categoria" data-etiqueta="Categoría">{{ comunicado.get_category_display }}</td>
-              <td data-columna="dirigido" data-etiqueta="Dirigido a">{{ comunicado.get_target_type_display }}</td>
-              <td data-columna="fecha" data-etiqueta="Fecha de publicación">{{ comunicado.published_at|date:"d/m/Y H:i"|default:"—" }}</td>
-              <td data-columna="estado" data-etiqueta="Estado">
-                {% if comunicado.is_published %}Publicado{% else %}Borrador{% endif %}
-              </td>
-              <td class="columna-acciones">
-                <div class="acciones-fila">
-                  <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ comunicado.id }}">
-                    <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
-                  </button>
-                </div>
-              </td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="6" class="sin-registros">Sin coincidencias.</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <form method="get" class="formulario-filtros" id="filtros-comunicados">
+        <select name="categoria" id="filtro-categoria">
+          <option value="">Todas las categorías</option>
+          <option value="aviso" {% if categoria_actual == 'aviso' %}selected{% endif %}>Aviso</option>
+          <option value="mantenimiento" {% if categoria_actual == 'mantenimiento' %}selected{% endif %}>Mantenimiento</option>
+          <option value="evento" {% if categoria_actual == 'evento' %}selected{% endif %}>Evento</option>
+          <option value="seguridad" {% if categoria_actual == 'seguridad' %}selected{% endif %}>Seguridad</option>
+          <option value="piscinas" {% if categoria_actual == 'piscinas' %}selected{% endif %}>Piscinas</option>
+          <option value="general" {% if categoria_actual == 'general' %}selected{% endif %}>General</option>
+        </select>
+
+        <select name="estado" id="filtro-estado">
+          <option value="">Todos los estados</option>
+          <option value="published" {% if estado_actual == 'published' %}selected{% endif %}>Publicado</option>
+          <option value="draft" {% if estado_actual == 'draft' %}selected{% endif %}>Borrador</option>
+        </select>
+      </form>
+
+      <a href="{% url 'agregar_comunicado' %}" class="boton-nuevo-comunicado"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar comunicado</a>
+    </div>
+  </div>
+
+  <div class="tabla-filtrada">
+    <table class="tabla-comunicados">
+      <thead>
+        <tr>
+          <th data-columna="titulo">Título</th>
+          <th data-columna="categoria">Categoría</th>
+          <th data-columna="mensaje">Mensaje</th>
+          <th data-columna="archivo">Archivo/Imagen</th>
+          <th data-columna="dirigido">Dirigido a</th>
+          <th data-columna="fecha">Fecha de publicación</th>
+          <th data-columna="estado">Estado</th>
+          <th class="columna-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comunicado in comunicados %}
+        <tr>
+          <td data-columna="titulo" data-etiqueta="Título">{{ comunicado.title }}</td>
+          <td data-columna="categoria" data-etiqueta="Categoría">{{ comunicado.get_category_display }}</td>
+          <td data-columna="mensaje" data-etiqueta="Mensaje" title="{{ comunicado.body }}">{{ comunicado.body|truncatechars:50 }}</td>
+          <td data-columna="archivo" data-etiqueta="Archivo/Imagen">
+            {% if comunicado.image %}
+            <img src="{{ comunicado.image.url }}" alt="Imagen de {{ comunicado.title }}" class="foto-comunicado">
+            {% else %}
+            <span class="foto-marcador" aria-hidden="true"></span>
+            {% endif %}
+          </td>
+          <td data-columna="dirigido" data-etiqueta="Dirigido a">{{ comunicado.get_target_type_display }}</td>
+          <td data-columna="fecha" data-etiqueta="Fecha de publicación">{{ comunicado.published_at|date:"d/m/Y H:i"|default:"—" }}</td>
+          <td data-columna="estado" data-etiqueta="Estado">{% if comunicado.is_published %}Publicado{% else %}Borrador{% endif %}</td>
+          <td class="columna-acciones">
+            <div class="acciones-fila">
+              <a href="{% url 'actualizar_comunicado' comunicado.id %}" class="boton-accion" aria-label="Editar">
+                <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+              </a>
+              <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ comunicado.id }}">
+                <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="sin-registros">Sin coincidencias.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% for comunicado in comunicados %}
+  <dialog id="dialog-eliminar-{{ comunicado.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ comunicado.id }}">
+    <form method="post" action="{% url 'eliminar_comunicado' comunicado.id %}">
+      {% csrf_token %}
+      <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+      <h3 id="dialog-eliminar-titulo-{{ comunicado.id }}" class="titulo-eliminar">Eliminar comunicado</h3>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar el comunicado <strong>{{ comunicado.title }}</strong>?</p>
+      <div class="acciones-eliminar">
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
       </div>
+    </form>
+  </dialog>
+  {% endfor %}
 
-      {% for comunicado in comunicados %}
-      <dialog id="dialog-eliminar-{{ comunicado.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ comunicado.id }}">
-        <form method="post" action="{% url 'eliminar_comunicado' comunicado.id %}">
-          {% csrf_token %}
-          <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
-          <h3 id="dialog-eliminar-titulo-{{ comunicado.id }}" class="titulo-eliminar">Eliminar comunicado</h3>
-          <p class="mensaje-eliminar">¿Estás seguro de eliminar el comunicado <strong>{{ comunicado.title }}</strong>?</p>
-          <div class="acciones-eliminar">
-            <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
-            <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
-          </div>
-        </form>
-      </dialog>
-      {% endfor %}
-
-      {% include "componentes/paginacion_tabla.html" with pagina=comunicados %}
+  {% include "componentes/paginacion_tabla.html" with pagina=comunicados %}
     </div>
   </div>
 </main>

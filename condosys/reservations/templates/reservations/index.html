@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-<<<<<<< HEAD
-{% block contenido %}
-=======
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/reservas.css' %}">
 {% endblock %}
 {% block mini-cards %}
->>>>>>> cec7002f1e7cce511dcba6ae432c0537b7500b19
 {% include "componentes/header.html" with nombre_modulo=module_name %}
 
 <main class="container-main-side2">
@@ -19,6 +15,32 @@
     <h2>Todas las reservas</h2>
 
     <div class="filtros-tabla">
+      <div class="selector-columnas">
+        <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+        <div class="panel-columnas" id="panel-columnas" hidden>
+          <label class="opcion-columna opcion-todas">
+            <input type="checkbox" id="toggle-todas-columnas">
+            <span>Todas</span>
+          </label>
+        </div>
+      </div>
+
+      <form method="get" class="formulario-filtros" id="filtros-reservas">
+        <select name="apartamento" id="filtro-apartamento">
+          <option value="">Todos los departamentos</option>
+          {% for apartamento in apartamentos %}
+          <option value="{{ apartamento.id }}" {% if apartamento_actual == apartamento.id|stringformat:'s' %}selected{% endif %}>{{ apartamento.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="estado" id="filtro-estado">
+          <option value="">Todos los estados</option>
+          {% for valor, etiqueta in estados_reserva %}
+          <option value="{{ valor }}" {% if estado_actual == valor %}selected{% endif %}>{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
       <a href="{% url 'agregar_reserva' %}" class="boton-nueva-reserva"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar reserva</a>
     </div>
   </div>
@@ -27,34 +49,34 @@
     <table class="tabla-reservas">
       <thead>
         <tr>
-          <th>Foto</th>
-          <th>Propietario/Residente</th>
-          <th>Área común</th>
-          <th>Departamento</th>
-          <th>Fecha de reserva</th>
-          <th>Hora de inicio</th>
-          <th>Hora de fin</th>
-          <th>Estado</th>
+          <th data-columna="foto">Foto</th>
+          <th data-columna="residente">Propietario/Residente</th>
+          <th data-columna="area">├ürea com├║n</th>
+          <th data-columna="departamento">Departamento</th>
+          <th data-columna="fecha">Fecha de reserva</th>
+          <th data-columna="inicio">Hora de inicio</th>
+          <th data-columna="fin">Hora de fin</th>
+          <th data-columna="estado">Estado</th>
           <th class="columna-acciones">Acciones</th>
         </tr>
       </thead>
       <tbody>
         {% for reserva in reservas %}
         <tr>
-          <td data-etiqueta="Foto">
+          <td data-columna="foto" data-etiqueta="Foto">
             {% if reserva.resident and reserva.resident.photo %}
             <img src="{{ reserva.resident.photo.url }}" alt="Foto de {{ reserva.resident.full_name }}" class="foto-reserva">
             {% else %}
             <span class="foto-marcador" aria-hidden="true"></span>
             {% endif %}
           </td>
-          <td data-etiqueta="Propietario/Residente">{{ reserva.resident.full_name|default:"—" }}</td>
-          <td data-etiqueta="Área común">{{ reserva.common_area.name }}</td>
-          <td data-etiqueta="Departamento">{{ reserva.apartment.name|default:"—" }}</td>
-          <td data-etiqueta="Fecha de reserva">{{ reserva.start_time|date:"d/m/Y" }}</td>
-          <td data-etiqueta="Hora de inicio">{{ reserva.start_time|date:"H:i" }}</td>
-          <td data-etiqueta="Hora de fin">{{ reserva.end_time|date:"H:i" }}</td>
-          <td data-etiqueta="Estado">{{ reserva.get_status_display }}</td>
+          <td data-columna="residente" data-etiqueta="Propietario/Residente">{{ reserva.resident.full_name|default:"ÔÇö" }}</td>
+          <td data-columna="area" data-etiqueta="├ürea com├║n">{{ reserva.common_area.name }}</td>
+          <td data-columna="departamento" data-etiqueta="Departamento">{{ reserva.apartment.name|default:"ÔÇö" }}</td>
+          <td data-columna="fecha" data-etiqueta="Fecha de reserva">{{ reserva.start_time|date:"d/m/Y" }}</td>
+          <td data-columna="inicio" data-etiqueta="Hora de inicio">{{ reserva.start_time|date:"H:i" }}</td>
+          <td data-columna="fin" data-etiqueta="Hora de fin">{{ reserva.end_time|date:"H:i" }}</td>
+          <td data-columna="estado" data-etiqueta="Estado">{{ reserva.get_status_display }}</td>
           <td class="columna-acciones">
             <div class="acciones-fila">
               <a href="{% url 'actualizar_reserva' reserva.id %}" class="boton-accion" aria-label="Editar">
@@ -81,9 +103,9 @@
       {% csrf_token %}
       <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
       <h3 id="dialog-eliminar-titulo-{{ reserva.id }}" class="titulo-eliminar">Eliminar reserva</h3>
-      <p class="mensaje-eliminar">¿Estás seguro de eliminar la reserva de <strong>{{ reserva.common_area.name }}</strong> del <strong>{{ reserva.start_time|date:"d/m/Y" }}</strong>?</p>
+      <p class="mensaje-eliminar">┬┐Est├ís seguro de eliminar la reserva de <strong>{{ reserva.common_area.name }}</strong> del <strong>{{ reserva.start_time|date:"d/m/Y" }}</strong>?</p>
       <div class="acciones-eliminar">
-        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="submit" class="boton-confirmar-eliminar">S├¡, Eliminar</button>
         <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
       </div>
     </form>
@@ -98,4 +120,5 @@
 
 {% block scripts %}
 <script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/reservas.js' %}" defer></script>
 {% endblock %}

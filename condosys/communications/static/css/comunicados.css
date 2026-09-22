@@ -1,10 +1,9 @@
 /* ============================================
    Módulo Comunicados - estilos específicos.
-   Los estilos de formulario/acciones/diálogo
+   Los estilos de formulario/acciones/diálogos
    viven en static/css/formularios.css,
    acciones.css y dialogos.css (compartidos).
    ============================================ */
-@import url("../css/variables.css");
 
 /* Cuadrícula dentro del panel de la página index: sin padding en .acciones,
    el espaciado lateral lo aportan sus elementos internos. */
@@ -144,10 +143,10 @@
 
 .panel-columnas .opcion-columna input:focus,
 .panel-columnas .opcion-columna input:active {
-	border-color: var(--black-50);
-	border-width: 1px;
-	box-shadow: none;
-	outline: none;
+	border-color: var(--black-50) !important;
+	border-width: 1px !important;
+	box-shadow: none !important;
+	outline: none !important;
 }
 
 .opcion-columna span {
@@ -162,6 +161,7 @@
 .boton-nuevo-comunicado {
 	display: inline-flex;
 	align-items: center;
+	gap: var(--space-4);
 	background: var(--green-900);
 	color: var(--white-50);
 	border: none;
@@ -172,6 +172,16 @@
 	cursor: pointer;
 	white-space: nowrap;
 	text-decoration: none;
+}
+
+.boton-nuevo-comunicado img {
+	width: 1.8rem;
+	height: 1.8rem;
+	flex: none;
+}
+
+.boton-nuevo-comunicado:hover {
+	background: var(--green-700);
 }
 
 .tabla-filtrada {
@@ -213,6 +223,33 @@ table.tabla-comunicados {
 	border-bottom: none;
 }
 
+/* El mensaje puede ser largo: se muestra recortado con salto de línea
+   y se parten las palabras largas para no invadir otras columnas. */
+.tabla-comunicados td[data-columna="mensaje"] {
+	white-space: normal;
+	min-width: 0;
+	max-width: 28rem;
+	overflow-wrap: anywhere;
+}
+
+.foto-comunicado {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	border-radius: var(--borderR-8);
+	object-fit: cover;
+	vertical-align: middle;
+}
+
+.foto-marcador {
+	display: inline-block;
+	width: 3.4rem;
+	height: 3.4rem;
+	background: var(--black-50);
+	border-radius: var(--borderR-8);
+	vertical-align: middle;
+}
+
 .tabla-comunicados th.columna-acciones {
 	width: 1px;
 	white-space: nowrap;
@@ -240,11 +277,10 @@ table.tabla-comunicados {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	text-decoration: none;
 }
 
 .boton-accion:hover {
-	color: var(--red-700);
+	color: var(--green-900);
 }
 
 .boton-accion img {
@@ -259,7 +295,12 @@ table.tabla-comunicados {
 	padding: 2.4rem;
 }
 
-/* Página agregar: tarjetas + columna lateral (según maqueta). */
+/* Campo que ocupa el ancho completo de su fila */
+.campo-ancho-completo {
+	grid-column: 1 / -1;
+}
+
+/* Página agregar */
 .pagina-agregar {
 	display: flex;
 	flex-direction: column;
@@ -312,7 +353,7 @@ table.tabla-comunicados {
 	gap: 1.2rem;
 }
 
-/* Radio de campos del formulario agregar según maqueta. */
+/* Radio de campos del formulario agregar/actualizar según maqueta. */
 .formulario-agregar .campo-formulario input,
 .formulario-agregar .campo-formulario select,
 .formulario-agregar .campo-formulario textarea,
@@ -321,15 +362,118 @@ table.tabla-comunicados {
 	border-radius: var(--borderR-8);
 }
 
-/* Rejillas internas de las tarjetas. */
-.rejilla-doble {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 1.2rem;
+/* Zona de imagen con borde punteado */
+.zona-imagen {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 28rem;
+	max-height: 39.1rem;
+	overflow: hidden;
+	padding: 1.6rem;
+	background: var(--white-100);
+	border: 1px dashed var(--black-100);
+	border-radius: var(--borderR-8);
+	cursor: pointer;
+}
+
+.zona-imagen:focus {
+	border-color: var(--green-900);
+	outline: none;
+}
+
+.zona-activa {
+	border-color: var(--green-900);
+	background: var(--green-25);
+}
+
+.contenido-zona {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	text-align: center;
+}
+
+.contenido-zona[hidden] {
+	display: none;
+}
+
+.icono-zona {
+	width: 2.4rem;
+	height: 2.4rem;
+	color: var(--white-700);
+}
+
+.texto-subir {
+	font-size: 1.2rem;
+	font-weight: 500;
+	color: var(--white-700);
+}
+
+.texto-ayuda {
+	font-size: 1.1rem;
+	color: var(--white-700);
+}
+
+.vista-previa-imagen {
+	display: block;
+	width: 100%;
+	min-height: inherit;
+	max-height: 32.2rem;
+	object-fit: cover;
+	border-radius: var(--borderR-4);
+}
+
+.vista-previa-imagen[hidden] {
+	display: none;
+}
+
+/* Input nativo de imagen: fuera del layout pero funcional para que la
+   zona y el botón abran el selector con JS. */
+input[data-imagen-comunicado] {
+	position: absolute;
+	width: 0.1rem;
+	height: 0.1rem;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.nombre-archivo {
+	font-size: 1.2rem;
+	color: var(--black-300);
+}
+
+.nombre-archivo[hidden] {
+	display: none;
+}
+
+.boton-subir {
+	align-self: flex-start;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-4);
+	padding: 0.4rem 1.2rem;
+	font: inherit;
+	font-size: 1.3rem;
+	font-weight: 500;
+	color: var(--green-900);
+	cursor: pointer;
+}
+
+.boton-subir svg {
+	width: 1.6rem;
+	height: 1.6rem;
 }
 
 /* Lateral: acción principal + cancelar (ancho del contenedor,
-   alto según contenido). */
+   alto según contenido) */
 .boton-agregar {
 	display: inline-flex;
 	align-items: center;
@@ -347,6 +491,11 @@ table.tabla-comunicados {
 	font-weight: 600;
 	cursor: pointer;
 	text-decoration: none;
+}
+
+.boton-agregar:hover,
+.boton-agregar:active {
+	background: var(--green-700);
 }
 
 .boton-cancelar {
@@ -367,15 +516,17 @@ table.tabla-comunicados {
 	text-decoration: none;
 }
 
+.boton-cancelar:hover {
+	border-color: var(--red-500);
+}
+
 @media (max-width: 900px) {
 	.formulario-agregar {
 		grid-template-columns: 1fr;
 	}
 
-	.rejilla-doble {
-		grid-template-columns: 1fr;
-	}
-
+	/* En tablet/móvil cada fila del listado es una tarjeta:
+	   se oculta la cabecera y cada celda muestra su etiqueta. */
 	.panel-cuadricula .tabla-filtrada {
 		padding: 1.2rem;
 	}
@@ -434,6 +585,7 @@ table.tabla-comunicados {
 		white-space: normal;
 	}
 
+	/* En tablet/móvil: acciones en fila, alineadas a la derecha abajo */
 	.tabla-comunicados tbody td.columna-acciones .acciones-fila {
 		display: flex;
 		flex-direction: row;

@@ -80,12 +80,32 @@
 	color: var(--black-300);
 }
 
+/* Todos los textareas con la misma altura que los de incidencias:
+   alto automático con mínimo de 8rem (encima de los 4rem de arriba). */
+.campo-formulario textarea {
+	height: auto;
+	min-height: 8rem;
+}
+
 .campo-formulario .errorlist {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	color: var(--red-500);
 	font-size: 1.2rem;
+}
+
+/* Contador de caracteres bajo los textareas (lo inserta contadores.js) */
+.contador-caracteres {
+	margin: 0;
+	font-size: 1.2rem;
+	color: var(--black-300);
+	text-align: right;
+}
+
+.contador-caracteres.limite-alcanzado {
+	color: var(--red-500);
+	font-weight: 600;
 }
 
 /* Campo en espera/deshabilitado: etiqueta y control en gris. */

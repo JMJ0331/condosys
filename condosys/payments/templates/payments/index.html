@@ -128,8 +128,8 @@
               <td data-columna="estado" data-etiqueta="Estado">{{ pago.get_status_display }}</td>
               <td class="columna-acciones">
                 <div class="acciones-fila">
-                  <a href="{% url 'generar_comprobante' %}?apartment={{ pago.apartment_id }}&amp;resident={{ pago.resident_id }}&amp;amount={{ pago.amount }}&amp;concept={{ pago.concept }}&amp;period={{ pago.period|date:'Y-m-d' }}&amp;payment_date={{ pago.payment_date|date:'Y-m-d' }}&amp;payment_method={{ pago.payment_method }}&amp;status={{ pago.status }}" class="boton-accion" aria-label="Ver comprobante" target="_blank" rel="noopener">
-                    <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="Comprobante">
+                  <a href="{% url 'actualizar_pago' pago.id %}" class="boton-accion" aria-label="Editar">
+                    <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
                   </a>
                   <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ pago.id }}">
                     <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">

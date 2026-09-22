@@ -189,9 +189,11 @@ main.container-main-side2 {
 }
 
 .subtitulo-vista {
-	margin: 0.4rem 0 1.2rem 0;
+	margin: 0.4rem -1.2rem 1.2rem -1.2rem;
+	padding: 0 1.2rem 1.2rem 1.2rem;
 	color: var(--black-300);
 	font-size: 1.2rem;
+	border-bottom: 1px solid var(--black-50);
 }
 
 /* Gráfico de barras en CSS puro */
@@ -202,7 +204,6 @@ main.container-main-side2 {
 	align-items: end;
 	min-height: 22rem;
 	padding: 1.2rem 0.4rem 0 0.4rem;
-	border-bottom: 1px solid var(--black-50);
 }
 
 .columna-barra {
@@ -233,10 +234,6 @@ main.container-main-side2 {
 .relleno-barra {
 	width: 100%;
 	border-radius: var(--borderR-4);
-	background: var(--green-300);
-}
-
-.relleno-barra.ultima {
 	background: var(--green-900);
 }
 
@@ -245,35 +242,40 @@ main.container-main-side2 {
 	color: var(--black-300);
 }
 
-.etiqueta-barra.actual {
-	font-weight: 700;
-	color: var(--black-400);
-}
-
-.resumen-vista {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 1.2rem;
-	margin: 1.2rem 0 0 0;
-	padding: 0;
-}
-
-.resumen-vista div {
+.pie-vista {
 	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.2rem;
+	margin: 1.2rem -1.2rem 0 -1.2rem;
+	padding: 1.2rem 1.2rem 0 1.2rem;
+	border-top: 1px solid var(--black-50);
 }
 
-.resumen-vista dt {
-	font-size: 1.2rem;
+.selector-mes {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.8rem;
+	font-size: 1.3rem;
 	color: var(--black-300);
 }
 
-.resumen-vista dd {
+.selector-mes .campo-seleccion {
+	min-width: 0;
+	width: auto;
+	height: auto;
+	padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+	font-size: 1.25rem;
+}
+
+.total-vista {
 	margin: 0;
 	font-size: 1.3rem;
-	font-weight: 600;
 	color: var(--black-400);
+}
+
+.total-vista span {
+	font-weight: 600;
 }
 
 /* Tabla de vista previa */
@@ -405,8 +407,9 @@ table.tabla-reportes {
 		width: 100%;
 	}
 
-	.resumen-vista {
-		grid-template-columns: minmax(0, 1fr);
+	.pie-vista {
+		flex-direction: column;
+		align-items: stretch;
 	}
 
 	.grafico-barras {

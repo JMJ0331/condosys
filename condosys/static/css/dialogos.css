@@ -169,6 +169,11 @@ dialog.dialogo-eliminar {
 	border-color: var(--red-900);
 }
 
+.dialogo-eliminar .boton-cancelar-eliminar:hover,
+.dialogo-eliminar .boton-cancelar-eliminar:active {
+	border-color: var(--red-500);
+}
+
 .dialogo-eliminar .boton-cancelar-eliminar {
 	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-8);
