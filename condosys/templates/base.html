@@ -70,18 +70,26 @@
       <a href="{% url 'inicio' %}" class="{% if request.resolver_match.url_name == 'inicio' %}activo{% endif %}" aria-label="Inicio">
         <img src="{% static 'images/icons/verdes/Container_green.svg' %}" alt="" aria-hidden="true">
       </a>
+      {% if modulos_acceso.pagos %}
       <a href="{% url 'pagos_index' %}" class="{% if request.resolver_match.url_name == 'pagos_index' or request.resolver_match.url_name == 'agregar_pago' or request.resolver_match.url_name == 'actualizar_pago' or request.resolver_match.url_name == 'eliminar_pago' %}activo{% endif %}" aria-label="Pagos">
         <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" aria-hidden="true">
       </a>
+      {% endif %}
+      {% if modulos_acceso.incidencias %}
       <a href="{% url 'incidencias_index' %}" class="{% if request.resolver_match.url_name == 'incidencias_index' or request.resolver_match.url_name == 'agregar_incidencia' or request.resolver_match.url_name == 'actualizar_incidencia' %}activo{% endif %}" aria-label="Incidencias">
         <img src="{% static 'images/icons/verdes/warning-triangle_green.svg' %}" alt="" aria-hidden="true">
       </a>
+      {% endif %}
+      {% if modulos_acceso.visitantes %}
       <a href="{% url 'visitantes_index' %}" class="{% if request.resolver_match.url_name == 'visitantes_index' or request.resolver_match.url_name == 'agregar_visitante' or request.resolver_match.url_name == 'actualizar_visitante' %}activo{% endif %}" aria-label="Visitantes">
         <img src="{% static 'images/icons/verdes/community_green.svg' %}" alt="" aria-hidden="true">
       </a>
+      {% endif %}
+      {% if modulos_acceso.reservas %}
       <a href="{% url 'reservas_index' %}" class="{% if request.resolver_match.url_name == 'reservas_index' or request.resolver_match.url_name == 'agregar_reserva' or request.resolver_match.url_name == 'actualizar_reserva' %}activo{% endif %}" aria-label="Reservas">
         <img src="{% static 'images/icons/verdes/google-docs_green900.svg' %}" alt="" aria-hidden="true">
       </a>
+      {% endif %}
     </nav>
 
     <script src="{% static "js/contadores.js" %}"></script>

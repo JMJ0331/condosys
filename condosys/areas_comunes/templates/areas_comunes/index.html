@@ -41,7 +41,9 @@
         </select>
       </form>
 
+      {% if puede_crear %}
       <a href="{% url 'agregar_area_comun' %}" class="boton-nueva-area"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar área común</a>
+      {% endif %}
     </div>
   </div>
 
@@ -71,12 +73,16 @@
           <td data-columna="estado" data-etiqueta="Estado">{{ area.get_status_display }}</td>
           <td class="columna-acciones">
             <div class="acciones-fila">
+              {% if puede_editar %}
               <a href="{% url 'actualizar_area_comun' area.id %}" class="boton-accion" aria-label="Editar">
                 <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
               </a>
+              {% endif %}
+              {% if puede_eliminar %}
               <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ area.id }}">
                 <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
               </button>
+              {% endif %}
             </div>
           </td>
         </tr>
@@ -89,6 +95,7 @@
     </table>
   </div>
 
+  {% if puede_eliminar %}
   {% for area in areas %}
   <dialog id="dialog-eliminar-{{ area.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ area.id }}">
     <form method="post" action="{% url 'eliminar_area_comun' area.id %}">
@@ -103,6 +110,7 @@
     </form>
   </dialog>
   {% endfor %}
+  {% endif %}
 
   {% include "componentes/paginacion_tabla.html" with pagina=areas %}
     </div>

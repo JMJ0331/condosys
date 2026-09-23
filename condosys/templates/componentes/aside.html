@@ -16,135 +16,16 @@
     <div class="aside-options">
 
       <div class="container-links{% if residencial_bloqueado %} bloqueado{% endif %}">
+
+        {% for modulo in modulos_habilitados %}
         <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'inicio' %} active{% endif %}"
-          href="{% url 'inicio' %}"
-
+          class="opt-modulo{% if request.resolver_match.url_name in modulo.activo_en %} active{% endif %}{% if modulo.clase_extra %} {{ modulo.clase_extra }}{% endif %}"
+          href="{% url modulo.url %}"
         >
-        <img src="{% static 'images/icons/blancos/Container_white.svg' %}" alt="home-icon" />
-
-          <h4>Inicio</h4>
+          <img src="{% static modulo.icono %}" alt="{{ modulo.alt }}" />
+          <h4>{{ modulo.nombre }}</h4>
         </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'departamentos_index' or request.resolver_match.url_name == 'agregar_departamento' or request.resolver_match.url_name == 'actualizar_departamento' %} active{% endif %}"
-          href="{% url 'departamentos_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/city_white.svg' %}" alt="city-icon" />
-          <h4>Departamentos</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'residentes_index' or request.resolver_match.url_name == 'crear_residente' or request.resolver_match.url_name == 'actualizar_residente' %} active{% endif %}"
-          href="{% url 'residentes_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/group_white.svg' %}" alt="group-icon" />
-          <h4>Residentes</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'propietarios_index' or request.resolver_match.url_name == 'crear_propietario' or request.resolver_match.url_name == 'actualizar_propietario' %} active{% endif %}"
-          href="{% url 'propietarios_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/home-user_white.svg' %}" alt="propietario-icon"/>
-          <h4>Propietarios</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'pagos_index' or request.resolver_match.url_name == 'agregar_pago' or request.resolver_match.url_name == 'actualizar_pago' or request.resolver_match.url_name == 'eliminar_pago' %} active{% endif %}"
-          href="{% url 'pagos_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/lot-of-cash_white.svg' %}" alt="waallet-icon" />
-          <h4>Pagos</h4>
-        </a>
-
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'mantenimientos_index' or request.resolver_match.url_name == 'agregar_mantenimiento' or request.resolver_match.url_name == 'actualizar_mantenimiento' %} active{% endif %}"
-          href="{% url 'mantenimientos_index' %}"
-        >
-
-          <img src="{% static 'images/icons/blancos/historic-shield-alt_white.svg' %}" alt="settings-icon" />
-          <h4>Mantenimientos</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'incidencias_index' or request.resolver_match.url_name == 'agregar_incidencia' or request.resolver_match.url_name == 'actualizar_incidencia' %} active{% endif %}"
-          href="{% url 'incidencias_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/warning-triangle_white.svg' %}" alt="message-icon"/>
-          <h4>Incidencias</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'solicitudes_index' or request.resolver_match.url_name == 'agregar_solicitud' or request.resolver_match.url_name == 'actualizar_solicitud' %} active{% endif %}"
-          href="{% url 'solicitudes_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/page_white.svg' %}" alt="area-icon"/>
-          <h4>Solicitudes</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'visitantes_index' or request.resolver_match.url_name == 'agregar_visitante' or request.resolver_match.url_name == 'actualizar_visitante' %} active{% endif %}"
-          href="{% url 'visitantes_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/community_white.svg' %}" alt="community-icon"/>
-          <h4>Visitantes</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'areas_comunes_index' or request.resolver_match.url_name == 'agregar_area_comun' or request.resolver_match.url_name == 'actualizar_area_comun' %} active{% endif %}"
-          href="{% url 'areas_comunes_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/leaf_white.svg' %}" alt="neigh-icon"/>
-          <h4>Áreas Comunes</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'reservas_index' or request.resolver_match.url_name == 'agregar_reserva' or request.resolver_match.url_name == 'actualizar_reserva' %} active{% endif %}"
-          href="{% url 'reservas_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/google-docs.svg' %}" alt="solicitud-icon"/>
-          <h4>Reservas</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'comunicados_index' or request.resolver_match.url_name == 'agregar_comunicado' or request.resolver_match.url_name == 'actualizar_comunicado' %} active{% endif %}"
-          href="{% url 'comunicados_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/voice_white.svg' %}" alt="chat-icon"/>
-          <h4>Comunicados</h4>
-        </a>
-
-        <a
-          class="opt-modulo{% if request.resolver_match.url_name == 'reportes_index' %} active{% endif %}"
-          href="{% url 'reportes_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/reports_white.svg' %}" alt="reports-icon"/>
-          <h4>Reportes</h4>
-        </a>
-
-        <a
-          class="opt-modulo opt-residencial{% if request.resolver_match.url_name == 'residencial_index' %} active{% endif %}"
-          href="{% url 'residencial_index' %}"
-        >
-
-        <img src="{% static 'images/icons/blancos/residencial.svg' %}" alt="residencial-icon"/>
-          <h4>Residencial</h4>
-        </a>
-
-      
+        {% endfor %}
 
       </div>
 
