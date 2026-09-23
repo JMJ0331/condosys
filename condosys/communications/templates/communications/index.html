@@ -43,7 +43,9 @@
         </select>
       </form>
 
+      {% if puede_crear %}
       <a href="{% url 'agregar_comunicado' %}" class="boton-nuevo-comunicado"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar comunicado</a>
+      {% endif %}
     </div>
   </div>
 
@@ -79,12 +81,16 @@
           <td data-columna="estado" data-etiqueta="Estado">{% if comunicado.is_published %}Publicado{% else %}Borrador{% endif %}</td>
           <td class="columna-acciones">
             <div class="acciones-fila">
+              {% if puede_editar %}
               <a href="{% url 'actualizar_comunicado' comunicado.id %}" class="boton-accion" aria-label="Editar">
                 <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
               </a>
+              {% endif %}
+              {% if puede_eliminar %}
               <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ comunicado.id }}">
                 <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
               </button>
+              {% endif %}
             </div>
           </td>
         </tr>
@@ -97,6 +103,7 @@
     </table>
   </div>
 
+  {% if puede_eliminar %}
   {% for comunicado in comunicados %}
   <dialog id="dialog-eliminar-{{ comunicado.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ comunicado.id }}">
     <form method="post" action="{% url 'eliminar_comunicado' comunicado.id %}">
@@ -111,6 +118,7 @@
     </form>
   </dialog>
   {% endfor %}
+  {% endif %}
 
   {% include "componentes/paginacion_tabla.html" with pagina=comunicados %}
     </div>

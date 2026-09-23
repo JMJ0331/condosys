@@ -49,7 +49,9 @@
         </select>
       </form>
 
+      {% if puede_crear %}
       <a href="{% url 'agregar_departamento' %}" class="boton-nuevo-departamento"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar departamento</a>
+      {% endif %}
     </div>
   </div>
 
@@ -97,12 +99,16 @@
           <td data-columna="ocupado" data-etiqueta="Estado">{{ departamento.get_status_display }}</td>
           <td class="columna-acciones">
             <div class="acciones-fila">
+              {% if puede_editar %}
               <a href="{% url 'actualizar_departamento' departamento.id %}" class="boton-accion" aria-label="Editar">
                 <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
               </a>
+              {% endif %}
+              {% if puede_eliminar %}
               <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ departamento.id }}">
                 <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
               </button>
+              {% endif %}
             </div>
           </td>
         </tr>
@@ -115,6 +121,7 @@
     </table>
   </div>
 
+  {% if puede_eliminar %}
   {% for departamento in departamentos %}
   <dialog id="dialog-eliminar-{{ departamento.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ departamento.id }}">
     <form method="post" action="{% url 'eliminar_departamento' departamento.id %}">
@@ -129,6 +136,7 @@
     </form>
   </dialog>
   {% endfor %}
+  {% endif %}
 
   {% include "componentes/paginacion_tabla.html" with pagina=departamentos %}
     </div>
