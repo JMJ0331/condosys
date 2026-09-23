@@ -12,7 +12,7 @@
     <div class="acciones">
 
   <div class="contenedor-filtros">
-    <h2>Todas las áreas comunes</h2>
+    <h2>Todas las ├íreas comunes</h2>
 
     <div class="filtros-tabla">
       <div class="selector-columnas">
@@ -27,7 +27,7 @@
 
       <form method="get" class="formulario-filtros" id="filtros-areas">
         <select name="tipo" id="filtro-tipo">
-          <option value="">Todos los tipos de áreas</option>
+          <option value="">Todos los tipos de ├íreas</option>
           {% for valor, etiqueta in tipos_area %}
           <option value="{{ valor }}" {% if tipo_actual == valor %}selected{% endif %}>{{ etiqueta }}</option>
           {% endfor %}
@@ -41,7 +41,7 @@
         </select>
       </form>
 
-      {% if puede_crear %}
+{% if puede_crear %}
       <a href="{% url 'agregar_area_comun' %}" class="boton-nueva-area"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar área común</a>
       {% endif %}
     </div>
@@ -52,10 +52,10 @@
       <thead>
         <tr>
           <th data-columna="nombre">Nombre</th>
-          <th data-columna="tipo">Tipo de área</th>
+          <th data-columna="tipo">Tipo de ├írea</th>
           <th data-columna="capacidad">Capacidad</th>
           <th data-columna="horario">Horario disponible</th>
-          <th data-columna="dias">Días habilitados</th>
+          <th data-columna="dias">D├¡as habilitados</th>
           <th data-columna="condiciones">Condiciones de uso</th>
           <th data-columna="estado">Estado</th>
           <th class="columna-acciones">Acciones</th>
@@ -65,11 +65,11 @@
         {% for area in areas %}
         <tr>
           <td data-columna="nombre" data-etiqueta="Nombre">{{ area.name }}</td>
-          <td data-columna="tipo" data-etiqueta="Tipo de área">{{ area.get_area_type_display }}</td>
-          <td data-columna="capacidad" data-etiqueta="Capacidad">{{ area.capacity|default:"—" }}</td>
-          <td data-columna="horario" data-etiqueta="Horario disponible">{% if area.available_from and area.available_until %}{{ area.available_from|time:"H:i" }} - {{ area.available_until|time:"H:i" }}{% else %}—{% endif %}</td>
-          <td data-columna="dias" data-etiqueta="Días habilitados">{{ area.get_available_days_display }}</td>
-          <td data-columna="condiciones" data-etiqueta="Condiciones de uso" title="{{ area.usage_conditions|default:'' }}">{{ area.usage_conditions|default:"—"|truncatechars:50 }}</td>
+          <td data-columna="tipo" data-etiqueta="Tipo de ├írea">{{ area.get_area_type_display }}</td>
+          <td data-columna="capacidad" data-etiqueta="Capacidad">{{ area.capacity|default:"ÔÇö" }}</td>
+          <td data-columna="horario" data-etiqueta="Horario disponible">{% if area.available_from and area.available_until %}{{ area.available_from|time:"H:i" }} - {{ area.available_until|time:"H:i" }}{% else %}ÔÇö{% endif %}</td>
+          <td data-columna="dias" data-etiqueta="D├¡as habilitados">{{ area.get_available_days_display }}</td>
+          <td data-columna="condiciones" data-etiqueta="Condiciones de uso" title="{{ area.usage_conditions|default:'' }}">{{ area.usage_conditions|default:"ÔÇö"|truncatechars:50 }}</td>
           <td data-columna="estado" data-etiqueta="Estado">{{ area.get_status_display }}</td>
           <td class="columna-acciones">
             <div class="acciones-fila">
@@ -101,10 +101,10 @@
     <form method="post" action="{% url 'eliminar_area_comun' area.id %}">
       {% csrf_token %}
       <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
-      <h3 id="dialog-eliminar-titulo-{{ area.id }}" class="titulo-eliminar">Eliminar área común</h3>
-      <p class="mensaje-eliminar">¿Estás seguro de eliminar el área <strong>{{ area.name }}</strong>?</p>
+      <h3 id="dialog-eliminar-titulo-{{ area.id }}" class="titulo-eliminar">Eliminar ├írea com├║n</h3>
+      <p class="mensaje-eliminar">┬┐Est├ís seguro de eliminar el ├írea <strong>{{ area.name }}</strong>?</p>
       <div class="acciones-eliminar">
-        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+        <button type="submit" class="boton-confirmar-eliminar">S├¡, Eliminar</button>
         <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
       </div>
     </form>

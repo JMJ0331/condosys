@@ -78,7 +78,7 @@
           </a>
           {% endif %}
 
-          {% if permisos_modulos.comunicados.crear %}
+{% if permisos_modulos.comunicados.crear %}
           <a class="accion" href="{% url 'agregar_comunicado' %}">
             <img src="{% static 'images/icons/verdes/voice_green.svg' %}" alt="" />
             <span>Agregar comunicado</span>

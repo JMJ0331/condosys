@@ -1,9 +1,9 @@
 @import url('/static/css/variables.css');
 
 /* ============================================
-   Módulo Inicio - estilos específicos.
-   Réplica de inicio.png: tarjetas de conteo,
-   tabla de pagos pendientes, acciones rápidas
+   M├│dulo Inicio - estilos espec├¡ficos.
+   R├®plica de inicio.png: tarjetas de conteo,
+   tabla de pagos pendientes, acciones r├ípidas
    y actividad reciente.
    ============================================ */
 
@@ -13,7 +13,7 @@
 	flex: 1;
 }
 
-/* Espacio entre el icono y el título del encabezado */
+/* Espacio entre el icono y el t├¡tulo del encabezado */
 .titulo-encabezado {
 	gap: var(--space-8);
 }
@@ -77,8 +77,8 @@
 }
 
 /* Panel de pagos pendientes por vencer: misma estructura que la
-   cuadrícula de departamentos (tabla de borde a borde, título con
-   línea divisoria). */
+   cuadr├¡cula de departamentos (tabla de borde a borde, t├¡tulo con
+   l├¡nea divisoria). */
 .panel-pagos {
 	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-8);
@@ -160,7 +160,7 @@ table.tabla-inicio {
 	text-decoration: underline;
 }
 
-/* Tarjeta ancha dentro de la cuadrícula de acciones */
+/* Tarjeta ancha dentro de la cuadr├¡cula de acciones */
 .accion-ancha {
 	grid-column: 1 / -1;
 	min-height: 9rem;

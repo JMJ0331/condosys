@@ -14,7 +14,7 @@
 
       <div class="columna-principal">
         <section class="tarjeta" aria-labelledby="titulo-informacion">
-          <h3 class="cabecera-tarjeta" id="titulo-informacion">Información del departamento</h3>
+          <h3 class="cabecera-tarjeta" id="titulo-informacion">Informaci├│n del departamento</h3>
           <div class="cuerpo-tarjeta">
             <div class="campo-formulario">
               <label for="{{ form_apartments.name.id_for_label }}">{{ form_apartments.name.label }}</label>
@@ -41,7 +41,7 @@
                     <path d="m21 15-4.5-4.5L6 21"></path>
                   </svg>
                   <span class="texto-subir">Subir imagen</span>
-                  <span class="texto-ayuda">JPG, PNG, WEBP · máx. 2 MB</span>
+                  <span class="texto-ayuda">JPG, PNG, WEBP ┬À m├íx. 2 MB</span>
                 </span>
               </div>
               {{ form_apartments.photo }}
@@ -59,14 +59,14 @@
         </section>
 
         <section class="tarjeta" aria-labelledby="titulo-ubicacion">
-          <h3 class="cabecera-tarjeta" id="titulo-ubicacion">Ubicación</h3>
+          <h3 class="cabecera-tarjeta" id="titulo-ubicacion">Ubicaci├│n</h3>
           <div class="cuerpo-tarjeta">
             <div class="campo-formulario">
               <label for="{{ form_apartments.building.id_for_label }}">{% if distribucion_residencial == 'torres' %}Torres{% else %}Edificios{% endif %}</label>
               <select name="{{ form_apartments.building.html_name }}" id="{{ form_apartments.building.id_for_label }}" class="campo-seleccion" data-departamento="edificio">
                 <option value="">{% if distribucion_residencial == 'torres' %}Elegir torre{% else %}Elegir edificio{% endif %}</option>
                 {% for edificio in edificios %}
-                <option value="{{ edificio.id }}" data-garden="{{ edificio.garden_id }}" data-torre="{{ edificio.tower|default:'' }}" data-bloque="{{ edificio.block|default:'' }}"{% if form_apartments.building.value|stringformat:'s' == edificio.id|stringformat:'s' %} selected{% endif %}>{% if distribucion_residencial == 'torres' %}{{ edificio.tower|default:edificio.name }}{% else %}{{ edificio.tower|default:'' }}{% if edificio.tower %} · {% endif %}{{ edificio.name }} · Bloque {{ edificio.block|default:'—' }}{% endif %}</option>
+                <option value="{{ edificio.id }}" data-garden="{{ edificio.garden_id }}" data-torre="{{ edificio.tower|default:'' }}" data-bloque="{{ edificio.block|default:'' }}"{% if form_apartments.building.value|stringformat:'s' == edificio.id|stringformat:'s' %} selected{% endif %}>{% if distribucion_residencial == 'torres' %}{{ edificio.tower|default:edificio.name }}{% else %}{{ edificio.tower|default:'' }}{% if edificio.tower %} ┬À {% endif %}{{ edificio.name }} ┬À Bloque {{ edificio.block|default:'ÔÇö' }}{% endif %}</option>
                 {% endfor %}
               </select>
               {{ form_apartments.building.errors }}

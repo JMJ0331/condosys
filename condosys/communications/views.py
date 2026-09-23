@@ -14,6 +14,18 @@ from .forms import CommunicationForm
 PAGINATE_BY = 15
 
 
+def _resolver_garden(user):
+    """Devuelve el jardín al que pertenece un comunicado.
+
+    Prioriza el jardín del usuario; si no lo tiene, usa el primero activo.
+    Retorna None si no hay ningún jardín configurado.
+    """
+    garden = getattr(user, 'garden', None)
+    if garden is not None:
+        return garden
+    return Garden.objects.filter(is_active=True).order_by('name').first()
+
+
 @role_required(*ROLES_TODOS)
 def app_index(request):
     comunicados_qs = (
@@ -22,7 +34,11 @@ def app_index(request):
         .order_by('-published_at', '-created_at')
     )
 
+    categoria = request.GET.get('categoria', '')
     estado = request.GET.get('estado', '')
+
+    if categoria:
+        comunicados_qs = comunicados_qs.filter(category=categoria)
     if estado == 'published':
         comunicados_qs = comunicados_qs.filter(is_published=True)
     elif estado == 'draft':
@@ -42,9 +58,10 @@ def app_index(request):
 
     contexto = {
         'comunicados': comunicados,
+        'categoria_actual': categoria,
         'estado_actual': estado,
         'paginacion_query': query.urlencode(),
-        'module_name': 'Comunicados'
+        'module_name': 'Comunicados',
     }
 
     return render(request, 'communications/index.html', contexto)
@@ -54,8 +71,16 @@ def _guardar_comunicado(request, form, es_nuevo):
     if form.is_valid():
         comunicacion = form.save(commit=False)
         if es_nuevo:
+            garden = _resolver_garden(request.user)
+            if garden is None:
+                messages.error(
+                    request,
+                    'No se pudo crear el comunicado: no hay ningún jardín configurado. '
+                    'Crea al menos uno desde la sección de departamentos.',
+                )
+                return redirect('comunicados_index')
             comunicacion.sender = request.user
-            comunicacion.garden = Garden.objects.first()
+            comunicacion.garden = garden
         comunicacion.save()
         messages.success(
             request,
