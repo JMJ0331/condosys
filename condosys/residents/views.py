@@ -4,7 +4,8 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from rest_framework import filters, viewsets
-from accounts.permissions import IsManager
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, IsGestionOrSoloLectura
 from structure.models import Apartment
 from .forms import ResidentForm
 from .models import Resident
@@ -12,13 +13,25 @@ from .serializers import ResidentSerializer
 
 PAGINATE_BY = 15
 
+ROLES_RESIDENTES = ROLES_GESTION + ('propietario',)
 
-@login_required
-def app_index(request):
+
+def _residentes_visibles(user):
+    """Residentes que puede ver el usuario según su rol."""
     qs = Resident.objects.select_related(
         'apartment__building__garden', 'user',
         'apartment__owner', 'apartment__owner__user',
-    ).order_by('-created_at')
+    )
+    if user.role in ROLES_GESTION:
+        return qs
+    if user.role == 'propietario':
+        return qs.filter(apartment__owner__user=user)
+    return qs.filter(user=user)
+
+
+@role_required(*ROLES_RESIDENTES)
+def app_index(request):
+    qs = _residentes_visibles(request.user).order_by('-created_at')
 
     estado = request.GET.get('estado', '')
     apartamento = request.GET.get('apartamento', '')
@@ -54,7 +67,7 @@ def app_index(request):
     return render(request, 'residents/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def crear_residente(request):
     if request.method == 'POST':
         form = ResidentForm(request.POST, request.FILES)
@@ -77,7 +90,7 @@ def crear_residente(request):
     return render(request, 'residents/nuevo.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_residente(request, pk):
     residente = Resident.objects.filter(pk=pk).first()
     if not residente:
@@ -105,7 +118,7 @@ def actualizar_residente(request, pk):
     return render(request, 'residents/nuevo.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def eliminar_residente(request, pk):
     residente = Resident.objects.filter(pk=pk).first()
     if not residente:
@@ -126,7 +139,7 @@ class ResidentViewSet(viewsets.ModelViewSet):
     """ViewSet para Resident"""
     queryset = Resident.objects.all()
     serializer_class = ResidentSerializer
-    permission_classes = [IsManager]
+    permission_classes = [IsGestionOrSoloLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['user__email', 'apartment__number']
     ordering_fields = ['created_at', 'full_name']
@@ -134,7 +147,4 @@ class ResidentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['apartment', 'is_active', 'marital_status']
 
     def get_queryset(self):
-        user = self.request.user
-        if user.role in ['admin', 'manager']:
-            return Resident.objects.all()
-        return Resident.objects.filter(user=user)
+        return _residentes_visibles(self.request.user).distinct()

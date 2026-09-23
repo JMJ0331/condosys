@@ -6,6 +6,8 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, IsGestionOrSoloLectura
 from structure.models import Apartment
 from .models import MaintenanceCharge
 from .serializers import (
@@ -15,6 +17,18 @@ from .serializers import (
 from .forms import MaintenanceChargeForm
 
 PAGINATE_BY = 15
+
+
+def _cargos_visibles(user):
+    """Cargos de mantenimiento que puede consultar el usuario."""
+    qs = MaintenanceCharge.objects.select_related('apartment__building')
+    if user.role in ROLES_GESTION:
+        return qs
+    if user.role == 'propietario':
+        return qs.filter(apartment__owner__user=user)
+    if user.role == 'resident':
+        return qs.filter(apartment__residents__user=user, apartment__residents__is_active=True)
+    return qs.none()
 
 
 def _anios_con_cargos():
@@ -31,13 +45,9 @@ MESES_NOMBRE = {
 }
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 def app_index(request):
-    cargos_qs = (
-        MaintenanceCharge.objects
-        .select_related('apartment__building')
-        .order_by('-effective_date', '-created_at')
-    )
+    cargos_qs = _cargos_visibles(request.user).order_by('-effective_date', '-created_at')
 
     estado = request.GET.get('estado', '')
     apartamento = request.GET.get('apartamento', '')
@@ -86,7 +96,7 @@ def app_index(request):
     return render(request, 'maintenance/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def agregar_mantenimiento(request):
     if request.method == 'POST':
         form = MaintenanceChargeForm(request.POST, request.FILES)
@@ -109,7 +119,7 @@ def agregar_mantenimiento(request):
     return render(request, 'maintenance/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_mantenimiento(request, pk):
     cargo = MaintenanceCharge.objects.filter(pk=pk).first()
     if not cargo:
@@ -138,7 +148,7 @@ def actualizar_mantenimiento(request, pk):
     return render(request, 'maintenance/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 @require_POST
 def eliminar_mantenimiento(request, pk):
     cargo = MaintenanceCharge.objects.filter(pk=pk).first()
@@ -155,12 +165,15 @@ def eliminar_mantenimiento(request, pk):
 class MaintenanceChargeViewSet(viewsets.ModelViewSet):
     """ViewSet para MaintenanceCharge"""
     queryset = MaintenanceCharge.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsGestionOrSoloLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['concept']
     ordering_fields = ['effective_date', 'amount']
     ordering = ['-effective_date']
     filterset_fields = ['concept', 'periodicity', 'is_active']
+
+    def get_queryset(self):
+        return _cargos_visibles(self.request.user)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

@@ -4,6 +4,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, IsGestionOrSoloLectura
 from .models import AreaComun
 from .serializers import AreaComunSerializer
 from .forms import AreaComunForm
@@ -11,7 +13,7 @@ from .forms import AreaComunForm
 PAGINATE_BY = 15
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 def app_index(request):
     areas_qs = AreaComun.objects.all().order_by('name')
 
@@ -47,7 +49,7 @@ def app_index(request):
     return render(request, 'areas_comunes/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def agregar_area_comun(request):
     if request.method == 'POST':
         form = AreaComunForm(request.POST)
@@ -70,7 +72,7 @@ def agregar_area_comun(request):
     return render(request, 'areas_comunes/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_area_comun(request, pk):
     area = AreaComun.objects.filter(pk=pk).first()
     if not area:
@@ -98,7 +100,7 @@ def actualizar_area_comun(request, pk):
     return render(request, 'areas_comunes/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def eliminar_area_comun(request, pk):
     area = AreaComun.objects.filter(pk=pk).first()
     if not area:
@@ -118,7 +120,7 @@ def eliminar_area_comun(request, pk):
 class AreaComunViewSet(viewsets.ModelViewSet):
     queryset = AreaComun.objects.all()
     serializer_class = AreaComunSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsGestionOrSoloLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'area_type', 'status']
     ordering_fields = ['name', 'created_at']

@@ -5,6 +5,11 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from accounts.decorators import role_required
+from accounts.permissions import (
+    ROLES_GESTION, ROLES_RESIDENTE, ROLES_TODOS,
+    IsSoloLecturaSeguridad,
+)
 from .models import CommonArea, Reservation
 from residents.models import Resident
 from structure.models import Apartment
@@ -18,13 +23,21 @@ from .forms import CommonAreaForm, ReservationForm
 PAGINATE_BY = 15
 
 
-@login_required
+def _reservas_visibles(user):
+    """Reservas que puede consultar el usuario según su rol."""
+    qs = Reservation.objects.select_related('common_area', 'apartment__building', 'resident')
+    if user.role in ROLES_GESTION:
+        return qs
+    if user.role == 'propietario':
+        return qs.filter(apartment__owner__user=user)
+    if user.role == 'resident':
+        return qs.filter(apartment__residents__user=user, apartment__residents__is_active=True).distinct()
+    return qs  # security: lectura
+
+
+@role_required(*ROLES_TODOS)
 def app_index(request):
-    reservas_qs = (
-        Reservation.objects
-        .select_related('common_area', 'apartment__building', 'resident')
-        .order_by('-start_time')
-    )
+    reservas_qs = _reservas_visibles(request.user).order_by('-start_time')
 
     estado = request.GET.get('estado', '')
     apartamento = request.GET.get('apartamento', '')
@@ -66,7 +79,7 @@ def _contexto_formulario():
     }
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 def agregar_reserva(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
@@ -88,7 +101,7 @@ def agregar_reserva(request):
     return render(request, 'reservations/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 def actualizar_reserva(request, pk):
     reserva = Reservation.objects.filter(pk=pk).first()
     if not reserva:
@@ -115,7 +128,7 @@ def actualizar_reserva(request, pk):
     return render(request, 'reservations/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 @require_POST
 def eliminar_reserva(request, pk):
     reserva = Reservation.objects.filter(pk=pk).first()
@@ -129,7 +142,7 @@ def eliminar_reserva(request, pk):
     return redirect('reservas_index')
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 @require_POST
 def crear_area_comun(request):
     form = CommonAreaForm(request.POST)
@@ -145,7 +158,7 @@ class CommonAreaViewSet(viewsets.ModelViewSet):
     """ViewSet para CommonArea"""
     queryset = CommonArea.objects.filter(is_active=True)
     serializer_class = CommonAreaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSoloLecturaSeguridad]
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     filterset_fields = ['garden']
@@ -154,12 +167,15 @@ class CommonAreaViewSet(viewsets.ModelViewSet):
 class ReservationViewSet(viewsets.ModelViewSet):
     """ViewSet para Reservation"""
     queryset = Reservation.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSoloLecturaSeguridad]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['reserved_by__email', 'common_area__name']
     ordering_fields = ['start_time', 'status']
     ordering = ['-start_time']
     filterset_fields = ['common_area', 'status', 'reserved_by']
+
+    def get_queryset(self):
+        return _reservas_visibles(self.request.user)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

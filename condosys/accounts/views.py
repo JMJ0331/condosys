@@ -11,11 +11,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from .models import User
-from .permissions import IsAdmin, CanModifyUser
+from .decorators import role_required
+from .permissions import ROLES_ADMIN, ROLES_TODOS, IsAdmin, CanModifyUser
 from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, ChangePasswordSerializer
 from .forms import UserForm, UserCreateForm
 
-@login_required
+@role_required(*ROLES_ADMIN)
 def app_index(request):
 
     contexto = {
@@ -30,12 +31,13 @@ DESCRIPCIONES_ROL = {
     'admin': 'Administra usuarios, departamentos, pagos y la configuración del residencial.',
     'manager': 'Gestiona pagos, comunicados, reservas y la operación diaria del residencial.',
     'resident': 'Consulta sus pagos, reservas y comunicados del residencial.',
+    'propietario': 'Consulta sus unidades, residentes, pagos y mantenimientos.',
     'maintenance': 'Atiende las incidencias y tareas de mantenimiento asignadas.',
     'security': 'Registra visitantes y controla los accesos al residencial.',
 }
 
 
-@login_required
+@role_required(*ROLES_TODOS)
 def mi_perfil(request):
     usuario = request.user
 
@@ -101,7 +103,7 @@ def mi_perfil(request):
     })
 
 
-@login_required
+@role_required(*ROLES_ADMIN)
 @require_POST
 def crear_usuario(request):
     form = UserForm(request.POST)
@@ -113,7 +115,7 @@ def crear_usuario(request):
     return redirect('inicio')
 
 
-@login_required
+@role_required(*ROLES_ADMIN)
 @require_POST
 def crear_usuario_nuevo(request):
     form = UserCreateForm(request.POST)

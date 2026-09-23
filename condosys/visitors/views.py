@@ -9,7 +9,8 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from accounts.permissions import CanModifyVisitor
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_SEGURIDAD, CanModifyVisitor
 from structure.models import Apartment
 from .models import Visitor
 from .serializers import VisitorSerializer
@@ -32,7 +33,7 @@ def _anios_con_visitas():
     return sorted(anios, reverse=True)
 
 
-@login_required
+@role_required(*ROLES_SEGURIDAD)
 def app_index(request):
     visitas_qs = (
         Visitor.objects
@@ -89,7 +90,7 @@ def app_index(request):
     return render(request, 'visitors/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_SEGURIDAD)
 def agregar_visitante(request):
     if request.method == 'POST':
         form = VisitorForm(request.POST, request.FILES)
@@ -114,7 +115,7 @@ def agregar_visitante(request):
     return render(request, 'visitors/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_SEGURIDAD)
 def actualizar_visitante(request, pk):
     visita = Visitor.objects.filter(pk=pk).first()
     if not visita:
@@ -143,7 +144,7 @@ def actualizar_visitante(request, pk):
     return render(request, 'visitors/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_SEGURIDAD)
 @require_POST
 def eliminar_visitante(request, pk):
     visita = Visitor.objects.filter(pk=pk).first()

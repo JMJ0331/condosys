@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from accounts.permissions import ROLES_TODOS
+from accounts.decorators import role_required
 from incidents.models import Incident
 from payments.models import Payment
 from reservations.models import Reservation
@@ -12,7 +14,7 @@ LIMITE_PAGOS_POR_VENCER = 5
 LIMITE_ACTIVIDAD = 5
 
 
-@login_required
+@role_required(*ROLES_TODOS)
 def app_index(request):
     """Panel de inicio: conteos, pagos pendientes por vencer y actividad reciente."""
     pagos_pendientes_qs = Payment.objects.filter(status__in=ESTADOS_PAGO_PENDIENTE)

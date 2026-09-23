@@ -4,12 +4,14 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, IsGestionOrSoloLectura
 from .models import Notification
 from .serializers import NotificationSerializer
 from .forms import NotificationForm
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def app_index(request):
     contexto = {
         'form_notification': NotificationForm(),
@@ -18,7 +20,7 @@ def app_index(request):
     return render(request, 'notifications/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 @require_POST
 def crear_notificacion(request):
     form = NotificationForm(request.POST)
@@ -34,7 +36,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
     """ViewSet para Notification"""
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsGestionOrSoloLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['user__email', 'title', 'message']
     ordering_fields = ['created_at', 'type']

@@ -6,8 +6,9 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, ROLES_TODOS, CanModifyIncident
 from .models import Incident, IncidentHistory
-from accounts.permissions import CanModifyIncident
 from residents.models import Resident
 from structure.models import Apartment
 from .serializers import (
@@ -19,6 +20,20 @@ from .forms import IncidentForm, IncidentImageForm, IncidentHistoryForm
 PAGINATE_BY = 15
 
 
+def _incidencias_visibles(user):
+    """Incidencias que puede consultar el usuario según su rol."""
+    qs = Incident.objects.select_related('apartment__building', 'resident')
+    if user.role in ROLES_GESTION:
+        return qs
+    if user.role == 'propietario':
+        return qs.filter(apartment__owner__user=user)
+    if user.role == 'resident':
+        return qs.filter(Q(reported_by=user) | Q(apartment__residents__user=user)).distinct()
+    if user.role == 'maintenance':
+        return qs.filter(Q(assigned_to=user) | Q(reported_by=user)).distinct()
+    return qs  # security: lectura
+
+
 def _ultimo_comentario_subquery():
     return (
         IncidentHistory.objects.filter(incident=OuterRef('pk'))
@@ -27,11 +42,10 @@ def _ultimo_comentario_subquery():
     )
 
 
-@login_required
+@role_required(*ROLES_TODOS)
 def app_index(request):
     incidencias_qs = (
-        Incident.objects
-        .select_related('apartment__building', 'resident')
+        _incidencias_visibles(request.user)
         .annotate(ultimo_comentario=Subquery(_ultimo_comentario_subquery()))
         .order_by('-created_at')
     )
@@ -95,7 +109,7 @@ def _guardar_incidencia(request, form, incidencia=None):
     return registro
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 def agregar_incidencia(request):
     if request.method == 'POST':
         form = IncidentForm(request.POST, request.FILES)
@@ -119,7 +133,7 @@ def agregar_incidencia(request):
     return render(request, 'incidents/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_incidencia(request, pk):
     incidencia = Incident.objects.filter(pk=pk).first()
     if not incidencia:
@@ -149,7 +163,7 @@ def actualizar_incidencia(request, pk):
     return render(request, 'incidents/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 @require_POST
 def eliminar_incidencia(request, pk):
     incidencia = Incident.objects.filter(pk=pk).first()
@@ -163,7 +177,7 @@ def eliminar_incidencia(request, pk):
     return redirect('incidencias_index')
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 @require_POST
 def crear_imagen_incidencia(request):
     form = IncidentImageForm(request.POST)
@@ -175,7 +189,7 @@ def crear_imagen_incidencia(request):
     return redirect('incidencias_index')
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 @require_POST
 def crear_historial_incidencia(request):
     form = IncidentHistoryForm(request.POST)
@@ -200,12 +214,7 @@ class IncidentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['apartment', 'status', 'priority', 'category', 'assigned_to']
 
     def get_queryset(self):
-        user = self.request.user
-        if user.role in ['admin', 'manager']:
-            return Incident.objects.all()
-        if user.role in ['maintenance', 'security']:
-            return Incident.objects.filter(Q(assigned_to=user) | Q(reported_by=user)).distinct()
-        return Incident.objects.filter(reported_by=user)
+        return _incidencias_visibles(self.request.user)
 
     def perform_update(self, serializer):
         incident = self.get_object()
