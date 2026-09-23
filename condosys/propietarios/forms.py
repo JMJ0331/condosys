@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from PIL import Image
+from accounts.forms import CuentaUsuarioFormBase
 from .models import Propietario
 
 ALLOWED_FORMATS = ('JPEG', 'PNG', 'WEBP')
@@ -36,8 +37,12 @@ def validate_photo(image):
         raise ValidationError("Solo se permiten imágenes JPG, PNG o WEBP.")
 
 
-class PropietarioForm(forms.ModelForm):
-    """Formulario de alta/edición de propietarios; usa estilos y clases compartidos."""
+class PropietarioForm(CuentaUsuarioFormBase):
+    """Formulario de alta/edición de propietarios; usa estilos y clases compartidos.
+    Crea y vincula la cuenta de acceso (User, rol 'propietario') con la
+    contraseña digitada por el admin."""
+    rol_cuenta = 'propietario'
+
     class Meta:
         model = Propietario
         fields = [

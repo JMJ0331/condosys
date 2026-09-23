@@ -86,6 +86,7 @@ def crear_residente(request):
         'url_form': 'crear_residente',
         'url_form_args': [],
         'texto_boton': 'Agregar',
+        'es_alta': True,
     }
     return render(request, 'residents/nuevo.html', contexto)
 

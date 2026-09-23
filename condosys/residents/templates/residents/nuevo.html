@@ -16,7 +16,7 @@
 
       <div class="columna-principal">
         <section class="tarjeta" aria-labelledby="titulo-personal">
-          <h3 class="cabecera-tarjeta" id="titulo-personal">Informaci├│n del personal</h3>
+          <h3 class="cabecera-tarjeta" id="titulo-personal">Información del personal</h3>
           <div class="cuerpo-tarjeta">
             <div class="fila-formulario">
               <div class="campo-formulario">
@@ -50,7 +50,7 @@
                     <path d="m21 15-4.5-4.5L6 21"></path>
                   </svg>
                   <span class="texto-subir">Subir imagen</span>
-                  <span class="texto-ayuda">JPG, PNG, WEBP ┬À m├íx. 2 MB</span>
+                  <span class="texto-ayuda">JPG, PNG, WEBP · máx. 2 MB</span>
                 </span>
               </div>
               {{ form_resident.photo }}
@@ -68,7 +68,7 @@
         </section>
 
         <section class="tarjeta" aria-labelledby="titulo-contacto">
-          <h3 class="cabecera-tarjeta" id="titulo-contacto">Informaci├│n de contacto</h3>
+          <h3 class="cabecera-tarjeta" id="titulo-contacto">Información de contacto</h3>
           <div class="cuerpo-tarjeta">
             <div class="campo-formulario">
               <label for="{{ form_resident.phone.id_for_label }}">{{ form_resident.phone.label }}</label>
@@ -113,6 +113,31 @@
                 <label for="{{ form_resident.mascotas.id_for_label }}">{{ form_resident.mascotas.label }}</label>
                 {{ form_resident.mascotas }}
                 {{ form_resident.mascotas.errors }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-cuenta">
+          <h3 class="cabecera-tarjeta" id="titulo-cuenta">Contraseña</h3>
+          <div class="cuerpo-tarjeta">
+            <p class="ayuda-formulario">
+              {% if es_alta %}
+              Define la contraseña con la que el residente iniciará sesión (mínimo 8 caracteres).
+              {% else %}
+              Contraseña con la que se iniciará sesión. Déjala en blanco para conservar la actual.
+              {% endif %}
+            </p>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_resident.password.id_for_label }}">{{ form_resident.password.label }}</label>
+                {{ form_resident.password }}
+                {{ form_resident.password.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_resident.password_confirmation.id_for_label }}">{{ form_resident.password_confirmation.label }}</label>
+                {{ form_resident.password_confirmation }}
+                {{ form_resident.password_confirmation.errors }}
               </div>
             </div>
           </div>

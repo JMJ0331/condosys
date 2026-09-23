@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from PIL import Image
+from accounts.forms import CuentaUsuarioFormBase
 from .models import Resident
 
 # Restricciones de imagen compartidas por todos los formularios que suben fotos.
@@ -25,8 +26,12 @@ def validate_photo(image):
         raise ValidationError("Solo se permiten imágenes JPG, PNG o WEBP.")
 
 
-class ResidentForm(forms.ModelForm):
-    """Formulario de alta/edición de residentes; usa estilos y clases compartidos."""
+class ResidentForm(CuentaUsuarioFormBase):
+    """Formulario de alta/edición de residentes; usa estilos y clases compartidos.
+    Crea y vincula la cuenta de acceso (User, rol 'resident') con la
+    contraseña digitada por el admin."""
+    rol_cuenta = 'resident'
+
     class Meta:
         model = Resident
         fields = [

@@ -75,6 +75,7 @@ def crear_propietario(request):
         'url_form': 'crear_propietario',
         'url_form_args': [],
         'texto_boton': 'Agregar',
+        'es_alta': True,
     }
     return render(request, 'propietarios/nuevo.html', contexto)
 

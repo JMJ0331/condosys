@@ -14,13 +14,11 @@ from .models import User
 from .decorators import role_required
 from .permissions import ROLES_ADMIN, ROLES_TODOS, IsAdmin, CanModifyUser
 from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, ChangePasswordSerializer
-from .forms import UserForm, UserCreateForm
+from .forms import UserCreateForm
 
 @role_required(*ROLES_ADMIN)
 def app_index(request):
-
     contexto = {
-        'form': UserForm(),
         'form_user_create': UserCreateForm(),
         'module_name': 'Cuentas'
     }
@@ -101,18 +99,6 @@ def mi_perfil(request):
         'descripcion_rol': DESCRIPCIONES_ROL.get(usuario.role, ''),
         'module_name': 'Mi perfil',
     })
-
-
-@role_required(*ROLES_ADMIN)
-@require_POST
-def crear_usuario(request):
-    form = UserForm(request.POST)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Usuario registrado correctamente.')
-    else:
-        messages.error(request, 'No se pudo registrar el usuario. Revisa los datos enviados.')
-    return redirect('inicio')
 
 
 @role_required(*ROLES_ADMIN)
