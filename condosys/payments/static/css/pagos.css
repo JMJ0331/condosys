@@ -11,6 +11,7 @@
 .panel-cuadricula .acciones {
 	gap: 0;
 	padding: 0;
+	box-shadow: var(--shadow-100);
 }
 
 .panel-cuadricula .contenedor-filtros {
@@ -377,7 +378,7 @@ table.tabla-pagos {
 
 .formulario-agregar {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) 30rem;
+	grid-template-columns: minmax(0, 1fr);
 	gap: 1.6rem;
 	align-items: start;
 }
@@ -403,6 +404,7 @@ table.tabla-pagos {
 	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-8);
 	overflow: hidden;
+	box-shadow: var(--shadow-100);
 }
 
 .cabecera-tarjeta {
@@ -625,6 +627,12 @@ input[data-pago-foto] {
 	flex: none;
 }
 
+/* En el encabezado el comprobante va entre Actualizar y Cancelar
+   con ancho según contenido (no a ancho completo como en el cuerpo). */
+.acciones-encabezado .btn-comprobante {
+	width: auto;
+}
+
 .boton-cancelar {
 	display: inline-flex;
 	align-items: center;
@@ -679,6 +687,7 @@ input[data-pago-foto] {
 		border: 1px solid var(--black-50);
 		border-radius: var(--borderR-8);
 		padding: 0.4rem 1.6rem;
+		box-shadow: var(--shadow-100);
 		margin-bottom: 1.2rem;
 	}
 

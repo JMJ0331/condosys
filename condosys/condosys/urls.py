@@ -18,9 +18,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from accounts.views import mi_perfil
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('mi-perfil/', mi_perfil, name='mi_perfil'),
     path('areas-comunes/', include('areas_comunes.urls')),
     path('', include('login.urls')),
     path('inicio/', include('inicio.urls')),

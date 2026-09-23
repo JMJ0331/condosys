@@ -92,15 +92,15 @@
             
     /* Shadows */
 
-    --shadow-100: 100px;
-    --shadow-200: 200px;
-    --shadow-300: 300px;
-    --shadow-400: 400px;
-    --shadow-500: 500px;
-    --shadow-600: 600px;
-    --shadow-700: 700px;
-    --shadow-800: 800px;
-    --shadow-900: 900px;
+    --shadow-100: 0 1px 2px rgba(16, 24, 40, 0.06);
+    --shadow-200: 0 2px 4px rgba(16, 24, 40, 0.08);
+    --shadow-300: 0 4px 8px rgba(16, 24, 40, 0.1);
+    --shadow-400: 0 6px 12px rgba(16, 24, 40, 0.12);
+    --shadow-500: 0 8px 16px rgba(16, 24, 40, 0.14);
+    --shadow-600: 0 12px 24px rgba(16, 24, 40, 0.16);
+    --shadow-700: 0 16px 32px rgba(16, 24, 40, 0.18);
+    --shadow-800: 0 24px 48px rgba(16, 24, 40, 0.2);
+    --shadow-900: 0 32px 64px rgba(16, 24, 40, 0.22);
 
 
     /* Border */

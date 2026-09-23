@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import ChatMessage
@@ -8,7 +9,7 @@ from .serializers import ChatMessageSerializer
 from .forms import ChatGroupForm, ChatMessageForm
 
 
-# @login_required
+@login_required
 def app_index(request):
     contexto = {
         'form_chat_group': ChatGroupForm(),
@@ -18,7 +19,7 @@ def app_index(request):
     return render(request, 'chat/index.html', contexto)
 
 
-# @login_required
+@login_required
 @require_POST
 def crear_grupo_chat(request):
     form = ChatGroupForm(request.POST)
@@ -30,7 +31,7 @@ def crear_grupo_chat(request):
     return redirect('inicio')
 
 
-# @login_required
+@login_required
 @require_POST
 def crear_mensaje_chat(request):
     form = ChatMessageForm(request.POST)

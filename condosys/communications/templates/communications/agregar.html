@@ -4,11 +4,11 @@
 <link rel="stylesheet" href="{% static 'css/comunicados.css' %}">
 {% endblock %}
 {% block mini-cards %}
-{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='comunicados_index' %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='comunicados_index' form_id='form-comunicado' texto_boton=texto_boton url_cancelar='comunicados_index' %}
 
 <main class="container-main-side2">
   <div class="pagina-agregar">
-    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
+    <form method="post" id="form-comunicado" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
       {% csrf_token %}
       {{ form_communication.non_field_errors }}
 
@@ -93,9 +93,7 @@
             </div>
           </div>
         </section>
-      </div>
 
-      <div class="columna-lateral">
         <section class="tarjeta" aria-labelledby="titulo-estado">
           <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
           <div class="cuerpo-tarjeta">
@@ -106,9 +104,6 @@
             </div>
           </div>
         </section>
-
-        <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
-        <a href="{% url 'comunicados_index' %}" class="boton-cancelar">Cancelar</a>
       </div>
     </form>
   </div>

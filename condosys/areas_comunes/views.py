@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import AreaComun
@@ -10,7 +11,7 @@ from .forms import AreaComunForm
 PAGINATE_BY = 15
 
 
-# @login_required
+@login_required
 def app_index(request):
     areas_qs = AreaComun.objects.all().order_by('name')
 
@@ -46,7 +47,7 @@ def app_index(request):
     return render(request, 'areas_comunes/index.html', contexto)
 
 
-# @login_required
+@login_required
 def agregar_area_comun(request):
     if request.method == 'POST':
         form = AreaComunForm(request.POST)
@@ -69,7 +70,7 @@ def agregar_area_comun(request):
     return render(request, 'areas_comunes/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_area_comun(request, pk):
     area = AreaComun.objects.filter(pk=pk).first()
     if not area:
@@ -97,7 +98,7 @@ def actualizar_area_comun(request, pk):
     return render(request, 'areas_comunes/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def eliminar_area_comun(request, pk):
     area = AreaComun.objects.filter(pk=pk).first()
     if not area:

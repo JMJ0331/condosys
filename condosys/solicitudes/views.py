@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from residents.models import Resident
@@ -13,7 +14,7 @@ from .forms import SolicitudForm
 PAGINATE_BY = 15
 
 
-# @login_required
+@login_required
 def app_index(request):
     solicitudes_qs = (
         Solicitud.objects
@@ -57,7 +58,7 @@ def app_index(request):
     return render(request, 'solicitudes/index.html', contexto)
 
 
-# @login_required
+@login_required
 def agregar_solicitud(request):
     if request.method == 'POST':
         form = SolicitudForm(request.POST, request.FILES)
@@ -81,7 +82,7 @@ def agregar_solicitud(request):
     return render(request, 'solicitudes/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_solicitud(request, pk):
     solicitud = Solicitud.objects.filter(pk=pk).first()
     if not solicitud:
@@ -111,7 +112,7 @@ def actualizar_solicitud(request, pk):
     return render(request, 'solicitudes/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 @require_POST
 def eliminar_solicitud(request, pk):
     solicitud = Solicitud.objects.filter(pk=pk).first()

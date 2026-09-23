@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from structure.models import Garden
@@ -23,7 +24,7 @@ def _resolver_garden(user):
     return Garden.objects.filter(is_active=True).order_by('name').first()
 
 
-# @login_required
+@login_required
 def app_index(request):
     comunicados_qs = (
         Communication.objects
@@ -88,7 +89,7 @@ def _guardar_comunicado(request, form, es_nuevo):
     return None
 
 
-# @login_required
+@login_required
 def agregar_comunicado(request):
     if request.method == 'POST':
         form = CommunicationForm(request.POST, request.FILES)
@@ -109,7 +110,7 @@ def agregar_comunicado(request):
     return render(request, 'communications/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_comunicado(request, pk):
     comunicado = Communication.objects.filter(pk=pk).first()
     if not comunicado:
@@ -141,7 +142,7 @@ def actualizar_comunicado(request, pk):
     return render(request, 'communications/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def eliminar_comunicado(request, pk):
     comunicado = Communication.objects.filter(pk=pk).first()
     if not comunicado:

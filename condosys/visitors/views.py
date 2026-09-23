@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -31,7 +32,7 @@ def _anios_con_visitas():
     return sorted(anios, reverse=True)
 
 
-# @login_required
+@login_required
 def app_index(request):
     visitas_qs = (
         Visitor.objects
@@ -88,7 +89,7 @@ def app_index(request):
     return render(request, 'visitors/index.html', contexto)
 
 
-# @login_required
+@login_required
 def agregar_visitante(request):
     if request.method == 'POST':
         form = VisitorForm(request.POST, request.FILES)
@@ -113,7 +114,7 @@ def agregar_visitante(request):
     return render(request, 'visitors/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_visitante(request, pk):
     visita = Visitor.objects.filter(pk=pk).first()
     if not visita:
@@ -142,7 +143,7 @@ def actualizar_visitante(request, pk):
     return render(request, 'visitors/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 @require_POST
 def eliminar_visitante(request, pk):
     visita = Visitor.objects.filter(pk=pk).first()

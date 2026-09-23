@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import CommonArea, Reservation
@@ -17,7 +18,7 @@ from .forms import CommonAreaForm, ReservationForm
 PAGINATE_BY = 15
 
 
-# @login_required
+@login_required
 def app_index(request):
     reservas_qs = (
         Reservation.objects
@@ -65,7 +66,7 @@ def _contexto_formulario():
     }
 
 
-# @login_required
+@login_required
 def agregar_reserva(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
@@ -87,7 +88,7 @@ def agregar_reserva(request):
     return render(request, 'reservations/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_reserva(request, pk):
     reserva = Reservation.objects.filter(pk=pk).first()
     if not reserva:
@@ -114,7 +115,7 @@ def actualizar_reserva(request, pk):
     return render(request, 'reservations/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 @require_POST
 def eliminar_reserva(request, pk):
     reserva = Reservation.objects.filter(pk=pk).first()
@@ -128,7 +129,7 @@ def eliminar_reserva(request, pk):
     return redirect('reservas_index')
 
 
-# @login_required
+@login_required
 @require_POST
 def crear_area_comun(request):
     form = CommonAreaForm(request.POST)

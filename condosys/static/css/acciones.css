@@ -75,4 +75,32 @@
 	.contenedor-acciones {
 		grid-template-columns: 1fr;
 	}
+
+	/* En móvil las acciones del encabezado bajan al final del
+	   formulario (lo mueve encabezado-acciones.js): apiladas a
+	   ancho completo. */
+	.acciones-encabezado.acciones-abajo {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.acciones-encabezado.acciones-abajo > a,
+	.acciones-encabezado.acciones-abajo > button {
+		width: 100%;
+	}
+}
+
+/* Acciones del formulario en el encabezado de agregar/actualizar
+   (compartido por todos los módulos; el encabezado .app-header ya
+   reparte título y acciones con space-between). */
+.acciones-encabezado {
+	display: flex;
+	align-items: center;
+	gap: var(--space-8);
+	flex-shrink: 0;
+}
+
+.acciones-encabezado .boton-agregar,
+.acciones-encabezado .boton-cancelar {
+	width: auto;
 }

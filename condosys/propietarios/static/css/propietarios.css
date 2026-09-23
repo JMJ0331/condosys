@@ -11,6 +11,7 @@
 .panel-cuadricula .acciones {
 	gap: 0;
 	padding: 0;
+	box-shadow: var(--shadow-100);
 }
 
 .panel-cuadricula .contenedor-filtros {
@@ -288,7 +289,7 @@ table.tabla-propietarios {
 
 .formulario-agregar {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) 30rem;
+	grid-template-columns: minmax(0, 1fr);
 	gap: 1.6rem;
 	align-items: start;
 }
@@ -314,6 +315,7 @@ table.tabla-propietarios {
 	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-8);
 	overflow: hidden;
+	box-shadow: var(--shadow-100);
 }
 
 .cabecera-tarjeta {
@@ -554,6 +556,7 @@ input[data-propietario="foto"] {
 		border: 1px solid var(--black-50);
 		border-radius: var(--borderR-8);
 		padding: 0.4rem 1.6rem;
+		box-shadow: var(--shadow-100);
 		margin-bottom: 1.2rem;
 	}
 
@@ -651,6 +654,31 @@ input[data-propietario="foto"] {
 		border: 1px solid var(--black-50);
 		border-radius: var(--borderR-8);
 		padding: 1.6rem;
+	}
+
+	/* El panel Estado conserva el estilo de escritorio en tablet/móvil:
+	   mantiene su marco y su fila no se convierte en mini-tarjeta. */
+	.columna-principal .tarjeta-estado {
+		background: var(--white-50);
+		border: 1px solid var(--black-50);
+		border-radius: var(--borderR-8);
+		overflow: hidden;
+	}
+
+	.columna-principal .tarjeta-estado .cabecera-tarjeta {
+		border-bottom: 1px solid var(--black-50);
+		padding: 1.2rem 1.6rem;
+	}
+
+	.columna-principal .tarjeta-estado .cuerpo-tarjeta {
+		padding: 1.6rem;
+	}
+
+	.columna-principal .tarjeta-estado .cuerpo-tarjeta > .campo-formulario {
+		background: transparent;
+		border: none;
+		border-radius: 0;
+		padding: 0;
 	}
 }
 

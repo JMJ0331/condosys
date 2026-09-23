@@ -462,6 +462,115 @@ aside {
     text-overflow: ellipsis;
 }
 
+/* Botón del usuario logueado: abre el menú de la cuenta */
+.boton-usuario {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.boton-usuario .info-usuario {
+    flex: 1;
+}
+
+.icono-desplegar {
+    width: 1.6rem;
+    height: 1.6rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.boton-usuario[aria-expanded="true"] .icono-desplegar {
+    transform: rotate(180deg);
+}
+
+/* Menú flotante de la cuenta: tarjeta blanca sobre el usuario */
+.menu-usuario {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + var(--space-8));
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    background: var(--white-50);
+    border-radius: var(--borderR-8);
+    box-shadow: var(--shadow-200);
+    padding: var(--padding-8);
+}
+
+.menu-usuario[hidden] {
+    display: none;
+}
+
+.menu-usuario-rol {
+    margin: 0;
+    padding: 0.4rem 0.8rem 0 0.8rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--black-400);
+}
+
+.menu-usuario-correo {
+    margin: 0;
+    padding: 0 0.8rem 0.4rem 0.8rem;
+    font-size: 1.2rem;
+    color: var(--white-700);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.opcion-menu-usuario {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.8rem;
+    background: none;
+    border: none;
+    border-radius: var(--borderR-4);
+    color: var(--black-400);
+    font: inherit;
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.opcion-menu-usuario:hover {
+    background: var(--white-500);
+}
+
+.opcion-menu-usuario img {
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+}
+
+.opcion-salir {
+    color: var(--red-500);
+}
+
+.opcion-salir:hover {
+    background: var(--red-50);
+}
+
+.form-salir {
+    margin: 0;
+}
+
 aside .opt-modulo {
 
     display: flex;
@@ -606,6 +715,12 @@ aside .opt-modulo h4 {
    5. RESPONSIVE
    ============================================================ */
 
+/* Barras compactas ocultas por defecto; los media de abajo las muestran */
+.barra-movil,
+.menu-inferior {
+    display: none;
+}
+
 @media (max-width: 1024px) {
     .container-flex1 {
         flex-wrap: wrap;
@@ -617,23 +732,91 @@ aside .opt-modulo h4 {
 }
 
 @media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
     aside {
-        padding: var(--padding-8);
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(30rem, 85vw);
+        z-index: 100;
+        box-shadow: var(--shadow-300);
+        transform: translateX(-105%);
+        visibility: hidden;
+        transition: transform 0.3s ease, visibility 0.3s;
     }
 
-    aside .opt-modulo h4,
-    aside .nombre-app,
-    aside .info-usuario {
-        display: none;
+    aside.abierto {
+        transform: translateX(0);
+        visibility: visible;
     }
 
-    aside .opt-modulo,
-    aside .usuario-sidebar {
-        justify-content: center;
+    body.sin-desplazar {
+        overflow: hidden;
     }
 
-    aside .opt-modulo {
-        padding: 1rem var(--padding-8);
+    .barra-movil {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-8);
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        height: 5.6rem;
+        padding: 0 var(--padding-16);
+        background: var(--white-50);
+        border-bottom: 1px solid var(--black-50);
+    }
+
+    /* El encabezado de sección se queda fijo debajo de la barra
+       móvil en vez de perderse tras ella al hacer scroll. */
+    .app-header {
+        top: 5.6rem;
+    }
+
+    .boton-menu-movil {
+        display: flex;
+        padding: 0.4rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .boton-menu-movil img {
+        width: 2.4rem;
+        height: 2.4rem;
+        display: block;
+    }
+
+    .logo-movil {
+        height: 3.2rem;
+        width: auto;
+    }
+
+    .boton-avatar-movil {
+        display: flex;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .boton-avatar-movil .avatar-usuario {
+        width: 3.6rem;
+        height: 3.6rem;
+        font-size: 1.6rem;
+    }
+
+    .barra-movil .menu-usuario {
+        left: auto;
+        right: 1.2rem;
+        top: calc(100% + 0.4rem);
+        bottom: auto;
+        width: 24rem;
     }
 
     .header-title {
@@ -658,4 +841,45 @@ button:focus-visible,
 .opt-modulo:focus-visible {
     outline: 2px solid var(--green-600);
     outline-offset: 0.2rem;
+}
+
+@media (max-width: 560px) {
+    aside {
+        width: 50vw;
+    }
+
+    .menu-inferior {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 60;
+        background: var(--white-50);
+        border-top: 1px solid var(--black-50);
+        padding: 0.8rem 1.6rem calc(0.8rem + env(safe-area-inset-bottom));
+    }
+
+    .menu-inferior a {
+        display: flex;
+        padding: 0.6rem 1rem;
+        border: 1px solid transparent;
+        border-radius: var(--borderR-8);
+    }
+
+    .menu-inferior a.activo {
+        border-color: var(--green-900);
+    }
+
+    .menu-inferior img {
+        width: 2.4rem;
+        height: 2.4rem;
+        display: block;
+    }
+
+    .main-layout {
+        padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+    }
 }

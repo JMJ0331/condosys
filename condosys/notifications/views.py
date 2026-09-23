@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Notification
@@ -8,7 +9,7 @@ from .serializers import NotificationSerializer
 from .forms import NotificationForm
 
 
-# @login_required
+@login_required
 def app_index(request):
     contexto = {
         'form_notification': NotificationForm(),
@@ -17,7 +18,7 @@ def app_index(request):
     return render(request, 'notifications/index.html', contexto)
 
 
-# @login_required
+@login_required
 @require_POST
 def crear_notificacion(request):
     form = NotificationForm(request.POST)

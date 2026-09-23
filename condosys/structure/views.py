@@ -22,7 +22,7 @@ def distribucion_residencial():
     return residencial.distribucion if residencial else ''
 
 
-# @login_required
+@login_required
 def app_index(request):
     apartamentos_qs = (
         Apartment.objects.select_related('building__garden', 'owner')
@@ -66,7 +66,7 @@ def app_index(request):
     return render(request, 'structure/index.html', contexto)
 
 
-# @login_required
+@login_required
 def agregar_departamento(request):
     if request.method == 'POST':
         form = ApartmentsForm(request.POST, request.FILES)
@@ -92,7 +92,7 @@ def agregar_departamento(request):
     return render(request, 'structure/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_departamento(request, pk):
     apartamento = Apartment.objects.select_related('building__garden').filter(pk=pk).first()
     if not apartamento:
@@ -124,7 +124,7 @@ def actualizar_departamento(request, pk):
     return render(request, 'structure/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def eliminar_departamento(request, pk):
     apartamento = Apartment.objects.filter(pk=pk).first()
     if not apartamento:

@@ -51,10 +51,10 @@
     <table class="tabla-comunicados">
       <thead>
         <tr>
+          <th data-columna="archivo">Archivo/Imagen</th>
           <th data-columna="titulo">Título</th>
           <th data-columna="categoria">Categoría</th>
           <th data-columna="mensaje">Mensaje</th>
-          <th data-columna="archivo">Archivo/Imagen</th>
           <th data-columna="dirigido">Dirigido a</th>
           <th data-columna="fecha">Fecha de publicación</th>
           <th data-columna="estado">Estado</th>
@@ -64,9 +64,6 @@
       <tbody>
         {% for comunicado in comunicados %}
         <tr>
-          <td data-columna="titulo" data-etiqueta="Título">{{ comunicado.title }}</td>
-          <td data-columna="categoria" data-etiqueta="Categoría">{{ comunicado.get_category_display }}</td>
-          <td data-columna="mensaje" data-etiqueta="Mensaje" title="{{ comunicado.body }}">{{ comunicado.body|truncatechars:50 }}</td>
           <td data-columna="archivo" data-etiqueta="Archivo/Imagen">
             {% if comunicado.image %}
             <img src="{{ comunicado.image.url }}" alt="Imagen de {{ comunicado.title }}" class="foto-comunicado">
@@ -74,6 +71,9 @@
             <span class="foto-marcador" aria-hidden="true"></span>
             {% endif %}
           </td>
+          <td data-columna="titulo" data-etiqueta="Título">{{ comunicado.title }}</td>
+          <td data-columna="categoria" data-etiqueta="Categoría">{{ comunicado.get_category_display }}</td>
+          <td data-columna="mensaje" data-etiqueta="Mensaje" title="{{ comunicado.body }}">{{ comunicado.body|truncatechars:50 }}</td>
           <td data-columna="dirigido" data-etiqueta="Dirigido a">{{ comunicado.get_target_type_display }}</td>
           <td data-columna="fecha" data-etiqueta="Fecha de publicación">{{ comunicado.published_at|date:"d/m/Y H:i"|default:"—" }}</td>
           <td data-columna="estado" data-etiqueta="Estado">{% if comunicado.is_published %}Publicado{% else %}Borrador{% endif %}</td>

@@ -3,12 +3,11 @@
    ============================================ */
 
 dialog {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: black;
+	position: fixed;
+	inset: 0;
+	margin: auto;
 	width: min(56rem, calc(100vw - 2.4rem));
+	height: fit-content;
 	max-height: 85vh;
 	padding: 1.6rem;
 	border: 1px solid var(--black-50);

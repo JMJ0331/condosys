@@ -23,7 +23,9 @@
   const selectQuien = formPago.querySelector('[data-pago-quien]');
   const selectResidente = formPago.querySelector('[data-pago-residente]');
   const inputComprobante = formPago.querySelector('[data-pago-foto]');
-  const btnComprobante = formPago.querySelector('[data-url-comprobante]');
+  // El botón vive en el encabezado (fuera del formulario), por eso se
+  // busca en todo el documento y no dentro de formPago.
+  const btnComprobante = document.querySelector('[data-url-comprobante]');
 
   // Campos que deben tener valor para habilitar el botón "Generar comprobante".
   const camposRequeridos = ['apartment', 'resident', 'amount', 'concept', 'period', 'status'];
