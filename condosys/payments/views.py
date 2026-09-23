@@ -23,6 +23,8 @@ from reportlab.platypus import (
 )
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, IsGestionOrSoloLectura
 from .models import Payment
 from .serializers import PaymentSerializer
 from .forms import PaymentForm
@@ -32,6 +34,20 @@ from structure.models import Apartment
 
 
 PAGINATE_BY = 15
+
+
+def _pagos_visibles(user):
+    """Pagos que puede consultar el usuario según su rol."""
+    qs = Payment.objects.select_related(
+        'apartment__building__garden', 'resident', 'registered_by'
+    )
+    if user.role in ROLES_GESTION:
+        return qs
+    if user.role == 'propietario':
+        return qs.filter(apartment__owner__user=user)
+    if user.role == 'resident':
+        return qs.filter(apartment__residents__user=user, apartment__residents__is_active=True)
+    return qs.none()
 
 
 def _anios_con_pagos():
@@ -48,13 +64,9 @@ MESES_NOMBRE = {
 }
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 def app_index(request):
-    pagos_qs = (
-        Payment.objects.select_related(
-            'apartment__building__garden', 'resident', 'registered_by'
-        ).order_by('-period', '-created_at')
-    )
+    pagos_qs = _pagos_visibles(request.user).order_by('-period', '-created_at')
 
     estado = request.GET.get('estado', '')
     concepto = request.GET.get('concepto', '')
@@ -105,7 +117,7 @@ def app_index(request):
     return render(request, 'payments/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def agregar_pago(request):
     if request.method == 'POST':
         datos = request.POST.copy()
@@ -142,7 +154,7 @@ def agregar_pago(request):
     return render(request, 'payments/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_pago(request, pk):
     pago = Payment.objects.filter(pk=pk).first()
     if not pago:
@@ -224,7 +236,7 @@ def _resolver_residente_id(resident_id, apartment_id):
     return str(residente.id), None
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def eliminar_pago(request, pk):
     pago = Payment.objects.filter(pk=pk).first()
     if not pago:
@@ -241,9 +253,9 @@ def eliminar_pago(request, pk):
 
 class PaymentViewSet(viewsets.ModelViewSet):
     """ViewSet para Payment"""
-    queryset = Payment.objects.select_related('apartment', 'resident').all()
+    queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsGestionOrSoloLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['resident__full_name', 'apartment__number', 'resident__cedula']
     ordering_fields = ['period', 'payment_date', 'status']
@@ -251,7 +263,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['apartment', 'resident', 'status', 'payment_method', 'concept']
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = _pagos_visibles(self.request.user)
         request = self.request
         resident_id = request.query_params.get('resident')
         month = request.query_params.get('month')
@@ -273,7 +285,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return queryset.distinct()
 
 
-@login_required
+@role_required(*ROLES_RESIDENTE)
 def generar_comprobante(request):
     """Genera el comprobante de pago en PDF (diseño de comprobante.png)."""
     from residencial.models import Residencial

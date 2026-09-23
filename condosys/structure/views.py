@@ -4,7 +4,8 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
-from accounts.permissions import CanAccessApartment
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, ROLES_TODOS, CanAccessApartment, IsManager
 from residencial.models import Residencial
 from .models import Garden, Building, Apartment
 from .serializers import (
@@ -15,6 +16,17 @@ from .forms import ApartmentsForm
 
 PAGINATE_BY = 15
 
+ROLES_DEPARTAMENTOS = ROLES_GESTION + ('propietario',)
+
+
+def _apartamentos_visibles(user):
+    """Apartamentos que puede ver el usuario según su rol."""
+    if user.role in ROLES_TODOS:
+        if user.role == 'propietario':
+            return Apartment.objects.filter(is_active=True, owner__user=user)
+        return Apartment.objects.filter(is_active=True)
+    return Apartment.objects.filter(is_active=True, residents__user=user, residents__is_active=True).distinct()
+
 
 def distribucion_residencial():
     """Modo de organización del residencial ('torres'|'edificios'|'')."""
@@ -22,10 +34,11 @@ def distribucion_residencial():
     return residencial.distribucion if residencial else ''
 
 
-@login_required
+@role_required(*ROLES_DEPARTAMENTOS)
 def app_index(request):
     apartamentos_qs = (
-        Apartment.objects.select_related('building__garden', 'owner')
+        _apartamentos_visibles(request.user)
+        .select_related('building__garden', 'owner')
         .order_by('-created_at')
     )
 
@@ -66,7 +79,7 @@ def app_index(request):
     return render(request, 'structure/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def agregar_departamento(request):
     if request.method == 'POST':
         form = ApartmentsForm(request.POST, request.FILES)
@@ -92,7 +105,7 @@ def agregar_departamento(request):
     return render(request, 'structure/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_departamento(request, pk):
     apartamento = Apartment.objects.select_related('building__garden').filter(pk=pk).first()
     if not apartamento:
@@ -124,7 +137,7 @@ def actualizar_departamento(request, pk):
     return render(request, 'structure/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def eliminar_departamento(request, pk):
     apartamento = Apartment.objects.filter(pk=pk).first()
     if not apartamento:
@@ -145,7 +158,7 @@ class GardenViewSet(viewsets.ModelViewSet):
     """ViewSet para Garden"""
     queryset = Garden.objects.filter(is_active=True)
     serializer_class = GardenSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'location']
     ordering_fields = ['created_at', 'name']
@@ -156,7 +169,7 @@ class BuildingViewSet(viewsets.ModelViewSet):
     """ViewSet para Building"""
     queryset = Building.objects.filter(is_active=True)
     serializer_class = BuildingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'garden__name']
     ordering_fields = ['created_at', 'name']
@@ -175,10 +188,7 @@ class ApartmentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['building', 'status', 'owner']
 
     def get_queryset(self):
-        user = self.request.user
-        if user.role in ['admin', 'manager', 'maintenance', 'security']:
-            return Apartment.objects.filter(is_active=True)
-        return Apartment.objects.filter(is_active=True, residents__user=user, residents__is_active=True).distinct()
+        return _apartamentos_visibles(self.request.user)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

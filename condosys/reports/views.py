@@ -13,6 +13,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, IsManager
 from .models import AuditLog
 from .serializers import AuditLogSerializer
 from residencial.models import Residencial
@@ -295,7 +297,7 @@ def _respuesta_csv(tipo_clave, tipo_etiqueta, columnas, filas):
     return respuesta
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def app_index(request):
     tipos = dict(TIPOS_REPORTE)
     tipo = request.GET.get('tipo', 'ingresos')
@@ -357,7 +359,7 @@ def app_index(request):
     return render(request, 'reports/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 @require_POST
 def crear_audit_log(request):
     form = AuditLogForm(request.POST)
@@ -371,7 +373,7 @@ def crear_audit_log(request):
     return redirect('inicio')
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 @require_POST
 def crear_audit_log_detail(request):
     form = AuditLogDetailForm(request.POST)
@@ -386,11 +388,11 @@ def crear_audit_log_detail(request):
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AuditLog.objects.all()
     serializer_class = AuditLogSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
 
 
 class ReportViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
 
     @action(detail=False, methods=['get'])
     def summary(self, request):

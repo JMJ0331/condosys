@@ -4,6 +4,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, ROLES_TODOS, IsGestionOrSoloLectura
 from structure.models import Garden
 from .models import Communication
 from .serializers import CommunicationSerializer
@@ -12,7 +14,7 @@ from .forms import CommunicationForm
 PAGINATE_BY = 15
 
 
-@login_required
+@role_required(*ROLES_TODOS)
 def app_index(request):
     comunicados_qs = (
         Communication.objects
@@ -64,7 +66,7 @@ def _guardar_comunicado(request, form, es_nuevo):
     return None
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def agregar_comunicado(request):
     if request.method == 'POST':
         form = CommunicationForm(request.POST, request.FILES)
@@ -85,7 +87,7 @@ def agregar_comunicado(request):
     return render(request, 'communications/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_comunicado(request, pk):
     comunicado = Communication.objects.filter(pk=pk).first()
     if not comunicado:
@@ -117,7 +119,7 @@ def actualizar_comunicado(request, pk):
     return render(request, 'communications/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def eliminar_comunicado(request, pk):
     comunicado = Communication.objects.filter(pk=pk).first()
     if not comunicado:
@@ -138,7 +140,7 @@ class CommunicationViewSet(viewsets.ModelViewSet):
     """ViewSet para Communication"""
     queryset = Communication.objects.all()
     serializer_class = CommunicationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsGestionOrSoloLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'body', 'sender__email']
     ordering_fields = ['published_at', 'created_at']

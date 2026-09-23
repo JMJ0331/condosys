@@ -5,6 +5,8 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, IsManager
 from residents.models import Resident
 from structure.models import Apartment
 from .models import Solicitud
@@ -14,7 +16,7 @@ from .forms import SolicitudForm
 PAGINATE_BY = 15
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def app_index(request):
     solicitudes_qs = (
         Solicitud.objects
@@ -58,7 +60,7 @@ def app_index(request):
     return render(request, 'solicitudes/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def agregar_solicitud(request):
     if request.method == 'POST':
         form = SolicitudForm(request.POST, request.FILES)
@@ -82,7 +84,7 @@ def agregar_solicitud(request):
     return render(request, 'solicitudes/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_solicitud(request, pk):
     solicitud = Solicitud.objects.filter(pk=pk).first()
     if not solicitud:
@@ -112,7 +114,7 @@ def actualizar_solicitud(request, pk):
     return render(request, 'solicitudes/agregar.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 @require_POST
 def eliminar_solicitud(request, pk):
     solicitud = Solicitud.objects.filter(pk=pk).first()
@@ -130,7 +132,7 @@ class SolicitudViewSet(viewsets.ModelViewSet):
     """ViewSet para Solicitud"""
     queryset = Solicitud.objects.all()
     serializer_class = SolicitudSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['description', 'apartment__name', 'resident__full_name']
     ordering_fields = ['created_at', 'request_date', 'status', 'request_type']

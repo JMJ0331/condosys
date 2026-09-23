@@ -3,7 +3,8 @@ from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from rest_framework import filters, viewsets
-from accounts.permissions import IsManager
+from accounts.decorators import role_required
+from accounts.permissions import ROLES_GESTION, IsManager
 from structure.models import Apartment
 from .forms import PropietarioForm
 from .models import Propietario
@@ -12,7 +13,7 @@ from .serializers import PropietarioSerializer
 PAGINATE_BY = 15
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def app_index(request):
     qs = (
         Propietario.objects
@@ -55,7 +56,7 @@ def app_index(request):
     return render(request, 'propietarios/index.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def crear_propietario(request):
     if request.method == 'POST':
         form = PropietarioForm(request.POST, request.FILES)
@@ -78,7 +79,7 @@ def crear_propietario(request):
     return render(request, 'propietarios/nuevo.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def actualizar_propietario(request, pk):
     propietario = Propietario.objects.filter(pk=pk).first()
     if not propietario:
@@ -106,7 +107,7 @@ def actualizar_propietario(request, pk):
     return render(request, 'propietarios/nuevo.html', contexto)
 
 
-@login_required
+@role_required(*ROLES_GESTION)
 def eliminar_propietario(request, pk):
     propietario = Propietario.objects.filter(pk=pk).first()
     if not propietario:
@@ -133,9 +134,3 @@ class PropietarioViewSet(viewsets.ModelViewSet):
     ordering_fields = ['full_name', 'created_at']
     ordering = ['full_name']
     filterset_fields = ['is_active']
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.role in ['admin', 'manager']:
-            return Propietario.objects.all()
-        return Propietario.objects.filter(user=user)
