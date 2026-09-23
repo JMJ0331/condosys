@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
 {% endblock %}
 {% block mini-cards %}
-{% include "componentes/header.html" with nombre_modulo='Mi perfil' url_volver='inicio' form_id='form-perfil' texto_boton='Actualizar' url_cancelar='inicio' %}
+{% include "componentes/header.html" with nombre_modulo='Mi perfil' url_volver=url_volver form_id='form-perfil' texto_boton='Actualizar' url_cancelar=url_cancelar %}
 
 <main class="container-main-side2">
   <div class="pagina-agregar">

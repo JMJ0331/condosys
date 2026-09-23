@@ -30,7 +30,6 @@ DESCRIPCIONES_ROL = {
     'manager': 'Gestiona pagos, comunicados, reservas y la operación diaria del residencial.',
     'resident': 'Consulta sus pagos, reservas y comunicados del residencial.',
     'propietario': 'Consulta sus unidades, residentes, pagos y mantenimientos.',
-    'maintenance': 'Atiende las incidencias y tareas de mantenimiento asignadas.',
     'security': 'Registra visitantes y controla los accesos al residencial.',
 }
 
@@ -93,11 +92,14 @@ def mi_perfil(request):
         messages.success(request, 'Perfil actualizado correctamente.')
         return redirect('mi_perfil')
 
+    url_volver = 'visitantes_index' if usuario.role == 'security' else 'inicio'
     return render(request, 'accounts/perfil.html', {
         'perfil_usuario': usuario,
         'roles': User.ROLE_CHOICES,
         'descripcion_rol': DESCRIPCIONES_ROL.get(usuario.role, ''),
         'module_name': 'Mi perfil',
+        'url_volver': url_volver,
+        'url_cancelar': url_volver,
     })
 
 
