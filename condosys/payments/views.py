@@ -8,6 +8,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -47,7 +48,7 @@ MESES_NOMBRE = {
 }
 
 
-# @login_required
+@login_required
 def app_index(request):
     pagos_qs = (
         Payment.objects.select_related(
@@ -104,7 +105,7 @@ def app_index(request):
     return render(request, 'payments/index.html', contexto)
 
 
-# @login_required
+@login_required
 def agregar_pago(request):
     if request.method == 'POST':
         datos = request.POST.copy()
@@ -141,7 +142,7 @@ def agregar_pago(request):
     return render(request, 'payments/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_pago(request, pk):
     pago = Payment.objects.filter(pk=pk).first()
     if not pago:
@@ -223,7 +224,7 @@ def _resolver_residente_id(resident_id, apartment_id):
     return str(residente.id), None
 
 
-# @login_required
+@login_required
 def eliminar_pago(request, pk):
     pago = Payment.objects.filter(pk=pk).first()
     if not pago:
@@ -272,7 +273,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return queryset.distinct()
 
 
-# @login_required
+@login_required
 def generar_comprobante(request):
     """Genera el comprobante de pago en PDF (diseño de comprobante.png)."""
     from residencial.models import Residencial

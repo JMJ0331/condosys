@@ -4,7 +4,11 @@
 <link rel="stylesheet" href="{% static 'css/residencial.css' %}">
 {% endblock %}
 {% block mini-cards %}
+{% if puede_editar %}
+{% include "componentes/header.html" with nombre_modulo=module_name form_id='formulario-residencial' texto_boton=texto_boton url_cancelar='inicio' %}
+{% else %}
 {% include "componentes/header.html" with nombre_modulo=module_name %}
+{% endif %}
 
 <main class="container-main-side2">
   <div class="pagina-residencial">
@@ -118,9 +122,7 @@
             </div>
           </div>
         </section>
-      </div>
 
-      <div class="columna-lateral">
         <section class="tarjeta" aria-labelledby="titulo-contacto">
           <h3 class="cabecera-tarjeta" id="titulo-contacto">Contacto y administración</h3>
           <div class="cuerpo-tarjeta">
@@ -136,11 +138,6 @@
             </div>
           </div>
         </section>
-
-        {% if puede_editar %}
-        <button type="submit" class="boton-guardar">{{ texto_boton }}</button>
-        <button type="reset" class="boton-cancelar" id="boton-cancelar-residencial">Cancelar</button>
-        {% endif %}
       </div>
     </form>
   </div>

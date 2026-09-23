@@ -10,6 +10,7 @@
 .panel-cuadricula .acciones {
 	gap: 0;
 	padding: 0;
+	box-shadow: var(--shadow-100);
 }
 
 .panel-cuadricula .contenedor-filtros {
@@ -309,7 +310,7 @@ table.tabla-comunicados {
 
 .formulario-agregar {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) 30rem;
+	grid-template-columns: minmax(0, 1fr);
 	gap: 1.6rem;
 	align-items: start;
 }
@@ -335,6 +336,7 @@ table.tabla-comunicados {
 	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-8);
 	overflow: hidden;
+	box-shadow: var(--shadow-100);
 }
 
 .cabecera-tarjeta {
@@ -548,6 +550,7 @@ input[data-imagen-comunicado] {
 		border: 1px solid var(--black-50);
 		border-radius: var(--borderR-8);
 		padding: 0.4rem 1.6rem;
+		box-shadow: var(--shadow-100);
 		margin-bottom: 1.2rem;
 	}
 

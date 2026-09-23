@@ -3,6 +3,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import OuterRef, Q, Subquery
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Incident, IncidentHistory
@@ -26,7 +27,7 @@ def _ultimo_comentario_subquery():
     )
 
 
-# @login_required
+@login_required
 def app_index(request):
     incidencias_qs = (
         Incident.objects
@@ -94,7 +95,7 @@ def _guardar_incidencia(request, form, incidencia=None):
     return registro
 
 
-# @login_required
+@login_required
 def agregar_incidencia(request):
     if request.method == 'POST':
         form = IncidentForm(request.POST, request.FILES)
@@ -118,7 +119,7 @@ def agregar_incidencia(request):
     return render(request, 'incidents/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_incidencia(request, pk):
     incidencia = Incident.objects.filter(pk=pk).first()
     if not incidencia:
@@ -148,7 +149,7 @@ def actualizar_incidencia(request, pk):
     return render(request, 'incidents/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 @require_POST
 def eliminar_incidencia(request, pk):
     incidencia = Incident.objects.filter(pk=pk).first()
@@ -162,7 +163,7 @@ def eliminar_incidencia(request, pk):
     return redirect('incidencias_index')
 
 
-# @login_required
+@login_required
 @require_POST
 def crear_imagen_incidencia(request):
     form = IncidentImageForm(request.POST)
@@ -174,7 +175,7 @@ def crear_imagen_incidencia(request):
     return redirect('incidencias_index')
 
 
-# @login_required
+@login_required
 @require_POST
 def crear_historial_incidencia(request):
     form = IncidentHistoryForm(request.POST)

@@ -12,7 +12,7 @@ from .serializers import PropietarioSerializer
 PAGINATE_BY = 15
 
 
-# @login_required
+@login_required
 def app_index(request):
     qs = (
         Propietario.objects
@@ -55,7 +55,7 @@ def app_index(request):
     return render(request, 'propietarios/index.html', contexto)
 
 
-# @login_required
+@login_required
 def crear_propietario(request):
     if request.method == 'POST':
         form = PropietarioForm(request.POST, request.FILES)
@@ -78,8 +78,7 @@ def crear_propietario(request):
     return render(request, 'propietarios/nuevo.html', contexto)
 
 
-# @login_required
-# @login_required
+@login_required
 def actualizar_propietario(request, pk):
     propietario = Propietario.objects.filter(pk=pk).first()
     if not propietario:
@@ -107,7 +106,7 @@ def actualizar_propietario(request, pk):
     return render(request, 'propietarios/nuevo.html', contexto)
 
 
-# @login_required
+@login_required
 def eliminar_propietario(request, pk):
     propietario = Propietario.objects.filter(pk=pk).first()
     if not propietario:

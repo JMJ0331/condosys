@@ -9,4 +9,15 @@
     {% endif %}
     <h1 class="header-title">{{nombre_modulo}}</h1>
   </div>
+  {% if form_id and texto_boton %}
+  <div class="acciones-encabezado">
+    <button type="submit" form="{{ form_id }}" class="boton-agregar">{{ texto_boton }}</button>
+    {% if mostrar_comprobante == 'actualizar_pago' %}
+    <button type="button" class="btn-comprobante" data-url-comprobante="{% url 'generar_comprobante' %}"><img src="{% static 'images/icons/verdes/page-flip.svg' %}" alt="" aria-hidden="true">Generar comprobante</button>
+    {% endif %}
+    {% if url_cancelar %}
+    <a href="{% url url_cancelar %}" class="boton-cancelar">Cancelar</a>
+    {% endif %}
+  </div>
+  {% endif %}
 </header>

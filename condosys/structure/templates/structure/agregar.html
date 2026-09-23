@@ -4,11 +4,11 @@
 <link rel="stylesheet" href="{% static 'css/departamentos.css' %}">
 {% endblock %}
 {% block mini-cards %}
-{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='departamentos_index' %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='departamentos_index' form_id='form-departamento' texto_boton=texto_boton url_cancelar='departamentos_index' %}
 
 <main class="container-main-side2">
   <div class="pagina-agregar">
-    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
+    <form method="post" id="form-departamento" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
       {% csrf_token %}
       {{ form_apartments.non_field_errors }}
 
@@ -29,8 +29,12 @@
             <div class="campo-formulario">
               <span class="etiqueta-campo" id="etiqueta-imagen">{{ form_apartments.photo.label }}</span>
               <div class="zona-imagen" id="zona-imagen" role="button" tabindex="0" aria-labelledby="etiqueta-imagen">
+                {% if form_apartments.instance.photo %}
+                <img class="vista-previa-imagen" id="vista-previa-imagen" src="{{ form_apartments.instance.photo.url }}" alt="Imagen actual del departamento">
+                {% else %}
                 <img class="vista-previa-imagen" id="vista-previa-imagen" alt="" hidden>
-                <span class="contenido-zona" id="contenido-zona">
+                {% endif %}
+                <span class="contenido-zona" id="contenido-zona"{% if form_apartments.instance.photo %} hidden{% endif %}>
                   <svg class="icono-zona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                     <rect x="3" y="3" width="18" height="18" rx="2"></rect>
                     <circle cx="9" cy="9" r="2"></circle>
@@ -97,9 +101,7 @@
             </div>
           </div>
         </section>
-      </div>
 
-      <div class="columna-lateral">
         <section class="tarjeta tarjeta-estado" aria-labelledby="titulo-estado">
           <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
           <div class="cuerpo-tarjeta">
@@ -113,9 +115,6 @@
             <input type="hidden" name="status" id="id_status" value="{{ form_apartments.status.value|default:'occupied' }}">
           </div>
         </section>
-
-        <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
-        <a href="{% url 'departamentos_index' %}" class="boton-cancelar">Cancelar</a>
       </div>
     </form>
   </div>

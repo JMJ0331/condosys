@@ -3,6 +3,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from structure.models import Apartment
@@ -30,7 +31,7 @@ MESES_NOMBRE = {
 }
 
 
-# @login_required
+@login_required
 def app_index(request):
     cargos_qs = (
         MaintenanceCharge.objects
@@ -85,7 +86,7 @@ def app_index(request):
     return render(request, 'maintenance/index.html', contexto)
 
 
-# @login_required
+@login_required
 def agregar_mantenimiento(request):
     if request.method == 'POST':
         form = MaintenanceChargeForm(request.POST, request.FILES)
@@ -108,7 +109,7 @@ def agregar_mantenimiento(request):
     return render(request, 'maintenance/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_mantenimiento(request, pk):
     cargo = MaintenanceCharge.objects.filter(pk=pk).first()
     if not cargo:
@@ -137,7 +138,7 @@ def actualizar_mantenimiento(request, pk):
     return render(request, 'maintenance/agregar.html', contexto)
 
 
-# @login_required
+@login_required
 @require_POST
 def eliminar_mantenimiento(request, pk):
     cargo = MaintenanceCharge.objects.filter(pk=pk).first()

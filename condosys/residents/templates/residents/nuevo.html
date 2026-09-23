@@ -6,11 +6,11 @@
 {% endblock %}
 
 {% block mini-cards %}
-{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='residentes_index' %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver='residentes_index' form_id='form-residente' texto_boton=texto_boton url_cancelar='residentes_index' %}
 
 <main class="container-main-side2">
   <div class="pagina-agregar">
-    <form method="post" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
+    <form method="post" id="form-residente" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" enctype="multipart/form-data" class="formulario-agregar">
       {% csrf_token %}
       {{ form_resident.non_field_errors }}
 
@@ -38,8 +38,12 @@
             <div class="campo-formulario">
               <span class="etiqueta-campo" id="etiqueta-foto">{{ form_resident.photo.label }}</span>
               <div class="zona-imagen" id="zona-imagen" role="button" tabindex="0" aria-labelledby="etiqueta-foto">
+                {% if form_resident.instance.photo %}
+                <img class="vista-previa-imagen" id="vista-previa-imagen" src="{{ form_resident.instance.photo.url }}" alt="Foto actual del residente">
+                {% else %}
                 <img class="vista-previa-imagen" id="vista-previa-imagen" alt="" hidden>
-                <span class="contenido-zona" id="contenido-zona">
+                {% endif %}
+                <span class="contenido-zona" id="contenido-zona"{% if form_resident.instance.photo %} hidden{% endif %}>
                   <svg class="icono-zona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                     <rect x="3" y="3" width="18" height="18" rx="2"></rect>
                     <circle cx="9" cy="9" r="2"></circle>
@@ -113,25 +117,22 @@
             </div>
           </div>
         </section>
-      </div>
 
-      <div class="columna-lateral">
         <section class="tarjeta tarjeta-estado" aria-labelledby="titulo-estado">
           <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
           <div class="cuerpo-tarjeta">
-            <label class="etiqueta-interruptor" for="{{ form_resident.is_active.id_for_label }}">
-              Activo
-              <span class="interruptor">
-                {{ form_resident.is_active }}
-                <span class="deslizador-interruptor"></span>
-              </span>
-            </label>
-            {{ form_resident.is_active.errors }}
+            <div class="campo-formulario">
+              <label class="etiqueta-interruptor" for="{{ form_resident.is_active.id_for_label }}">
+                Activo
+                <span class="interruptor">
+                  {{ form_resident.is_active }}
+                  <span class="deslizador-interruptor"></span>
+                </span>
+              </label>
+              {{ form_resident.is_active.errors }}
+            </div>
           </div>
         </section>
-
-        <button type="submit" class="boton-agregar">{{ texto_boton }}</button>
-        <a href="{% url 'residentes_index' %}" class="boton-cancelar">Cancelar</a>
       </div>
     </form>
   </div>

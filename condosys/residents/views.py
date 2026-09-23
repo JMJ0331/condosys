@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 from rest_framework import filters, viewsets
 from accounts.permissions import IsManager
 from structure.models import Apartment
@@ -12,7 +13,7 @@ from .serializers import ResidentSerializer
 PAGINATE_BY = 15
 
 
-# @login_required
+@login_required
 def app_index(request):
     qs = Resident.objects.select_related(
         'apartment__building__garden', 'user',
@@ -53,7 +54,7 @@ def app_index(request):
     return render(request, 'residents/index.html', contexto)
 
 
-# @login_required
+@login_required
 def crear_residente(request):
     if request.method == 'POST':
         form = ResidentForm(request.POST, request.FILES)
@@ -76,7 +77,7 @@ def crear_residente(request):
     return render(request, 'residents/nuevo.html', contexto)
 
 
-# @login_required
+@login_required
 def actualizar_residente(request, pk):
     residente = Resident.objects.filter(pk=pk).first()
     if not residente:
@@ -104,7 +105,7 @@ def actualizar_residente(request, pk):
     return render(request, 'residents/nuevo.html', contexto)
 
 
-# @login_required
+@login_required
 def eliminar_residente(request, pk):
     residente = Resident.objects.filter(pk=pk).first()
     if not residente:

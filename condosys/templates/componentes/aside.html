@@ -1,5 +1,5 @@
 {% load static %}
-<aside>
+<aside id="menu-lateral">
 
   <div class="cont-info">
 
@@ -156,17 +156,23 @@
 
   {% if request.user.is_authenticated %}
   <div class="usuario-sidebar">
-    <div class="avatar-usuario" aria-hidden="true">
-      {% if request.user.avatar_url %}
-      <img src="{{ request.user.avatar_url }}" alt="">
-      {% else %}
-      <span>{{ request.user.full_name|default:request.user.email|slice:":1"|upper }}</span>
-      {% endif %}
-    </div>
-    <div class="info-usuario">
-      <span class="nombre-usuario">{{ request.user.full_name|default:request.user.email }}</span>
-      <span class="correo-usuario">{{ request.user.email }}</span>
-    </div>
+    <button type="button" class="boton-usuario" id="boton-usuario" data-boton-cuenta aria-haspopup="true" aria-expanded="false" aria-controls="menu-usuario">
+      <span class="avatar-usuario" aria-hidden="true">
+        {% if request.user.avatar %}
+        <img src="{{ request.user.avatar.url }}" alt="">
+        {% elif request.user.avatar_url %}
+        <img src="{{ request.user.avatar_url }}" alt="">
+        {% else %}
+        <span>{{ request.user.full_name|default:request.user.email|slice:":1"|upper }}</span>
+        {% endif %}
+      </span>
+      <span class="info-usuario">
+        <span class="nombre-usuario">{{ request.user.full_name|default:request.user.email }}</span>
+        <span class="correo-usuario">{{ request.user.email }}</span>
+      </span>
+      <img class="icono-desplegar" src="{% static 'images/icons/blancos/chevron-abajo.svg' %}" alt="" aria-hidden="true">
+    </button>
+    {% include "componentes/menu_usuario.html" with sufijo='' %}
   </div>
   {% else %}
   <div class="usuario-sidebar">

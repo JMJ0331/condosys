@@ -11,7 +11,7 @@ from .models import MUNICIPIOS_POR_PROVINCIA, Residencial
 from .serializers import ResidencialSerializer
 
 
-# @login_required  # TEMP pruebas: login deshabilitado como en las demás apps
+@login_required
 def app_index(request):
     """Página única del residencial: crea el registro o actualiza el existente.
 

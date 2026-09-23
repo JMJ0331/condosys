@@ -63,6 +63,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, blank=True, null=True)
     document = models.CharField(max_length=50, blank=True, unique=True, null=True)
     avatar_url = models.URLField(blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     
     role = models.CharField(max_length=30, choices=ROLE_CHOICES, default='resident')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')

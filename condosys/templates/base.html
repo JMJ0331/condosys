@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static "css/mediaquerys.css" %}">
     <link rel="stylesheet" href="{% static "css/formularios.css" %}">
     <link rel="stylesheet" href="{% static "css/acciones.css" %}">
-    <link rel="stylesheet" href="{% static "css/dialogos.css" %}">
+    <link rel="stylesheet" href="{% static "css/dialogos.css" %}?v=2">
     <link rel="stylesheet" href="{% static "css/paginacion.css" %}">
     <link rel="stylesheet" href="{% static "css/entradas.css" %}">
     <link rel="icon" type="image/svg+xml" href="../static/images/logo_del_proyecto.svg">
@@ -23,6 +23,31 @@
         {% include "componentes/aside.html" with nombre_residencial="Residencial Rialto" nombre_usuario="CJY" %}
 
         <div class="main-layout">
+
+            <header class="barra-movil">
+              <button type="button" class="boton-menu-movil" id="boton-menu-movil" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-lateral">
+                <img src="{% static 'images/icons/verdes/menu.svg' %}" alt="" aria-hidden="true">
+              </button>
+              <img class="logo-movil" src="{% static 'images/logo_del_proyecto_mobiles.svg' %}" alt="Condosys">
+              {% if request.user.is_authenticated %}
+              <button type="button" class="boton-avatar-movil" id="boton-usuario-movil" data-boton-cuenta aria-haspopup="true" aria-expanded="false" aria-controls="menu-usuario-movil" aria-label="Cuenta">
+                <span class="avatar-usuario" aria-hidden="true">
+                  {% if request.user.avatar %}
+                  <img src="{{ request.user.avatar.url }}" alt="">
+                  {% elif request.user.avatar_url %}
+                  <img src="{{ request.user.avatar_url }}" alt="">
+                  {% else %}
+                  <span>{{ request.user.full_name|default:request.user.email|slice:":1"|upper }}</span>
+                  {% endif %}
+                </span>
+              </button>
+              {% include "componentes/menu_usuario.html" with sufijo='-movil' %}
+              {% else %}
+              <a class="boton-avatar-movil" href="{% url 'login' %}" aria-label="Iniciar sesión">
+                <span class="avatar-usuario" aria-hidden="true"><span>?</span></span>
+              </a>
+              {% endif %}
+            </header>
 
             {% if messages %}
             <ul class="messages">
@@ -41,7 +66,28 @@
 
     </div>
 
+    <nav class="menu-inferior" aria-label="Navegación principal">
+      <a href="{% url 'inicio' %}" class="{% if request.resolver_match.url_name == 'inicio' %}activo{% endif %}" aria-label="Inicio">
+        <img src="{% static 'images/icons/verdes/Container_green.svg' %}" alt="" aria-hidden="true">
+      </a>
+      <a href="{% url 'pagos_index' %}" class="{% if request.resolver_match.url_name == 'pagos_index' or request.resolver_match.url_name == 'agregar_pago' or request.resolver_match.url_name == 'actualizar_pago' or request.resolver_match.url_name == 'eliminar_pago' %}activo{% endif %}" aria-label="Pagos">
+        <img src="{% static 'images/icons/verdes/lot-of-cash_green.svg' %}" alt="" aria-hidden="true">
+      </a>
+      <a href="{% url 'incidencias_index' %}" class="{% if request.resolver_match.url_name == 'incidencias_index' or request.resolver_match.url_name == 'agregar_incidencia' or request.resolver_match.url_name == 'actualizar_incidencia' %}activo{% endif %}" aria-label="Incidencias">
+        <img src="{% static 'images/icons/verdes/warning-triangle_green.svg' %}" alt="" aria-hidden="true">
+      </a>
+      <a href="{% url 'visitantes_index' %}" class="{% if request.resolver_match.url_name == 'visitantes_index' or request.resolver_match.url_name == 'agregar_visitante' or request.resolver_match.url_name == 'actualizar_visitante' %}activo{% endif %}" aria-label="Visitantes">
+        <img src="{% static 'images/icons/verdes/community_green.svg' %}" alt="" aria-hidden="true">
+      </a>
+      <a href="{% url 'reservas_index' %}" class="{% if request.resolver_match.url_name == 'reservas_index' or request.resolver_match.url_name == 'agregar_reserva' or request.resolver_match.url_name == 'actualizar_reserva' %}activo{% endif %}" aria-label="Reservas">
+        <img src="{% static 'images/icons/verdes/google-docs_green900.svg' %}" alt="" aria-hidden="true">
+      </a>
+    </nav>
+
     <script src="{% static "js/contadores.js" %}"></script>
+    <script src="{% static "js/encabezado-acciones.js" %}" defer></script>
+    <script src="{% static "js/usuario-menu.js" %}" defer></script>
+    <script src="{% static "js/menu-movil.js" %}" defer></script>
     {% block scripts %}{% endblock %}
 
 </body>

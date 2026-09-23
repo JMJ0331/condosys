@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -294,7 +295,7 @@ def _respuesta_csv(tipo_clave, tipo_etiqueta, columnas, filas):
     return respuesta
 
 
-# @login_required
+@login_required
 def app_index(request):
     tipos = dict(TIPOS_REPORTE)
     tipo = request.GET.get('tipo', 'ingresos')
@@ -356,7 +357,7 @@ def app_index(request):
     return render(request, 'reports/index.html', contexto)
 
 
-# @login_required
+@login_required
 @require_POST
 def crear_audit_log(request):
     form = AuditLogForm(request.POST)
@@ -370,7 +371,7 @@ def crear_audit_log(request):
     return redirect('inicio')
 
 
-# @login_required
+@login_required
 @require_POST
 def crear_audit_log_detail(request):
     form = AuditLogDetailForm(request.POST)

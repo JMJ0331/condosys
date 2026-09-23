@@ -40,12 +40,17 @@ main.container-main-side2 {
 	font-weight: 600;
 }
 
+.rejilla-kpis .app-info {
+	box-shadow: var(--shadow-100);
+}
+
 /* Panel generador */
 .panel-generar {
 	border: 1px solid var(--black-50);
 	border-radius: var(--borderR-8);
 	background: var(--white-50);
 	padding: 0;
+	box-shadow: var(--shadow-100);
 }
 
 .panel-generar h2 {
@@ -158,6 +163,12 @@ main.container-main-side2 {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	overflow: hidden;
+}
+
+/* La cuadrícula va de borde a borde como en departamentos */
+.panel-vista .tabla-filtrada {
+	margin: 0 -1.2rem -1.2rem;
 }
 
 .panel-disponibles {
@@ -170,6 +181,7 @@ main.container-main-side2 {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	box-shadow: var(--shadow-100);
 }
 
 .panel-vista h2 {
@@ -290,24 +302,25 @@ table.tabla-reportes {
 }
 
 .tabla-reportes thead {
-	border-bottom: 1px solid var(--black-50);
 	background-color: var(--white-500);
 }
 
 .tabla-reportes th {
 	text-align: left;
 	font-size: 1.2rem;
-	font-weight: 600;
+	font-weight: bold;
 	color: var(--black-400);
-	padding: 1rem 1.2rem;
+	padding: var(--padding-8) 1.2rem;
 	white-space: nowrap;
+	border-bottom: 1px solid var(--black-50);
 }
 
 .tabla-reportes td {
-	font-size: 1.25rem;
+	padding: 1.4rem;
+	font-size: 1.3rem;
 	color: var(--black-400);
-	padding: 1rem 1.2rem;
-	border-bottom: 1px solid var(--white-500);
+	border-bottom: 1px solid var(--white-400);
+	vertical-align: middle;
 	white-space: nowrap;
 }
 
@@ -317,7 +330,9 @@ table.tabla-reportes {
 
 .tabla-reportes td.sin-registros {
 	text-align: center;
-	color: var(--black-300);
+	color: var(--white-700);
+	font-size: 1.3rem;
+	padding: 2.4rem;
 }
 
 /* Lista de reportes disponibles */

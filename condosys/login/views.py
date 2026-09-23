@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login as django_login
+from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.shortcuts import redirect, render
 
 def login_view(request):
@@ -22,3 +22,9 @@ def login_view(request):
         error = 'El email o la contraseña no son válidos.'
 
     return render(request, 'login/index.html', {'error': error})
+
+
+def cerrar_sesion(request):
+    if request.method == 'POST':
+        django_logout(request)
+    return redirect('login')

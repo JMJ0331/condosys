@@ -1,0 +1,17 @@
+{% load static %}
+<div class="menu-usuario" id="menu-usuario{{ sufijo }}" role="menu" hidden>
+  <p class="menu-usuario-rol">{{ request.user.full_name|default:request.user.email }}</p>
+  <p class="menu-usuario-correo">{{ request.user.email }}</p>
+  <a class="opcion-menu-usuario" href="{% url 'mi_perfil' %}" role="menuitem">
+    <img src="{% static 'images/icons/verdes/user.svg' %}" alt="" aria-hidden="true">Mi perfil
+  </a>
+  <a class="opcion-menu-usuario" href="{% url 'residencial_index' %}" role="menuitem">
+    <img src="{% static 'images/icons/verdes/settings.svg' %}" alt="" aria-hidden="true">Configuración
+  </a>
+  <form method="post" action="{% url 'cerrar_sesion' %}" class="form-salir">
+    {% csrf_token %}
+    <button type="submit" class="opcion-menu-usuario opcion-salir" role="menuitem">
+      <img src="{% static 'images/icons/acciones/log-out.svg' %}" alt="" aria-hidden="true">Cerrar sesión
+    </button>
+  </form>
+</div>
