@@ -66,14 +66,6 @@ class IsResidentOrManager(BasePermission):
         return request.user.is_authenticated and request.user.role in ROLES_RESIDENTE
 
 
-class IsMaintenance(BasePermission):
-    """Personal de mantenimiento o administrador"""
-    message = "Se requiere acceso de mantenimiento."
-
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role in ('maintenance', 'admin', 'manager')
-
-
 class IsSecurity(BasePermission):
     """Personal de seguridad o administrador"""
     message = "Se requiere acceso de seguridad."
@@ -92,19 +84,6 @@ class IsGestionOrSoloLectura(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return request.user.role in ROLES_GESTION
-
-
-class IsSoloLecturaSeguridad(BasePermission):
-    """Cualquier autenticado puede leer (incl. security); escribir solo
-    residentes, propietarios y gestión."""
-    message = "No tienes permisos para modificar este recurso."
-
-    def has_permission(self, request, view):
-        if not request.user.is_authenticated:
-            return False
-        if request.method in SAFE_METHODS:
-            return True
-        return request.user.role in ROLES_RESIDENTE
 
 
 class CanModifyUser(BasePermission):

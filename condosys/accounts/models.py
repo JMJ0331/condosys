@@ -50,7 +50,6 @@ class User(AbstractUser):
         ('manager', 'Encargado de Administración'),
         ('resident', 'Residente'),
         ('propietario', 'Propietario'),
-        ('maintenance', 'Personal de Mantenimiento'),
         ('security', 'Seguridad/Portería'),
     )
     

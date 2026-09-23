@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.decorators import role_required
-from accounts.permissions import ROLES_GESTION, ROLES_TODOS, CanAccessApartment, IsManager
+from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, CanAccessApartment, IsManager
 from residencial.models import Residencial
 from .models import Garden, Building, Apartment
 from .serializers import (
@@ -16,16 +16,16 @@ from .forms import ApartmentsForm
 
 PAGINATE_BY = 15
 
-ROLES_DEPARTAMENTOS = ROLES_GESTION + ('propietario',)
+ROLES_DEPARTAMENTOS = ROLES_RESIDENTE
 
 
 def _apartamentos_visibles(user):
     """Apartamentos que puede ver el usuario según su rol."""
-    if user.role in ROLES_TODOS:
-        if user.role == 'propietario':
-            return Apartment.objects.filter(is_active=True, owner__user=user)
-        return Apartment.objects.filter(is_active=True)
-    return Apartment.objects.filter(is_active=True, residents__user=user, residents__is_active=True).distinct()
+    if user.role == 'propietario':
+        return Apartment.objects.filter(is_active=True, owner__user=user)
+    if user.role == 'resident':
+        return Apartment.objects.filter(is_active=True, residents__user=user, residents__is_active=True).distinct()
+    return Apartment.objects.filter(is_active=True)
 
 
 def distribucion_residencial():

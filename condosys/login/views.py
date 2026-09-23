@@ -17,6 +17,8 @@ def login_view(request):
                 from residencial.models import Residencial
                 if Residencial.obtener_unico() is None:
                     return redirect('residencial_index')
+            if user.role == 'security':
+                return redirect('visitantes_index')
             return redirect('inicio')
 
         error = 'El email o la contraseña no son válidos.'

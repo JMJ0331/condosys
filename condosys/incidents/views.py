@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.decorators import role_required
-from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, ROLES_TODOS, CanModifyIncident
+from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, CanModifyIncident
 from .models import Incident, IncidentHistory
 from residents.models import Resident
 from structure.models import Apartment
@@ -29,9 +29,7 @@ def _incidencias_visibles(user):
         return qs.filter(apartment__owner__user=user)
     if user.role == 'resident':
         return qs.filter(Q(reported_by=user) | Q(apartment__residents__user=user)).distinct()
-    if user.role == 'maintenance':
-        return qs.filter(Q(assigned_to=user) | Q(reported_by=user)).distinct()
-    return qs  # security: lectura
+    return qs.none()
 
 
 def _ultimo_comentario_subquery():
@@ -42,7 +40,7 @@ def _ultimo_comentario_subquery():
     )
 
 
-@role_required(*ROLES_TODOS)
+@role_required(*ROLES_RESIDENTE)
 def app_index(request):
     incidencias_qs = (
         _incidencias_visibles(request.user)

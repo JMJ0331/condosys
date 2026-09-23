@@ -4,7 +4,7 @@ usuario autenticado (se usa en el aside del menú lateral). Ocultado 100%
 server-side: los módulos no permitidos ni siquiera llegan al HTML.
 """
 
-from accounts.permissions import ROLES_GESTION, ROLES_SEGURIDAD, ROLES_RESIDENTE, ROLES_TODOS
+from accounts.permissions import ROLES_GESTION, ROLES_SEGURIDAD, ROLES_RESIDENTE
 
 # Roles que pueden crear/editar/eliminar en cada módulo (mirror de los
 # decoradores @role_required de las vistas de función).
@@ -66,7 +66,7 @@ MODULOS = [
         'activo_en': ['inicio'],
         'icono': 'images/icons/blancos/Container_white.svg',
         'alt': 'home-icon',
-        'roles': ROLES_TODOS,
+        'roles': ROLES_RESIDENTE,
     },
     {
         'clave': 'departamentos',
@@ -79,7 +79,7 @@ MODULOS = [
         ],
         'icono': 'images/icons/blancos/city_white.svg',
         'alt': 'city-icon',
-        'roles': ROLES_GESTION + ('propietario',),
+        'roles': ROLES_RESIDENTE,
     },
     {
         'clave': 'residentes',
@@ -145,7 +145,7 @@ MODULOS = [
         ],
         'icono': 'images/icons/blancos/warning-triangle_white.svg',
         'alt': 'message-icon',
-        'roles': ROLES_RESIDENTE + ('security',),
+        'roles': ROLES_RESIDENTE,
     },
     {
         'clave': 'solicitudes',
@@ -197,7 +197,7 @@ MODULOS = [
         ],
         'icono': 'images/icons/blancos/google-docs.svg',
         'alt': 'solicitud-icon',
-        'roles': ROLES_RESIDENTE + ('security',),
+        'roles': ROLES_RESIDENTE,
     },
     {
         'clave': 'comunicados',

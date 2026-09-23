@@ -8,8 +8,8 @@ from django.shortcuts import redirect
 def role_required(*roles):
     """
     Decorador para vistas basadas en función: requiere inicio de sesión y
-    que user.role esté entre los roles permitidos. Si no, redirige a Inicio
-    con un mensaje de error.
+    que user.role esté entre los roles permitidos. Si no, redirige al módulo
+    inicial del rol (security → visitantes) con un mensaje de error.
     """
     def decorator(view_func):
         @login_required
@@ -21,6 +21,8 @@ def role_required(*roles):
                     request,
                     'No tienes permisos para acceder a este módulo.',
                 )
+                if request.user.role == 'security':
+                    return redirect('visitantes_index')
                 return redirect('inicio')
             return view_func(request, *args, **kwargs)
         return _wrapped

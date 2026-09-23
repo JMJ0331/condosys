@@ -7,8 +7,7 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.decorators import role_required
 from accounts.permissions import (
-    ROLES_GESTION, ROLES_RESIDENTE, ROLES_TODOS,
-    IsSoloLecturaSeguridad,
+    ROLES_GESTION, ROLES_RESIDENTE, IsResident,
 )
 from .models import CommonArea, Reservation
 from residents.models import Resident
@@ -32,10 +31,10 @@ def _reservas_visibles(user):
         return qs.filter(apartment__owner__user=user)
     if user.role == 'resident':
         return qs.filter(apartment__residents__user=user, apartment__residents__is_active=True).distinct()
-    return qs  # security: lectura
+    return qs.none()
 
 
-@role_required(*ROLES_TODOS)
+@role_required(*ROLES_RESIDENTE)
 def app_index(request):
     reservas_qs = _reservas_visibles(request.user).order_by('-start_time')
 
@@ -158,7 +157,7 @@ class CommonAreaViewSet(viewsets.ModelViewSet):
     """ViewSet para CommonArea"""
     queryset = CommonArea.objects.filter(is_active=True)
     serializer_class = CommonAreaSerializer
-    permission_classes = [IsSoloLecturaSeguridad]
+    permission_classes = [IsResident]
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     filterset_fields = ['garden']
@@ -167,7 +166,7 @@ class CommonAreaViewSet(viewsets.ModelViewSet):
 class ReservationViewSet(viewsets.ModelViewSet):
     """ViewSet para Reservation"""
     queryset = Reservation.objects.all()
-    permission_classes = [IsSoloLecturaSeguridad]
+    permission_classes = [IsResident]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['reserved_by__email', 'common_area__name']
     ordering_fields = ['start_time', 'status']
