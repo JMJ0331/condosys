@@ -2,6 +2,7 @@ from django import forms
 from django.utils import timezone
 from datetime import datetime
 from accounts.models import User
+from accounts.permissions import ROLES_GESTION
 from structure.models import Apartment
 from residents.models import Resident
 from areas_comunes.models import AreaComun
@@ -64,8 +65,11 @@ class ReservationForm(forms.ModelForm):
             'status': 'Estado',
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+        # Residentes y propietarios no deciden el estado: lo gestiona admin/manager.
+        if user is None or getattr(user, 'role', None) not in ROLES_GESTION:
+            self.fields.pop('status', None)
         # En actualizar, la plantilla no pinta fecha/hora desde la instancia
         # (no son campos del modelo): se precargan aquí desde start/end_time.
         instancia = getattr(self, 'instance', None)
@@ -88,7 +92,8 @@ class ReservationForm(forms.ModelForm):
         # select_related evita consultas extra al mostrar el apartamento de cada residente.
         self.fields['resident'].queryset = Resident.objects.select_related('apartment').all()
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
-        placeholder(self.fields['status'], 'Elegir estado')
+        if 'status' in self.fields:
+            placeholder(self.fields['status'], 'Elegir estado')
 
     def clean(self):
         cleaned_data = super().clean()

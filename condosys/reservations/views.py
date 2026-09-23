@@ -81,14 +81,14 @@ def _contexto_formulario():
 @role_required(*ROLES_RESIDENTE)
 def agregar_reserva(request):
     if request.method == 'POST':
-        form = ReservationForm(request.POST)
+        form = ReservationForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Reserva creada correctamente.')
             return redirect('reservas_index')
         messages.error(request, 'No se pudo crear la reserva. Revisa los datos enviados.')
     else:
-        form = ReservationForm()
+        form = ReservationForm(user=request.user)
 
     contexto = _contexto_formulario() | {
         'form_reservation': form,
@@ -108,14 +108,14 @@ def actualizar_reserva(request, pk):
         return redirect('reservas_index')
 
     if request.method == 'POST':
-        form = ReservationForm(request.POST, instance=reserva)
+        form = ReservationForm(request.POST, instance=reserva, user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Reserva actualizada correctamente.')
             return redirect('reservas_index')
         messages.error(request, 'No se pudo actualizar la reserva. Revisa los datos enviados.')
     else:
-        form = ReservationForm(instance=reserva)
+        form = ReservationForm(instance=reserva, user=request.user)
 
     contexto = _contexto_formulario() | {
         'form_reservation': form,

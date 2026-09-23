@@ -110,14 +110,14 @@ def _guardar_incidencia(request, form, incidencia=None):
 @role_required(*ROLES_RESIDENTE)
 def agregar_incidencia(request):
     if request.method == 'POST':
-        form = IncidentForm(request.POST, request.FILES)
+        form = IncidentForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             _guardar_incidencia(request, form)
             messages.success(request, 'Incidencia creada correctamente.')
             return redirect('incidencias_index')
         messages.error(request, 'No se pudo crear la incidencia. Revisa los datos enviados.')
     else:
-        form = IncidentForm()
+        form = IncidentForm(user=request.user)
 
     contexto = {
         'form_incident': form,
@@ -139,14 +139,14 @@ def actualizar_incidencia(request, pk):
         return redirect('incidencias_index')
 
     if request.method == 'POST':
-        form = IncidentForm(request.POST, request.FILES, instance=incidencia)
+        form = IncidentForm(request.POST, request.FILES, instance=incidencia, user=request.user)
         if form.is_valid():
             _guardar_incidencia(request, form, incidencia)
             messages.success(request, 'Incidencia actualizada correctamente.')
             return redirect('incidencias_index')
         messages.error(request, 'No se pudo actualizar la incidencia. Revisa los datos enviados.')
     else:
-        form = IncidentForm(instance=incidencia)
+        form = IncidentForm(instance=incidencia, user=request.user)
 
     contexto = {
         'form_incident': form,

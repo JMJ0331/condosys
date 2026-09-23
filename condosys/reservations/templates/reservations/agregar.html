@@ -79,6 +79,7 @@
           </div>
         </section>
 
+        {% if form_reservation.status %}
         <section class="tarjeta" aria-labelledby="titulo-estado">
           <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
           <div class="cuerpo-tarjeta">
@@ -89,6 +90,7 @@
             </div>
           </div>
         </section>
+        {% endif %}
       </div>
     </form>
   </div>

@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from accounts.permissions import ROLES_GESTION
 from structure.models import Apartment
 from residents.models import Resident
 from .models import Incident, IncidentHistory, IncidentImage
@@ -73,8 +74,11 @@ class IncidentForm(forms.ModelForm):
             'status': 'Estado',
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+        # Residentes y propietarios no deciden el estado: lo gestiona admin/manager.
+        if user is None or getattr(user, 'role', None) not in ROLES_GESTION:
+            self.fields.pop('status', None)
         # Solo departamentos activos y con su edificio para el selector.
         self.fields['apartment'].queryset = (
             Apartment.objects.filter(is_active=True).select_related('building')
@@ -85,7 +89,8 @@ class IncidentForm(forms.ModelForm):
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
         placeholder(self.fields['category'], 'Elegir tipo de incidencia')
         placeholder(self.fields['priority'], 'Elegir prioridad')
-        placeholder(self.fields['status'], 'Elegir estado')
+        if 'status' in self.fields:
+            placeholder(self.fields['status'], 'Elegir estado')
         # La fecha se rellena sola con la de hoy si el usuario no la cambia.
         self.fields['reported_date'].required = False
 
