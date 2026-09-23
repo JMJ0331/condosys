@@ -1,63 +1,118 @@
 """
 Permission classes para control de acceso basado en roles
 """
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, SAFE_METHODS
+
+# ==================================================
+# CONJUNTOS DE ROLES
+# ==================================================
+
+ROLES_ADMIN = ('admin',)
+ROLES_GESTION = ('admin', 'manager')
+ROLES_SEGURIDAD = ('admin', 'manager', 'security')
+ROLES_RESIDENTE = ('admin', 'manager', 'resident', 'propietario')
+ROLES_TODOS = ('admin', 'manager', 'security', 'resident', 'propietario')
+
+# ==================================================
+# PERMISOS DE NIVEL DE VISTA (has_permission)
+# ==================================================
 
 
 class IsAdmin(BasePermission):
     """Solo administradores"""
     message = "Solo administradores pueden acceder a este recurso."
-    
+
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role == 'admin'
+        return request.user.is_authenticated and request.user.role in ROLES_ADMIN
 
 
 class IsManager(BasePermission):
     """Administrador o gerente"""
     message = "Se requiere rol de administrador o gerente."
-    
+
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role in ['admin', 'manager']
+        return request.user.is_authenticated and request.user.role in ROLES_GESTION
 
 
 class IsResident(BasePermission):
-    """Solo residentes"""
+    """Residentes, propietarios y gestión (usuarios con unidad propia)"""
+    message = "No tienes permisos para acceder a este recurso."
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role in ROLES_RESIDENTE
+
+
+class IsResidentOnly(BasePermission):
+    """Solo residentes (sin propietarios)"""
     message = "Solo residentes pueden acceder a este recurso."
-    
+
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role == 'resident'
 
 
-class IsResidentOrManager(BasePermission):
-    """Residentes o gerentes"""
-    message = "Se requiere ser residente o gerente."
-    
+class IsPropietario(BasePermission):
+    """Solo propietarios"""
+    message = "Solo propietarios pueden acceder a este recurso."
+
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role in ['resident', 'manager', 'admin']
+        return request.user.is_authenticated and request.user.role == 'propietario'
+
+
+class IsResidentOrManager(BasePermission):
+    """Residentes, propietarios o gerentes"""
+    message = "Se requiere ser residente, propietario o gerente."
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role in ROLES_RESIDENTE
 
 
 class IsMaintenance(BasePermission):
     """Personal de mantenimiento o administrador"""
     message = "Se requiere acceso de mantenimiento."
-    
+
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role in ['maintenance', 'admin', 'manager']
+        return request.user.is_authenticated and request.user.role in ('maintenance', 'admin', 'manager')
 
 
 class IsSecurity(BasePermission):
     """Personal de seguridad o administrador"""
     message = "Se requiere acceso de seguridad."
-    
+
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role in ['security', 'admin', 'manager']
+        return request.user.is_authenticated and request.user.role in ROLES_SEGURIDAD
+
+
+class IsGestionOrSoloLectura(BasePermission):
+    """Cualquier autenticado puede leer; solo admin/manager pueden escribir."""
+    message = "No tienes permisos para modificar este recurso."
+
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.role in ROLES_GESTION
+
+
+class IsSoloLecturaSeguridad(BasePermission):
+    """Cualquier autenticado puede leer (incl. security); escribir solo
+    residentes, propietarios y gestión."""
+    message = "No tienes permisos para modificar este recurso."
+
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.role in ROLES_RESIDENTE
 
 
 class CanModifyUser(BasePermission):
     """Usuario solo puede modificar su propio perfil, admins pueden modificar cualquiera"""
     message = "No puedes modificar este usuario."
-    
+
     def has_object_permission(self, request, view, obj):
-        if request.user.role == 'admin':
+        if request.user.role in ROLES_ADMIN:
             return True
         return request.user == obj
 
@@ -69,7 +124,7 @@ class CanModifyIncident(BasePermission):
     - Assigned staff pueden ver el suyo
     """
     def has_object_permission(self, request, view, obj):
-        if request.user.role in ['admin', 'manager']:
+        if request.user.role in ROLES_GESTION:
             return True
         # Reporter can view/edit own incident
         if obj.reported_by == request.user:
@@ -86,7 +141,7 @@ class CanModifyReservation(BasePermission):
     - Manager/Admin can approve/reject reservations
     """
     def has_object_permission(self, request, view, obj):
-        if request.user.role in ['admin', 'manager']:
+        if request.user.role in ROLES_GESTION:
             return True
         # Reserver can view/modify own reservation
         if obj.reserved_by == request.user:
@@ -101,7 +156,7 @@ class CanModifyVisitor(BasePermission):
     - Manager/Admin have full access
     """
     def has_object_permission(self, request, view, obj):
-        if request.user.role in ['admin', 'manager']:
+        if request.user.role in ROLES_GESTION:
             return True
         if request.user.role == 'security':
             return True
@@ -120,9 +175,11 @@ class CanAccessApartment(BasePermission):
     - Manager/Admin can access cualquier apartamento
     """
     def has_object_permission(self, request, view, obj):
-        if request.user.role in ['admin', 'manager']:
+        if request.user.role in ROLES_GESTION:
             return True
         if request.method in ['GET', 'HEAD', 'OPTIONS']:
+            if request.user.role == 'propietario':
+                return obj.owner is not None and obj.owner.user == request.user
             from residents.models import Resident
             try:
                 resident = Resident.objects.get(user=request.user, apartment=obj)
