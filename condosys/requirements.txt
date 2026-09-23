@@ -1,27 +1,27 @@
 # Para actualizarlas: .venv\Scripts\python.exe -m pip install --upgrade -r requirements.txt
 
-Django
-djangorestframework
-django-filter
-django-cors-headers
-psycopg
+Django>=6.1.1
+djangorestframework>=3.18.1
+django-filter>=26.1
+django-cors-headers>=4.9.0
+psycopg>=3.3.6
 
 # Real-time & WebSocket
-channels
-channels-redis
-daphne
+channels>=4.3.2
+channels-redis>=4.3.0
+daphne>=4.2.3
 
 # Utilities
-python-dotenv
-celery
-redis
-Pillow
-reportlab
+python-dotenv>=1.2.3
+celery>=5.6.3
+redis>=8.1.0
+Pillow>=12.3.0
+reportlab>=5.0.1
 
 # Production
-gunicorn
-whitenoise
+gunicorn>=26.2.0
+whitenoise>=6.12.0
 
 # Development
-django-extensions
-django-debug-toolbar
+django-extensions>=4.1
+django-debug-toolbar>=8.0.0
