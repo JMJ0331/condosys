@@ -1,11 +1,11 @@
 /* ============================================
-   M├│dulo Residentes - estilos espec├¡ficos.
-   Los estilos de formulario/paginaci├│n viven en
+   Módulo Residentes - estilos específicos.
+   Los estilos de formulario/paginación viven en
    static/css/formularios.css, paginacion.css
    (compartidos).
    ============================================ */
 
-/* P├ígina agregar: tarjetas + columna lateral con estado y acciones. */
+/* Página agregar: tarjetas + columna lateral con estado y acciones. */
 .pagina-agregar {
 	display: flex;
 	flex-direction: column;
@@ -65,7 +65,7 @@
 	color: var(--black-400);
 }
 
-/* Radio de campos del formulario agregar/actualizar seg├║n maqueta. */
+/* Radio de campos del formulario agregar/actualizar según maqueta. */
 .formulario-agregar .campo-formulario input,
 .formulario-agregar .campo-formulario select,
 .formulario-agregar .campo-formulario textarea,
@@ -142,7 +142,7 @@
 }
 
 /* Input nativo de foto: fuera del layout pero funcional para que la
-   zona y el bot├│n abran el selector con JS. */
+   zona y el botón abran el selector con JS. */
 input[data-residente="foto"] {
 	position: absolute;
 	width: 0.1rem;
@@ -207,7 +207,7 @@ input[data-residente="foto"] {
 	background: var(--green-900);
 }
 
-/* Lateral: acci├│n principal + cancelar */
+/* Lateral: acción principal + cancelar */
 .boton-agregar {
 	display: inline-flex;
 	align-items: center;
@@ -261,7 +261,7 @@ input[data-residente="foto"] {
 	margin: 0;
 }
 
-/* Encabezado del formulario nuevo: t├¡tulo + enlace de retorno */
+/* Encabezado del formulario nuevo: título + enlace de retorno */
 .fila-encabezado {
 	display: flex;
 	align-items: center;
@@ -281,7 +281,7 @@ input[data-residente="foto"] {
 	text-decoration: underline;
 }
 
-/* Cuadr├¡cula dentro del panel de la p├ígina index: sin padding en .acciones,
+/* Cuadrícula dentro del panel de la página index: sin padding en .acciones,
    el espaciado lateral lo aportan sus elementos internos. */
 .panel-cuadricula .acciones {
 	gap: 0;
@@ -559,7 +559,7 @@ table.tabla-residentes {
 		grid-template-columns: 1fr;
 	}
 
-	/* En tablet/m├│vil cada fila del listado es una tarjeta:
+	/* En tablet/móvil cada fila del listado es una tarjeta:
 	   se oculta la cabecera y cada celda muestra su etiqueta. */
 	.panel-cuadricula .tabla-filtrada {
 		padding: 1.2rem;
@@ -625,7 +625,7 @@ table.tabla-residentes {
 		white-space: normal;
 	}
 
-	/* En tablet/m├│vil: acciones en fila, alineadas a la derecha abajo */
+	/* En tablet/móvil: acciones en fila, alineadas a la derecha abajo */
 	.tabla-residentes tbody td.columna-acciones .acciones-fila {
 		display: flex;
 		flex-direction: row;
@@ -656,7 +656,7 @@ table.tabla-residentes {
 		text-align: center;
 	}
 
-	/* En tablet/m├│vil cada fila es una tarjeta: la secci├│n pierde
+	/* En tablet/móvil cada fila es una tarjeta: la sección pierde
 	   el marco y cada fila (de una o dos columnas) lo gana. */
 	.columna-principal .tarjeta {
 		background: transparent;
@@ -682,7 +682,7 @@ table.tabla-residentes {
 		padding: 1.6rem;
 	}
 
-	/* El panel Estado conserva el estilo de escritorio en tablet/m├│vil:
+	/* El panel Estado conserva el estilo de escritorio en tablet/móvil:
 	   mantiene su marco y su fila no se convierte en mini-tarjeta. */
 	.columna-principal .tarjeta-estado {
 		background: var(--white-50);

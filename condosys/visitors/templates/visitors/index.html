@@ -46,7 +46,7 @@
           <option value="">Todos los tipos de visitantes</option>
           <option value="family" {% if tipo_actual == 'family' %}selected{% endif %}>Familiar</option>
           <option value="delivery" {% if tipo_actual == 'delivery' %}selected{% endif %}>Delivery</option>
-          <option value="technician" {% if tipo_actual == 'technician' %}selected{% endif %}>T├®cnico</option>
+          <option value="technician" {% if tipo_actual == 'technician' %}selected{% endif %}>Técnico</option>
           <option value="provider" {% if tipo_actual == 'provider' %}selected{% endif %}>Proveedor</option>
           <option value="other" {% if tipo_actual == 'other' %}selected{% endif %}>Otro</option>
         </select>
@@ -74,7 +74,7 @@
         </div>
 
         <div class="selector-calendario">
-          <button type="button" class="boton-calendario" id="boton-anio" aria-haspopup="true" aria-expanded="false">{% if anio_actual %}{{ anio_actual }}{% else %}Todos los a├▒os{% endif %}</button>
+          <button type="button" class="boton-calendario" id="boton-anio" aria-haspopup="true" aria-expanded="false">{% if anio_actual %}{{ anio_actual }}{% else %}Todos los años{% endif %}</button>
           <div class="panel-calendario" id="panel-anio" hidden>
             <input type="hidden" name="anio" id="valor-anio" value="{{ anio_actual }}">
             <div class="rejilla-calendario">
@@ -114,12 +114,12 @@
         <tr>
           <td data-columna="nombre" data-etiqueta="Nombre completo">{{ visita.name }}</td>
           <td data-columna="tipo" data-etiqueta="Tipo de visitante">{{ visita.get_type_display }}</td>
-          <td data-columna="tipo-documento" data-etiqueta="Tipo de documento">{{ visita.get_document_type_display|default:"ÔÇö" }}</td>
-          <td data-columna="documento" data-etiqueta="Documento">{{ visita.document|default:"ÔÇö" }}</td>
+          <td data-columna="tipo-documento" data-etiqueta="Tipo de documento">{{ visita.get_document_type_display|default:"—" }}</td>
+          <td data-columna="documento" data-etiqueta="Documento">{{ visita.document|default:"—" }}</td>
           <td data-columna="departamento" data-etiqueta="Departamento a visitar">{{ visita.apartment.name }}</td>
-          <td data-columna="autorizado" data-etiqueta="Autorizado por">{{ visita.authorized_by.full_name|default:"ÔÇö" }}</td>
+          <td data-columna="autorizado" data-etiqueta="Autorizado por">{{ visita.authorized_by.full_name|default:"—" }}</td>
           <td data-columna="entrada" data-etiqueta="Fecha de entrada">{{ visita.scheduled_entry|date:"d/m/Y H:i" }}</td>
-          <td data-columna="salida" data-etiqueta="Fecha de salida">{{ visita.scheduled_exit|date:"d/m/Y H:i"|default:"ÔÇö" }}</td>
+          <td data-columna="salida" data-etiqueta="Fecha de salida">{{ visita.scheduled_exit|date:"d/m/Y H:i"|default:"—" }}</td>
           <td data-columna="estado" data-etiqueta="Estado">{{ visita.get_status_display }}</td>
           <td class="columna-acciones">
             <div class="acciones-fila">
@@ -152,9 +152,9 @@
       {% csrf_token %}
       <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
       <h3 id="dialog-eliminar-titulo-{{ visita.id }}" class="titulo-eliminar">Eliminar visita</h3>
-      <p class="mensaje-eliminar">┬┐Est├ís seguro de eliminar la visita de <strong>{{ visita.name }}</strong> al departamento <strong>{{ visita.apartment.name }}</strong>?</p>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar la visita de <strong>{{ visita.name }}</strong> al departamento <strong>{{ visita.apartment.name }}</strong>?</p>
       <div class="acciones-eliminar">
-        <button type="submit" class="boton-confirmar-eliminar">S├¡, Eliminar</button>
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
         <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
       </div>
     </form>

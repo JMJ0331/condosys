@@ -53,7 +53,7 @@
         <tr>
           <th data-columna="foto">Foto</th>
           <th data-columna="residente">Propietario/Residente</th>
-          <th data-columna="area">├ürea com├║n</th>
+          <th data-columna="area">Área común</th>
           <th data-columna="departamento">Departamento</th>
           <th data-columna="fecha">Fecha de reserva</th>
           <th data-columna="inicio">Hora de inicio</th>
@@ -72,9 +72,9 @@
             <span class="foto-marcador" aria-hidden="true"></span>
             {% endif %}
           </td>
-          <td data-columna="residente" data-etiqueta="Propietario/Residente">{{ reserva.resident.full_name|default:"ÔÇö" }}</td>
-          <td data-columna="area" data-etiqueta="├ürea com├║n">{{ reserva.common_area.name }}</td>
-          <td data-columna="departamento" data-etiqueta="Departamento">{{ reserva.apartment.name|default:"ÔÇö" }}</td>
+          <td data-columna="residente" data-etiqueta="Propietario/Residente">{{ reserva.resident.full_name|default:"—" }}</td>
+          <td data-columna="area" data-etiqueta="Área común">{{ reserva.common_area.name }}</td>
+          <td data-columna="departamento" data-etiqueta="Departamento">{{ reserva.apartment.name|default:"—" }}</td>
           <td data-columna="fecha" data-etiqueta="Fecha de reserva">{{ reserva.start_time|date:"d/m/Y" }}</td>
           <td data-columna="inicio" data-etiqueta="Hora de inicio">{{ reserva.start_time|date:"H:i" }}</td>
           <td data-columna="fin" data-etiqueta="Hora de fin">{{ reserva.end_time|date:"H:i" }}</td>
@@ -110,9 +110,9 @@
       {% csrf_token %}
       <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
       <h3 id="dialog-eliminar-titulo-{{ reserva.id }}" class="titulo-eliminar">Eliminar reserva</h3>
-      <p class="mensaje-eliminar">┬┐Est├ís seguro de eliminar la reserva de <strong>{{ reserva.common_area.name }}</strong> del <strong>{{ reserva.start_time|date:"d/m/Y" }}</strong>?</p>
+      <p class="mensaje-eliminar">¿Estás seguro de eliminar la reserva de <strong>{{ reserva.common_area.name }}</strong> del <strong>{{ reserva.start_time|date:"d/m/Y" }}</strong>?</p>
       <div class="acciones-eliminar">
-        <button type="submit" class="boton-confirmar-eliminar">S├¡, Eliminar</button>
+        <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
         <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
       </div>
     </form>
