@@ -69,39 +69,12 @@
           </div>
         </section>
 
-        <section class="tarjeta" aria-labelledby="titulo-rol">
-          <h3 class="cabecera-tarjeta" id="titulo-rol">Información según rol</h3>
+        <section class="tarjeta" aria-labelledby="titulo-ingreso">
+          <h3 class="cabecera-tarjeta" id="titulo-ingreso">Fecha de ingreso</h3>
           <div class="cuerpo-tarjeta">
             <div class="campo-formulario">
-              <label for="id-rol-nombre">Nombre del rol</label>
-              <textarea id="id-rol-nombre" class="campo-entrada" rows="4" placeholder="Descripción de que puede hacer el rol" disabled>{{ descripcion_rol }}</textarea>
-            </div>
-          </div>
-        </section>
-
-        <section class="tarjeta tarjeta-estado" aria-labelledby="titulo-estado">
-          <h3 class="cabecera-tarjeta" id="titulo-estado">Estado de la cuenta</h3>
-          <div class="cuerpo-tarjeta">
-            <label class="etiqueta-interruptor" for="toggle-activo">
-              Activo
-              <span class="interruptor">
-                <input type="checkbox" id="toggle-activo" class="entrada-interruptor" {% if perfil_usuario.status == 'active' %}checked{% endif %}>
-                <span class="deslizador-interruptor"></span>
-              </span>
-            </label>
-            <input type="hidden" name="status" id="id_status" value="{{ perfil_usuario.status|default:'active' }}">
-            <div class="campo-formulario">
-              <label for="id-rol">Rol</label>
-              <select id="id-rol" class="campo-seleccion" disabled>
-                <option value="">Elegir rol</option>
-                {% for valor, etiqueta in roles %}
-                <option value="{{ valor }}"{% if perfil_usuario.role == valor %} selected{% endif %}>{{ etiqueta }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="campo-formulario">
-              <label for="id-ingreso">Fecha de ingreso</label>
-              <input type="date" id="id-ingreso" class="campo-entrada" value="{{ perfil_usuario.date_joined|date:'Y-m-d' }}" disabled>
+              <span class="etiqueta-campo" id="etiqueta-ingreso">Ingresó el</span>
+              <p class="valor-solo-lectura" aria-labelledby="etiqueta-ingreso">{{ perfil_usuario.date_joined|date:'d/m/Y' }}</p>
             </div>
           </div>
         </section>

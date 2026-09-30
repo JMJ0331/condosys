@@ -13,7 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
             'phone', 'document', 'avatar_url', 'role', 'status',
             'garden', 'is_active', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        # El rol y el estado solo se cambian al crear la cuenta o desde el
+        # módulo de cuentas; nunca a través de este serializer.
+        read_only_fields = ['id', 'role', 'status', 'created_at', 'updated_at']
         extra_kwargs = {
             'password': {'write_only': True},
         }

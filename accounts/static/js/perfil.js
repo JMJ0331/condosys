@@ -1,12 +1,9 @@
 /**
  * Lógica de la página Mi perfil.
- * - Interruptor Activo: sincroniza el hidden `status` (active/inactive).
  * - Zona de imagen circular: clic, teclado, arrastrar y vista previa
  *   + nombre del archivo elegido.
  *
  * La plantilla debe usar:
- *   - <input type="checkbox" id="toggle-activo">
- *   - <input type="hidden" id="id_status">
  *   - <input type="file" data-perfil-foto>
  *   - <div id="zona-imagen"> + <img id="vista-previa-imagen">
  *     + <span id="contenido-zona">
@@ -15,20 +12,6 @@
  */
 
 (() => {
-  const toggleActivo = document.getElementById('toggle-activo');
-  const inputStatus = document.getElementById('id_status');
-
-  function sincronizarEstado() {
-    if (toggleActivo && inputStatus) {
-      inputStatus.value = toggleActivo.checked ? 'active' : 'inactive';
-    }
-  }
-
-  if (toggleActivo && inputStatus) {
-    toggleActivo.addEventListener('change', sincronizarEstado);
-    sincronizarEstado();
-  }
-
   const inputFoto = document.querySelector('[data-perfil-foto]');
   const zonaImagen = document.getElementById('zona-imagen');
   const vistaPrevia = document.getElementById('vista-previa-imagen');
