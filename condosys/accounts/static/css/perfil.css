@@ -187,23 +187,6 @@ input[data-perfil-foto] {
 	height: 1.6rem;
 }
 
-/* Interruptor de la tarjeta Estado: pista clara y pastilla verde */
-.tarjeta-estado .deslizador-interruptor {
-	background: var(--white-400);
-}
-
-.tarjeta-estado .deslizador-interruptor::before {
-	background: var(--white-700);
-}
-
-.tarjeta-estado .interruptor input:checked + .deslizador-interruptor {
-	background: var(--green-100);
-}
-
-.tarjeta-estado .interruptor input:checked + .deslizador-interruptor::before {
-	background: var(--green-900);
-}
-
 /* Lateral: acción principal + cancelar (ancho del contenedor,
    alto según contenido) */
 .boton-agregar {
