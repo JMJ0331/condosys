@@ -74,6 +74,16 @@
             </div>
           </div>
         </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-ingreso">
+          <h3 class="cabecera-tarjeta" id="titulo-ingreso">Fecha de ingreso</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <span class="etiqueta-campo" id="etiqueta-ingreso">Ingresó el</span>
+              <p class="valor-solo-lectura" aria-labelledby="etiqueta-ingreso">{{ perfil_usuario.date_joined|date:'d/m/Y' }}</p>
+            </div>
+          </div>
+        </section>
       </div>
     </form>
   </div>

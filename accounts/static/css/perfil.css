@@ -187,6 +187,24 @@ input[data-perfil-foto] {
 	height: 1.6rem;
 }
 
+/* Dato que el perfil solo muestra (fecha de ingreso): texto plano, sin
+   control de formulario, porque no se puede editar desde aquí. */
+.valor-solo-lectura {
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 4rem;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	padding: 0.4rem 1.2rem;
+	background: var(--white-400);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: var(--black-300);
+}
+
 /* Lateral: acción principal + cancelar (ancho del contenedor,
    alto según contenido) */
 .boton-agregar {

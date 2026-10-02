@@ -71,8 +71,10 @@ def mi_perfil(request):
                 usuario.avatar.delete(save=False)
             usuario.avatar = avatar
 
-        # El rol y el estado de la cuenta no se editan desde aquí: se
-        # gestionan en el módulo de cuentas.
+        # El rol y el estado de la cuenta no se muestran ni se editan desde el
+        # perfil, para ningún rol: aquí tampoco se leen del POST, así que se
+        # ignoran aunque se manipulen. Solo un administrador puede verlos o
+        # cambiarlos, desde el módulo de cuentas.
         usuario.save()
         messages.success(request, 'Perfil actualizado correctamente.')
         return redirect('mi_perfil')
