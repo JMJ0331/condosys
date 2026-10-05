@@ -5,6 +5,7 @@
   <a class="opcion-menu-usuario" href="{% url 'mi_perfil' %}" role="menuitem">
     <img src="{% static 'images/icons/verdes/user.svg' %}" alt="" aria-hidden="true">Mi perfil
   </a>
+  {% if request.user.role == 'admin' %}
   <a class="opcion-menu-usuario" href="{% url 'configuracion_index' %}" role="menuitem">
     <img src="{% static 'images/icons/verdes/settings.svg' %}" alt="" aria-hidden="true">Configuración
   </a>
