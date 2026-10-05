@@ -25,15 +25,6 @@ def app_index(request):
     return render(request, 'accounts/index.html', contexto)
 
 
-DESCRIPCIONES_ROL = {
-    'admin': 'Administra usuarios, departamentos, pagos y la configuración del residencial.',
-    'manager': 'Gestiona pagos, comunicados, reservas y la operación diaria del residencial.',
-    'resident': 'Consulta sus pagos, reservas y comunicados del residencial.',
-    'propietario': 'Consulta sus unidades, residentes, pagos y mantenimientos.',
-    'security': 'Registra visitantes y controla los accesos al residencial.',
-}
-
-
 @role_required(*ROLES_TODOS)
 def mi_perfil(request):
     usuario = request.user
@@ -43,7 +34,6 @@ def mi_perfil(request):
         documento = request.POST.get('document', '').strip() or None
         telefono = request.POST.get('phone', '').strip()
         correo = request.POST.get('email', '').strip()
-        estado = request.POST.get('status', 'active')
 
         if not nombre:
             messages.error(request, 'El nombre completo es obligatorio.')
@@ -81,13 +71,10 @@ def mi_perfil(request):
                 usuario.avatar.delete(save=False)
             usuario.avatar = avatar
 
-        # El rol y la fecha de ingreso no se editan desde aquí (vienen sin
-        # name y se ignoran aunque se manipulen). La cuenta propia tampoco
-        # se puede desactivar: bloquearía el acceso de quien la edita.
-        usuario.status = 'active'
-        if estado == 'inactive':
-            messages.warning(request, 'No puedes desactivar tu propia cuenta; se mantuvo activa.')
-
+        # El rol y el estado de la cuenta no se muestran ni se editan desde el
+        # perfil, para ningún rol: aquí tampoco se leen del POST, así que se
+        # ignoran aunque se manipulen. Solo un administrador puede verlos o
+        # cambiarlos, desde el módulo de cuentas.
         usuario.save()
         messages.success(request, 'Perfil actualizado correctamente.')
         return redirect('mi_perfil')
@@ -95,8 +82,6 @@ def mi_perfil(request):
     url_volver = 'visitantes_index' if usuario.role == 'security' else 'inicio'
     return render(request, 'accounts/perfil.html', {
         'perfil_usuario': usuario,
-        'roles': User.ROLE_CHOICES,
-        'descripcion_rol': DESCRIPCIONES_ROL.get(usuario.role, ''),
         'module_name': 'Mi perfil',
         'url_volver': url_volver,
         'url_cancelar': url_volver,

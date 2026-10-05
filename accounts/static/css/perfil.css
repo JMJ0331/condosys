@@ -187,21 +187,22 @@ input[data-perfil-foto] {
 	height: 1.6rem;
 }
 
-/* Interruptor de la tarjeta Estado: pista clara y pastilla verde */
-.tarjeta-estado .deslizador-interruptor {
+/* Dato que el perfil solo muestra (fecha de ingreso): texto plano, sin
+   control de formulario, porque no se puede editar desde aquí. */
+.valor-solo-lectura {
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 4rem;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	padding: 0.4rem 1.2rem;
 	background: var(--white-400);
-}
-
-.tarjeta-estado .deslizador-interruptor::before {
-	background: var(--white-700);
-}
-
-.tarjeta-estado .interruptor input:checked + .deslizador-interruptor {
-	background: var(--green-100);
-}
-
-.tarjeta-estado .interruptor input:checked + .deslizador-interruptor::before {
-	background: var(--green-900);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: var(--black-300);
 }
 
 /* Lateral: acción principal + cancelar (ancho del contenedor,

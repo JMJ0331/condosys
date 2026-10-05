@@ -9,7 +9,7 @@ def residencial_configurado(request):
     bloqueado = bool(
         user is not None
         and user.is_authenticated
-        and getattr(user, 'role', '') in ('admin', 'manager')
+        and getattr(user, 'role', '') == 'admin'
         and not configurado
     )
     return {

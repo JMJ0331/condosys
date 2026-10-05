@@ -11,9 +11,11 @@ def login_view(request):
 
         if user is not None and user.is_active and user.status == 'active':
             django_login(request, user)
-            # Admin/manager nuevo: si aún no hay residencial configurado,
-            # va directo a configurarlo antes de usar el sistema.
-            if user.role in ('admin', 'manager'):
+            # Solo el admin configura el residencial: el resto de roles entra
+            # directo a su módulo. Si el gate de configuración incluyera al
+            # manager, /residencial/ lo rechazaría y volvería a /inicio/, que
+            # el middleware volvería a mandar a /residencial/ (bucle).
+            if user.role == 'admin':
                 from residencial.models import Residencial
                 if Residencial.obtener_unico() is None:
                     return redirect('residencial_index')
