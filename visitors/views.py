@@ -164,7 +164,7 @@ class VisitorViewSet(viewsets.ModelViewSet):
     serializer_class = VisitorSerializer
     permission_classes = [IsAuthenticated, CanModifyVisitor]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name', 'document', 'apartment__number']
+    search_fields = ['name', 'document', 'apartment__name']
     ordering_fields = ['scheduled_entry', 'status']
     ordering = ['-scheduled_entry']
     filterset_fields = ['apartment', 'status', 'type']
