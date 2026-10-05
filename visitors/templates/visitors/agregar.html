@@ -29,10 +29,15 @@
               </div>
             </div>
             <div class="fila-formulario">
-              <div class="campo-formulario campo-ancho-completo">
+              <div class="campo-formulario">
                 <label for="{{ form_visitor.document_type.id_for_label }}">{{ form_visitor.document_type.label }}</label>
                 {{ form_visitor.document_type }}
                 {{ form_visitor.document_type.errors }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_visitor.document.id_for_label }}">{{ form_visitor.document.label }}</label>
+                {{ form_visitor.document }}
+                {{ form_visitor.document.errors }}
               </div>
             </div>
           </div>

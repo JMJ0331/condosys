@@ -34,8 +34,8 @@ class VisitorForm(forms.ModelForm):
     class Meta:
         model = Visitor
         fields = [
-            'name', 'type', 'document_type', 'document_image',
-            'apartment', 'authorized_by', 'status',
+            'name', 'type', 'document_type', 'document',
+            'document_image', 'apartment', 'authorized_by', 'status',
         ]
         widgets = {
             'name': forms.TextInput(attrs={
@@ -44,6 +44,10 @@ class VisitorForm(forms.ModelForm):
             }),
             'type': forms.Select(attrs={'class': 'campo-seleccion'}),
             'document_type': forms.Select(attrs={'class': 'campo-seleccion'}),
+            'document': forms.TextInput(attrs={
+                'class': 'campo-entrada',
+                'placeholder': 'Número de documento',
+            }),
             'document_image': forms.FileInput(attrs={
                 'accept': 'image/jpeg,image/png,image/webp',
                 'data-documento-visitante': '',
@@ -58,6 +62,7 @@ class VisitorForm(forms.ModelForm):
             'name': 'Nombre completo',
             'type': 'Tipo de visitante',
             'document_type': 'Documento de identidad',
+            'document': 'Número de documento',
             'document_image': 'Foto del documento',
             'apartment': 'Departamento a visitar',
             'authorized_by': 'Autorizado por',

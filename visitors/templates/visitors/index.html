@@ -87,10 +87,15 @@
         </div>
       </form>
 
+      <button type="button" class="boton-buscar-cedula" data-dialog="dialog-buscar-cedula"><img src="{% static 'images/icons/verdes/id_green.svg' %}" alt="" aria-hidden="true">Buscar por cédula</button>
       {% if puede_crear %}
       <a href="{% url 'agregar_visitante' %}" class="boton-nuevo-visitante"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar visitante</a>
       {% endif %}
     </div>
+
+    {% if documento_actual %}
+    <p class="busqueda-cedula">Cédula: <strong>{{ documento_actual }}</strong> <a href="{% url 'visitantes_index' %}" class="limpiar-busqueda">Limpiar</a></p>
+    {% endif %}
   </div>
 
   <div class="tabla-filtrada">
@@ -162,6 +167,26 @@
   {% endfor %}
   {% endif %}
 
+  <dialog id="dialog-buscar-cedula" class="dialogo-cedula" aria-labelledby="dialog-cedula-titulo">
+    <form method="post" action="{% url 'buscar_cedula' %}" enctype="multipart/form-data" class="formulario-cedula">
+      {% csrf_token %}
+      <h3 id="dialog-cedula-titulo" class="titulo-cedula">Buscar por cédula</h3>
+      <p class="ayuda-formulario">Toma una foto de la cédula con la cámara o sube un archivo y la AI la buscará en el sistema.</p>
+      <video id="video-cedula" class="video-cedula" autoplay playsinline hidden></video>
+      <canvas id="lienzo-cedula" hidden></canvas>
+      <img id="vista-previa-cedula" class="vista-previa-cedula" alt="Foto de la cédula" hidden>
+      <p class="error-cedula" id="error-camara-cedula" hidden></p>
+      <input type="file" name="imagen" id="archivo-cedula" accept="image/*" data-cedula-archivo>
+      <div class="acciones-cedula">
+        <button type="button" class="boton-camara" id="boton-camara-cedula">Usar cámara</button>
+        <button type="button" class="boton-camara" id="boton-capturar-cedula" hidden>Capturar foto</button>
+        <button type="submit" class="boton-confirmar-eliminar">Buscar</button>
+        <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+      </div>
+      <p class="ayuda-formulario">La cámara requiere HTTPS o localhost y tu permiso.</p>
+    </form>
+  </dialog>
+
   {% include "componentes/paginacion_tabla.html" with pagina=visitas %}
     </div>
   </div>
@@ -171,4 +196,5 @@
 {% block scripts %}
 <script src="{% static 'js/dialogos.js' %}" defer></script>
 <script src="{% static 'js/visitantes_lista.js' %}" defer></script>
+<script src="{% static 'js/buscar-cedula.js' %}" defer></script>
 {% endblock %}

@@ -1,0 +1,596 @@
+@import url('../../../css/variables.css');
+
+/* Contenedor general de la página de configuración */
+.contenedor-configuracion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0);
+  width: 100%;
+}
+
+/* Fila de pestañas superiores */
+.pestanas-configuracion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  padding: 0 var(--padding-16);
+}
+
+.pestana {
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-bottom: none;
+  border-radius: var(--borderR-8) var(--borderR-8) var(--borderR-0) var(--borderR-0);
+  color: var(--green-900);
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: var(--padding-8) var(--padding-16);
+}
+
+.pestana:hover {
+  background: var(--green-50);
+}
+
+.pestana-activa {
+  background: var(--green-900);
+  border-color: var(--green-900);
+  color: var(--white-50);
+}
+
+.pestana-activa:hover {
+  background: var(--green-900);
+  color: var(--white-50);
+}
+
+/* Paneles de cada pestaña */
+.panel-configuracion {
+  width: 100%;
+}
+
+.tarjeta-usuarios {
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  box-shadow: var(--shadow-100);
+  overflow: visible;
+  width: 100%;
+}
+
+.barra-usuarios {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  padding: var(--padding-16);
+}
+
+.titulo-usuarios {
+  color: var(--black-400);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.controles-usuarios {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.selector-usuarios {
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  color: var(--black-400);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: var(--padding-8) var(--padding-16);
+}
+
+.formulario-filtros {
+  margin: 0;
+}
+
+.formulario-filtros select {
+  appearance: none;
+  background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  box-sizing: border-box;
+  color: var(--black-400);
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin: 0;
+  min-width: 15rem;
+  outline: none;
+  padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+  text-align: left;
+  transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formulario-filtros select:hover {
+  border-color: var(--green-900);
+}
+
+.formulario-filtros select:focus {
+  border-color: var(--green-900);
+  border-width: 1px;
+  box-shadow: 0 0 0 2px var(--green-200);
+  outline: none;
+}
+
+.boton-columnas {
+  appearance: none;
+  background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  box-sizing: border-box;
+  color: var(--black-400);
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin: 0;
+  min-width: 15rem;
+  outline: none;
+  padding: 0.8rem 2.8rem 0.8rem 1.2rem;
+  text-align: left;
+  transition: border-color 0.2s ease, border-width 0.2s ease, box-shadow 0.2s ease;
+}
+
+.boton-columnas:hover {
+  border-color: var(--green-900);
+}
+
+.boton-columnas:focus,
+.boton-columnas[aria-expanded="true"] {
+  border-color: var(--green-900);
+  border-width: 1px;
+  box-shadow: 0 0 0 2px var(--green-200);
+  outline: none;
+}
+
+.selector-columnas {
+  position: relative;
+}
+
+.panel-columnas {
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  left: 0;
+  min-width: 16rem;
+  padding: var(--padding-8);
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  z-index: 30;
+}
+
+.panel-columnas[hidden] {
+  display: none;
+}
+
+.opcion-columna {
+  align-items: center;
+  color: var(--black-400);
+  cursor: pointer;
+  display: flex;
+  font-size: 1.25rem;
+  gap: 0.8rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.opcion-columna:hover {
+  background: var(--green-100);
+  border-radius: var(--borderR-4);
+}
+
+.opcion-columna input {
+  accent-color: var(--green-900);
+  height: 1.6rem;
+  width: 1.6rem;
+}
+
+.panel-columnas .opcion-columna input:focus,
+.panel-columnas .opcion-columna input:active {
+  border-color: var(--black-50);
+  border-width: 1px;
+  box-shadow: none;
+  outline: none;
+}
+
+.opcion-columna span {
+  white-space: nowrap;
+}
+
+.opcion-columna.opcion-todas {
+  border-bottom: 1px solid var(--black-50);
+  font-weight: 600;
+}
+
+.boton-agregar-usuario {
+  align-items: center;
+  background: var(--green-900);
+  border: none;
+  border-radius: var(--borderR-8);
+  color: var(--white-50);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1.25rem;
+  font-weight: 500;
+  gap: var(--space-4);
+  padding: var(--padding-8) var(--padding-16);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.boton-agregar-usuario:hover {
+  background: var(--green-700);
+}
+
+.boton-agregar-usuario img {
+  flex: none;
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+.tabla-usuarios {
+  min-width: 110rem;
+}
+
+.tarjeta-usuarios .tabla-filtrada {
+  border-radius: 0 0 var(--borderR-8) var(--borderR-8);
+  border-top: 1px solid var(--black-50);
+  margin-top: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Página de edición de usuario: tarjetas y columna principal.
+   Reutiliza las clases compartidas de formularios.css
+   (fila-formulario, campo-formulario, interruptor...). */
+.pagina-agregar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.formulario-agregar {
+  align-items: start;
+  display: grid;
+  gap: var(--space-16);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.columna-principal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  min-width: 0;
+}
+
+.tarjeta {
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  box-shadow: var(--shadow-100);
+  overflow: hidden;
+}
+
+.cabecera-tarjeta {
+  border-bottom: 1px solid var(--black-50);
+  color: var(--black-400);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0;
+  padding: var(--padding-12) var(--padding-16);
+}
+
+.cuerpo-tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--padding-16);
+}
+
+.etiqueta-campo {
+  color: var(--black-400);
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.formulario-agregar .campo-formulario input,
+.formulario-agregar .campo-formulario select,
+.formulario-agregar .campo-formulario textarea,
+.formulario-agregar .campo-seleccion,
+.formulario-ia .campo-formulario input,
+.formulario-ia .campo-formulario select,
+.formulario-ia .campo-seleccion {
+  border-radius: var(--borderR-8);
+}
+
+/* Zona de foto de perfil circular, igual que en Mi perfil. */
+.zona-imagen {
+  align-items: center;
+  background: var(--white-100);
+  border: 1px dashed var(--black-100);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  height: 12rem;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1rem;
+  width: 12rem;
+}
+
+.zona-imagen:focus {
+  border-color: var(--green-900);
+  outline: none;
+}
+
+.zona-activa {
+  background: var(--green-25);
+  border-color: var(--green-900);
+}
+
+.contenido-zona {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.contenido-zona[hidden] {
+  display: none;
+}
+
+.icono-zona {
+  color: var(--white-700);
+  height: 2.4rem;
+  width: 2.4rem;
+}
+
+.texto-subir {
+  color: var(--white-700);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.texto-ayuda {
+  color: var(--white-700);
+  font-size: 1.1rem;
+}
+
+.vista-previa-imagen {
+  border-radius: 50%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.vista-previa-imagen[hidden] {
+  display: none;
+}
+
+input[data-perfil-foto] {
+  height: 0.1rem;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 0.1rem;
+}
+
+.nombre-archivo {
+  color: var(--black-300);
+  font-size: 1.2rem;
+}
+
+.nombre-archivo[hidden] {
+  display: none;
+}
+
+.boton-subir {
+  align-items: center;
+  align-self: flex-start;
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-4);
+  color: var(--green-900);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 500;
+  gap: 0.6rem;
+  padding: 0.4rem 1.2rem;
+}
+
+.boton-subir svg {
+  height: 1.6rem;
+  width: 1.6rem;
+}
+
+/* Encabezado de la página de edición: acción principal + cancelar,
+   igual que en las demás secciones. */
+.boton-agregar {
+  align-items: center;
+  background: var(--green-900);
+  border: none;
+  border-radius: var(--borderR-8);
+  box-sizing: border-box;
+  color: var(--white-50);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+  height: fit-content;
+  justify-content: center;
+  padding: var(--padding-8) var(--padding-16);
+  text-decoration: none;
+  width: 100%;
+}
+
+.boton-agregar:hover,
+.boton-agregar:active {
+  background: var(--green-700);
+}
+
+.boton-cancelar {
+  align-items: center;
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  box-sizing: border-box;
+  color: var(--red-500);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1.4rem;
+  font-weight: 500;
+  height: fit-content;
+  justify-content: center;
+  padding: var(--padding-8) var(--padding-16);
+  text-decoration: none;
+  width: 100%;
+}
+
+.boton-cancelar:hover {
+  border-color: var(--red-500);
+}
+
+/* La cuenta propia muestra el botón eliminar deshabilitado:
+   visible como en las demás filas pero sin acción ni hover. */
+.acciones-fila .boton-accion:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.acciones-fila .boton-accion:disabled:hover {
+  background: none;
+}
+
+/* Panel de integración AI */
+.tarjeta-ia {
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  box-shadow: var(--shadow-100);
+  width: 100%;
+}
+
+.formulario-ia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--padding-16);
+}
+
+.titulo-ia {
+  color: var(--black-400);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.formulario-ia .boton-agregar-usuario {
+  align-self: flex-start;
+}
+
+/* Input de API Key con ojo ver/no ver */
+.campo-clave {
+  position: relative;
+}
+
+.campo-clave input {
+  padding-right: 4rem;
+}
+
+/* Oculta el ojo nativo del navegador en el input de clave para que
+   solo quede el botón propio. */
+.campo-clave input::-ms-reveal,
+.campo-clave input::-ms-clear {
+  display: none;
+}
+
+.boton-ojo {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--black-300);
+  cursor: pointer;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  padding: 0 var(--padding-8);
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.boton-ojo:hover {
+  color: var(--green-900);
+}
+
+.boton-ojo svg {
+  height: 2rem;
+  width: 2rem;
+}
+
+/* El "hidden" nativo no aplica a elementos <svg>: se oculta por CSS. */
+.boton-ojo svg[hidden] {
+  display: none;
+}
+
+.error-ia {
+  color: var(--red-500);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.error-ia[hidden] {
+  display: none;
+}
+
+/* Tarjetas pendientes de los demás tabs */
+.tarjeta-pendiente {
+  background: var(--white-50);
+  border: 1px solid var(--black-50);
+  border-radius: var(--borderR-8);
+  box-shadow: var(--shadow-100);
+  padding: var(--padding-24);
+}
+
+.titulo-pendiente {
+  color: var(--green-900);
+  font-size: 1.8rem;
+  margin: 0 0 var(--space-8) 0;
+}
+
+.texto-pendiente {
+  color: var(--black-300);
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .barra-usuarios {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pestanas-configuracion {
+    padding: 0;
+  }
+}

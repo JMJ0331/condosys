@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'areas_comunes',
     'chat',
     'communications',
+    'configuracion',
     'incidents',
     'login',
     'maintenance',

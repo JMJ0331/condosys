@@ -1,7 +1,10 @@
+import re
+
 from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -11,6 +14,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from accounts.decorators import role_required
 from accounts.permissions import ROLES_SEGURIDAD, CanModifyVisitor
+from configuracion.ia_vision import ErrorVision, con_guiones, extraer_cedula
+from configuracion.models import IntegracionIA
 from structure.models import Apartment
 from .models import Visitor
 from .serializers import VisitorSerializer
@@ -46,6 +51,7 @@ def app_index(request):
     tipo = request.GET.get('tipo', '')
     mes = request.GET.get('mes', '')
     anio = request.GET.get('anio', '')
+    documento = request.GET.get('documento', '').strip()
 
     if estado:
         visitas_qs = visitas_qs.filter(status=estado)
@@ -61,6 +67,18 @@ def app_index(request):
         visitas_qs = visitas_qs.filter(scheduled_entry__year=int(anio))
     else:
         anio = ''
+
+    if documento:
+        # Compara con y sin guiones porque el documento se guarda de ambas formas.
+        digitos = re.sub(r'\D', '', documento)
+        variantes = {documento, digitos}
+        if len(digitos) == 11:
+            variantes.add(con_guiones(digitos))
+        condicion = Q()
+        for variante in variantes:
+            if variante:
+                condicion |= Q(document__icontains=variante)
+        visitas_qs = visitas_qs.filter(condicion)
 
     paginator = Paginator(visitas_qs, PAGINATE_BY)
     pagina = request.GET.get('page')
@@ -82,12 +100,53 @@ def app_index(request):
         'tipo_actual': tipo,
         'mes_actual': mes,
         'anio_actual': anio,
+        'documento_actual': documento,
         'mes_actual_nombre': MESES_NOMBRE.get(int(mes), 'Todos los meses') if mes else 'Todos los meses',
         'anios': _anios_con_visitas(),
         'paginacion_query': query.urlencode(),
         'module_name': 'Visitantes',
     }
     return render(request, 'visitors/index.html', contexto)
+
+
+MAX_IMAGEN_CEDULA_MB = 8
+
+
+@role_required(*ROLES_SEGURIDAD)
+def buscar_cedula(request):
+    """Lee la cédula de una foto (cámara o archivo) con la AI configurada
+    y filtra el listado por el documento detectado."""
+    if request.method != 'POST':
+        return redirect('visitantes_index')
+
+    integracion = IntegracionIA.obtener_unica()
+    if not integracion or not integracion.api_key:
+        messages.error(request, 'Configura el modelo y la API Key en Integración AI.')
+        return redirect('visitantes_index')
+
+    imagen = request.FILES.get('imagen')
+    if not imagen:
+        messages.error(request, 'Sube o captura la foto de la cédula para buscar.')
+        return redirect('visitantes_index')
+    if imagen.size > MAX_IMAGEN_CEDULA_MB * 1024 * 1024:
+        messages.error(request, f'La imagen no puede superar {MAX_IMAGEN_CEDULA_MB} MB.')
+        return redirect('visitantes_index')
+
+    try:
+        digitos = extraer_cedula(
+            integracion.proveedor, integracion.modelo, integracion.api_key, imagen.read()
+        )
+    except ErrorVision as error:
+        messages.error(request, str(error))
+        return redirect('visitantes_index')
+
+    if not digitos:
+        messages.error(request, 'No se pudo leer la cédula en la imagen. Intenta con otra foto.')
+        return redirect('visitantes_index')
+
+    cedula = con_guiones(digitos)
+    messages.success(request, f'Cédula detectada: {cedula}.')
+    return redirect(f"{reverse('visitantes_index')}?documento={cedula}")
 
 
 @role_required(*ROLES_SEGURIDAD)

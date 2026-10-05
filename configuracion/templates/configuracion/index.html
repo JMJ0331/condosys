@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/tablas.css' %}">
+<link rel="stylesheet" href="{% static 'configuracion/css/configuracion.css' %}">
+{% endblock %}
+{% block contenido %}
+{% include "componentes/header.html" with nombre_modulo=module_name %}
+
+<main class="container-main-side2">
+  <div class="contenedor-configuracion">
+    <nav class="pestanas-configuracion" aria-label="Secciones de configuración" data-pestanas>
+      <button type="button" class="pestana pestana-activa" data-pestana="usuarios" aria-selected="true">Usuarios</button>
+      <button type="button" class="pestana" data-pestana="integracion-ai" aria-selected="false">Integracion AI</button>
+      <button type="button" class="pestana" data-pestana="seguridad" aria-selected="false">Seguridad</button>
+      <button type="button" class="pestana" data-pestana="notificaciones" aria-selected="false">Notificaciones</button>
+      <button type="button" class="pestana" data-pestana="comprobantes" aria-selected="false">Comprobantes fiscales</button>
+      <button type="button" class="pestana" data-pestana="preferencias" aria-selected="false">Preferencias generales</button>
+    </nav>
+
+    <section class="panel-configuracion panel-activo" data-panel="usuarios" aria-label="Usuarios">
+      <div class="tarjeta-usuarios">
+        <div class="barra-usuarios">
+          <h2 class="titulo-usuarios">Todos los usuarios</h2>
+          <div class="controles-usuarios">
+            <div class="selector-columnas">
+              <button type="button" class="boton-columnas" id="boton-columnas" aria-haspopup="true" aria-expanded="false">Todas las columnas</button>
+              <div class="panel-columnas" id="panel-columnas" hidden>
+                <label class="opcion-columna opcion-todas">
+                  <input type="checkbox" id="toggle-todas-columnas">
+                  <span>Todas</span>
+                </label>
+              </div>
+            </div>
+            <form method="get" class="formulario-filtros" id="filtros-usuarios">
+              <select name="estado" id="filtro-estado">
+                <option value="">Todos los estados</option>
+                <option value="active" {% if estado_actual == 'active' %}selected{% endif %}>Activo</option>
+                <option value="inactive" {% if estado_actual == 'inactive' %}selected{% endif %}>Inactivo</option>
+                <option value="pending" {% if estado_actual == 'pending' %}selected{% endif %}>En verificación</option>
+              </select>
+            </form>
+            <a href="{% url 'crear_usuario' %}" class="boton-agregar-usuario">
+              <img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar usuario
+            </a>
+          </div>
+        </div>
+
+        <div class="tabla-filtrada">
+          <table class="tabla-residentes tabla-usuarios">
+            <thead>
+              <tr>
+                <th data-columna="foto">Foto de perfil</th>
+                <th data-columna="nombre">Nombre completo</th>
+                <th data-columna="cedula">Cedula</th>
+                <th data-columna="telefono">Telefono</th>
+                <th data-columna="correo">Correo electronico</th>
+                <th data-columna="rol">Rol</th>
+                <th data-columna="fecha">Fecha de ingreso</th>
+                <th data-columna="estado">Estado</th>
+                <th class="columna-acciones">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for usuario in usuarios %}
+              <tr>
+                <td data-columna="foto" data-etiqueta="Foto de perfil">
+                  {% if usuario.avatar %}
+                  <img src="{{ usuario.avatar.url }}" alt="" class="foto-residente">
+                  {% elif usuario.avatar_url %}
+                  <img src="{{ usuario.avatar_url }}" alt="" class="foto-residente">
+                  {% else %}
+                  <span class="foto-placeholder" aria-hidden="true"></span>
+                  {% endif %}
+                </td>
+                <td data-columna="nombre" data-etiqueta="Nombre completo">{{ usuario.full_name|default:usuario.email }}</td>
+                <td data-columna="cedula" data-etiqueta="Cedula">{{ usuario.document|default:"—" }}</td>
+                <td data-columna="telefono" data-etiqueta="Telefono">{{ usuario.phone|default:"—" }}</td>
+                <td data-columna="correo" data-etiqueta="Correo electronico">{{ usuario.email }}</td>
+                <td data-columna="rol" data-etiqueta="Rol">{{ usuario.get_role_display }}</td>
+                <td data-columna="fecha" data-etiqueta="Fecha de ingreso">{{ usuario.created_at|date:"d/m/Y" }}</td>
+                <td data-columna="estado" data-etiqueta="Estado">{{ usuario.get_status_display }}</td>
+                <td class="columna-acciones">
+                  <div class="acciones-fila">
+                    <a href="{% url 'actualizar_usuario' usuario.id %}" class="boton-accion" aria-label="Editar">
+                      <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+                    </a>
+                    {% if usuario.id != request.user.id %}
+                    <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ usuario.id }}">
+                      <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+                    </button>
+                    {% else %}
+                    <button type="button" class="boton-accion" aria-label="Eliminar" disabled title="No puedes eliminar tu propia cuenta">
+                      <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+                    </button>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="9" class="sin-registros">Sin usuarios registrados.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {% for usuario in usuarios %}
+        {% if usuario.id != request.user.id %}
+        <dialog id="dialog-eliminar-{{ usuario.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ usuario.id }}">
+          <form method="post" action="{% url 'eliminar_usuario' usuario.id %}">
+            {% csrf_token %}
+            <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+            <h3 id="dialog-eliminar-titulo-{{ usuario.id }}" class="titulo-eliminar">Eliminar usuario</h3>
+            <p class="mensaje-eliminar">¿Estás seguro de eliminar al usuario <strong>{{ usuario.full_name|default:usuario.email }}</strong>?</p>
+            <div class="acciones-eliminar">
+              <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+              <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+            </div>
+          </form>
+        </dialog>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="panel-configuracion" data-panel="seguridad" aria-label="Seguridad" hidden>
+      <div class="tarjeta-pendiente">
+        <h2 class="titulo-pendiente">Seguridad</h2>
+        <p class="texto-pendiente">Módulo próximamente.</p>
+      </div>
+    </section>
+
+    <section class="panel-configuracion" data-panel="notificaciones" aria-label="Notificaciones" hidden>
+      <div class="tarjeta-pendiente">
+        <h2 class="titulo-pendiente">Notificaciones</h2>
+        <p class="texto-pendiente">Módulo próximamente.</p>
+      </div>
+    </section>
+
+    <section class="panel-configuracion" data-panel="comprobantes" aria-label="Comprobantes fiscales" hidden>
+      <div class="tarjeta-pendiente">
+        <h2 class="titulo-pendiente">Comprobantes fiscales</h2>
+        <p class="texto-pendiente">Módulo próximamente.</p>
+      </div>
+    </section>
+
+    <section class="panel-configuracion" data-panel="preferencias" aria-label="Preferencias generales" hidden>
+      <div class="tarjeta-pendiente">
+        <h2 class="titulo-pendiente">Preferencias generales</h2>
+        <p class="texto-pendiente">Módulo próximamente.</p>
+      </div>
+    </section>
+
+    <section class="panel-configuracion" data-panel="integracion-ai" aria-label="Integracion AI" hidden>
+      <div class="tarjeta-ia">
+        <form method="post" action="{% url 'guardar_ia' %}" class="formulario-ia" data-ia-configurada="{% if ia_configurada %}1{% else %}0{% endif %}" data-modelos='{{ modelos_json }}'>
+          {% csrf_token %}
+          {{ form_ia.non_field_errors }}
+          <h2 class="titulo-ia">Integracion AI</h2>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_ia.proveedor.id_for_label }}">{{ form_ia.proveedor.label }}</label>
+              {{ form_ia.proveedor }}
+              {{ form_ia.proveedor.errors }}
+            </div>
+            <div class="campo-formulario">
+              <label for="{{ form_ia.modelo.id_for_label }}">{{ form_ia.modelo.label }}</label>
+              {{ form_ia.modelo }}
+              <datalist id="lista-modelos"></datalist>
+              {{ form_ia.modelo.errors }}
+            </div>
+          </div>
+          <div class="fila-formulario">
+            <div class="campo-formulario">
+              <label for="{{ form_ia.api_key.id_for_label }}">{{ form_ia.api_key.label }}</label>
+              <div class="campo-clave">
+                {{ form_ia.api_key }}
+                <button type="button" class="boton-ojo" id="boton-ojo-clave" aria-label="Mostrar API Key" aria-pressed="false">
+                  <svg id="icono-ojo-abierto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg id="icono-ojo-cerrado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                    <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="23" x2="23" y2="1"></line>
+                  </svg>
+                </button>
+              </div>
+              {{ form_ia.api_key.errors }}
+              <p class="error-ia" id="error-ia-clave" hidden>Escribe la API Key para activar la integración.</p>
+            </div>
+          </div>
+          {% if ia_configurada %}
+          <p class="ayuda-formulario">Hay una clave guardada. Déjala en blanco para quitarla.</p>
+          {% endif %}
+          <button type="submit" class="boton-agregar-usuario">{% if ia_configurada %}Actualizar{% else %}Guardar{% endif %}</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'configuracion/js/configuracion.js' %}" defer></script>
+{% endblock %}
