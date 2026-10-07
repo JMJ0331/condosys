@@ -4,7 +4,7 @@ Envío del correo transaccional de recuperación de contraseña vía Resend.
 La configuración vive en settings.py (bloque "Email Configuration"):
     RESEND_API_KEY -> clave privada de la API de Resend (re_...)
     RESEND_FROM    -> remitente verificado (por defecto
-                      "CONDYSOS <onboarding@resend.dev>")
+                      "CONDOSYS <onboarding@resend.dev>")
 """
 
 import logging
@@ -22,7 +22,7 @@ def _cuerpo_correo(nombre, enlace):
     <div style="font-family: Arial, Helvetica, sans-serif; max-width: 480px; margin: 0 auto; color: #41413D;">
       <h2 style="color: #163D1F; font-size: 20px; margin-bottom: 16px;">Hola {nombre},</h2>
       <p style="font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
-        Recibimos una solicitud para restablecer la contraseña de tu cuenta en CONDYSOS.
+        Recibimos una solicitud para restablecer la contraseña de tu cuenta en CONDOSYS.
         Para elegir una nueva contraseña, usa el botón de abajo:
       </p>
       <p style="margin-bottom: 24px;">
@@ -42,7 +42,7 @@ def _cuerpo_correo(nombre, enlace):
         <strong>Si no solicitaste este cambio, puedes ignorar este correo de forma segura.
         Tu contraseña seguirá siendo la misma.</strong>
       </p>
-      <p style="font-size: 13px; color: #929290; margin-top: 16px;">Equipo CONDYSOS</p>
+      <p style="font-size: 13px; color: #929290; margin-top: 16px;">Equipo CONDOSYS</p>
     </div>
     """
 

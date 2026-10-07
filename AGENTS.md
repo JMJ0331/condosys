@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Sistema de administración residencial **CONDYSOS** (Django 6.1 + DRF + Channels). No hay README; este es el único doc.
+Sistema de administración residencial **CONDOSYS** (Django 6.1 + DRF + Channels). No hay README; este es el único doc.
 
 ## Repo y git
 

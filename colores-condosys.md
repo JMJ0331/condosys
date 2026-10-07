@@ -1,4 +1,4 @@
-# Paleta de colores CONDYSOS
+# Paleta de colores CONDOSYS
 
 Análisis de uso de las variables de color en los 25 archivos CSS del proyecto
 (976 usos totales en 33 variables con uso; las 31 restantes aparecen en 0%).

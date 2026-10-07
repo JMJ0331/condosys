@@ -229,7 +229,7 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', 'noreply@condosys.com')
 
 # Resend (correo transaccional: recuperación de contraseña, etc.)
 RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
-RESEND_FROM = os.getenv('RESEND_FROM', 'CONDYSOS <onboarding@resend.dev>')
+RESEND_FROM = os.getenv('RESEND_FROM', 'CONDOSYS <onboarding@resend.dev>')
 
 
 # Celery Configuration
