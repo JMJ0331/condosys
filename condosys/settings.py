@@ -227,6 +227,10 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', 'noreply@condosys.com')
 
+# Resend (correo transaccional: recuperación de contraseña, etc.)
+RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
+RESEND_FROM = os.getenv('RESEND_FROM', 'CONDYSOS <onboarding@resend.dev>')
+
 
 # Celery Configuration
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')

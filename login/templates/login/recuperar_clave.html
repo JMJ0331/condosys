@@ -1,0 +1,70 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Recuperar contraseña | Condosys</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/entradas.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/recuperar.css' %}" />
+    <link rel="stylesheet" href="/static/css/mediaquerys.css" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/logo_del_proyecto.svg' %}">
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div class="panel-login">
+        <div class="lado-izq">
+          <div class="container-logo">
+            <img src="{% static "images/logo_del_proyecto.svg" %}" alt="Condosys" class="img-logo" />
+            <h1 class="nombre-app">CONDOSYS</h1>
+          </div>
+        </div>
+
+        <div class="lado-der">
+          <h2 class="titulo">Recuperar contraseña</h2>
+
+          {% if enviado %}
+            <div class="mensaje-exito" role="status">
+              <p class="mensaje-exito__titulo">Solicitud recibida</p>
+              <p>{{ mensaje }}</p>
+            </div>
+            <a href="{% url 'login' %}" class="text-restrablecer">Volver al inicio de sesión</a>
+          {% else %}
+            <p class="descripcion">
+              Escribe el correo con el que inicias sesión y te enviaremos un
+              enlace para elegir una nueva contraseña.
+            </p>
+
+            <form action="" method="post" class="form">
+              {% csrf_token %}
+              <div class="inputs">
+                <div class="container-input">
+                  <input
+                    type="email"
+                    name="email"
+                    class="input"
+                    id="email"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="email">Email</label>
+                </div>
+              </div>
+
+              <div class="container-btn">
+                <button type="submit" class="btn-enviar">Enviar enlace</button>
+                <a href="{% url 'login' %}" class="text-restrablecer">Volver al inicio de sesión</a>
+              </div>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <script type="module" src="{% static 'js/main.js' %}" defer></script>
+  </body>
+</html>
