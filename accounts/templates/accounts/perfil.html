@@ -21,8 +21,8 @@
                 <input type="text" name="full_name" id="id-nombre" class="campo-entrada" placeholder="Administrador" value="{{ perfil_usuario.full_name }}" autocomplete="name">
               </div>
               <div class="campo-formulario">
-                <label for="id-cedula">Cedula</label>
-                <input type="text" name="document" id="id-cedula" class="campo-entrada" placeholder="000-0000000-0" maxlength="13" data-mascara="cedula" value="{{ perfil_usuario.document|default:'' }}">
+                <label for="id-cedula">Cédula</label>
+                <input type="text" id="id-cedula" class="campo-entrada" placeholder="000-0000000-0" value="{{ perfil_usuario.document|default:'' }}" disabled>
               </div>
             </div>
             <div class="fila-formulario">

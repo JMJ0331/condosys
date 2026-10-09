@@ -31,7 +31,6 @@ def mi_perfil(request):
 
     if request.method == 'POST':
         nombre = request.POST.get('full_name', '').strip()
-        documento = request.POST.get('document', '').strip() or None
         telefono = request.POST.get('phone', '').strip()
         correo = request.POST.get('email', '').strip()
 
@@ -49,14 +48,9 @@ def mi_perfil(request):
             messages.error(request, 'Ese correo ya está en uso por otra cuenta.')
             return redirect('mi_perfil')
 
-        if documento and User.objects.filter(document=documento).exclude(pk=usuario.pk).exists():
-            messages.error(request, 'Esa cédula ya está registrada en otra cuenta.')
-            return redirect('mi_perfil')
-
         partes = nombre.split()
         usuario.first_name = partes[0]
         usuario.last_name = ' '.join(partes[1:])
-        usuario.document = documento
         usuario.phone = telefono
         usuario.email = correo
 
@@ -75,6 +69,8 @@ def mi_perfil(request):
         # perfil, para ningún rol: aquí tampoco se leen del POST, así que se
         # ignoran aunque se manipulen. Solo un administrador puede verlos o
         # cambiarlos, desde el módulo de cuentas.
+        # La cédula (document) tampoco se lee del POST: es de solo lectura en
+        # el perfil, igual que la fecha de ingreso.
         usuario.save()
         messages.success(request, 'Perfil actualizado correctamente.')
         return redirect('mi_perfil')
