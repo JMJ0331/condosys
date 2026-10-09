@@ -61,7 +61,8 @@ a{ color: var(--verde); }
 15. [Comunicados](#15-comunicados)
 16. [Reportes](#16-reportes)
 17. [Configuración del Residencial](#17-configuración-del-residencial)
-18. [Preguntas Frecuentes y Resolución de Problemas](#18-preguntas-frecuentes-y-resolución-de-problemas)
+18. [Configuración](#18-configuración)
+19. [Preguntas Frecuentes y Resolución de Problemas](#19-preguntas-frecuentes-y-resolución-de-problemas)
 
 ---
 
@@ -93,8 +94,9 @@ Si es tu primera vez usando el sistema, completa estos pasos en orden.
 1. Presiona tu nombre en la parte inferior del menú lateral.
 2. Selecciona la opción <span class="mencion-ui">Mi perfil</span>.
 3. Revisa que tus datos de contacto estén correctos.
+4. Para cambiar tu contraseña, cierra sesión y usa el enlace <span class="mencion-ui">¿Se te ha olvidado la clave?</span> del formulario de acceso.
 
-<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> Tu contraseña inicial te la entrega el Administrador o el Encargado de Administración. Si no la recuerdas, solicítales una nueva.</div>
+<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> Tu contraseña inicial te la entrega el Administrador o el Encargado de Administración. Si la olvidas, puedes restablecerla tú mismo desde el enlace del inicio de sesión.</div>
 
 ### <span class="etiqueta-paso">Paso 4</span> — Registra tus datos en el sistema
 
@@ -186,6 +188,7 @@ El sistema adapta su contenido según el tipo de usuario con el que inicias sesi
 | **Comunicados** | Avisos y anuncios de la administración. | Todos |
 | **Reportes** | Estadísticas y exportaciones de información. | Administración |
 | **Residencial** | Configuración general del residencial. | Administrador |
+| **Configuración** | Gestión de usuarios e integración con inteligencia artificial. Se abre desde el menú de usuario. | Administrador |
 
 ### 2.5 Elementos que se repiten en el sistema
 
@@ -273,15 +276,15 @@ El formulario contiene los siguientes campos:
 
 <div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> El tipo de usuario y el estado de tu cuenta <strong>no</strong> se modifican desde <em>Mi perfil</em>. Los gestiona la administración.</div>
 
-<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> Si cambias tu correo electrónico, 반드시 usa el nuevo correo para iniciar sesión la próxima vez.</div>
+<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> Si cambias tu correo electrónico, usa el nuevo correo para iniciar sesión la próxima vez.</div>
 
 <div class="captura"><span class="captura-titulo">INSERTAR CAPTURA DE PANTALLA</span><span class="captura-leyenda">Pantalla Mi perfil con el formulario de datos personales y la zona de carga de imagen</span></div>
 
-### 3.5 Configuración (Residencial)
+### 3.5 Configuración
 
-La opción <span class="mencion-ui">Configuración</span> del menú de usuario abre el módulo <span class="mencion-ui">Residencial</span>, descrito en el capítulo 17.
+La opción <span class="mencion-ui">Configuración</span> del menú de usuario (solo visible para el Administrador) abre el módulo <span class="mencion-ui">Configuración</span>, descrito en el capítulo 18. Desde ahí se gestionan los <span class="mencion-ui">Usuarios</span> y la <span class="mencion-ui">Integración AI</span>.
 
-<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> Solo el Administrador puede guardar cambios en esta pantalla. Los demás usuarios la ven en modo de solo lectura.</div>
+<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> La configuración general del residencial (dirección, estructura y contacto) está en un módulo aparte llamado <span class="mencion-ui">Residencial</span>, descrito en el capítulo 17.</div>
 
 ---
 
@@ -1057,6 +1060,21 @@ La barra de filtros permite acotar el listado con cinco criterios:
 2. Presiona el ícono de la <span class="mencion-ui">papelera</span>.
 3. Presiona <span class="mencion-ui">Sí, Eliminar</span> para confirmar.
 
+### 12.9 Buscar por cédula con inteligencia artificial
+
+La tabla de visitas permite buscar por cédula leyendo el número desde una foto, con la integración de inteligencia artificial configurada por el Administrador.
+
+1. Presiona el botón <span class="mencion-ui">Buscar por cédula</span>.
+2. En la ventana, presiona <span class="mencion-ui">Usar cámara</span> para tomar la foto, o adjunta una imagen desde el archivo.
+3. Si usas la cámara, presiona <span class="mencion-ui">Capturar foto</span>.
+4. Presiona el botón <span class="mencion-ui">Buscar</span>.
+
+El sistema detecta la cédula, muestra un aviso con el número y filtra la tabla por ese documento.
+
+<div class="caja caja-advertencia"><span class="caja-etiqueta">💡 CONSEJO:</span> Mientras hay una búsqueda activa, aparece un enlace <span class="mencion-ui">Limpiar</span> sobre la tabla para quitar el filtro.</div>
+
+<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> La imagen puede pesar hasta 8 MB. La cámara requiere HTTPS o localhost y tu permiso. Si la Integración AI no está configurada, esta función no podrá leer la cédula desde la foto.</div>
+
 ---
 
 ## 13. Áreas Comunes
@@ -1453,9 +1471,97 @@ La pantalla <span class="mencion-ui">Residencial</span> (también disponible com
 
 ---
 
-## 18. Preguntas Frecuentes y Resolución de Problemas
+## 18. Configuración
 
-### 18.1 Preguntas Frecuentes
+El módulo <span class="mencion-ui">Configuración</span> reúne la administración de las cuentas de usuario y la conexión del sistema con un proveedor de inteligencia artificial. Se abre desde la opción <span class="mencion-ui">Configuración</span> del menú de usuario y solo está disponible para el <span class="mencion-ui">Administrador</span>.
+
+<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> Esta pantalla es distinta del módulo <em>Residencial</em> (capítulo 17), donde se registran los datos generales del residencial.</div>
+
+### 18.1 Pestañas del módulo
+
+La pantalla está organizada en seis pestañas. Solo <span class="mencion-ui">Usuarios</span> e <span class="mencion-ui">Integración AI</span> están disponibles; las demás muestran el aviso <span class="mencion-ui">Módulo próximamente</span>.
+
+| Pestaña | Estado | Contenido |
+|---|---|---|
+| **Usuarios** | Disponible | Listado y gestión de todas las cuentas del sistema. |
+| **Integración AI** | Disponible | Proveedor, modelo y clave de la inteligencia artificial. |
+| **Seguridad** | Próximamente | Aún no disponible. |
+| **Notificaciones** | Próximamente | Aún no disponible. |
+| **Comprobantes fiscales** | Próximamente | Aún no disponible. |
+| **Preferencias generales** | Próximamente | Aún no disponible. |
+
+### 18.2 Ver los usuarios
+
+1. Abre la pestaña <span class="mencion-ui">Usuarios</span>.
+2. Localiza la tabla <span class="mencion-ui">Todos los usuarios</span>.
+
+**Columnas disponibles:**
+
+| Columna | Contenido |
+|---|---|
+| **Foto de perfil** | Imagen de la cuenta, o un marcador si no tiene. |
+| **Nombre completo** | Nombre y apellido. Si no se registró, se muestra el correo. |
+| **Cédula** | Documento de identidad. |
+| **Teléfono** | Número de contacto. |
+| **Correo electrónico** | Es el usuario de acceso. |
+| **Rol** | Tipo de usuario del sistema. |
+| **Fecha de ingreso** | Fecha de creación de la cuenta. |
+| **Estado** | Activo, Inactivo o En verificación. |
+| **Acciones** | Editar o eliminar la cuenta. |
+
+### 18.3 Filtrar los usuarios
+
+1. Usa el selector de estado para ver solo <span class="mencion-ui">Activo</span>, <span class="mencion-ui">Inactivo</span>, <span class="mencion-ui">En verificación</span> o <span class="mencion-ui">Todos los estados</span>.
+2. Usa el botón <span class="mencion-ui">Todas las columnas</span> para mostrar u ocultar columnas de la tabla.
+
+### 18.4 Agregar un usuario
+
+1. Presiona el botón <span class="mencion-ui">Agregar usuario</span>.
+2. Completa los campos <span class="mencion-ui">Nombre</span>, <span class="mencion-ui">Apellido</span>, <span class="mencion-ui">Cédula</span>, <span class="mencion-ui">Teléfono</span> y <span class="mencion-ui">Correo electrónico</span>.
+3. Adjunta la <span class="mencion-ui">Foto de perfil</span>, si lo deseas.
+4. Elige el <span class="mencion-ui">Rol</span> y el <span class="mencion-ui">Estado</span> de la cuenta.
+5. Deja activo el interruptor <span class="mencion-ui">Activo</span> para que la cuenta pueda iniciar sesión.
+6. Escribe una <span class="mencion-ui">Contraseña temporal</span> y confírmala (mínimo 8 caracteres).
+7. Presiona el botón <span class="mencion-ui">Agregar</span>.
+
+<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> El correo electrónico y la cédula no pueden repetirse entre cuentas. La contraseña temporal se guarda cifrada y es la que entregas al usuario para su primer ingreso.</div>
+
+### 18.5 Editar un usuario
+
+1. Ubica la fila del usuario.
+2. Presiona el ícono del <span class="mencion-ui">lápiz</span>.
+3. Cambia los campos que necesites.
+4. Presiona <span class="mencion-ui">Actualizar</span>.
+
+<div class="caja caja-advertencia"><span class="caja-etiqueta">🔴 IMPORTANTE:</span> Al editar tu propia cuenta no podrás cambiar tu rol ni desactivarla: el sistema mantiene el rol <em>Administrador</em> y el estado <em>Activo</em> para no bloquear tu acceso.</div>
+
+### 18.6 Eliminar un usuario
+
+1. Ubica la fila del usuario.
+2. Presiona el ícono de la <span class="mencion-ui">papelera</span>.
+3. Presiona <span class="mencion-ui">Sí, Eliminar</span> para confirmar.
+
+<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> No puedes eliminar tu propia cuenta; el botón aparece deshabilitado.</div>
+
+### 18.7 Integración AI
+
+La pestaña <span class="mencion-ui">Integración AI</span> guarda la conexión con un proveedor de inteligencia artificial, que el sistema usa para leer cédulas desde una foto en el módulo <em>Visitantes</em>.
+
+1. Abre la pestaña <span class="mencion-ui">Integración AI</span>.
+2. Elige el <span class="mencion-ui">Proveedor</span>: GPT (OpenAI), Claude (Anthropic), Gemini (Google), Llama (Meta), Mistral AI, DeepSeek o Grok (xAI).
+3. Elige o escribe el <span class="mencion-ui">Modelo</span> dentro de ese proveedor.
+4. Escribe la <span class="mencion-ui">API Key</span> con el botón del ojo para revisarla.
+5. Presiona <span class="mencion-ui">Guardar</span> (o <span class="mencion-ui">Actualizar</span> si ya había una clave guardada).
+
+<div class="caja caja-advertencia"><span class="caja-etiqueta">💡 CONSEJO:</span> Para quitar una clave existente, deja el campo <span class="mencion-ui">API Key</span> en blanco y guarda.</div>
+
+<div class="caja caja-advertencia"><span class="caja-etiqueta">⚠️ NOTA:</span> Algunos proveedores no ofrecen modelos con visión (por ejemplo DeepSeek y Llama). Elige un proveedor con modelos de imagen para poder escanear cédulas.</div>
+
+---
+
+## 19. Preguntas Frecuentes y Resolución de Problemas
+
+### 19.1 Preguntas Frecuentes
 
 **1. ¿Por qué no me aparece un módulo en el menú?**
 
@@ -1483,7 +1589,7 @@ Verifica que estés escribiendo tu <span class="mencion-ui">correo electrónico<
 
 **5. ¿Cómo recupero mi contraseña?**
 
-El enlace <span class="mencion-ui">¿Se te ha olvidado la clave?</span> del formulario de acceso no genera contraseñas automáticamente. Solicita al Administrador que restablezca tu contraseña.
+Usa el enlace <span class="mencion-ui">¿Se te ha olvidado la clave?</span> del formulario de acceso, escribe tu correo electrónico y presiona <span class="mencion-ui">Enviar enlace</span>. Si el correo corresponde a una cuenta activa, recibirás un mensaje con un enlace para crear una nueva contraseña. El enlace vence a los 30 minutos y solo puede usarse una vez. Por seguridad, el sistema muestra el mismo mensaje exista o no la cuenta.
 
 ---
 
@@ -1547,14 +1653,14 @@ Abre el pago que quieres facturar desde el ícono del <span class="mencion-ui">l
 
 ---
 
-### 18.2 Resolución de Problemas
+### 19.2 Resolución de Problemas
 
 **Problema: aparece el mensaje «El email o la contraseña no son válidos»**
 
 1. Verifica que el correo esté escrito correctamente.
 2. Verifica que no haya espacios al inicio o al final.
 3. Confirma que la cuenta esté en estado <span class="mencion-ui">Activo</span>.
-4. Solicita al Administrador que restablezca tu contraseña si el problema persiste.
+4. Si olvidaste la contraseña, usa el enlace <span class="mencion-ui">¿Se te ha olvidado la clave?</span> para restablecerla por correo.
 
 ---
 
@@ -1625,7 +1731,7 @@ Debes registrar primero al menos un jardín con sus edificios desde el módulo <
 
 ---
 
-### 18.3 Módulos no disponibles en la interfaz
+### 19.3 Módulos no disponibles en la interfaz
 
 Actualmente el sistema <span class="mencion-ui">no muestra</span> los módulos de <span class="mencion-ui">Chat</span> y <span class="mencion-ui">Notificaciones</span> en el menú lateral. Estas secciones se encuentran en fase de desarrollo y todavía no están habilitadas para los usuarios.
 
@@ -1633,13 +1739,13 @@ Si necesitas recibir avisos automáticos o communicate con la administración, u
 
 ---
 
-### 18.4 Cuándo solicitar ayuda
+### 19.4 Cuándo solicitar ayuda
 
 Contacta a la administración del residencial cuando:
 
 - No puedas iniciar sesión tras varios intentos.
 - Necesites un cambio de permisos o de tipo de usuario.
-- Necesites restablecer tu contraseña.
+- No recibas el correo de recuperación de contraseña o el enlace haya vencido.
 - Detectes un dato incorrecto que no puedes corregir por tu cuenta.
 - Necesites información que los reportes no muestran.
 
