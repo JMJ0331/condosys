@@ -1,14 +1,7 @@
-import re
-
 from django import forms
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as ErrorValidacion
 from .models import User
-
-
-def solo_digitos(valor):
-    """Descarta todo lo que no sea dígito (guiones, paréntesis, espacios)."""
-    return re.sub(r'\D', '', valor or '')
 
 
 class CuentaUsuarioFormBase(forms.ModelForm):
@@ -59,30 +52,6 @@ class CuentaUsuarioFormBase(forms.ModelForm):
         if duplicadas.exists():
             raise forms.ValidationError('Ya existe una cuenta con ese correo electrónico.')
         return email
-
-    def clean_cedula(self):
-        cedula = self.cleaned_data.get('cedula')
-        if not cedula:
-            return cedula
-        if len(solo_digitos(cedula)) != 11:
-            raise forms.ValidationError('La cédula debe tener 11 dígitos.')
-        return cedula
-
-    def clean_phone(self):
-        telefono = self.cleaned_data.get('phone')
-        if not telefono:
-            return telefono
-        if len(solo_digitos(telefono)) != 10:
-            raise forms.ValidationError('El teléfono debe tener 10 dígitos.')
-        return telefono
-
-    def clean_emergency_contact(self):
-        contacto = self.cleaned_data.get('emergency_contact')
-        if not contacto:
-            return contacto
-        if len(solo_digitos(contacto)) != 10:
-            raise forms.ValidationError('El contacto de emergencia debe tener 10 dígitos.')
-        return contacto
 
     def clean(self):
         datos = super().clean()

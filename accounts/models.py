@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CASCADE, PROTECT, SET_NULL
+from .validators import validar_cedula, validar_telefono
 import uuid
 
 
@@ -60,8 +61,8 @@ class User(AbstractUser):
     )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    document = models.CharField(max_length=50, blank=True, unique=True, null=True)
+    phone = models.CharField(max_length=14, blank=True, null=True, validators=[validar_telefono])
+    document = models.CharField(max_length=13, blank=True, unique=True, null=True, validators=[validar_cedula])
     avatar_url = models.URLField(blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     

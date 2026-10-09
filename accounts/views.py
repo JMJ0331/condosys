@@ -15,6 +15,7 @@ from .decorators import role_required
 from .permissions import ROLES_ADMIN, ROLES_TODOS, IsAdmin, CanModifyUser
 from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, ChangePasswordSerializer
 from .forms import UserCreateForm
+from .validators import validar_telefono
 
 @role_required(*ROLES_ADMIN)
 def app_index(request):
@@ -47,6 +48,13 @@ def mi_perfil(request):
         if User.objects.filter(email=correo).exclude(pk=usuario.pk).exists():
             messages.error(request, 'Ese correo ya está en uso por otra cuenta.')
             return redirect('mi_perfil')
+
+        if telefono:
+            try:
+                validar_telefono(telefono)
+            except ValidationError as err:
+                messages.error(request, '; '.join(err.messages))
+                return redirect('mi_perfil')
 
         partes = nombre.split()
         usuario.first_name = partes[0]
