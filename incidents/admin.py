@@ -11,7 +11,7 @@ class IncidentImageInline(admin.TabularInline):
 class IncidentAdmin(admin.ModelAdmin):
     list_display = ('id', 'apartment', 'category', 'priority', 'status', 'reported_by', 'created_at')
     list_filter = ('category', 'priority', 'status', 'created_at')
-    search_fields = ('title', 'apartment__number', 'reported_by__email')
+    search_fields = ('title', 'apartment__name', 'reported_by__email')
     readonly_fields = ('created_at', 'updated_at', 'resolved_at')
     inlines = [IncidentImageInline]
     ordering = ('-created_at',)

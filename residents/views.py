@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -142,7 +141,7 @@ class ResidentViewSet(viewsets.ModelViewSet):
     serializer_class = ResidentSerializer
     permission_classes = [IsGestionOrSoloLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['user__email', 'apartment__number']
+    search_fields = ['user__email', 'apartment__name']
     ordering_fields = ['created_at', 'full_name']
     ordering = ['apartment', 'full_name']
     filterset_fields = ['apartment', 'is_active', 'marital_status']

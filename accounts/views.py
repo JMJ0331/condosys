@@ -108,7 +108,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """ViewSet para User - CRUD de usuarios"""
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated]
-    filter_fields = ['role', 'status', 'is_active']
+    filterset_fields = ['role', 'status', 'is_active']
     search_fields = ['email', 'first_name', 'last_name', 'document']
     ordering_fields = ['created_at', 'email']
     ordering = ['-created_at']

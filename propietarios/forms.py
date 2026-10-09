@@ -1,13 +1,7 @@
 from django import forms
-from django.core.exceptions import ValidationError
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
-from PIL import Image
 from accounts.forms import CuentaUsuarioFormBase
+from residents.forms import validate_photo
 from .models import Propietario
-
-ALLOWED_FORMATS = ('JPEG', 'PNG', 'WEBP')
-MAX_SIZE_MB = 2
 
 
 class FotoPreviewWidget(forms.ClearableFileInput):
@@ -19,22 +13,6 @@ class FotoPreviewWidget(forms.ClearableFileInput):
         if value and hasattr(value, 'url'):
             context['widget']['preview_url'] = value.url
         return context
-
-
-def validate_photo(image):
-    """Valida que el archivo sea una imagen JPG/PNG/WEBP de máximo 2 MB."""
-    if image is None:
-        return
-    if image.size > MAX_SIZE_MB * 1024 * 1024:
-        raise ValidationError(f"La imagen no puede superar {MAX_SIZE_MB} MB.")
-    try:
-        img = Image.open(image)
-        img.verify()
-        fmt = (img.format or '').upper()
-    except Exception:
-        raise ValidationError("El archivo no es una imagen válida.")
-    if fmt not in ALLOWED_FORMATS:
-        raise ValidationError("Solo se permiten imágenes JPG, PNG o WEBP.")
 
 
 class PropietarioForm(CuentaUsuarioFormBase):

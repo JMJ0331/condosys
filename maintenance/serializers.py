@@ -10,7 +10,7 @@ class MaintenanceChargeListSerializer(serializers.ModelSerializer):
             'id', 'concept', 'periodicity', 'amount',
             'effective_date', 'is_active', 'payment_methods', 'created_at',
         ]
-        read_only_fields = ['id', 'payment_methods', 'created_at']
+        read_only_fields = ['id', 'created_at']
 
 
 class MaintenanceChargeDetailSerializer(serializers.ModelSerializer):

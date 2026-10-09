@@ -33,7 +33,7 @@ Sistema de administración residencial **CONDOSYS** (Django 6.1 + DRF + Channels
 ## Modelo de usuario y roles (crítico)
 
 - `AUTH_USER_MODEL = 'accounts.User'`: **sin `username`**, login con email (`USERNAME_FIELD='email'`), PK UUID.
-- Roles en `user.role`: `admin`, `manager`, `resident`, `maintenance`, `security`. Estados en `user.status`: `active`, `inactive`, `pending`. El login manual (`login\views.py`) rechaza a quien no tenga `status == 'active'`.
+- Roles en `user.role`: `admin`, `manager`, `resident`, `propietario`, `security`. Estados en `user.status`: `active`, `inactive`, `pending`. El login manual (`login\views.py`) rechaza a quien no tenga `status == 'active'`.
 - Los permisos DRF por rol viven en `accounts\permissions.py` (`IsManager`, `IsResident`, ...). Úsalos en los ViewSets en lugar de repetir chequeos de rol.
 
 ## Permisos por rol de usuario

@@ -206,7 +206,7 @@ class IncidentViewSet(viewsets.ModelViewSet):
     queryset = Incident.objects.all()
     permission_classes = [IsAuthenticated, CanModifyIncident]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'apartment__number', 'reported_by__email']
+    search_fields = ['title', 'apartment__name', 'reported_by__email']
     ordering_fields = ['created_at', 'priority', 'status']
     ordering = ['-created_at']
     filterset_fields = ['apartment', 'status', 'priority', 'category', 'assigned_to']

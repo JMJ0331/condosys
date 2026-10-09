@@ -86,22 +86,32 @@
                 {{ form_communication.target_type.errors }}
               </div>
               <div class="campo-formulario">
-                <label for="{{ form_communication.publication_date.id_for_label }}">{{ form_communication.publication_date.label }}</label>
-                {{ form_communication.publication_date }}
-                {{ form_communication.publication_date.errors }}
+                <label for="{{ form_communication.published_at.id_for_label }}">{{ form_communication.published_at.label }}</label>
+                {{ form_communication.published_at }}
+                {{ form_communication.published_at.errors }}
+              </div>
+            </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_communication.target_id.id_for_label }}">{{ form_communication.target_id.label }}</label>
+                {{ form_communication.target_id }}
+                {{ form_communication.target_id.errors }}
               </div>
             </div>
           </div>
         </section>
 
-        <section class="tarjeta" aria-labelledby="titulo-estado">
+        <section class="tarjeta tarjeta-estado" aria-labelledby="titulo-estado">
           <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
           <div class="cuerpo-tarjeta">
-            <div class="campo-formulario">
-              <label for="{{ form_communication.estado.id_for_label }}">{{ form_communication.estado.label }}</label>
-              {{ form_communication.estado }}
-              {{ form_communication.estado.errors }}
-            </div>
+            <label class="etiqueta-interruptor" for="{{ form_communication.is_published.id_for_label }}">
+              Publicado
+              <span class="interruptor">
+                {{ form_communication.is_published }}
+                <span class="deslizador-interruptor"></span>
+              </span>
+            </label>
+            {{ form_communication.is_published.errors }}
           </div>
         </section>
       </div>
