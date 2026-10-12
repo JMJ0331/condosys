@@ -201,11 +201,10 @@ main.container-main-side2 {
 }
 
 .subtitulo-vista {
-	margin: 0.4rem -1.2rem 1.2rem -1.2rem;
+	margin: 0;
 	padding: 0 1.2rem 1.2rem 1.2rem;
 	color: var(--black-300);
 	font-size: 1.2rem;
-	border-bottom: 1px solid var(--black-50);
 }
 
 /* Gráfico de barras en CSS puro */
@@ -299,6 +298,7 @@ table.tabla-reportes {
 	width: 100%;
 	border-collapse: collapse;
 	min-width: 70rem;
+	border-top: 1px solid var(--black-50);
 }
 
 .tabla-reportes thead {

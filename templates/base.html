@@ -16,7 +16,7 @@
     {% block extra_css %}{% endblock %}
 
 </head>
-<body>
+<body{% if request.COOKIES.sidebar_colapsado == '1' %} class="colapsado"{% endif %}>
 
     <div class="container">
 
@@ -97,6 +97,7 @@
     <script src="{% static "js/encabezado-acciones.js" %}" defer></script>
     <script src="{% static "js/usuario-menu.js" %}" defer></script>
     <script src="{% static "js/menu-movil.js" %}" defer></script>
+    <script src="{% static "js/barra-lateral.js" %}" defer></script>
     {% block scripts %}{% endblock %}
 
 </body>

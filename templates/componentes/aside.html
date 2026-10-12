@@ -4,13 +4,21 @@
   <div class="cont-info">
 
     <div class="app-log">
-      <div class="container-img">
-        <img class="img-app" src="{% static "images/logo_del_proyecto.svg" %}" alt="home" />
+
+      <div class="contenedor-marca">
+        <div class="container-img">
+          <img class="img-app" src="{% static "images/logo_del_proyecto.svg" %}" alt="home" />
+        </div>
+
+        <div class="container-info">
+          <h1 class="nombre-app">condosys</h1>
+        </div>
       </div>
 
-      <div class="container-info">
-        <h1 class="nombre-app">condosys</h1>
-      </div>
+      <button type="button" class="boton-colapsar" id="boton-colapsar" aria-label="Minimizar menú" aria-expanded="true" aria-controls="menu-lateral">
+        <img src="{% static 'images/icons/blancos/chevron-abajo.svg' %}" alt="" aria-hidden="true">
+      </button>
+
     </div>
 
     <div class="aside-options">
@@ -21,6 +29,7 @@
         <a
           class="opt-modulo{% if request.resolver_match.url_name in modulo.activo_en %} active{% endif %}{% if modulo.clase_extra %} {{ modulo.clase_extra }}{% endif %}"
           href="{% url modulo.url %}"
+          title="{{ modulo.nombre }}"
         >
           <img src="{% static modulo.icono %}" alt="{{ modulo.alt }}" />
           <h4>{{ modulo.nombre }}</h4>

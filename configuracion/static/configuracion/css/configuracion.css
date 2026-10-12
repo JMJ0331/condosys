@@ -590,7 +590,38 @@ input[data-perfil-foto] {
     flex-direction: column;
   }
 
+  /* Como en las demás secciones: en tablet/móvil las filas son
+     tarjetas y la cuadrícula lleva padding alrededor. */
+  .tarjeta-usuarios .tabla-filtrada {
+    padding: 1.2rem;
+  }
+
   .pestanas-configuracion {
     padding: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .barra-usuarios {
+    align-items: stretch;
+  }
+
+  .controles-usuarios {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .selector-columnas,
+  .formulario-filtros {
+    width: 100%;
+  }
+
+  .formulario-filtros select,
+  .boton-columnas,
+  .boton-agregar-usuario {
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 }
