@@ -52,6 +52,7 @@ class ReservationForm(forms.ModelForm):
             'apartment': forms.Select(attrs={
                 'class': 'campo-seleccion',
                 'data-reserva-apartamento': '',
+                'data-autocompletar': '',
             }),
             'reserved_by': forms.Select(attrs={'class': 'campo-seleccion'}),
             'status': forms.Select(attrs={'class': 'campo-seleccion'}),

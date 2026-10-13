@@ -49,7 +49,7 @@
             <div class="fila-formulario">
               <div class="campo-formulario campo-ancho-completo">
                 <label for="{{ form_visitor.apartment.id_for_label }}">{{ form_visitor.apartment.label }}</label>
-                <select name="{{ form_visitor.apartment.html_name }}" id="{{ form_visitor.apartment.id_for_label }}" class="campo-seleccion" data-visitante="departamento">
+                <select name="{{ form_visitor.apartment.html_name }}" id="{{ form_visitor.apartment.id_for_label }}" class="campo-seleccion" data-visitante="departamento" data-autocompletar>
                   <option value="">{{ form_visitor.fields.apartment.empty_label }}</option>
                   {% for opcion in form_visitor.opciones_departamento %}
                   <option value="{{ opcion.id }}" data-autorizado-ids="{{ opcion.autorizados }}"{% if form_visitor.apartment.value|stringformat:'s' == opcion.id|stringformat:'s' %} selected{% endif %}>{{ opcion.texto }}</option>

@@ -23,6 +23,7 @@ class SolicitudForm(forms.ModelForm):
             'apartment': forms.Select(attrs={
                 'class': 'campo-seleccion',
                 'data-solicitud-apartamento': '',
+                'data-autocompletar': '',
             }),
             'request_type': forms.Select(attrs={
                 'class': 'campo-seleccion',

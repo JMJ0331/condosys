@@ -36,6 +36,7 @@ class IncidentForm(forms.ModelForm):
             'apartment': forms.Select(attrs={
                 'class': 'campo-seleccion',
                 'data-incidencia-apartamento': '',
+                'data-autocompletar': '',
             }),
             'category': forms.Select(attrs={
                 'class': 'campo-seleccion',
