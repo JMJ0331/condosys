@@ -91,7 +91,7 @@ MODULOS = [
                 'nombre': 'Jardines',
                 'url': 'jardines_index',
                 'activo_en': ['jardines_index', 'agregar_jardin', 'actualizar_jardin'],
-                'icono': 'images/icons/blancos/leaf_white.svg',
+                'icono': 'images/icons/blancos/tree.svg',
                 'alt': 'jardin-icon',
                 'roles': ROLES_ADMIN,
             },
@@ -100,7 +100,7 @@ MODULOS = [
                 'nombre': 'Bloques',
                 'url': 'bloques_index',
                 'activo_en': ['bloques_index', 'agregar_bloque', 'actualizar_bloque'],
-                'icono': 'images/icons/blancos/page_white.svg',
+                'icono': 'images/icons/blancos/xray-view.svg',
                 'alt': 'bloque-icon',
                 'roles': ROLES_ADMIN,
             },
@@ -109,7 +109,7 @@ MODULOS = [
                 'nombre': 'Edificios',
                 'url': 'edificios_index',
                 'activo_en': ['edificios_index', 'agregar_edificio', 'actualizar_edificio'],
-                'icono': 'images/icons/blancos/city_white.svg',
+                'icono': 'images/icons/blancos/building.svg',
                 'alt': 'edificio-icon',
                 'roles': ROLES_ADMIN,
             },
@@ -289,17 +289,34 @@ def _modulos_planos():
     return planos
 
 
+def _nombre_seccion_edificios():
+    """Nombre de la sección según la distribución ('Torres' o 'Edificios')."""
+    try:
+        from residencial.models import Residencial
+        residencial = Residencial.obtener_unico()
+        if residencial and residencial.distribucion == 'torres':
+            return 'Torres'
+    except Exception:
+        pass
+    return 'Edificios'
+
+
 def _modulos_visibles(role):
     """Módulos del menú para el rol; cada grupo conserva solo los hijos
     permitidos y reúne sus `activo_en` para saber si debe mostrarse abierto."""
     visibles = []
+    nombre_edificios = _nombre_seccion_edificios()
     for modulo in MODULOS:
         if role not in modulo['roles']:
             continue
         if 'hijos' in modulo:
-            hijos = [hijo for hijo in modulo['hijos'] if role in hijo['roles']]
+            hijos = [dict(hijo) for hijo in modulo['hijos'] if role in hijo['roles']]
             if not hijos:
                 continue
+            for hijo in hijos:
+                if hijo['clave'] == 'edificios':
+                    hijo['nombre'] = nombre_edificios
+                    hijo['alt'] = 'torre-icon' if nombre_edificios == 'Torres' else 'edificio-icon'
             modulo = {
                 **modulo,
                 'hijos': hijos,
