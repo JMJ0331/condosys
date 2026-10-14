@@ -26,6 +26,36 @@
       <div class="container-links{% if residencial_bloqueado %} bloqueado{% endif %}">
 
         {% for modulo in modulos_habilitados %}
+        {% if modulo.hijos %}
+        {% with grupo_activo=request.resolver_match.url_name %}
+        <div class="grupo-menu{% if grupo_activo in modulo.activo_en %} abierto{% endif %}" data-grupo-menu>
+          <button
+            type="button"
+            class="opt-modulo boton-grupo{% if grupo_activo in modulo.activo_en %} active{% endif %}"
+            title="{{ modulo.nombre }}"
+            aria-expanded="{% if grupo_activo in modulo.activo_en %}true{% else %}false{% endif %}"
+            aria-controls="submenu-{{ modulo.clave }}"
+            data-boton-grupo
+          >
+            <img src="{% static modulo.icono %}" alt="{{ modulo.alt }}" />
+            <h4>{{ modulo.nombre }}</h4>
+            <img class="icono-grupo" src="{% static 'images/icons/blancos/chevron-abajo.svg' %}" alt="" aria-hidden="true" />
+          </button>
+          <div class="submenu" id="submenu-{{ modulo.clave }}">
+            {% for hijo in modulo.hijos %}
+            <a
+              class="opt-modulo opt-submodulo{% if grupo_activo in hijo.activo_en %} active{% endif %}"
+              href="{% url hijo.url %}"
+              title="{{ hijo.nombre }}"
+            >
+              <img src="{% static hijo.icono %}" alt="{{ hijo.alt }}" />
+              <h4>{{ hijo.nombre }}</h4>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endwith %}
+        {% else %}
         <a
           class="opt-modulo{% if request.resolver_match.url_name in modulo.activo_en %} active{% endif %}{% if modulo.clase_extra %} {{ modulo.clase_extra }}{% endif %}"
           href="{% url modulo.url %}"
@@ -34,6 +64,7 @@
           <img src="{% static modulo.icono %}" alt="{{ modulo.alt }}" />
           <h4>{{ modulo.nombre }}</h4>
         </a>
+        {% endif %}
         {% endfor %}
 
       </div>

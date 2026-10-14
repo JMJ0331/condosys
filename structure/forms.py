@@ -1,29 +1,98 @@
 from django import forms
 from residents.forms import validate_photo
-from .models import Apartment
+from .campos import campo_bloque, campo_edificio, campo_jardin, incluir_actual
+from .models import Apartment, Block, Building, Garden
+
+
+class GardenForm(forms.ModelForm):
+    class Meta:
+        model = Garden
+        fields = ['name', 'location', 'description', 'is_active']
+        labels = {
+            'name': 'Nombre',
+            'location': 'Ubicación',
+            'description': 'Descripción',
+            'is_active': 'Activo',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Nombre del jardín'}),
+            'location': forms.TextInput(attrs={'placeholder': 'Dirección o referencia'}),
+            'description': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Descripción'}),
+        }
+
+
+class BlockForm(forms.ModelForm):
+    garden = campo_jardin(required=True)
+
+    class Meta:
+        model = Block
+        fields = ['garden', 'name', 'description', 'is_active']
+        labels = {
+            'name': 'Nombre',
+            'description': 'Descripción',
+            'is_active': 'Activo',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Nombre del bloque'}),
+            'description': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Descripción'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.garden_id:
+            self.fields['garden'].queryset = incluir_actual(self.fields['garden'].queryset, self.instance.garden)
+
+
+class BuildingForm(forms.ModelForm):
+    # Filtro (no se guarda): reduce los bloques al jardín elegido.
+    jardin = campo_jardin()
+    block = campo_bloque(required=True)
+
+    class Meta:
+        model = Building
+        fields = ['block', 'name', 'number_of_floors', 'description', 'is_active']
+        labels = {
+            'name': 'Nombre',
+            'number_of_floors': 'Número de pisos',
+            'description': 'Descripción',
+            'is_active': 'Activo',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Nombre del edificio o torre'}),
+            'number_of_floors': forms.NumberInput(attrs={'placeholder': 'Pisos', 'min': 1}),
+            'description': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Descripción'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.block_id:
+            self.fields['block'].queryset = incluir_actual(self.fields['block'].queryset, self.instance.block)
+            self.initial.setdefault('jardin', self.instance.block.garden_id)
 
 
 class ApartmentsForm(forms.ModelForm):
-    """Formulario de departamentos con filtros enlazados a static/js/departamentos.js."""
+    """Formulario de departamentos con ubicación en cascada (static/js/cascada.js).
+
+    El propietario no se elige aquí: es el propietario quien elige sus
+    departamentos desde su propio formulario.
+    """
+    jardin = campo_jardin()
+    bloque = campo_bloque()
+    building = campo_edificio(required=True)
+
     class Meta:
         model = Apartment
         fields = [
-            'building', 'name', 'owner', 'photo',
+            'building', 'name', 'photo',
             'floor', 'status', 'is_active',
         ]
         labels = {
             'name': 'Apartamento',
-            'building': 'Edificio',
-            'owner': 'Propietario',
             'photo': 'Imagen',
             'floor': 'Piso',
         }
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'nombre del departamento'}),
-            # data-departamento="edificio": el select de edificios se filtra por el jardín
-            # elegido; data-departamento="propietario": select de propietarios.
-            'building': forms.Select(attrs={'class': 'campo-seleccion', 'data-departamento': 'edificio'}),
-            'owner': forms.Select(attrs={'class': 'campo-seleccion', 'data-departamento': 'propietario'}),
             'floor': forms.NumberInput(attrs={'placeholder': 'Piso'}),
             # El estado (occupied/empty) se gestiona con un interruptor visual
             # que vuelca su valor a este campo oculto del formulario.
@@ -32,8 +101,11 @@ class ApartmentsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['building'].empty_label = 'Edificio'
-        self.fields['owner'].empty_label = 'Elegir propietario'
+        if self.instance.building_id:
+            edificio = self.instance.building
+            self.fields['building'].queryset = incluir_actual(self.fields['building'].queryset, edificio)
+            self.initial.setdefault('jardin', edificio.garden_id)
+            self.initial.setdefault('bloque', edificio.block_id)
 
     # Campo de imagen reutilizando la validación compartida de residents.forms
     # (solo JPG/PNG/WEBP y máximo 2 MB). FileInput simple: sin los textos

@@ -1,6 +1,9 @@
 from django import forms
 from accounts.forms import CuentaUsuarioFormBase
 from residents.forms import validate_photo
+from structure.campos import campo_bloque, campo_edificio, campo_jardin
+from structure.models import Apartment
+from structure.widgets import CasillasCascada
 from .models import Propietario
 
 
@@ -57,6 +60,50 @@ class PropietarioForm(CuentaUsuarioFormBase):
         if not self.instance.pk:
             # Formulario de alta: mostrar el "Elegir..." en vez del valor por defecto.
             self.fields['marital_status'].initial = ''
+
+        # Departamentos libres (sin propietario) más los que ya son suyos.
+        libres = Apartment.objects.filter(is_active=True, owner__isnull=True)
+        if not self.instance._state.adding:
+            propios = Apartment.objects.filter(owner=self.instance)
+            self.fields['departamentos'].queryset = (libres | propios).distinct().select_related(
+                'building__garden', 'building__block', 'owner'
+            ).order_by('building__garden__name', 'building__block__name', 'building__name', 'name')
+            self.initial.setdefault('departamentos', list(propios.values_list('pk', flat=True)))
+
+    # Filtros en cascada (no se guardan): reducen la lista de departamentos.
+    jardin = campo_jardin()
+    bloque = campo_bloque()
+    edificio = campo_edificio()
+    departamentos = forms.ModelMultipleChoiceField(
+        queryset=Apartment.objects.filter(is_active=True, owner__isnull=True).select_related(
+            'building__garden', 'building__block', 'owner'
+        ).order_by('building__garden__name', 'building__block__name', 'building__name', 'name'),
+        label='Departamentos',
+        widget=CasillasCascada('departamento'),
+        error_messages={'required': 'Elige al menos un departamento del propietario.'},
+    )
+
+    def _propios_actuales(self):
+        if self.instance._state.adding:
+            return Apartment.objects.none()
+        return Apartment.objects.filter(owner=self.instance)
+
+    def clean_departamentos(self):
+        elegidos = self.cleaned_data['departamentos']
+        quitados = self._propios_actuales().exclude(pk__in=[d.pk for d in elegidos])
+        con_residentes = quitados.filter(residents__is_active=True).distinct()
+        if con_residentes.exists():
+            nombres = ', '.join(str(d) for d in con_residentes.select_related('building'))
+            raise forms.ValidationError(
+                f'No puedes quitar departamentos con residentes activos: {nombres}.'
+            )
+        return elegidos
+
+    def _save_m2m(self):
+        super()._save_m2m()
+        elegidos = [d.pk for d in self.cleaned_data['departamentos']]
+        self._propios_actuales().exclude(pk__in=elegidos).update(owner=None)
+        Apartment.objects.filter(pk__in=elegidos).update(owner=self.instance)
 
     photo = forms.ImageField(
         required=False,

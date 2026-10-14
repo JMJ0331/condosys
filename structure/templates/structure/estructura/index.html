@@ -1,0 +1,116 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/departamentos.css' %}">
+{% endblock %}
+{% block contenido %}
+{% include "componentes/header.html" with nombre_modulo=module_name icono=entidad.icono %}
+
+<main class="container-main-side2">
+  <div class="panel-acciones panel-cuadricula">
+    <div class="acciones">
+
+      <div class="contenedor-filtros">
+        <h2>{{ entidad.titulo_lista }}</h2>
+
+        <div class="filtros-tabla">
+          <form method="get" class="formulario-filtros" id="filtros-estructura" data-envio-automatico>
+            {% if 'jardin' in filtros %}
+            <select name="jardin" data-cascada="jardin" aria-label="Filtrar por jardín">
+              <option value="">Todos los jardines</option>
+              {% for jardin in jardines %}
+              <option value="{{ jardin.id }}"{% if jardin_actual == jardin.id|stringformat:'s' %} selected{% endif %}>{{ jardin.name }}</option>
+              {% endfor %}
+            </select>
+            {% endif %}
+
+            {% if 'bloque' in filtros %}
+            <select name="bloque" data-cascada="bloque" aria-label="Filtrar por bloque">
+              <option value="">Todos los bloques</option>
+              {% for bloque in bloques %}
+              <option value="{{ bloque.id }}" data-jardin="{{ bloque.garden_id }}"{% if bloque_actual == bloque.id|stringformat:'s' %} selected{% endif %}>{{ bloque.garden.name }} · {{ bloque.name }}</option>
+              {% endfor %}
+            </select>
+            {% endif %}
+
+            <select name="estado" aria-label="Filtrar por estado">
+              <option value="">Todos los estados</option>
+              <option value="activo"{% if estado_actual == 'activo' %} selected{% endif %}>Activos</option>
+              <option value="inactivo"{% if estado_actual == 'inactivo' %} selected{% endif %}>Inactivos</option>
+            </select>
+          </form>
+
+          {% if puede_crear %}
+          <a href="{% url url_agregar %}" class="boton-nuevo-departamento"><img src="{% static 'images/icons/blancos/plus.svg' %}" alt="" aria-hidden="true">Agregar {{ entidad.singular }}</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="tabla-filtrada">
+        <table class="tabla-departamentos">
+          <thead>
+            <tr>
+              {% for cabecera in cabeceras %}
+              <th>{{ cabecera }}</th>
+              {% endfor %}
+              <th class="columna-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for fila in filas %}
+            <tr>
+              {% for etiqueta, valor in fila.celdas %}
+              <td data-etiqueta="{{ etiqueta }}">{{ valor }}</td>
+              {% endfor %}
+              <td class="columna-acciones">
+                <div class="acciones-fila">
+                  {% if puede_editar %}
+                  <a href="{% url url_actualizar fila.objeto.id %}" class="boton-accion" aria-label="Editar">
+                    <img src="{% static 'images/icons/acciones/edit-pencil.svg' %}" alt="Editar">
+                  </a>
+                  {% endif %}
+                  {% if puede_eliminar %}
+                  <button type="button" class="boton-accion" aria-label="Eliminar" data-dialog="dialog-eliminar-{{ fila.objeto.id }}">
+                    <img src="{% static 'images/icons/acciones/trash.svg' %}" alt="Eliminar">
+                  </button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="{{ cabeceras|length|add:1 }}" class="sin-registros">Sin coincidencias.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if puede_eliminar %}
+      {% for fila in filas %}
+      <dialog id="dialog-eliminar-{{ fila.objeto.id }}" class="dialogo-eliminar" aria-labelledby="dialog-eliminar-titulo-{{ fila.objeto.id }}">
+        <form method="post" action="{% url url_eliminar fila.objeto.id %}">
+          {% csrf_token %}
+          <img class="icono-eliminar" src="{% static 'images/icons/acciones/trash.svg' %}" alt="">
+          <h3 id="dialog-eliminar-titulo-{{ fila.objeto.id }}" class="titulo-eliminar">Eliminar {{ entidad.singular }}</h3>
+          <p class="mensaje-eliminar">¿Estás seguro de eliminar <strong>{{ fila.objeto.name }}</strong>? Solo se puede eliminar si no tiene {{ entidad.dependientes }} asociados.</p>
+          <div class="acciones-eliminar">
+            <button type="submit" class="boton-confirmar-eliminar">Sí, Eliminar</button>
+            <button type="button" class="boton-cancelar-eliminar" data-dialog-close>Cancelar</button>
+          </div>
+        </form>
+      </dialog>
+      {% endfor %}
+      {% endif %}
+
+      {% include "componentes/paginacion_tabla.html" with pagina=pagina %}
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/dialogos.js' %}" defer></script>
+<script src="{% static 'js/cascada.js' %}" defer></script>
+<script src="{% static 'js/filtros-automaticos.js' %}" defer></script>
+{% endblock %}

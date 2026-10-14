@@ -86,6 +86,22 @@ class IsGestionOrSoloLectura(BasePermission):
         return request.user.role in ROLES_GESTION
 
 
+class IsAdminOrGestionLectura(BasePermission):
+    """Gestión (admin/manager) puede leer; solo el admin puede escribir.
+
+    Se usa en la estructura del residencial (jardines, bloques, edificios),
+    que solo crea el administrador.
+    """
+    message = "Solo el administrador puede modificar la estructura del residencial."
+
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+        if request.method in SAFE_METHODS:
+            return request.user.role in ROLES_GESTION
+        return request.user.role in ROLES_ADMIN
+
+
 class CanModifyUser(BasePermission):
     """Usuario solo puede modificar su propio perfil, admins pueden modificar cualquiera"""
     message = "No puedes modificar este usuario."

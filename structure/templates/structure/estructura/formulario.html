@@ -1,0 +1,54 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/departamentos.css' %}">
+{% endblock %}
+{% block mini-cards %}
+{% include "componentes/header.html" with nombre_modulo=titulo_modulo url_volver=url_index form_id='form-estructura' texto_boton=texto_boton url_cancelar=url_index %}
+
+<main class="container-main-side2">
+  <div class="pagina-agregar">
+    <form method="post" id="form-estructura" action="{% if url_form_args %}{% url url_form url_form_args.0 %}{% else %}{% url url_form %}{% endif %}" class="formulario-agregar">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div class="columna-principal">
+        <section class="tarjeta" aria-labelledby="titulo-informacion">
+          <h3 class="cabecera-tarjeta" id="titulo-informacion">Información del {{ entidad.singular }}</h3>
+          <div class="cuerpo-tarjeta">
+            {% for campo in form.visible_fields %}
+            {% if campo.name != 'is_active' %}
+            <div class="campo-formulario">
+              <label for="{{ campo.id_for_label }}">{{ campo.label }}{% if campo.field.required %} *{% endif %}</label>
+              {{ campo }}
+              {{ campo.errors }}
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="tarjeta tarjeta-estado" aria-labelledby="titulo-estado">
+          <h3 class="cabecera-tarjeta" id="titulo-estado">Estado</h3>
+          <div class="cuerpo-tarjeta">
+            <div class="campo-formulario">
+              <label class="etiqueta-interruptor" for="{{ form.is_active.id_for_label }}">
+                Activo
+                <span class="interruptor">
+                  {{ form.is_active }}
+                  <span class="deslizador-interruptor"></span>
+                </span>
+              </label>
+              {{ form.is_active.errors }}
+            </div>
+          </div>
+        </section>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/cascada.js' %}" defer></script>
+{% endblock %}

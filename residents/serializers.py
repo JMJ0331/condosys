@@ -22,6 +22,11 @@ class ResidentSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
 
+    def validate_apartment(self, departamento):
+        if departamento and not departamento.owner_id:
+            raise serializers.ValidationError('El departamento debe tener un propietario antes de asignarle residentes.')
+        return departamento
+
     def get_photo_url(self, obj):
         if obj.photo:
             request = self.context.get('request')

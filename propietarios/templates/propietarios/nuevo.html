@@ -88,6 +88,38 @@
           </div>
         </section>
 
+        <section class="tarjeta" aria-labelledby="titulo-departamentos">
+          <h3 class="cabecera-tarjeta" id="titulo-departamentos">Departamentos</h3>
+          <div class="cuerpo-tarjeta">
+            <p class="ayuda-formulario">Filtra por jardín, bloque y edificio y marca los departamentos del propietario. Solo aparecen los departamentos sin propietario y los que ya son suyos.</p>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_owner.jardin.id_for_label }}">{{ form_owner.jardin.label }}</label>
+                {{ form_owner.jardin }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_owner.bloque.id_for_label }}">{{ form_owner.bloque.label }}</label>
+                {{ form_owner.bloque }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_owner.edificio.id_for_label }}">{{ form_owner.edificio.label }}</label>
+                {{ form_owner.edificio }}
+              </div>
+            </div>
+            <div class="campo-formulario">
+              <span class="etiqueta-campo">{{ form_owner.departamentos.label }} *</span>
+              <div class="lista-casillas">
+                {% for casilla in form_owner.departamentos %}
+                <div class="opcion-casilla">{{ casilla.tag }}<label for="{{ casilla.id_for_label }}">{{ casilla.choice_label }}</label></div>
+                {% empty %}
+                <p class="ayuda-formulario">No hay departamentos disponibles.</p>
+                {% endfor %}
+              </div>
+              {{ form_owner.departamentos.errors }}
+            </div>
+          </div>
+        </section>
+
         <section class="tarjeta" aria-labelledby="titulo-cuenta">
           <h3 class="cabecera-tarjeta" id="titulo-cuenta">Contraseña</h3>
           <div class="cuerpo-tarjeta">
@@ -136,5 +168,6 @@
 
 {% block scripts %}
 <script src="{% static 'js/mascaras.js' %}" defer></script>
+<script src="{% static 'js/cascada.js' %}" defer></script>
 <script src="{% static 'js/nuevo-propietario.js' %}" defer></script>
 {% endblock %}

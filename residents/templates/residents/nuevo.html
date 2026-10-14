@@ -91,12 +91,33 @@
         <section class="tarjeta" aria-labelledby="titulo-residencia">
           <h3 class="cabecera-tarjeta" id="titulo-residencia">Residencia</h3>
           <div class="cuerpo-tarjeta">
+            <p class="ayuda-formulario">Filtra por jardín, bloque y edificio para encontrar el departamento. Solo aparecen departamentos que ya tienen propietario.</p>
+            <div class="fila-formulario">
+              <div class="campo-formulario">
+                <label for="{{ form_resident.jardin.id_for_label }}">{{ form_resident.jardin.label }}</label>
+                {{ form_resident.jardin }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_resident.bloque.id_for_label }}">{{ form_resident.bloque.label }}</label>
+                {{ form_resident.bloque }}
+              </div>
+              <div class="campo-formulario">
+                <label for="{{ form_resident.edificio.id_for_label }}">{{ form_resident.edificio.label }}</label>
+                {{ form_resident.edificio }}
+              </div>
+            </div>
             <div class="fila-formulario">
               <div class="campo-formulario">
                 <label for="{{ form_resident.apartment.id_for_label }}">{{ form_resident.apartment.label }}</label>
                 {{ form_resident.apartment }}
                 {{ form_resident.apartment.errors }}
               </div>
+              <div class="campo-formulario">
+                <span class="etiqueta-campo">Propietario</span>
+                <span class="propietario-departamento" data-cascada-propietario>—</span>
+              </div>
+            </div>
+            <div class="fila-formulario">
               <div class="campo-formulario">
                 <label for="{{ form_resident.tipo_relacion.id_for_label }}">{{ form_resident.tipo_relacion.label }}</label>
                 {{ form_resident.tipo_relacion }}
@@ -166,5 +187,6 @@
 
 {% block scripts %}
 <script src="{% static 'js/mascaras.js' %}" defer></script>
+<script src="{% static 'js/cascada.js' %}" defer></script>
 <script src="{% static 'js/nuevo-residente.js' %}" defer></script>
 {% endblock %}

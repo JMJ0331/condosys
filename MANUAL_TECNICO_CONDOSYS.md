@@ -600,7 +600,8 @@ Si el usuario no tiene el rol, el decorador muestra un mensaje de error y rediri
 | Clase | Regla | Se aplica en |
 | --- | --- | --- |
 | `IsAdmin` | `role in ROLES_ADMIN` | UserViewSet (listar, crear), ResidencialViewSet |
-| `IsManager` | `role in ROLES_GESTION` | Garden, Building, Propietario, Solicitud, AuditLog, Report |
+| `IsManager` | `role in ROLES_GESTION` | Propietario, Solicitud, AuditLog, Report |
+| `IsAdminOrGestionLectura` | lectura: `ROLES_GESTION`; escritura: solo admin | Garden, Block, Building |
 | `IsResident` | `role in ROLES_RESIDENTE` | CommonAreaViewSet, ReservationViewSet |
 | `IsGestionOrSoloLectura` | Autenticado y (método seguro o `role in ROLES_GESTION`) | Resident, Payment, MaintenanceCharge, AreaComun, Communication, Notification |
 | `CanModifyUser` | admin, o el propio usuario | UserViewSet (detalle, editar, borrar) |
@@ -728,7 +729,7 @@ accounts.User --SET_NULL--> structure.Garden (users)
 |
 +-- es referenciado por casi todos los modulos
 
-structure.Garden --CASCADE--> structure.Building --CASCADE--> structure.Apartment
+structure.Garden --PROTECT--> structure.Block --PROTECT--> structure.Building --PROTECT--> structure.Apartment
 |
 +---------------------------------------------------------------------+
 | SET_NULL (owner) CASCADE PROTECT                                     |
@@ -770,8 +771,9 @@ El núcleo espacial del sistema es una jerarquía de tres niveles que determina 
 
 | Modelo | App | Campos principales | Relaciones |
 | --- | --- | --- | --- |
-| Garden | structure | name (único), location, description, is_active | building_set, users, common_areas, communications |
-| Building | structure | name, tower, block, number_of_floors, description, is_active | garden (CASCADE, related_name='buildings') |
+| Garden | structure | name (único), location, description, is_active | blocks, buildings, users, common_areas, communications |
+| Block | structure | name, description, is_active | garden (PROTECT, related_name='blocks'); unique_together (garden, name) |
+| Building | structure | name (edificio = torre), number_of_floors, description, is_active | block (PROTECT, related_name='buildings'); garden (PROTECT, se sincroniza con el del bloque en `save()`) |
 | Apartment | structure | name, floor, status, photo, is_active | building (CASCADE), owner (SET_NULL -> Propietario) |
 
 *Tabla 6.1 - Jerarquía espacial.*
@@ -927,7 +929,7 @@ Resumen de los 25 modelos del sistema, agrupados por aplicación.
 | configuracion | IntegracionIA (configuración de IA, registro único) | 1 |
 | login | PasswordResetToken (token de recuperación de contraseña) | 1 |
 | residencial | Residencial (modelo de configuración singular) | 1 |
-| structure | Garden, Building, Apartment | 3 |
+| structure | Garden, Block, Building, Apartment | 4 |
 | propietarios | Propietario | 1 |
 | residents | Resident | 1 |
 | payments | Payment | 1 |
@@ -963,7 +965,7 @@ Un apartamento que se elimina arrastra sus residentes, pagos, incidencias, solic
 
 | Restricción | Modelo | Efecto |
 | --- | --- | --- |
-| unique_together (garden, name) | Building | No se repiten nombres de edificio dentro de un jardín |
+| unique_together (block, name) | Building | No se repiten nombres de edificio dentro de un bloque |
 | unique_together (building, name) | Apartment | No se repiten nombres de apartamento dentro de un edificio |
 | unique_together (garden, name) | reservations.CommonArea | No se repiten áreas dentro de un jardín |
 | UniqueConstraint (common_area, start_time, end_time) | Reservation | Bloquea reservas exactamente duplicadas |
@@ -1058,8 +1060,9 @@ Cada aplicación monta su propio DefaultRouter. No existe un prefijo global /api
 | --- | --- | --- | --- |
 | accounts | /cuentas/ | UserViewSet | login, profile, change_password, logout |
 | residencial | /residencial/residencial/ | ResidencialViewSet | - |
-| structure | /departamentos/jardines/ | GardenViewSet | - |
-| structure | /departamentos/edificios/ | BuildingViewSet | - |
+| structure | /departamentos/jardines/ | GardenViewSet | IsAdminOrGestionLectura |
+| structure | /departamentos/bloques/ | BlockViewSet | IsAdminOrGestionLectura |
+| structure | /departamentos/edificios/ | BuildingViewSet | IsAdminOrGestionLectura |
 | structure | /departamentos/departamentos/ | ApartmentViewSet | - |
 | propietarios | /propietarios/ | PropietarioViewSet | - |
 | residents | /residentes/ | ResidentViewSet | - |

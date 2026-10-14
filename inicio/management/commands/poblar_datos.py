@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         from accounts.models import User
-        from structure.models import Garden, Building, Apartment
+        from structure.models import Garden, Block, Building, Apartment
         from propietarios.models import Propietario
         from residents.models import Resident
         from payments.models import Payment
@@ -84,10 +84,14 @@ class Command(BaseCommand):
                 ('Torre E', 'E', 'Bloque 3', 12),
             ]
             edificios = []
-            for i, (nombre, torre, bloque, pisos) in enumerate(edificios_datos):
+            for i, (nombre, _torre, nombre_bloque, pisos) in enumerate(edificios_datos):
+                bloque, _ = Block.objects.update_or_create(
+                    garden=jardines[i], name=nombre_bloque,
+                    defaults={'is_active': True},
+                )
                 edificio, _ = Building.objects.update_or_create(
-                    garden=jardines[i], name=nombre,
-                    defaults={'tower': torre, 'block': bloque,
+                    block=bloque, name=nombre,
+                    defaults={'garden': jardines[i],
                               'number_of_floors': pisos, 'is_active': True},
                 )
                 edificios.append(edificio)

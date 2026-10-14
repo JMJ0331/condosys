@@ -41,6 +41,7 @@ urlpatterns = [
     path('residentes/', include('residents.urls')),
     path('solicitudes/', include('solicitudes.urls')),
     path('departamentos/', include('structure.urls')),
+    path('estructura/', include('structure.urls_estructura')),
     path('visitantes/', include('visitors.urls')),
 ]
 

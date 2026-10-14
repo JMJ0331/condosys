@@ -3,6 +3,7 @@ from django.test import TestCase
 
 from accounts.models import User
 from accounts.serializers import UserSerializer
+from propietarios.models import Propietario
 from structure.models import Apartment, Building, Garden
 
 from .forms import ResidentForm
@@ -15,7 +16,9 @@ CLAVE = 'ClaveSegura123!'
 def crear_apartamento(nombre='T-101'):
     jardin = Garden.objects.create(name='Jardín Pruebas')
     edificio = Building.objects.create(garden=jardin, name='Torre P')
-    return Apartment.objects.create(building=edificio, name=nombre)
+    # Un residente solo puede ir a un departamento que ya tiene propietario.
+    propietario = Propietario.objects.create(full_name='Dueño Pruebas', cedula='402-0000099-9', phone='809-555-0099')
+    return Apartment.objects.create(building=edificio, name=nombre, owner=propietario)
 
 
 def datos_residente(apartamento, **extras):

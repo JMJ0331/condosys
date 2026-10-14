@@ -3,7 +3,7 @@ from django.db.models import CASCADE, PROTECT, SET_NULL
 import uuid
 
 # ==================================================
-# ESTRUCTURA FÍSICA: Jardín → Edificio → Apartamento
+# ESTRUCTURA FÍSICA: Jardín → Bloque → Edificio → Apartamento
 # ==================================================
 
 class Garden(models.Model):
@@ -28,16 +28,39 @@ class Garden(models.Model):
         return self.name
 
 
-class Building(models.Model):
+class Block(models.Model):
     """
-    Edificio
-    Pertenece a un Jardín
+    Bloque
+    Pertenece a un Jardín y agrupa edificios (torres)
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    garden = models.ForeignKey(Garden, on_delete=CASCADE, related_name='buildings')
+    garden = models.ForeignKey(Garden, on_delete=PROTECT, related_name='blocks')
     name = models.CharField(max_length=50)
-    tower = models.CharField(max_length=50, blank=True, null=True)
-    block = models.CharField(max_length=50, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['garden', 'name']
+        unique_together = ('garden', 'name')
+        verbose_name_plural = 'Blocks'
+
+    def __str__(self):
+        return f"{self.garden.name} - {self.name}"
+
+
+class Building(models.Model):
+    """
+    Edificio (torre)
+    Pertenece a un Bloque; `garden` se mantiene sincronizado con el del bloque
+    para conservar los filtros existentes por jardín.
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    garden = models.ForeignKey(Garden, on_delete=PROTECT, related_name='buildings')
+    block = models.ForeignKey(Block, on_delete=PROTECT, related_name='buildings')
+    name = models.CharField(max_length=50)
     number_of_floors = models.PositiveIntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     
@@ -46,15 +69,23 @@ class Building(models.Model):
     is_active = models.BooleanField(default=True)
     
     class Meta:
-        ordering = ['garden', 'name']
-        unique_together = ('garden', 'name')
+        ordering = ['garden', 'block', 'name']
+        unique_together = ('block', 'name')
         verbose_name_plural = 'Buildings'
         indexes = [
             models.Index(fields=['garden']),
         ]
     
     def __str__(self):
-        return f"{self.garden.name} - {self.name}"
+        return f"{self.garden.name} - {self.block.name} - {self.name}"
+
+    def save(self, *args, **kwargs):
+        if self.block_id:
+            self.garden_id = self.block.garden_id
+        elif self.garden_id:
+            # Compatibilidad: un edificio creado solo con jardín cae en el bloque "General".
+            self.block, _ = Block.objects.get_or_create(garden_id=self.garden_id, name='General')
+        super().save(*args, **kwargs)
 
 
 class Apartment(models.Model):
@@ -70,7 +101,7 @@ class Apartment(models.Model):
     )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    building = models.ForeignKey(Building, on_delete=CASCADE, related_name='apartments')
+    building = models.ForeignKey(Building, on_delete=PROTECT, related_name='apartments')
     name = models.CharField(max_length=50, help_text='Nombre del departamento')
     owner = models.ForeignKey(
         'propietarios.Propietario',

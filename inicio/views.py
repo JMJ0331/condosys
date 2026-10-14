@@ -58,7 +58,7 @@ def _actividad_reciente():
             'tipo': 'incidencia',
             'texto': (
                 'Nueva incidencia reportada en '
-                f'{incidencia.apartment.building.tower or incidencia.apartment.building.name} '
+                f'{incidencia.apartment.building.name} '
                 f'{incidencia.apartment.name}.'
             ),
             'fecha': incidencia.created_at,

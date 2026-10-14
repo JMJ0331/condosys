@@ -5,11 +5,11 @@ from django.shortcuts import redirect, render
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from accounts.decorators import role_required
-from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, CanAccessApartment, IsManager
+from accounts.permissions import ROLES_GESTION, ROLES_RESIDENTE, CanAccessApartment, IsAdminOrGestionLectura
 from residencial.models import Residencial
-from .models import Garden, Building, Apartment
+from .models import Garden, Block, Building, Apartment
 from .serializers import (
-    GardenSerializer, BuildingSerializer,
+    GardenSerializer, BlockSerializer, BuildingSerializer,
     ApartmentListSerializer, ApartmentDetailSerializer
 )
 from .forms import ApartmentsForm
@@ -38,18 +38,21 @@ def distribucion_residencial():
 def app_index(request):
     apartamentos_qs = (
         _apartamentos_visibles(request.user)
-        .select_related('building__garden', 'owner')
+        .select_related('building__garden', 'building__block', 'owner')
         .order_by('-created_at')
     )
 
     estado = request.GET.get('estado', '')
     jardin = request.GET.get('jardin', '')
+    bloque = request.GET.get('bloque', '')
     edificio = request.GET.get('edificio', '')
 
     if estado:
         apartamentos_qs = apartamentos_qs.filter(status=estado)
     if jardin:
         apartamentos_qs = apartamentos_qs.filter(building__garden_id=jardin)
+    if bloque:
+        apartamentos_qs = apartamentos_qs.filter(building__block_id=bloque)
     if edificio:
         apartamentos_qs = apartamentos_qs.filter(building_id=edificio)
 
@@ -68,10 +71,12 @@ def app_index(request):
     contexto = {
         'departamentos': departamentos,
         'jardines': Garden.objects.filter(is_active=True),
+        'bloques': Block.objects.filter(is_active=True),
         'edificios': Building.objects.filter(is_active=True),
         'distribucion_residencial': distribucion_residencial(),
         'estado_actual': estado,
         'jardin_actual': jardin,
+        'bloque_actual': bloque,
         'edificio_actual': edificio,
         'paginacion_query': query.urlencode(),
         'module_name': 'Departamentos'
@@ -93,8 +98,6 @@ def agregar_departamento(request):
 
     contexto = {
         'form_apartments': form,
-        'jardines': Garden.objects.filter(is_active=True),
-        'edificios': Building.objects.filter(is_active=True),
         'distribucion_residencial': distribucion_residencial(),
         'module_name': 'Departamentos',
         'titulo_modulo': 'Agregar departamento',
@@ -107,7 +110,7 @@ def agregar_departamento(request):
 
 @role_required(*ROLES_GESTION)
 def actualizar_departamento(request, pk):
-    apartamento = Apartment.objects.select_related('building__garden').filter(pk=pk).first()
+    apartamento = Apartment.objects.select_related('building__garden', 'building__block', 'owner').filter(pk=pk).first()
     if not apartamento:
         messages.error(request, 'Departamento no encontrado.')
         return redirect('departamentos_index')
@@ -124,9 +127,6 @@ def actualizar_departamento(request, pk):
 
     contexto = {
         'form_apartments': form,
-        'jardines': Garden.objects.filter(is_active=True),
-        'edificios': Building.objects.filter(is_active=True),
-        'edificio_actual': apartamento.building,
         'distribucion_residencial': distribucion_residencial(),
         'module_name': 'Departamentos',
         'titulo_modulo': 'Actualizar departamento',
@@ -158,23 +158,35 @@ class GardenViewSet(viewsets.ModelViewSet):
     """ViewSet para Garden"""
     queryset = Garden.objects.filter(is_active=True)
     serializer_class = GardenSerializer
-    permission_classes = [IsManager]
+    permission_classes = [IsAdminOrGestionLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'location']
     ordering_fields = ['created_at', 'name']
     ordering = ['-created_at']
 
 
-class BuildingViewSet(viewsets.ModelViewSet):
-    """ViewSet para Building"""
-    queryset = Building.objects.filter(is_active=True)
-    serializer_class = BuildingSerializer
-    permission_classes = [IsManager]
+class BlockViewSet(viewsets.ModelViewSet):
+    """ViewSet para Block"""
+    queryset = Block.objects.filter(is_active=True).select_related('garden')
+    serializer_class = BlockSerializer
+    permission_classes = [IsAdminOrGestionLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'garden__name']
     ordering_fields = ['created_at', 'name']
     ordering = ['garden', 'name']
     filterset_fields = ['garden']
+
+
+class BuildingViewSet(viewsets.ModelViewSet):
+    """ViewSet para Building"""
+    queryset = Building.objects.filter(is_active=True).select_related('garden', 'block')
+    serializer_class = BuildingSerializer
+    permission_classes = [IsAdminOrGestionLectura]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'garden__name', 'block__name']
+    ordering_fields = ['created_at', 'name']
+    ordering = ['garden', 'block', 'name']
+    filterset_fields = ['garden', 'block']
 
 
 class ApartmentViewSet(viewsets.ModelViewSet):

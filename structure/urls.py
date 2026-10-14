@@ -1,12 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
-    GardenViewSet, BuildingViewSet, ApartmentViewSet, app_index,
+    GardenViewSet, BlockViewSet, BuildingViewSet, ApartmentViewSet, app_index,
     agregar_departamento, actualizar_departamento, eliminar_departamento,
 )
 
 router = DefaultRouter()
 router.register(r'jardines', GardenViewSet, basename='jardin')
+router.register(r'bloques', BlockViewSet, basename='bloque')
 router.register(r'edificios', BuildingViewSet, basename='edificio')
 router.register(r'departamentos', ApartmentViewSet, basename='departamento')
 

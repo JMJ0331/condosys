@@ -339,7 +339,7 @@ def generar_comprobante(request):
     fecha_label = (fecha_pago or hoy).strftime('%d/%m/%Y')
 
     if apartment:
-        bloque = apartment.building.tower or apartment.building.name
+        bloque = apartment.building.name
         departamento_label = f'{bloque} - {apartment.name}'
     else:
         departamento_label = '—'

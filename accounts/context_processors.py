@@ -4,7 +4,7 @@ usuario autenticado (se usa en el aside del menú lateral). Ocultado 100%
 server-side: los módulos no permitidos ni siquiera llegan al HTML.
 """
 
-from accounts.permissions import ROLES_GESTION, ROLES_SEGURIDAD, ROLES_RESIDENTE
+from accounts.permissions import ROLES_ADMIN, ROLES_GESTION, ROLES_SEGURIDAD, ROLES_RESIDENTE
 
 # Roles que pueden crear/editar/eliminar en cada módulo (mirror de los
 # decoradores @role_required de las vistas de función).
@@ -23,6 +23,9 @@ ROL_CREADOR = {
     'comunicados': ROLES_GESTION,
     'reportes': ROLES_GESTION,
     'residencial': ROLES_GESTION,
+    'jardines': ROLES_ADMIN,
+    'bloques': ROLES_ADMIN,
+    'edificios': ROLES_ADMIN,
 }
 ROL_EDITOR = {
     'inicio': (),
@@ -35,10 +38,13 @@ ROL_EDITOR = {
     'solicitudes': ROLES_GESTION,
     'visitantes': ROLES_SEGURIDAD,
     'areas_comunes': ROLES_GESTION,
-'reservas': ROLES_RESIDENTE,
+    'reservas': ROLES_RESIDENTE,
     'comunicados': ROLES_GESTION,
     'reportes': ROLES_GESTION,
     'residencial': ('admin',),
+    'jardines': ROLES_ADMIN,
+    'bloques': ROLES_ADMIN,
+    'edificios': ROLES_ADMIN,
 }
 ROL_ELIMINADOR = {
     'inicio': (),
@@ -55,6 +61,9 @@ ROL_ELIMINADOR = {
     'comunicados': ROLES_GESTION,
     'reportes': ROLES_GESTION,
     'residencial': ('admin',),
+    'jardines': ROLES_ADMIN,
+    'bloques': ROLES_ADMIN,
+    'edificios': ROLES_ADMIN,
 }
 
 
@@ -67,6 +76,44 @@ MODULOS = [
         'icono': 'images/icons/blancos/Container_white.svg',
         'alt': 'home-icon',
         'roles': ROLES_RESIDENTE,
+    },
+    {
+        'clave': 'estructura',
+        'nombre': 'Estructura',
+        'icono': 'images/icons/blancos/residencial.svg',
+        'alt': 'estructura-icon',
+        'roles': ROLES_ADMIN,
+        # Grupo desplegable del menú: no tiene URL propia, solo agrupa
+        # los módulos de la jerarquía física que solo crea el administrador.
+        'hijos': [
+            {
+                'clave': 'jardines',
+                'nombre': 'Jardines',
+                'url': 'jardines_index',
+                'activo_en': ['jardines_index', 'agregar_jardin', 'actualizar_jardin'],
+                'icono': 'images/icons/blancos/leaf_white.svg',
+                'alt': 'jardin-icon',
+                'roles': ROLES_ADMIN,
+            },
+            {
+                'clave': 'bloques',
+                'nombre': 'Bloques',
+                'url': 'bloques_index',
+                'activo_en': ['bloques_index', 'agregar_bloque', 'actualizar_bloque'],
+                'icono': 'images/icons/blancos/page_white.svg',
+                'alt': 'bloque-icon',
+                'roles': ROLES_ADMIN,
+            },
+            {
+                'clave': 'edificios',
+                'nombre': 'Edificios',
+                'url': 'edificios_index',
+                'activo_en': ['edificios_index', 'agregar_edificio', 'actualizar_edificio'],
+                'icono': 'images/icons/blancos/city_white.svg',
+                'alt': 'edificio-icon',
+                'roles': ROLES_ADMIN,
+            },
+        ],
     },
     {
         'clave': 'departamentos',
@@ -234,13 +281,41 @@ MODULOS = [
 ]
 
 
+def _modulos_planos():
+    """MODULOS con los hijos de cada grupo al mismo nivel (sin los grupos)."""
+    planos = []
+    for modulo in MODULOS:
+        planos.extend(modulo.get('hijos') or [modulo])
+    return planos
+
+
+def _modulos_visibles(role):
+    """Módulos del menú para el rol; cada grupo conserva solo los hijos
+    permitidos y reúne sus `activo_en` para saber si debe mostrarse abierto."""
+    visibles = []
+    for modulo in MODULOS:
+        if role not in modulo['roles']:
+            continue
+        if 'hijos' in modulo:
+            hijos = [hijo for hijo in modulo['hijos'] if role in hijo['roles']]
+            if not hijos:
+                continue
+            modulo = {
+                **modulo,
+                'hijos': hijos,
+                'activo_en': [nombre for hijo in hijos for nombre in hijo['activo_en']],
+            }
+        visibles.append(modulo)
+    return visibles
+
+
 def modulos_usuario(request):
     """Devuelve los módulos visibles según el rol del usuario autenticado."""
     if not hasattr(request, 'user') or not request.user.is_authenticated:
-        return {'modulos_habilitados': MODULOS, 'modulos_acceso': {m['clave']: False for m in MODULOS}}
+        return {'modulos_habilitados': MODULOS, 'modulos_acceso': {m['clave']: False for m in _modulos_planos()}}
     role = request.user.role
-    habilitados = [modulo for modulo in MODULOS if role in modulo['roles']]
-    modulos_acceso = {modulo['clave']: role in modulo['roles'] for modulo in MODULOS}
+    habilitados = _modulos_visibles(role)
+    modulos_acceso = {modulo['clave']: role in modulo['roles'] for modulo in _modulos_planos()}
     return {'modulos_habilitados': habilitados, 'modulos_acceso': modulos_acceso}
 
 
@@ -249,7 +324,7 @@ def _modulo_actual(request):
     if not hasattr(request, 'resolver_match') or not request.resolver_match:
         return ''
     url_name = request.resolver_match.url_name
-    for modulo in MODULOS:
+    for modulo in _modulos_planos():
         if url_name in modulo['activo_en']:
             return modulo['clave']
     return ''
@@ -271,7 +346,7 @@ def permisos_modulo(request):
             'editar': role in ROL_EDITOR.get(modulo['clave'], ()),
             'eliminar': role in ROL_ELIMINADOR.get(modulo['clave'], ()),
         }
-        for modulo in MODULOS
+        for modulo in _modulos_planos()
     }
     clave = _modulo_actual(request)
     clave_perms = permisos_modulos.get(clave, {})

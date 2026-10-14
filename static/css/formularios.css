@@ -328,3 +328,44 @@ input:disabled {
 		grid-template-columns: 1fr;
 	}
 }
+/* Lista de casillas en cascada (p. ej. departamentos de un propietario,
+   ver static/js/cascada.js). */
+.lista-casillas {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-4);
+	max-height: 24rem;
+	overflow-y: auto;
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-4);
+	padding: var(--padding-8) var(--padding-12);
+	background: var(--white-50);
+}
+
+.opcion-casilla {
+	display: flex;
+	align-items: center;
+	gap: var(--space-8);
+	font-size: 1.4rem;
+	color: var(--black-300);
+}
+
+.opcion-casilla[hidden] {
+	display: none;
+}
+
+.opcion-casilla input {
+	width: auto;
+	height: auto;
+	accent-color: var(--green-600);
+	cursor: pointer;
+}
+
+.opcion-casilla label {
+	cursor: pointer;
+}
+
+.propietario-departamento {
+	font-size: 1.4rem;
+	color: var(--black-300);
+}

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Garden, Building, Apartment
+from .models import Garden, Block, Building, Apartment
 
 
 class GardenSerializer(serializers.ModelSerializer):
@@ -14,19 +14,32 @@ class GardenSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at', 'updated_at']
 
 
-class BuildingSerializer(serializers.ModelSerializer):
-    """Serializer para Building"""
+class BlockSerializer(serializers.ModelSerializer):
+    """Serializer para Block"""
     garden_name = serializers.CharField(source='garden.name', read_only=True)
+
+    class Meta:
+        model = Block
+        fields = [
+            'id', 'garden', 'garden_name', 'name', 'description',
+            'is_active', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class BuildingSerializer(serializers.ModelSerializer):
+    """Serializer para Building (el jardín se toma del bloque)"""
+    garden_name = serializers.CharField(source='garden.name', read_only=True)
+    block_name = serializers.CharField(source='block.name', read_only=True)
     
     class Meta:
         model = Building
         fields = [
-            'id', 'garden', 'garden_name', 'name',
-            'tower', 'block',
+            'id', 'garden', 'garden_name', 'block', 'block_name', 'name',
             'number_of_floors', 'description',
             'is_active', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'garden', 'created_at', 'updated_at']
 
 
 class ApartmentListSerializer(serializers.ModelSerializer):

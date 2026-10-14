@@ -2,6 +2,9 @@ from django import forms
 from django.core.exceptions import ValidationError
 from PIL import Image
 from accounts.forms import CuentaUsuarioFormBase
+from structure.campos import campo_bloque, campo_edificio, campo_jardin
+from structure.models import Apartment
+from structure.widgets import SelectCascada
 from .models import Resident
 
 # Restricciones de imagen compartidas por todos los formularios que suben fotos.
@@ -61,7 +64,11 @@ class ResidentForm(CuentaUsuarioFormBase):
             'email': forms.EmailInput(attrs={'placeholder': 'Correo electrónico'}),
             'emergency_contact': forms.TextInput(attrs={'placeholder': '(000)-000-0000', 'maxlength': '14', 'data-mascara': 'telefono'}),
             # Clases 'campo-seleccion' y 'entrada-interruptor' vienen de static/css/formularios.css.
+<<<<<<< Updated upstream
             'apartment': forms.Select(attrs={'class': 'campo-seleccion', 'data-autocompletar': ''}),
+=======
+            'apartment': SelectCascada('departamento'),
+>>>>>>> Stashed changes
             'tipo_relacion': forms.Select(attrs={'class': 'campo-seleccion'}),
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}, format='%Y-%m-%d'),
             'mascotas': forms.Select(attrs={'class': 'campo-seleccion'}),
@@ -84,10 +91,32 @@ class ResidentForm(CuentaUsuarioFormBase):
             + [(valor, etiqueta) for valor, etiqueta in self.fields['mascotas'].choices if valor]
         )
         self.fields['apartment'].empty_label = 'Elegir departamento'
+        # Solo departamentos con propietario (más el actual del residente).
+        departamentos = Apartment.objects.filter(is_active=True, owner__isnull=False)
+        if self.instance.apartment_id:
+            departamentos = departamentos | Apartment.objects.filter(pk=self.instance.apartment_id)
+            edificio = self.instance.apartment.building
+            self.initial.setdefault('jardin', edificio.garden_id)
+            self.initial.setdefault('bloque', edificio.block_id)
+            self.initial.setdefault('edificio', edificio.id)
+        self.fields['apartment'].queryset = departamentos.distinct().select_related(
+            'building__garden', 'building__block', 'owner'
+        ).order_by('building__garden__name', 'building__block__name', 'building__name', 'name')
         if not self.instance.pk:
             # Formulario de alta: mostrar los "Elegir..." en vez de los valores por defecto.
             self.fields['marital_status'].initial = ''
             self.fields['tipo_relacion'].initial = ''
+
+    # Filtros en cascada (no se guardan): reducen la lista de departamentos.
+    jardin = campo_jardin()
+    bloque = campo_bloque()
+    edificio = campo_edificio()
+
+    def clean_apartment(self):
+        departamento = self.cleaned_data.get('apartment')
+        if departamento and not departamento.owner_id:
+            raise forms.ValidationError('El departamento debe tener un propietario antes de asignarle residentes.')
+        return departamento
 
     photo = forms.ImageField(
         required=False,

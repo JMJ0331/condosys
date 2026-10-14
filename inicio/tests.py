@@ -13,7 +13,7 @@ from structure.models import Apartment, Building, Garden
 
 def crear_estructura(nombre='A-102'):
     jardin = Garden.objects.create(name='Jardín Central')
-    edificio = Building.objects.create(garden=jardin, name='Torre A', tower='Torre A')
+    edificio = Building.objects.create(garden=jardin, name='Torre A')
     return Apartment.objects.create(building=edificio, name=nombre)
 
 

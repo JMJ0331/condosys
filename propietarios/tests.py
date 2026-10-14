@@ -3,12 +3,22 @@ from django.test import TestCase
 
 from accounts.models import User
 from accounts.serializers import UserSerializer
+from structure.models import Apartment, Block, Building, Garden
 
 from .forms import PropietarioForm
 from .models import Propietario
 from .serializers import PropietarioSerializer
 
 CLAVE = 'ClaveSegura123!'
+
+
+def departamento_de_prueba():
+    """El propietario debe elegir al menos un departamento."""
+    jardin, _ = Garden.objects.get_or_create(name='Jardín Propietarios')
+    bloque, _ = Block.objects.get_or_create(garden=jardin, name='Bloque Q')
+    edificio, _ = Building.objects.get_or_create(block=bloque, garden=jardin, name='Torre Q')
+    departamento, _ = Apartment.objects.get_or_create(building=edificio, name='Q-101')
+    return departamento
 
 
 def datos_propietario(**extras):
@@ -22,6 +32,7 @@ def datos_propietario(**extras):
         'is_active': 'on',
         'password': CLAVE,
         'password_confirmation': CLAVE,
+        'departamentos': [str(departamento_de_prueba().pk)],
     }
     datos.update(extras)
     return datos
