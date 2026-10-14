@@ -21,6 +21,7 @@ class MaintenanceChargeForm(forms.ModelForm):
             'apartment': forms.Select(attrs={
                 'class': 'campo-seleccion',
                 'data-mantenimiento': 'departamento',
+                'data-autocompletar': '',
             }),
             'amount': forms.NumberInput(attrs={
                 'class': 'campo-entrada',
