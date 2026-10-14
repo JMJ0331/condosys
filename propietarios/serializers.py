@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Propietario
-from structure.serializers import ApartmentListSerializer
 
 
 class PropietarioSerializer(serializers.ModelSerializer):

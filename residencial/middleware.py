@@ -2,10 +2,13 @@ from django.shortcuts import redirect
 
 
 class ResidencialSetupMiddleware:
-    """Fuerza a admin/manager a configurar el residencial antes de usar el sistema.
+    """Fuerza al admin a configurar el residencial antes de usar el sistema.
 
     Mientras no exista el registro del residencial, redirige a /residencial/.
-    El sidebar muestra el resto de opciones en gris (ver aside.html).
+    Ese módulo es exclusivo del admin, así que el gate no debe aplicarse a
+    otros roles: el manager es rechazado allí y el propio middleware lo
+    devolvería a /residencial/ en bucle. El sidebar muestra el resto de
+    opciones en gris (ver aside.html).
     """
 
     RUTAS_EXENTAS = ('/residencial/', '/admin/', '/static/', '/media/')
@@ -18,7 +21,7 @@ class ResidencialSetupMiddleware:
         if (
             user is not None
             and user.is_authenticated
-            and getattr(user, 'role', '') in ('admin', 'manager')
+            and getattr(user, 'role', '') == 'admin'
             and not request.path.startswith(self.RUTAS_EXENTAS)
         ):
             from residencial.models import Residencial

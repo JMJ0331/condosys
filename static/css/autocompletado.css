@@ -1,0 +1,71 @@
+@import url("variables.css");
+
+/* ==========================================================================
+   Autocompletado de selects (buscador de departamentos/apartamentos).
+
+   Mejora progresiva sobre un <select data-autocompletar>: el select nativo
+   permanece en el formulario (oculto) como fuente de verdad y el componente
+   añade una entrada de texto con una lista filtrable. La lista se inserta en
+   el <body> desde el JS para no quedar recortada por el `overflow: hidden`
+   de las tarjetas.
+   ========================================================================== */
+
+.autocompletado {
+	position: relative;
+	width: 100%;
+}
+
+/* El select original queda fuera de la vista pero sigue enviando su valor. */
+.autocompletado-select {
+	display: none;
+}
+
+/* La entrada hereda el estilo de `.campo-formulario input`; aquí solo se
+   añade el icono de despliegue y el espacio que necesita a la derecha. */
+.campo-formulario .autocompletado-entrada {
+	padding-right: 3.2rem;
+	background: var(--white-50) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 1rem center;
+}
+
+.autocompletado-lista {
+	z-index: 100;
+	box-sizing: border-box;
+	margin: 0;
+	padding: var(--padding-4);
+	list-style: none;
+	overflow-y: auto;
+	max-height: 24rem;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	box-shadow: var(--shadow-400);
+}
+
+.autocompletado-lista[hidden] {
+	display: none;
+}
+
+.autocompletado-opcion {
+	padding: var(--padding-8) var(--padding-12);
+	border-radius: var(--borderR-4);
+	font-size: 1.3rem;
+	font-weight: 520;
+	color: var(--black-300);
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.autocompletado-opcion.activo,
+.autocompletado-opcion:hover {
+	background: var(--green-100);
+	color: var(--green-900);
+}
+
+.autocompletado-vacio {
+	padding: var(--padding-8) var(--padding-12);
+	font-size: 1.2rem;
+	color: var(--white-800);
+	text-align: center;
+}

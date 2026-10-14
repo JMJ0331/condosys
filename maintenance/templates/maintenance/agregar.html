@@ -55,6 +55,13 @@
                 {{ form_cargo.effective_date.errors }}
               </div>
             </div>
+            <div class="fila-formulario">
+              <div class="campo-formulario campo-ancho-completo">
+                <label for="{{ form_cargo.payment_methods.id_for_label }}">{{ form_cargo.payment_methods.label }}</label>
+                {{ form_cargo.payment_methods }}
+                {{ form_cargo.payment_methods.errors }}
+              </div>
+            </div>
           </div>
         </section>
 

@@ -6,7 +6,7 @@ from .models import Visitor
 class VisitorAdmin(admin.ModelAdmin):
     list_display = ('name', 'apartment', 'type', 'status', 'scheduled_entry', 'actual_entry')
     list_filter = ('type', 'status', 'scheduled_entry')
-    search_fields = ('name', 'document', 'apartment__number')
+    search_fields = ('name', 'document', 'apartment__name')
     readonly_fields = ('created_at', 'updated_at', 'actual_entry', 'actual_exit')
     ordering = ('-scheduled_entry',)
     fieldsets = (

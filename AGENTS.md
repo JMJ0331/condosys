@@ -1,13 +1,13 @@
 # AGENTS.md
 
-Sistema de administración residencial **CONDYSOS** (Django 6.1 + DRF + Channels). No hay README; este es el único doc.
+Sistema de administración residencial **CONDOSYS** (Django 6.1 + DRF + Channels). No hay README; este es el único doc.
 
 ## Repo y git
 
-- El **repo Git vive en `tecnico\condosys\`** (un nivel arriba de la carpeta del proyecto). El proyecto Django (con `manage.py`) está en `tecnico\condosys\condosys\`.
+- El **repo Git y el proyecto Django están aplanados en la misma raíz**: `manage.py`, el paquete de config `condosys\`, cada app, `templates\`, `static\`, `venv\` y `.gitignore` viven todos en el nivel superior del repo. La estructura antigua con el proyecto en `tecnico\condosys\condosys\` **ya no existe** (se aplanó en el commit `9845d34`). Corre todos los comandos de `manage.py` **desde la raíz del repo**.
 - Remoto `origin`: `https://github.com/JMJ0331/condosys.git`. Rama de trabajo: **`desarrollo`** (desarrollar ahí; `main` es estable).
 - Mensajes de commit en español con prefijos cortos: `add:`, `fix:`, `update:`, `refactor:`. Los mensajes se escriben **en pretérito indefinido** (ej. "a nivel de código: añadí", "agregué", "integré", "renombré", "arreglé", no en infinitivo ni presente).
-- `.gitignore` está dentro de `condosys\.gitignore` (protege `.env`, `db.sqlite3`, `.venv`, `__pycache__`).
+- `.gitignore` está en la **raíz del repo** (`\.gitignore`; protege `.env`, `db.sqlite3`, `venv/`, `.venv/`, `__pycache__`).
 
 ## Comandos (Windows)
 
@@ -33,7 +33,7 @@ Sistema de administración residencial **CONDYSOS** (Django 6.1 + DRF + Channels
 ## Modelo de usuario y roles (crítico)
 
 - `AUTH_USER_MODEL = 'accounts.User'`: **sin `username`**, login con email (`USERNAME_FIELD='email'`), PK UUID.
-- Roles en `user.role`: `admin`, `manager`, `resident`, `maintenance`, `security`. Estados en `user.status`: `active`, `inactive`, `pending`. El login manual (`login\views.py`) rechaza a quien no tenga `status == 'active'`.
+- Roles en `user.role`: `admin`, `manager`, `resident`, `propietario`, `security`. Estados en `user.status`: `active`, `inactive`, `pending`. El login manual (`login\views.py`) rechaza a quien no tenga `status == 'active'`.
 - Los permisos DRF por rol viven en `accounts\permissions.py` (`IsManager`, `IsResident`, ...). Úsalos en los ViewSets en lugar de repetir chequeos de rol.
 
 ## Permisos por rol de usuario

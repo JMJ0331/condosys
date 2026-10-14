@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import CASCADE
 from accounts.models import User
+from accounts.validators import validar_cedula, validar_telefono, validar_contacto_emergencia
 import uuid
 
 # ==================================================
@@ -35,13 +36,13 @@ class Propietario(models.Model):
     # Información personal
     full_name = models.CharField(max_length=100)
     marital_status = models.CharField(max_length=30, choices=MARITAL_CHOICES, default='single')
-    cedula = models.CharField(max_length=50, unique=True)
+    cedula = models.CharField(max_length=13, unique=True, validators=[validar_cedula])
     photo = models.ImageField(upload_to='propietarios/', blank=True, null=True)
 
     # Información de contacto
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=14, validators=[validar_telefono])
     email = models.EmailField(blank=True, null=True)
-    emergency_contact = models.CharField(max_length=20, blank=True, null=True)
+    emergency_contact = models.CharField(max_length=14, blank=True, null=True, validators=[validar_contacto_emergencia])
 
     # Estado del registro
     is_active = models.BooleanField(default=True)

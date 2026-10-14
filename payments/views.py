@@ -257,7 +257,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     permission_classes = [IsGestionOrSoloLectura]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['resident__full_name', 'apartment__number', 'resident__cedula']
+    search_fields = ['resident__full_name', 'apartment__name', 'resident__cedula']
     ordering_fields = ['period', 'payment_date', 'status']
     ordering = ['-period']
     filterset_fields = ['apartment', 'resident', 'status', 'payment_method', 'concept']

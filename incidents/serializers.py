@@ -44,7 +44,7 @@ class IncidentDetailSerializer(serializers.ModelSerializer):
     """Serializer detallado para Incident"""
     reported_by_detail = UserSerializer(source='reported_by', read_only=True)
     assigned_to_detail = UserSerializer(source='assigned_to', read_only=True)
-    history = IncidentHistorySerializer(source='incidenthistory_set', many=True, read_only=True)
+    history = IncidentHistorySerializer(many=True, read_only=True)
     images = IncidentImageSerializer(many=True, read_only=True)
     
     class Meta:

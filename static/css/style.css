@@ -365,14 +365,46 @@ aside {
 
 .app-log{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    gap: var(--space-8);
     position: sticky;
     top: 0;
     z-index: 10;
     background-color: var(--green-900);
     padding-bottom: var(--padding-8);
+}
+
+.contenedor-marca{
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    min-width: 0;
+}
+
+.boton-colapsar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--borderR-8);
+    cursor: pointer;
+}
+
+.boton-colapsar:hover{
+    background: var(--white-50-hover);
+}
+
+.boton-colapsar img{
+    width: 2rem;
+    height: 2rem;
+    transform: rotate(90deg);
+    transition: transform 0.2s ease;
 }
 
 .container-img{
@@ -622,6 +654,57 @@ aside .opt-modulo h4 {
     font-weight: 500;
 }
 
+/* Sidebar colapsable: solo iconos (solo escritorio) */
+@media (min-width: 769px) {
+    body.colapsado .container {
+        grid-template-columns: 8rem 1fr;
+    }
+
+    body.colapsado .app-log {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    body.colapsado .contenedor-marca {
+        justify-content: center;
+    }
+
+    body.colapsado .container-info,
+    body.colapsado aside .opt-modulo h4,
+    body.colapsado .info-usuario,
+    body.colapsado .icono-desplegar {
+        display: none;
+    }
+
+    body.colapsado aside .opt-modulo {
+        justify-content: center;
+    }
+
+    body.colapsado .usuario-sidebar {
+        justify-content: center;
+    }
+
+    body.colapsado .boton-usuario {
+        justify-content: center;
+    }
+
+    /* El menú flotante de la cuenta se angosta con el sidebar: se le da
+       ancho propio y se deja salir del lateral para que se lea bien. */
+    body.colapsado aside {
+        overflow: visible;
+    }
+
+    body.colapsado .menu-usuario {
+        left: 0;
+        right: auto;
+        width: 24rem;
+    }
+
+    body.colapsado .boton-colapsar img {
+        transform: rotate(-90deg);
+    }
+}
+
 .container-main-side2 {
     display: flex;
     flex-direction: column;
@@ -785,11 +868,14 @@ aside .opt-modulo h4 {
         border: none;
         cursor: pointer;
     }
-
     .boton-menu-movil img {
         width: 2.4rem;
         height: 2.4rem;
         display: block;
+    }
+
+    .boton-colapsar {
+        display: none;
     }
 
     .logo-movil {

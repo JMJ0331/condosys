@@ -1,0 +1,101 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Restablecer contraseña | Condosys</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/entradas.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/recuperar.css' %}" />
+    <link rel="stylesheet" href="/static/css/mediaquerys.css" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/logo_del_proyecto.svg' %}">
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div class="panel-login">
+        <div class="lado-izq">
+          <div class="container-logo">
+            <img src="{% static "images/logo_del_proyecto.svg" %}" alt="Condosys" class="img-logo" />
+            <h1 class="nombre-app">CONDOSYS</h1>
+          </div>
+        </div>
+
+        <div class="lado-der">
+          <h2 class="titulo">Nueva contraseña</h2>
+
+          {% if exitoso %}
+            <div class="mensaje-exito" role="status">
+              <p class="mensaje-exito__titulo">Contraseña actualizada</p>
+              <p>Tu contraseña se cambió correctamente. Ya puedes iniciar sesión con ella.</p>
+            </div>
+            <a href="{% url 'login' %}" class="text-restrablecer">Ir al inicio de sesión</a>
+
+          {% elif error %}
+            <div class="mensaje-error" role="alert">
+              <p>{{ error }}</p>
+            </div>
+
+            {% if not valido %}
+              <a href="{% url 'recuperar_clave' %}" class="text-restrablecer">Solicitar un enlace nuevo</a>
+            {% endif %}
+
+          {% elif valido %}
+            <p class="descripcion">
+              Escribe tu nueva contraseña. Debe tener al menos 8 caracteres y
+              no puede ser solo numérica.
+            </p>
+
+            <form action="" method="post" class="form">
+              {% csrf_token %}
+              <input type="hidden" name="token" value="{{ token }}" />
+
+              <div class="inputs">
+                <div class="container-input">
+                  <input
+                    type="password"
+                    name="password"
+                    class="input"
+                    id="password"
+                    placeholder=" "
+                    minlength="8"
+                    required
+                  />
+                  <label for="password">Nueva contraseña</label>
+                </div>
+
+                <div class="container-input">
+                  <input
+                    type="password"
+                    name="password_confirmacion"
+                    class="input"
+                    id="password_confirmacion"
+                    placeholder=" "
+                    minlength="8"
+                    required
+                  />
+                  <label for="password_confirmacion">Confirmar contraseña</label>
+                </div>
+              </div>
+
+              <div class="container-btn">
+                <button type="submit" class="btn-enviar">Guardar contraseña</button>
+              </div>
+            </form>
+
+          {% else %}
+            <div class="mensaje-error" role="alert">
+              <p>El enlace no es válido o ha expirado. Solicita uno nuevo para continuar.</p>
+            </div>
+            <a href="{% url 'recuperar_clave' %}" class="text-restrablecer">Solicitar un enlace nuevo</a>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <script type="module" src="{% static 'js/main.js' %}" defer></script>
+  </body>
+</html>

@@ -61,7 +61,7 @@ class ResidentForm(CuentaUsuarioFormBase):
             'email': forms.EmailInput(attrs={'placeholder': 'Correo electrónico'}),
             'emergency_contact': forms.TextInput(attrs={'placeholder': '(000)-000-0000', 'maxlength': '14', 'data-mascara': 'telefono'}),
             # Clases 'campo-seleccion' y 'entrada-interruptor' vienen de static/css/formularios.css.
-            'apartment': forms.Select(attrs={'class': 'campo-seleccion'}),
+            'apartment': forms.Select(attrs={'class': 'campo-seleccion', 'data-autocompletar': ''}),
             'tipo_relacion': forms.Select(attrs={'class': 'campo-seleccion'}),
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date', 'class': 'campo-entrada'}, format='%Y-%m-%d'),
             'mascotas': forms.Select(attrs={'class': 'campo-seleccion'}),

@@ -125,13 +125,7 @@ def actualizar_comunicado(request, pk):
         if respuesta:
             return respuesta
     else:
-        form = CommunicationForm(
-            instance=comunicado,
-            initial={
-                'estado': 'published' if comunicado.is_published else 'draft',
-                'publication_date': comunicado.published_at,
-            },
-        )
+        form = CommunicationForm(instance=comunicado)
 
     contexto = {
         'form_communication': form,

@@ -12,11 +12,12 @@
     <link rel="stylesheet" href="{% static "css/dialogos.css" %}?v=2">
     <link rel="stylesheet" href="{% static "css/paginacion.css" %}">
     <link rel="stylesheet" href="{% static "css/entradas.css" %}">
+    <link rel="stylesheet" href="{% static "css/autocompletado.css" %}">
     <link rel="icon" type="image/svg+xml" href="{% static "images/logo_del_proyecto.svg" %}">
     {% block extra_css %}{% endblock %}
 
 </head>
-<body>
+<body{% if request.COOKIES.sidebar_colapsado == '1' %} class="colapsado"{% endif %}>
 
     <div class="container">
 
@@ -97,6 +98,8 @@
     <script src="{% static "js/encabezado-acciones.js" %}" defer></script>
     <script src="{% static "js/usuario-menu.js" %}" defer></script>
     <script src="{% static "js/menu-movil.js" %}" defer></script>
+    <script src="{% static "js/barra-lateral.js" %}" defer></script>
+    <script src="{% static "js/autocompletado.js" %}" defer></script>
     {% block scripts %}{% endblock %}
 
 </body>

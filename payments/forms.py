@@ -44,6 +44,7 @@ class PaymentForm(forms.ModelForm):
             'apartment': forms.Select(attrs={
                 'class': 'campo-seleccion',
                 'data-pago-apartamento': '',
+                'data-autocompletar': '',
                 'placeholder': 'Elegir apartamento',
             }),
             'resident': forms.Select(attrs={

@@ -705,3 +705,137 @@ input[data-documento-visitante] {
 		padding: 1.2rem;
 	}
 }
+
+/* Buscador inteligente por cédula (cámara o archivo + AI) */
+.boton-buscar-cedula {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-4);
+	background: var(--white-50);
+	color: var(--green-900);
+	border: 1px solid var(--green-900);
+	border-radius: var(--borderR-8);
+	padding: var(--padding-8) var(--padding-16);
+	font-size: 1.25rem;
+	font-weight: 500;
+	cursor: pointer;
+	white-space: nowrap;
+	text-decoration: none;
+}
+
+.boton-buscar-cedula img {
+	width: 1.8rem;
+	height: 1.8rem;
+	flex: none;
+}
+
+.boton-buscar-cedula:hover {
+	background: var(--green-100);
+}
+
+.busqueda-cedula {
+	color: var(--black-400);
+	font-size: 1.3rem;
+	margin: var(--space-8) 0 0 0;
+}
+
+.limpiar-busqueda {
+	color: var(--red-500);
+	font-weight: 500;
+	margin-left: var(--space-4);
+}
+
+.dialogo-cedula .formulario-cedula {
+	display: flex;
+	flex-direction: column;
+}
+
+.titulo-cedula {
+	color: var(--green-900);
+	font-size: 1.8rem;
+	margin: 0;
+}
+
+.video-cedula,
+.vista-previa-cedula {
+	border-radius: var(--borderR-8);
+	max-height: 32rem;
+	object-fit: cover;
+	width: 100%;
+}
+
+.video-cedula[hidden],
+.vista-previa-cedula[hidden] {
+	display: none;
+}
+
+.acciones-cedula {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-8);
+}
+
+.boton-camara {
+	align-items: center;
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	color: var(--black-400);
+	cursor: pointer;
+	display: inline-flex;
+	font-size: 1.25rem;
+	font-weight: 500;
+	padding: var(--padding-8) var(--padding-16);
+}
+
+.boton-camara:hover {
+	border-color: var(--green-900);
+}
+
+/* Botones del modal de búsqueda por cédula: las clases de confirmar /
+   cancelar solo tienen estilo dentro de .dialogo-eliminar, aquí van en verde. */
+.dialogo-cedula .boton-confirmar-eliminar {
+	background: var(--green-900);
+	border: 1px solid var(--green-900);
+	border-radius: var(--borderR-8);
+	color: var(--white-50);
+	cursor: pointer;
+	font: inherit;
+	font-size: 1.4rem;
+	padding: var(--padding-8) var(--padding-16);
+}
+
+.dialogo-cedula .boton-confirmar-eliminar:hover,
+.dialogo-cedula .boton-confirmar-eliminar:active {
+	background: var(--green-700);
+	border-color: var(--green-700);
+}
+
+.dialogo-cedula .boton-cancelar-eliminar {
+	background: var(--white-50);
+	border: 1px solid var(--black-50);
+	border-radius: var(--borderR-8);
+	color: var(--black-400);
+	cursor: pointer;
+	font: inherit;
+	font-size: 1.4rem;
+	padding: var(--padding-8) var(--padding-16);
+}
+
+.dialogo-cedula .boton-cancelar-eliminar:hover {
+	border-color: var(--green-900);
+}
+
+.boton-camara[hidden] {
+	display: none;
+}
+
+.error-cedula {
+	color: var(--red-500);
+	font-size: 1.3rem;
+	margin: 0;
+}
+
+.error-cedula[hidden] {
+	display: none;
+}

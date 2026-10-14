@@ -58,7 +58,7 @@ class ChatMessage(models.Model):
         if self.receiver:
             return f"{self.sender.email} → {self.receiver.email}"
         else:
-            return f"{self.sender.email} → {self.group_name}"
+            return f"{self.sender.email} → {self.group.name if self.group else 'sin grupo'}"
     
     def mark_as_read(self):
         """Marcar mensaje como leído"""

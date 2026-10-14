@@ -13,7 +13,7 @@ class MaintenanceChargeForm(forms.ModelForm):
         model = MaintenanceCharge
         fields = [
             'concept', 'periodicity', 'amount', 'apartment',
-            'effective_date', 'photo', 'is_active',
+            'effective_date', 'payment_methods', 'photo', 'is_active',
         ]
         widgets = {
             'concept': forms.Select(attrs={'class': 'campo-seleccion'}),
@@ -32,6 +32,7 @@ class MaintenanceChargeForm(forms.ModelForm):
                 'type': 'date',
                 'class': 'campo-entrada',
             }, format='%Y-%m-%d'),
+            'payment_methods': forms.Select(attrs={'class': 'campo-seleccion'}),
             'photo': forms.FileInput(attrs={
                 'accept': 'image/jpeg,image/png,image/webp',
                 'data-foto-mantenimiento': '',
@@ -48,6 +49,7 @@ class MaintenanceChargeForm(forms.ModelForm):
             'amount': 'Monto',
             'apartment': 'Departamentos (si es aplicable)',
             'effective_date': 'Fecha de generación',
+            'payment_methods': 'Método de pago',
             'photo': 'Foto del mantenimiento',
             'is_active': 'Activo',
         }
@@ -57,6 +59,7 @@ class MaintenanceChargeForm(forms.ModelForm):
         # Opciones "placeholder" al inicio de cada dropdown de opciones fijas.
         placeholder(self.fields['concept'], 'Elegir concepto')
         placeholder(self.fields['periodicity'], 'Elegir periodicidad')
+        placeholder(self.fields['payment_methods'], 'Elegir método de pago')
         self.fields['apartment'].queryset = Apartment.objects.filter(is_active=True)
         self.fields['apartment'].empty_label = 'Elegir departamento'
         # El cargo nuevo viene activo por defecto.
