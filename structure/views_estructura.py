@@ -22,6 +22,23 @@ def _texto(valor):
     return '—' if valor in (None, '') else valor
 
 
+def _es_torres():
+    """True si el residencial configuró su distribución como 'torres'."""
+    try:
+        from residencial.models import Residencial
+        residencial = Residencial.obtener_unico()
+        return bool(residencial and residencial.distribucion == 'torres')
+    except Exception:
+        return False
+
+
+def _etiquetas_edificio():
+    """Nombre singular/plural de la sección según la distribución."""
+    if _es_torres():
+        return {'singular': 'torre', 'plural': 'Torres', 'titulo': 'Todas las torres'}
+    return {'singular': 'edificio', 'plural': 'Edificios', 'titulo': 'Todos los edificios'}
+
+
 ENTIDADES = {
     'jardines': {
         'modelo': Garden,
@@ -29,7 +46,6 @@ ENTIDADES = {
         'singular': 'jardín',
         'plural': 'Jardines',
         'titulo_lista': 'Todos los jardines',
-        'icono': 'images/icons/blancos/leaf_white.svg',
         'urls': ('jardines_index', 'agregar_jardin', 'actualizar_jardin', 'eliminar_jardin'),
         'queryset': lambda: Garden.objects.annotate(
             total_bloques=Count('blocks', distinct=True),
@@ -51,7 +67,6 @@ ENTIDADES = {
         'singular': 'bloque',
         'plural': 'Bloques',
         'titulo_lista': 'Todos los bloques',
-        'icono': 'images/icons/blancos/page_white.svg',
         'urls': ('bloques_index', 'agregar_bloque', 'actualizar_bloque', 'eliminar_bloque'),
         'queryset': lambda: Block.objects.select_related('garden').annotate(
             total_edificios=Count('buildings'),
@@ -71,7 +86,6 @@ ENTIDADES = {
         'singular': 'edificio',
         'plural': 'Edificios',
         'titulo_lista': 'Todos los edificios',
-        'icono': 'images/icons/blancos/city_white.svg',
         'urls': ('edificios_index', 'agregar_edificio', 'actualizar_edificio', 'eliminar_edificio'),
         'queryset': lambda: Building.objects.select_related('garden', 'block').annotate(
             total_departamentos=Count('apartments'),
@@ -90,8 +104,53 @@ ENTIDADES = {
 }
 
 
+def obtener_entidades():
+    """Copia de ENTIDADES con los textos de edificios/torres según distribución.
+
+    Las claves y URLs se mantienen ('edificios') para no romper el routing;
+    solo cambian singular/plural/títulos/columnas visibles.
+    """
+    etiquetas = _etiquetas_edificio()
+    nombre_conteo = 'Torres' if etiquetas['plural'] == 'Torres' else 'Edificios'
+    dependientes_jardin = (
+        'bloques o torres' if etiquetas['plural'] == 'Torres' else 'bloques o edificios'
+    )
+    dependientes_bloque = 'torres' if etiquetas['plural'] == 'Torres' else 'edificios'
+
+    entidades = dict(ENTIDADES)
+
+    jardines = dict(entidades['jardines'])
+    jardines['columnas'] = (
+        ('Nombre', lambda o: o.name),
+        ('Ubicación', lambda o: _texto(o.location)),
+        ('Bloques', lambda o: o.total_bloques),
+        (nombre_conteo, lambda o: o.total_edificios),
+        ('Estado', lambda o: 'Activo' if o.is_active else 'Inactivo'),
+    )
+    jardines['dependientes'] = dependientes_jardin
+    entidades['jardines'] = jardines
+
+    bloques = dict(entidades['bloques'])
+    bloques['columnas'] = (
+        ('Nombre', lambda o: o.name),
+        ('Jardín', lambda o: o.garden.name),
+        (nombre_conteo, lambda o: o.total_edificios),
+        ('Estado', lambda o: 'Activo' if o.is_active else 'Inactivo'),
+    )
+    bloques['dependientes'] = dependientes_bloque
+    entidades['bloques'] = bloques
+
+    edificios = dict(entidades['edificios'])
+    edificios['singular'] = etiquetas['singular']
+    edificios['plural'] = etiquetas['plural']
+    edificios['titulo_lista'] = etiquetas['titulo']
+    entidades['edificios'] = edificios
+
+    return entidades
+
+
 def _contexto_base(clave):
-    entidad = ENTIDADES[clave]
+    entidad = obtener_entidades()[clave]
     url_index, url_agregar, url_actualizar, url_eliminar = entidad['urls']
     return {
         'entidad': entidad,
@@ -106,7 +165,7 @@ def _contexto_base(clave):
 
 @role_required(*ROLES_ADMIN)
 def listar(request, clave):
-    entidad = ENTIDADES[clave]
+    entidad = obtener_entidades()[clave]
     qs = entidad['queryset']()
 
     valores_filtro = {}
@@ -153,7 +212,7 @@ def listar(request, clave):
 
 
 def _formulario(request, clave, instancia=None):
-    entidad = ENTIDADES[clave]
+    entidad = obtener_entidades()[clave]
     contexto = _contexto_base(clave)
     accion = 'actualizado' if instancia else 'creado'
 
@@ -184,13 +243,13 @@ def agregar(request, clave):
 
 @role_required(*ROLES_ADMIN)
 def actualizar(request, clave, pk):
-    instancia = get_object_or_404(ENTIDADES[clave]['modelo'], pk=pk)
+    instancia = get_object_or_404(obtener_entidades()[clave]['modelo'], pk=pk)
     return _formulario(request, clave, instancia)
 
 
 @role_required(*ROLES_ADMIN)
 def eliminar(request, clave, pk):
-    entidad = ENTIDADES[clave]
+    entidad = obtener_entidades()[clave]
     url_index = entidad['urls'][0]
     if request.method != 'POST':
         return redirect(url_index)

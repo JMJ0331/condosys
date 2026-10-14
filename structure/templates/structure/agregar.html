@@ -57,7 +57,7 @@
         <section class="tarjeta" aria-labelledby="titulo-ubicacion">
           <h3 class="cabecera-tarjeta" id="titulo-ubicacion">Ubicación</h3>
           <div class="cuerpo-tarjeta">
-            <p class="ayuda-formulario">Elige el jardín y el bloque para filtrar los edificios, o elige directamente el edificio.</p>
+            <p class="ayuda-formulario">Elige el jardín y el bloque para filtrar {% if distribucion_residencial == 'torres' %}las torres{% else %}los edificios{% endif %}, o elige directamente {% if distribucion_residencial == 'torres' %}la torre{% else %}el edificio{% endif %}.</p>
             <div class="campo-formulario">
               <label for="{{ form_apartments.jardin.id_for_label }}">{{ form_apartments.jardin.label }}</label>
               {{ form_apartments.jardin }}

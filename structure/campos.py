@@ -30,12 +30,20 @@ def campo_bloque(required=False, label='Bloque'):
     )
 
 
-def campo_edificio(required=False, label='Edificio'):
+def campo_edificio(required=False, label=None):
+    if label is None:
+        try:
+            from residencial.models import Residencial
+            residencial = Residencial.obtener_unico()
+            es_torres = bool(residencial and residencial.distribucion == 'torres')
+        except Exception:
+            es_torres = False
+        label = 'Torre' if es_torres else 'Edificio'
     return forms.ModelChoiceField(
         queryset=Building.objects.filter(is_active=True).select_related('garden', 'block'),
         required=required,
         label=label,
-        empty_label='Elegir edificio',
+        empty_label=f'Elegir {label.lower()}',
         widget=SelectCascada('edificio'),
     )
 

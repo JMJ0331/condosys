@@ -91,7 +91,7 @@
         <section class="tarjeta" aria-labelledby="titulo-departamentos">
           <h3 class="cabecera-tarjeta" id="titulo-departamentos">Departamentos</h3>
           <div class="cuerpo-tarjeta">
-            <p class="ayuda-formulario">Filtra por jardín, bloque y edificio y marca los departamentos del propietario. Solo aparecen los departamentos sin propietario y los que ya son suyos.</p>
+            <p class="ayuda-formulario">Filtra por jardín, bloque y {{ form_owner.edificio.label|lower }} y marca los departamentos del propietario. Solo aparecen los departamentos sin propietario y los que ya son suyos.</p>
             <div class="fila-formulario">
               <div class="campo-formulario">
                 <label for="{{ form_owner.jardin.id_for_label }}">{{ form_owner.jardin.label }}</label>
