@@ -1,5 +1,6 @@
 from django import forms
 from residents.forms import validate_photo
+from residencial.models import Residencial
 from .campos import campo_bloque, campo_edificio, campo_jardin, incluir_actual
 from .models import Apartment, Block, Building, Garden
 
@@ -65,9 +66,30 @@ class BuildingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        residencial = Residencial.obtener_unico()
+        if residencial and residencial.cantidad_pisos:
+            max_pisos = residencial.cantidad_pisos
+            self.fields['number_of_floors'].widget.attrs['max'] = max_pisos
+            self.max_pisos_config = max_pisos
+        else:
+            self.max_pisos_config = None
         if self.instance.block_id:
             self.fields['block'].queryset = incluir_actual(self.fields['block'].queryset, self.instance.block)
             self.initial.setdefault('jardin', self.instance.block.garden_id)
+
+    def clean_number_of_floors(self):
+        pisos = self.cleaned_data.get('number_of_floors')
+        if pisos is None or pisos == '':
+            return pisos
+        max_pisos = getattr(self, 'max_pisos_config', None)
+        if max_pisos is None:
+            residencial = Residencial.obtener_unico()
+            max_pisos = residencial.cantidad_pisos if residencial else None
+        if max_pisos and pisos > max_pisos:
+            raise forms.ValidationError(
+                f'El número de pisos ({pisos}) supera el límite máximo configurado ({max_pisos} pisos).'
+            )
+        return pisos
 
 
 class ApartmentsForm(forms.ModelForm):
@@ -101,6 +123,13 @@ class ApartmentsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        residencial = Residencial.obtener_unico()
+        if residencial and residencial.cantidad_pisos:
+            max_pisos = residencial.cantidad_pisos
+            self.fields['floor'].widget.attrs['max'] = max_pisos
+            self.max_pisos_config = max_pisos
+        else:
+            self.max_pisos_config = None
         if self.instance.building_id:
             edificio = self.instance.building
             self.fields['building'].queryset = incluir_actual(self.fields['building'].queryset, edificio)
@@ -120,6 +149,27 @@ class ApartmentsForm(forms.ModelForm):
             'tabindex': '-1',
         }),
     )
+
+    def clean_floor(self):
+        piso = self.cleaned_data.get('floor')
+        if piso is None or piso == '':
+            return piso
+        max_pisos = getattr(self, 'max_pisos_config', None)
+        if max_pisos is None:
+            residencial = Residencial.obtener_unico()
+            max_pisos = residencial.cantidad_pisos if residencial else None
+        if max_pisos and piso > max_pisos:
+            es_torres = False
+            try:
+                residencial = Residencial.obtener_unico()
+                es_torres = bool(residencial and residencial.distribucion == 'torres')
+            except Exception:
+                es_torres = False
+            tipo = 'torres' if es_torres else 'edificios'
+            raise forms.ValidationError(
+                f'El piso especificado supera el límite máximo configurado para las {tipo} ({max_pisos} pisos).'
+            )
+        return piso
 
     def clean_status(self):
         # Si el interruptor nunca se tocó, el campo oculto llega vacío;

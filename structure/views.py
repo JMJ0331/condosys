@@ -96,6 +96,9 @@ def agregar_departamento(request):
     else:
         form = ApartmentsForm()
 
+    residencial = Residencial.obtener_unico()
+    max_pisos = residencial.cantidad_pisos if residencial and residencial.cantidad_pisos else None
+
     contexto = {
         'form_apartments': form,
         'distribucion_residencial': distribucion_residencial(),
@@ -104,6 +107,7 @@ def agregar_departamento(request):
         'url_form': 'agregar_departamento',
         'url_form_args': [],
         'texto_boton': 'Agregar',
+        'max_pisos': max_pisos,
     }
     return render(request, 'structure/agregar.html', contexto)
 
@@ -125,6 +129,9 @@ def actualizar_departamento(request, pk):
     else:
         form = ApartmentsForm(instance=apartamento)
 
+    residencial = Residencial.obtener_unico()
+    max_pisos = residencial.cantidad_pisos if residencial and residencial.cantidad_pisos else None
+
     contexto = {
         'form_apartments': form,
         'distribucion_residencial': distribucion_residencial(),
@@ -133,6 +140,7 @@ def actualizar_departamento(request, pk):
         'url_form': 'actualizar_departamento',
         'url_form_args': [str(apartamento.id)],
         'texto_boton': 'Actualizar',
+        'max_pisos': max_pisos,
     }
     return render(request, 'structure/agregar.html', contexto)
 

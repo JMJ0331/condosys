@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.decorators import role_required
 from accounts.permissions import ROLES_ADMIN
+from residencial.models import Residencial
 
 from .forms import BlockForm, BuildingForm, GardenForm
 from .models import Block, Building, Garden
@@ -226,12 +227,16 @@ def _formulario(request, clave, instancia=None):
     else:
         form = entidad['form'](instance=instancia)
 
+    residencial = Residencial.obtener_unico()
+    max_pisos = residencial.cantidad_pisos if residencial and residencial.cantidad_pisos else None
+
     contexto.update({
         'form': form,
         'titulo_modulo': f'{"Actualizar" if instancia else "Agregar"} {entidad["singular"]}',
         'texto_boton': 'Actualizar' if instancia else 'Agregar',
         'url_form_args': [str(instancia.pk)] if instancia else [],
         'url_form': contexto['url_actualizar'] if instancia else contexto['url_agregar'],
+        'max_pisos': max_pisos,
     })
     return render(request, 'structure/estructura/formulario.html', contexto)
 

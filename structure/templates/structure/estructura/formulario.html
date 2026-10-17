@@ -51,4 +51,29 @@
 
 {% block scripts %}
 <script src="{% static 'js/cascada.js' %}" defer></script>
+{% if clave_entidad == 'edificios' and max_pisos %}
+<script>
+(() => {
+  const form = document.getElementById('form-estructura');
+  if (!form) return;
+  const input = form.querySelector('#id_number_of_floors');
+  if (input) {
+    input.max = '{{ max_pisos }}';
+    input.min = input.min || '1';
+  }
+  form.addEventListener('submit', (e) => {
+    if (!input) return;
+    const val = parseInt(input.value, 10);
+    const max = parseInt('{{ max_pisos }}', 10);
+    if (!isNaN(val) && !isNaN(max) && val > max) {
+      e.preventDefault();
+      input.focus();
+      input.setCustomValidity(`El número de pisos supera el límite máximo configurado (${max} pisos).`);
+      input.reportValidity();
+      input.addEventListener('input', () => input.setCustomValidity(''), { once: true });
+    }
+  });
+})();
+</script>
+{% endif %}
 {% endblock %}
