@@ -1,81 +1,81 @@
-# Manual Técnico — CONDOSYS
+﻿# Manual TÃ©cnico â€” CONDOSYS
 
-| Documento | Manual Técnico |
+| Documento | Manual TÃ©cnico |
 |---|---|
-| Sistema | CONDOSYS — administración residencial |
+| Sistema | CONDOSYS â€” administraciÃ³n residencial |
 | Stack | Django 6.1 + Django REST Framework + Channels |
-| Versión | 1.0 |
+| VersiÃ³n | 1.0 |
 | Fecha | Octubre 2026 |
 | Repositorio | https://github.com/JMJ0331/condosys |
 | Rama de trabajo | desarrollo |
-| Licencia | Proyecto académico / uso interno |
+| Licencia | Proyecto acadÃ©mico / uso interno |
 
-Documento generado a partir del código fuente del proyecto. Resumen de arquitectura, modelos de datos, API REST, permisos, frontend y procedimientos de operación.
+Documento generado a partir del cÃ³digo fuente del proyecto. Resumen de arquitectura, modelos de datos, API REST, permisos, frontend y procedimientos de operaciÃ³n.
 
-## Índice
+## Ãndice
 
 <!--INDICE-->
 
-## 1. Introducción
+## 1. IntroducciÃ³n
 
-### 1.1 Propósito del documento
+### 1.1 PropÃ³sito del documento
 
-Este manual describe el sistema CONDOSYS desde el punto de vista técnico: qué hace, cómo está construido, qué decisiones técnicas lo sostienen y cómo instalarlo, operarlo y extenderlo. Todo el contenido se derivó directamente del código fuente del repositorio, de modo que el documento y el sistema evolucionan juntos.
+Este manual describe el sistema CONDOSYS desde el punto de vista tÃ©cnico: quÃ© hace, cÃ³mo estÃ¡ construido, quÃ© decisiones tÃ©cnicas lo sostienen y cÃ³mo instalarlo, operarlo y extenderlo. Todo el contenido se derivÃ³ directamente del cÃ³digo fuente del repositorio, de modo que el documento y el sistema evolucionan juntos.
 
-El manual está dirigido a las personas que desarrollarán, darán soporte o administrarán el sistema: perfil de desarrollo backend, perfil de desarrollo frontend y perfil de operador.
+El manual estÃ¡ dirigido a las personas que desarrollarÃ¡n, darÃ¡n soporte o administrarÃ¡n el sistema: perfil de desarrollo backend, perfil de desarrollo frontend y perfil de operador.
 
-### 1.2 Qué es CONDOSYS
+### 1.2 QuÃ© es CONDOSYS
 
-CONDOSYS es un sistema web de administración y gestión para residenciales verticales u horizontales. Centraliza la información de apartamentos, residentes, propietarios, cuotas, pagos, incidencias y control de accesos, reemplazando los cuadernos manuales y las hojas de cálculo dispersas que normalmente se usan en la operación de una administración.
+CONDOSYS es un sistema web de administraciÃ³n y gestiÃ³n para residenciales verticales u horizontales. Centraliza la informaciÃ³n de apartamentos, residentes, propietarios, cuotas, pagos, incidencias y control de accesos, reemplazando los cuadernos manuales y las hojas de cÃ¡lculo dispersas que normalmente se usan en la operaciÃ³n de una administraciÃ³n.
 
-El sistema responde a un problema concreto: la administración de un residencial maneja datos sensibles (personas, documentos, pagos/saldo) y tareas recurrentes con plazos (cuotas, mantenimiento, permisos). Sin un sistema único, cada tarea se resuelve por canales distintos y se pierde trazabilidad.
+El sistema responde a un problema concreto: la administraciÃ³n de un residencial maneja datos sensibles (personas, documentos, pagos/saldo) y tareas recurrentes con plazos (cuotas, mantenimiento, permisos). Sin un sistema Ãºnico, cada tarea se resuelve por canales distintos y se pierde trazabilidad.
 
 ### 1.3 Alcance funcional
 
-El alcance funcional se organiza en los siguientes módulos, cada uno desplegado como una aplicación Django independiente pero integrada en un único proyecto:
+El alcance funcional se organiza en los siguientes mÃ³dulos, cada uno desplegado como una aplicaciÃ³n Django independiente pero integrada en un Ãºnico proyecto:
 
-| Módulo | Función principal | Usuarios principales |
+| MÃ³dulo | FunciÃ³n principal | Usuarios principales |
 |---|---|---|
 | Inicio (dashboard) | Resumen de estado: departamentos, incidencias abiertas, pagos por vencer, actividad reciente | Todos |
-| Residencial | Ficha única del residencial: nombre, RNC, dirección, provincia/municipio y distribución | Administrador |
-| Departamentos | Jerarquía Jardín → Edificio → Apartamento, con estado y propietario | Todos (lectura), Gestión (escritura) |
-| Propietarios | Registro de propietarios y asociación con apartamentos | Gestión |
-| Residentes | Ocupantes por apartamento: relación, fecha de ingreso, mascotas | Gestión, Propietario (lectura) |
-| Pagos | Registro de cuotas y pagos, estados de mora, descarga de comprobante en PDF | Todos (lectura), Gestión (escritura) |
-| Mantenimientos | Catálogo de cargos y cuotas recurrentes por periodicidad | Todos (lectura), Gestión (escritura) |
-| Incidencias | Reporte, clasificación, asignación, seguimiento e historial de cambios de estado | Todos (reportar), Gestión (gestionar) |
-| Solicitudes | Certificados, permisos, instalaciones y trámites documentales | Gestión |
-| Visitantes | Registro, autorización y control de entrada/salida | Seguridad, Gestión |
-| Áreas comunes | Catálogo de áreas comunes con tipo, capacidad, horario y estado | Todos (lectura), Gestión (escritura) |
-| Reservas | Solicitud y aprobación de reservas de áreas comunes | Todos |
-| Comunicados | Avisos, eventos y mantenimiento de comunicados del residencial | Todos (lectura), Gestión (escritura) |
-| Notificaciones | Avisos dirigidos a usuarios concretos | Gestión |
-| Reportes | Reportes administrativos, ocupación, pagos y bitácora de auditoría (CSV) | Gestión |
-| Chat | Mensajería persistida entre usuarios y grupos | Todos |
-| Cuentas | Alta, edición, activación y roles de usuarios; perfil propio | Administrador |
+| Residencial | Ficha Ãºnica del residencial: nombre, RNC, direcciÃ³n, provincia/municipio y distribuciÃ³n | Administrador |
+| Departamentos | JerarquÃ­a JardÃ­n â†’ Edificio â†’ Apartamento, con estado y propietario | Todos (lectura), GestiÃ³n (escritura) |
+| Propietarios | Registro de propietarios y asociaciÃ³n con apartamentos | GestiÃ³n |
+| Residentes | Ocupantes por apartamento: relaciÃ³n, fecha de ingreso, mascotas | GestiÃ³n, Propietario (lectura) |
+| Pagos | Registro de cuotas y pagos, estados de mora, descarga de comprobante en PDF | Todos (lectura), GestiÃ³n (escritura) |
+| Mantenimientos | CatÃ¡logo de cargos y cuotas recurrentes por periodicidad | Todos (lectura), GestiÃ³n (escritura) |
+| Incidencias | Reporte, clasificaciÃ³n, asignaciÃ³n, seguimiento e historial de cambios de estado | Todos (reportar), GestiÃ³n (gestionar) |
+| Solicitudes | Certificados, permisos, instalaciones y trÃ¡mites documentales | GestiÃ³n |
+| Visitantes | Registro, autorizaciÃ³n y control de entrada/salida | Seguridad, GestiÃ³n |
+| Ãreas comunes | CatÃ¡logo de Ã¡reas comunes con tipo, capacidad, horario y estado | Todos (lectura), GestiÃ³n (escritura) |
+| Reservas | Solicitud y aprobaciÃ³n de reservas de Ã¡reas comunes | Todos |
+| Comunicados | Avisos, eventos y mantenimiento de comunicados del residencial | Todos (lectura), GestiÃ³n (escritura) |
+| Notificaciones | Avisos dirigidos a usuarios concretos | GestiÃ³n |
+| Reportes | Reportes administrativos, ocupaciÃ³n, pagos y bitÃ¡cora de auditorÃ­a (CSV) | GestiÃ³n |
+| Chat | MensajerÃ­a persistida entre usuarios y grupos | Todos |
+| Cuentas | Alta, ediciÃ³n, activaciÃ³n y roles de usuarios; perfil propio | Administrador |
 
-*Tabla 1.1 - Módulos funcionales de CONDOSYS y su acceso por rol.*
+*Tabla 1.1 - MÃ³dulos funcionales de CONDOSYS y su acceso por rol.*
 
 ### 1.4 Perfiles de usuario
 
-El sistema define cinco roles, almacenados en el campo role del modelo de usuario. Cada rol habilita un conjunto de módulos y un conjunto de acciones (crear, editar, eliminar):
+El sistema define cinco roles, almacenados en el campo role del modelo de usuario. Cada rol habilita un conjunto de mÃ³dulos y un conjunto de acciones (crear, editar, eliminar):
 
-- Administrador (admin): acceso total. Es el único rol que autoriza el registro de nuevos usuarios y gestiona roles.
-- Encargado de Administración (manager): opera la operación diaria (pagos, solicitudes, residentes, reportes) pero no administra usuarios ni estructura del sistema.
-- Residente (resident): consulta sus datos, reporta incidencias y reserva áreas comunes.
-- Propietario (propietario): consulta información de los apartamentos que posee.
-- Seguridad / Portería (security): opera el control de visitantes y accesos; sin acceso financiero ni a datos de residentes.
+- Administrador (admin): acceso total. Es el Ãºnico rol que autoriza el registro de nuevos usuarios y gestiona roles.
+- Encargado de AdministraciÃ³n (manager): opera la operaciÃ³n diaria (pagos, solicitudes, residentes, reportes) pero no administra usuarios ni estructura del sistema.
+- Residente (resident): consulta sus datos, reporta incidencias y reserva Ã¡reas comunes.
+- Propietario (propietario): consulta informaciÃ³n de los apartamentos que posee.
+- Seguridad / PorterÃ­a (security): opera el control de visitantes y accesos; sin acceso financiero ni a datos de residentes.
 
-> **NOTA** — El detalle normativo de permisos por rol está en el capítulo 5. La matriz completa (qué puede y qué no puede hacer cada rol) se documenta en AGENTS.md y se resume aquí en el capítulo 5.
+> **NOTA** â€” El detalle normativo de permisos por rol estÃ¡ en el capÃ­tulo 5. La matriz completa (quÃ© puede y quÃ© no puede hacer cada rol) se documenta en AGENTS.md y se resume aquÃ­ en el capÃ­tulo 5.
 
 ### 1.5 Convenciones del documento
 
 - Los nombres de archivo, clases y funciones aparecen en tipo monoespaciado.
-- Los bloques de código son extractos literales del repositorio.
-- Las cajas ATENCIÓN señalan riesgo de operación; las cajas PENDIENTE / BUG señalan defectos conocidos del código actual.
-- Las rutas se expresan siempre relativas a la raíz del proyecto Django.
+- Los bloques de cÃ³digo son extractos literales del repositorio.
+- Las cajas ATENCIÃ“N seÃ±alan riesgo de operaciÃ³n; las cajas PENDIENTE / BUG seÃ±alan defectos conocidos del cÃ³digo actual.
+- Las rutas se expresan siempre relativas a la raÃ­z del proyecto Django.
 
-## 2. Stack tecnológico y dependencias
+## 2. Stack tecnolÃ³gico y dependencias
 
 ### 2.1 Lenguaje y runtime
 
@@ -83,78 +83,78 @@ El sistema define cinco roles, almacenados en el campo role del modelo de usuari
 |---|---|---|
 | Lenguaje | Python 3.13+ | Entorno de desarrollo verificado con 3.13.6 |
 | Entorno virtual | venv/ (Windows: venv\Scripts\python.exe) | Nunca se instalan paquetes en el Python del sistema |
-| Gestión de dependencias | pip + requirements.txt | El archivo no fija versiones a propósito |
+| GestiÃ³n de dependencias | pip + requirements.txt | El archivo no fija versiones a propÃ³sito |
 
-> **ATENCIÓN** — requirements.txt no fija versiones. El archivo de dependencias usa comparadores >= sin versiones exactas. pip install -r requirements.txt instala siempre la última versión compatible. Consecuencia: una instalación nueva puede diferir de la que se probó. Para reproducibilidad conviene congelar versiones con pip freeze en el momento de una publicación. Actualización controlada: pip install --upgrade --dry-run -r requirements.txt para ver qué cambios sin aplicar nada.
+> **ATENCIÃ“N** â€” requirements.txt no fija versiones. El archivo de dependencias usa comparadores >= sin versiones exactas. pip install -r requirements.txt instala siempre la Ãºltima versiÃ³n compatible. Consecuencia: una instalaciÃ³n nueva puede diferir de la que se probÃ³. Para reproducibilidad conviene congelar versiones con pip freeze en el momento de una publicaciÃ³n. ActualizaciÃ³n controlada: pip install --upgrade --dry-run -r requirements.txt para ver quÃ© cambios sin aplicar nada.
 
 ### 2.2 Dependencias del proyecto
 
-| Grupo | Paquete | Versión min. | Uso en CONDOSYS |
+| Grupo | Paquete | VersiÃ³n min. | Uso en CONDOSYS |
 |---|---|---|---|
 | Core | django | 6.1.1 | Framework base: ORM, vistas, plantillas, admin, auth |
-| API | djangorestframework | 3.18.1 | ViewSets, serializers, permisos y paginación de la API |
+| API | djangorestframework | 3.18.1 | ViewSets, serializers, permisos y paginaciÃ³n de la API |
 | API | django-filter | 26.1 | DjangoFilterBackend para filtrar y ordenar listados |
-| Seguridad web | django-cors-headers | 4.9.0 | Middleware CORS para consumos desde otros orígenes |
-| Datos | psycopg | 3.3.6 | Driver PostgreSQL para el despliegue de producción |
+| Seguridad web | django-cors-headers | 4.9.0 | Middleware CORS para consumos desde otros orÃ­genes |
+| Datos | psycopg | 3.3.6 | Driver PostgreSQL para el despliegue de producciÃ³n |
 | Real-time | channels | 4.3.2 | Infraestructura ASGI para WebSockets |
 | Real-time | channels-redis | 4.3.0 | Channel layer distribuido sobre Redis |
 | Real-time | daphne | 4.2.3 | Servidor ASGI; es el que ejecuta runserver |
-| Utilerías | python-dotenv | 1.2.3 | Carga del archivo .env en settings |
-| Utilerías | celery | 5.6.3 | Cola de tareas asíncronas (configurado, sin uso activo) |
-| Utilerías | redis | 8.1.0 | Cliente Redis |
-| Utilerías | Pillow | 12.3.0 | Procesamiento de imágenes (avatars, fotos) |
-| Documentos | reportlab | 5.0.1 | Generación del comprobante de pago en PDF |
-| Producción | gunicorn | 26.2.0 | Servidor WSGI para producción |
-| Producción | whitenoise | 6.12.0 | Servido de archivos estáticos sin servidor extra |
-| Desarrollo | django-extensions | 4.1 | Comandos de gestión adicionales |
-| Desarrollo | django-debug-toolbar | 8.0.0 | Panel de depuración (no activado) |
+| UtilerÃ­as | python-dotenv | 1.2.3 | Carga del archivo .env en settings |
+| UtilerÃ­as | celery | 5.6.3 | Cola de tareas asÃ­ncronas (configurado, sin uso activo) |
+| UtilerÃ­as | redis | 8.1.0 | Cliente Redis |
+| UtilerÃ­as | Pillow | 12.3.0 | Procesamiento de imÃ¡genes (avatars, fotos) |
+| Documentos | reportlab | 5.0.1 | GeneraciÃ³n del comprobante de pago en PDF |
+| ProducciÃ³n | gunicorn | 26.2.0 | Servidor WSGI para producciÃ³n |
+| ProducciÃ³n | whitenoise | 6.12.0 | Servido de archivos estÃ¡ticos sin servidor extra |
+| Desarrollo | django-extensions | 4.1 | Comandos de gestiÃ³n adicionales |
+| Desarrollo | django-debug-toolbar | 8.0.0 | Panel de depuraciÃ³n (no activado) |
 
 *Tabla 2.1 - Dependencias declaradas en requirements.txt.*
 
 ### 2.3 Componentes principales
 
-| Componente | Tecnología | Responsabilidad en el sistema |
+| Componente | TecnologÃ­a | Responsabilidad en el sistema |
 |---|---|---|
-| Backend web | Django 6.1 | MVT: URLs, vistas, plantillas, ORM y administración |
-| API REST | Django REST Framework | ViewSets por módulo con permisos, filtros y paginación |
+| Backend web | Django 6.1 | MVT: URLs, vistas, plantillas, ORM y administraciÃ³n |
+| API REST | Django REST Framework | ViewSets por mÃ³dulo con permisos, filtros y paginaciÃ³n |
 | Base de datos | SQLite (dev) / PostgreSQL (prod) | Persistencia relacional de 25 modelos |
 | Plantillas | Django Template Language | HTML renderizado en el servidor |
-| Estilos | CSS con variables + media queries | Sistema de diseño compartido entre módulos |
-| Interactividad | JavaScript nativo (sin framework) | Formularios, diálogos, filtros y acciones asíncronas |
+| Estilos | CSS con variables + media queries | Sistema de diseÃ±o compartido entre mÃ³dulos |
+| Interactividad | JavaScript nativo (sin framework) | Formularios, diÃ¡logos, filtros y acciones asÃ­ncronas |
 | PDF | ReportLab | Comprobante de pago descargable |
 | Tiempo real | Daphne + Channels + Redis | WebSockets de chat y notificaciones (pendiente de cablear) |
-| Tareas asíncronas | Celery + Redis | Configurado en settings, sin app Celery implementada |
-| Despliegue | Gunicorn + WhiteNoise | Servidor de producción previsto |
+| Tareas asÃ­ncronas | Celery + Redis | Configurado en settings, sin app Celery implementada |
+| Despliegue | Gunicorn + WhiteNoise | Servidor de producciÃ³n previsto |
 
-*Tabla 2.2 - Componentes tecnológicos y su papel en la arquitectura.*
+*Tabla 2.2 - Componentes tecnolÃ³gicos y su papel en la arquitectura.*
 
 ### 2.4 Dependencias declaradas pero no activas
 
-Los siguientes paquetes aparecen en requirements.txt y/o en settings.py pero no están integrados en INSTALLED_APPS ni en el flujo de ejecución. No son errores, pero conviene saberlo antes de planificar trabajo sobre ellos:
+Los siguientes paquetes aparecen en requirements.txt y/o en settings.py pero no estÃ¡n integrados en INSTALLED_APPS ni en el flujo de ejecuciÃ³n. No son errores, pero conviene saberlo antes de planificar trabajo sobre ellos:
 
-| Paquete / config | Estado real | Qué faltaría |
+| Paquete / config | Estado real | QuÃ© faltarÃ­a |
 |---|---|---|
-| channels | No está en INSTALLED_APPS | Registrar la app y cablear el ProtocolTypeRouter en condosys/asgi.py |
-| chat/routing.py + consumers.py | Existe pero es código muerto | Registrar las rutas WebSocket en asgi.py con AuthMiddlewareStack |
+| channels | No estÃ¡ en INSTALLED_APPS | Registrar la app y cablear el ProtocolTypeRouter en condosys/asgi.py |
+| chat/routing.py + consumers.py | Existe pero es cÃ³digo muerto | Registrar las rutas WebSocket en asgi.py con AuthMiddlewareStack |
 | CHANNEL_LAYERS | Configurado con RedisChannelLayer | Solo se usa si se cablea el routing ASGI |
 | celery | Configurado (broker, serializers, timezone) | Crear celery.py, el initializer de la app y registrar tareas |
-| django-extensions | No está en INSTALLED_APPS | Añadir la app para habilitar sus comandos |
-| django-debug-toolbar | No está en INSTALLED_APPS | Añadir app + middleware solo en desarrollo |
-| corsheaders | Middleware activo pero la app no está instalada | Añadir 'corsheaders' a INSTALLED_APPS si se consume desde otro origen |
-| gunicorn + whitenoise | Solo dependencias | Crear el servicio de producción y servir los estáticos con WhiteNoise |
+| django-extensions | No estÃ¡ en INSTALLED_APPS | AÃ±adir la app para habilitar sus comandos |
+| django-debug-toolbar | No estÃ¡ en INSTALLED_APPS | AÃ±adir app + middleware solo en desarrollo |
+| corsheaders | Middleware activo pero la app no estÃ¡ instalada | AÃ±adir 'corsheaders' a INSTALLED_APPS si se consume desde otro origen |
+| gunicorn + whitenoise | Solo dependencias | Crear el servicio de producciÃ³n y servir los estÃ¡ticos con WhiteNoise |
 | psycopg | Driver instalado | Descomentar el bloque PostgreSQL de settings.py |
 
 *Tabla 2.3 - Capacidades preparadas pero no habilitadas.*
 
-> **ATENCIÓN** — El frontend no usa ningún framework de JavaScript. Todo el comportamiento dinámico está escrito en JavaScript nativo repartido en 29 archivos .js. No hay build step, ni bundler, ni node_modules, ni transpilador. Ventaja: no hay cadena de herramientas que mantener. Riesgo: el JavaScript del proyecto crece de forma lineal con los módulos y no tiene pruebas ni linting automático.
+> **ATENCIÃ“N** â€” El frontend no usa ningÃºn framework de JavaScript. Todo el comportamiento dinÃ¡mico estÃ¡ escrito en JavaScript nativo repartido en 29 archivos .js. No hay build step, ni bundler, ni node_modules, ni transpilador. Ventaja: no hay cadena de herramientas que mantener. Riesgo: el JavaScript del proyecto crece de forma lineal con los mÃ³dulos y no tiene pruebas ni linting automÃ¡tico.
 
 ## 3. Arquitectura del proyecto
 
-### 3.1 Visión general
+### 3.1 VisiÃ³n general
 
-CONDOSYS sigue el patrón clásico de Django: un único proyecto de settings y URLs que agrega múltiples aplicaciones. Cada aplicación es autónoma en cuanto a modelos, vistas, serializers, plantillas y estáticos, pero comparte el proyecto, la base de datos, el sistema de autenticación y los permisos definidos en la aplicación accounts.
+CONDOSYS sigue el patrÃ³n clÃ¡sico de Django: un Ãºnico proyecto de settings y URLs que agrega mÃºltiples aplicaciones. Cada aplicaciÃ³n es autÃ³noma en cuanto a modelos, vistas, serializers, plantillas y estÃ¡ticos, pero comparte el proyecto, la base de datos, el sistema de autenticaciÃ³n y los permisos definidos en la aplicaciÃ³n accounts.
 
-**Flujo de una petición en CONDOSYS**
+**Flujo de una peticiÃ³n en CONDOSYS**
 
 ```
 Navegador
@@ -167,7 +167,7 @@ Navegador
 |                   |                    |
 +--------------+-------------------------+
                 |
-            [Capa común]
+            [Capa comÃºn]
          accounts.permissions
            (IsAdmin, IsManager,
             IsResident, ...)
@@ -179,49 +179,49 @@ Navegador
         [SQLite (dev) / PostgreSQL (prod)]
 ```
 
-Contexto transversal: Jinja-free Django Templates, static/css (variables.css como fuente única de tokens), static/js (módulos sin framework).
+Contexto transversal: Jinja-free Django Templates, static/css (variables.css como fuente Ãºnica de tokens), static/js (mÃ³dulos sin framework).
 
 ### 3.2 Estructura de directorios
 
-El repositorio tiene dos niveles: el proyecto Django y, dentro de él, las aplicaciones. La raíz del proyecto es el directorio que contiene manage.py.
+El repositorio tiene dos niveles: el proyecto Django y, dentro de Ã©l, las aplicaciones. La raÃ­z del proyecto es el directorio que contiene manage.py.
 
 **Estructura del repositorio**
 
 ```text
 condosys/
-|-- manage.py           # utilidad de línea de comandos de Django
+|-- manage.py           # utilidad de lÃ­nea de comandos de Django
 |-- requirements.txt    # dependencias del proyecto
 |-- .gitignore          # protege .env, db.sqlite3, .venv, __pycache__
 |-- venv/               # entorno virtual (no versionado)
 |-- db.sqlite3          # base de datos de desarrollo (no versionada)
 |
-|-- condosys/           # CONFIGURACIÓN del proyecto
-|   |-- settings.py     # settings únicos (contiene duplicados, ver cap. 11)
+|-- condosys/           # CONFIGURACIÃ“N del proyecto
+|   |-- settings.py     # settings Ãºnicos (contiene duplicados, ver cap. 11)
 |   |-- urls.py         # ROOT_URLCONF: incluye los urls de cada app
 |   |-- asgi.py         # punto de entrada ASGI (sin ProtocolTypeRouter)
 |   |-- wsgi.py         # punto de entrada WSGI
 |   `-- accounts/       # sub-paquete auxiliar interno
 |
 |-- templates/          # plantillas GLOBALES
-|   |-- base.html       # esqueleto común a toda la interfaz
-|   `-- componentes/    # header, aside, modal, paginación, botones, ...
+|   |-- base.html       # esqueleto comÃºn a toda la interfaz
+|   `-- componentes/    # header, aside, modal, paginaciÃ³n, botones, ...
 |
-|-- static/             # estáticos COMPARTIDOS del proyecto
+|-- static/             # estÃ¡ticos COMPARTIDOS del proyecto
 |   |-- css/
-|   |   |-- variables.css     # FUENTE ÚNICA de tokens de diseño
+|   |   |-- variables.css     # FUENTE ÃšNICA de tokens de diseÃ±o
 |   |   |-- style.css         # estilos base (importa variables.css)
 |   |   |-- formularios.css   # formularios compartidos
 |   |   |-- tablas.css        # tablas de datos
-|   |   |-- paginacion.css    # controles de paginación
-|   |   |-- dialogos.css      # modales y diálogos
+|   |   |-- paginacion.css    # controles de paginaciÃ³n
+|   |   |-- dialogos.css      # modales y diÃ¡logos
 |   |   |-- acciones.css      # paneles de acciones del dashboard
 |   |   |-- entradas.css      # inputs
 |   |   `-- mediaquerys.css   # breakpoints comunes
 |   |-- js/
-|   |   |-- dialogos.js       # gestión de <dialog>
-|   |   |-- pagos.js          # lógica compartida de pagos
+|   |   |-- dialogos.js       # gestiÃ³n de <dialog>
+|   |   |-- pagos.js          # lÃ³gica compartida de pagos
 |   |   `-- mascaras.js, contadores.js, menu-movil.js, ...
-|   `-- images/icons/         # iconografía
+|   `-- images/icons/         # iconografÃ­a
 |
 `-- <app>/              # 18 aplicaciones Django
     |-- models.py       # modelos de datos
@@ -230,46 +230,46 @@ condosys/
     |-- forms.py        # formularios de las vistas HTML
     |-- urls.py         # rutas + DefaultRouter
     |-- admin.py        # registro en el admin de Django
-    |-- tests.py        # plantilla vacía (no hay suite real)
+    |-- tests.py        # plantilla vacÃ­a (no hay suite real)
     |-- migrations/     # migraciones de esquema
     |-- templates/<app>/# plantillas de la app
-    `-- static/css, static/js # estilos y scripts específicos del módulo
+    `-- static/css, static/js # estilos y scripts especÃ­ficos del mÃ³dulo
 ```
 
-### 3.3 El patrón por aplicación
+### 3.3 El patrÃ³n por aplicaciÃ³n
 
-Todas las apps de dominio siguen el mismo esqueleto. Cuando agregue un módulo nuevo, copie este patrón:
+Todas las apps de dominio siguen el mismo esqueleto. Cuando agregue un mÃ³dulo nuevo, copie este patrÃ³n:
 
 | Archivo | Contenido esperado | Existe en |
 |---|---|---|
-| models.py | Modelos de dominio con claves UUID y related_name explícitos | Todas salvo login e inicio |
+| models.py | Modelos de dominio con claves UUID y related_name explÃ­citos | Todas salvo login e inicio |
 | views.py | app_index() con @role_required + ViewSets DRF | Todas |
 | serializers.py | Serializers de lectura (y de detalle cuando aplica) | Todas salvo inicio |
 | urls.py | Rutas HTML + DefaultRouter registrado en su prefijo | Todas |
-| forms.py | Formularios ModelForm para las vistas HTML | Mayoría |
+| forms.py | Formularios ModelForm para las vistas HTML | MayorÃ­a |
 | admin.py | Registro de modelos en el admin de Django | Todas |
-| permissions.py | Permisos DRF específicos | Solo accounts (ver cap. 5) |
+| permissions.py | Permisos DRF especÃ­ficos | Solo accounts (ver cap. 5) |
 | migrations/ | Migraciones de esquema | Todas salvo inicio y login |
-| templates/ | index.html como página principal del módulo | Todas |
-| static/ | CSS y JS propios del módulo | Todas salvo inicio (parcial) |
-| tests.py | Plantilla vacía generada por startapp | Todas |
+| templates/ | index.html como pÃ¡gina principal del mÃ³dulo | Todas |
+| static/ | CSS y JS propios del mÃ³dulo | Todas salvo inicio (parcial) |
+| tests.py | Plantilla vacÃ­a generada por startapp | Todas |
 
-*Tabla 3.1 - Archivos esperados en cada aplicación de dominio.*
+*Tabla 3.1 - Archivos esperados en cada aplicaciÃ³n de dominio.*
 
-> **NOTA** — Convención de nombres del frontend. La página principal de cada módulo se llama siempre index.html; los demás archivos se nombran por su contenido (agregar.html, nuevo.html, perfil.html). Los estilos y scripts compartidos viven en static/css y static/js del proyecto; lo específico de un módulo queda en el static de su propia app.
+> **NOTA** â€” ConvenciÃ³n de nombres del frontend. La pÃ¡gina principal de cada mÃ³dulo se llama siempre index.html; los demÃ¡s archivos se nombran por su contenido (agregar.html, nuevo.html, perfil.html). Los estilos y scripts compartidos viven en static/css y static/js del proyecto; lo especÃ­fico de un mÃ³dulo queda en el static de su propia app.
 
-### 3.4 Capa de presentación: dos superficies en la misma app
+### 3.4 Capa de presentaciÃ³n: dos superficies en la misma app
 
-Cada módulo expone dos superficies complementarias:
+Cada mÃ³dulo expone dos superficies complementarias:
 
-- **Superficie HTML** - vista de función app_index que renderiza la plantilla index.html con paginación server-side, filtros por query string y formularios. Es la experiencia principal del usuario.
-- **Superficie API** - ViewSet de DRF registrado en el router que expone listado, detalle, creación, actualización y borrado en JSON, con filtros, búsqueda, ordenamiento y paginación por ?page=. La vista HTML aplica el permiso con el decorador @role_required(...); la API lo aplica con permission_classes. Los listados HTML tienen paginación de 15 elementos por página; la API usa PageNumberPagination con 20.
+- **Superficie HTML** - vista de funciÃ³n app_index que renderiza la plantilla index.html con paginaciÃ³n server-side, filtros por query string y formularios. Es la experiencia principal del usuario.
+- **Superficie API** - ViewSet de DRF registrado en el router que expone listado, detalle, creaciÃ³n, actualizaciÃ³n y borrado en JSON, con filtros, bÃºsqueda, ordenamiento y paginaciÃ³n por ?page=. La vista HTML aplica el permiso con el decorador @role_required(...); la API lo aplica con permission_classes. Los listados HTML tienen paginaciÃ³n de 15 elementos por pÃ¡gina; la API usa PageNumberPagination con 20.
 
-### 3.5 Patrones de implementación recurrentes
+### 3.5 Patrones de implementaciÃ³n recurrentes
 
 #### Visibilidad por usuario en los listados
 
-Los listados HTML aplican un filtro de visibilidad para que un residente solo vea lo que le corresponde. El patrón es una función helper _<entidad>_visibles(user) en views.py, reutilizada por la vista y por el get_queryset() del ViewSet:
+Los listados HTML aplican un filtro de visibilidad para que un residente solo vea lo que le corresponde. El patrÃ³n es una funciÃ³n helper _<entidad>_visibles(user) en views.py, reutilizada por la vista y por el get_queryset() del ViewSet:
 
 ```python
 # Patron real (payments/views.py, estructura logica)
@@ -290,7 +290,7 @@ def get_queryset(self):
 
 #### Serializers diferenciados para listado y detalle
 
-Cuando el detalle expone más campos que el listado, el ViewSet elige el serializer según la acción mediante get_serializer_class():
+Cuando el detalle expone mÃ¡s campos que el listado, el ViewSet elige el serializer segÃºn la acciÃ³n mediante get_serializer_class():
 
 ```python
 def get_serializer_class(self):
@@ -310,7 +310,7 @@ def get_serializer_class(self):
 
 #### Cambios de estado auditados
 
-El módulo de incidencias registra cada transición de estado en una bitácora de historial. Se hace sobrescribiendo perform_update() en el ViewSet:
+El mÃ³dulo de incidencias registra cada transiciÃ³n de estado en una bitÃ¡cora de historial. Se hace sobrescribiendo perform_update() en el ViewSet:
 
 ```python
 # incidents/views.py - perform_update
@@ -346,23 +346,23 @@ respuesta['Content-Disposition'] = 'inline; filename="comprobante_pago.pdf"'
 return respuesta
 ```
 
-Los parámetros viajan por query string (?pago_id=...&departamento=...) porque el JS externo no puede usar etiquetas de plantilla Django; los valores viajan en atributos data-* del HTML.
+Los parÃ¡metros viajan por query string (?pago_id=...&departamento=...) porque el JS externo no puede usar etiquetas de plantilla Django; los valores viajan en atributos data-* del HTML.
 
-## 4. Instalación, ejecución y operación
+## 4. InstalaciÃ³n, ejecuciÃ³n y operaciÃ³n
 
 ### 4.1 Requisitos previos
 
-| Requisito | Detalle | Cómo verificarlo |
+| Requisito | Detalle | CÃ³mo verificarlo |
 |---|---|---|
 | Python | 3.13 o superior (probado en 3.13.6) | python --version |
 | pip | incluido con Python | python -m pip --version |
 | Acceso al repositorio | git clone del remoto origin | git remote -v |
 | Redis (opcional) | Solo si se activan Channels o Celery | redis-cli ping |
-| PostgreSQL (opcional) | Solo para el despliegue de producción | psql --version |
+| PostgreSQL (opcional) | Solo para el despliegue de producciÃ³n | psql --version |
 
-### 4.2 Instalación desde cero
+### 4.2 InstalaciÃ³n desde cero
 
-Todos los comandos se ejecutan desde la raíz del proyecto, el directorio que contiene manage.py. En Windows, los comandos usan la ruta relativa del intérprete del entorno virtual.
+Todos los comandos se ejecutan desde la raÃ­z del proyecto, el directorio que contiene manage.py. En Windows, los comandos usan la ruta relativa del intÃ©rprete del entorno virtual.
 
 #### Paso 1 - Clonar el repositorio
 
@@ -383,11 +383,11 @@ venv\Scripts\activate
 python3 -m venv venv
 source venv/bin/activate
 
-# Verificación
+# VerificaciÃ³n
 python --version # debe responder 3.13.x
 ```
 
-A partir de aquí, este manual usa la forma Windows venv\Scripts\python.exe porque es el entorno verificado. En Linux/macOS se sustituye por python.
+A partir de aquÃ­, este manual usa la forma Windows venv\Scripts\python.exe porque es el entorno verificado. En Linux/macOS se sustituye por python.
 
 #### Paso 3 - Instalar dependencias
 
@@ -395,13 +395,13 @@ A partir de aquí, este manual usa la forma Windows venv\Scripts\python.exe porq
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 
-# Verificación: la suite de comprobación debe reportar 0 problemas
+# VerificaciÃ³n: la suite de comprobaciÃ³n debe reportar 0 problemas
 python manage.py check
 ```
 
 #### Paso 4 - Configurar el archivo .env
 
-El proyecto lee su configuración sensible desde un archivo .env en la raíz, cargado por python-dotenv. El archivo está en .gitignore y nunca debe versionarse.
+El proyecto lee su configuraciÃ³n sensible desde un archivo .env en la raÃ­z, cargado por python-dotenv. El archivo estÃ¡ en .gitignore y nunca debe versionarse.
 
 **.env - variables disponibles**
 
@@ -424,7 +424,7 @@ DATABASE_HOST=localhost
 DATABASE_PORT=5432
 ```
 
-> **PENDIENTE / BUG** — SECRET_KEY no tiene valor por defecto. settings.py lee SECRET_KEY = os.getenv('DJANGO_SECRET_KEY') sin fallback. Si la variable falta, Django lanza ImproperlyConfigured y el proyecto no arranca. Implica que .env es obligatorio: no se puede levantar el proyecto sin él.
+> **PENDIENTE / BUG** â€” SECRET_KEY no tiene valor por defecto. settings.py lee SECRET_KEY = os.getenv('DJANGO_SECRET_KEY') sin fallback. Si la variable falta, Django lanza ImproperlyConfigured y el proyecto no arranca. Implica que .env es obligatorio: no se puede levantar el proyecto sin Ã©l.
 
 #### Paso 5 - Aplicar migraciones
 
@@ -435,21 +435,21 @@ python manage.py migrate
 
 #### Paso 6 - Cargar datos de ejemplo (opcional)
 
-El proyecto incluye un comando de gestión idempotente que siembra registros de prueba en todas las secciones. Es la vía recomendada para levantar un entorno de demostración o para verificar permisos con los distintos roles.
+El proyecto incluye un comando de gestiÃ³n idempotente que siembra registros de prueba en todas las secciones. Es la vÃ­a recomendada para levantar un entorno de demostraciÃ³n o para verificar permisos con los distintos roles.
 
-**Carga de datos de demostración**
+**Carga de datos de demostraciÃ³n**
 
 ```bash
 python manage.py poblar_datos
 
-# Crea 7 usuarios base; las contraseñas de los recién creados son: Condosys123*
+# Crea 7 usuarios base; las contraseÃ±as de los reciÃ©n creados son: Condosys123*
 # admin@condosys.do rol admin
 # gestion@condosys.do rol manager
 # residente1..5@condosys.do rol resident
 # Ejecutarlo de nuevo no duplica registros (update_or_create + transaction.atomic).
 ```
 
-> **ATENCIÓN** — No use datos de ejemplo en producción. El comando poblar_datos crea usuarios con contraseña conocida y datos personales ficticios. Elimínelos antes de exponer el sistema a usuarios reales.
+> **ATENCIÃ“N** â€” No use datos de ejemplo en producciÃ³n. El comando poblar_datos crea usuarios con contraseÃ±a conocida y datos personales ficticios. ElimÃ­nelos antes de exponer el sistema a usuarios reales.
 
 #### Paso 7 - Arrancar el servidor de desarrollo
 
@@ -458,82 +458,82 @@ python manage.py runserver
 # http://127.0.0.1:8000/
 ```
 
-Aunque el comando se llama runserver, el servidor real es Daphne: la cadena daphne aparece primera en INSTALLED_APPS y Django delega en ella cuando está disponible.
+Aunque el comando se llama runserver, el servidor real es Daphne: la cadena daphne aparece primera en INSTALLED_APPS y Django delega en ella cuando estÃ¡ disponible.
 
 ### 4.3 Comandos de uso frecuente
 
-| Comando | Para qué sirve |
+| Comando | Para quÃ© sirve |
 |---|---|
 | manage.py runserver | Levanta el servidor ASGI de desarrollo |
-| manage.py check | Verifica la configuración; debe dar 0 problemas |
+| manage.py check | Verifica la configuraciÃ³n; debe dar 0 problemas |
 | manage.py migrate | Aplica las migraciones pendientes |
 | manage.py makemigrations | Genera migraciones tras cambiar modelos |
-| manage.py sqlmigrate <app> <n> | Muestra el SQL de una migración |
+| manage.py sqlmigrate <app> <n> | Muestra el SQL de una migraciÃ³n |
 | manage.py showmigrations | Lista el estado de las migraciones de cada app |
 | manage.py createsuperuser | Crea el administrador inicial (pide email, no username) |
 | manage.py shell | Consola interactiva de Python con el ORM cargado |
 | manage.py dbshell | Consola directa de la base de datos |
-| manage.py collectstatic | Reúne los estáticos en STATIC_ROOT para producción |
-| manage.py test | Ejecuta la suite de pruebas (hoy vacía) |
-| manage.py poblar_datos | Carga datos de demostración (idempotente) |
+| manage.py collectstatic | ReÃºne los estÃ¡ticos en STATIC_ROOT para producciÃ³n |
+| manage.py test | Ejecuta la suite de pruebas (hoy vacÃ­a) |
+| manage.py poblar_datos | Carga datos de demostraciÃ³n (idempotente) |
 
-*Tabla 4.1 - Comandos de gestión de Django usados en el proyecto.*
+*Tabla 4.1 - Comandos de gestiÃ³n de Django usados en el proyecto.*
 
 ### 4.4 Flujo de trabajo con git
 
-| Concepto | Convención del proyecto |
+| Concepto | ConvenciÃ³n del proyecto |
 |---|---|
-| Rama de trabajo | desarrollo - aquí se desarrolla |
+| Rama de trabajo | desarrollo - aquÃ­ se desarrolla |
 | Rama estable | main - versiones estables |
 | Remoto | origin -> https://github.com/JMJ0331/condosys.git |
 | Prefijos de commit | add:, fix:, update:, refactor: |
-| Tiempo verbal | Pretérito indefinido: 'agregué', 'integré', 'arreglé' |
-| Idioma | Español, incluidos los mensajes de commit |
+| Tiempo verbal | PretÃ©rito indefinido: 'agreguÃ©', 'integrÃ©', 'arreglÃ©' |
+| Idioma | EspaÃ±ol, incluidos los mensajes de commit |
 
 **Ejemplo**
 
 ```bash
-fix: corregí la validación del rol en el login
+fix: corregÃ­ la validaciÃ³n del rol en el login
 git status # revisar antes de commitear
-git add <archivos-específicos> # nunca commitear .env ni db.sqlite3
-git commit -m "add: agregué módulo de reservas"
+git add <archivos-especÃ­ficos> # nunca commitear .env ni db.sqlite3
+git commit -m "add: agreguÃ© mÃ³dulo de reservas"
 git push origin desarrollo
 ```
 
 ### 4.5 Rutas principales del sistema
 
-| Ruta | Módulo | Acceso |
+| Ruta | MÃ³dulo | Acceso |
 |---|---|---|
-| / | Inicio de sesión | Público |
-| /salir/ | Cierre de sesión (POST) | Autenticado |
+| / | Inicio de sesiÃ³n | PÃºblico |
+| /salir/ | Cierre de sesiÃ³n (POST) | Autenticado |
 | /inicio/ | Dashboard | Todos |
 | /mi-perfil/ | Perfil del usuario | Todos |
 | /residencial/ | Ficha del residencial | Administrador |
 | /cuentas/ | Usuarios y roles | Administrador |
 | /departamentos/ | Jardines, edificios y apartamentos | Todos |
-| /propietarios/ | Propietarios | Gestión |
-| /residentes/ | Residentes y ocupantes | Gestión, Propietario |
-| /pagos/ | Pagos y cuotas | Todos (Gestión escribe) |
+| /propietarios/ | Propietarios | GestiÃ³n |
+| /residentes/ | Residentes y ocupantes | GestiÃ³n, Propietario |
+| /pagos/ | Pagos y cuotas | Todos (GestiÃ³n escribe) |
 | /pagos/comprobante/ | Comprobante en PDF | Todos |
-| /mantenimientos/ | Cargos de mantenimiento | Todos (Gestión escribe) |
+| /mantenimientos/ | Cargos de mantenimiento | Todos (GestiÃ³n escribe) |
 | /incidencias/ | Incidencias | Todos |
-| /solicitudes/ | Solicitudes y trámites | Gestión |
-| /visitantes/ | Control de visitantes | Seguridad, Gestión |
-| /areas-comunes/ | Áreas comunes | Todos |
+| /solicitudes/ | Solicitudes y trÃ¡mites | GestiÃ³n |
+| /visitantes/ | Control de visitantes | Seguridad, GestiÃ³n |
+| /areas-comunes/ | Ãreas comunes | Todos |
 | /reservas/ | Reservas | Todos |
 | /comunicados/ | Comunicados | Todos |
-| /notificaciones/ | Notificaciones | Gestión |
-| /reportes/ | Reportes y bitácora | Gestión |
-| /chat/ | Mensajería | Todos |
-| /configuracion/ | Configuración (usuarios e integración IA) | Administrador |
-| /recuperar-clave/ | Solicitar recuperación de contraseña | Público |
-| /restablecer-clave/ | Restablecer contraseña con token | Público |
-| /visitantes/buscar-cedula/ | Lectura de cédula con IA (POST) | Seguridad, Gestión |
-| /admin/ | Administración de Django | Staff |
+| /notificaciones/ | Notificaciones | GestiÃ³n |
+| /reportes/ | Reportes y bitÃ¡cora | GestiÃ³n |
+| /chat/ | MensajerÃ­a | Todos |
+| /configuracion/ | ConfiguraciÃ³n (usuarios e integraciÃ³n IA) | Administrador |
+| /recuperar-clave/ | Solicitar recuperaciÃ³n de contraseÃ±a | PÃºblico |
+| /restablecer-clave/ | Restablecer contraseÃ±a con token | PÃºblico |
+| /visitantes/buscar-cedula/ | Lectura de cÃ©dula con IA (POST) | Seguridad, GestiÃ³n |
+| /admin/ | AdministraciÃ³n de Django | Staff |
 
-*Tabla 4.2 - Rutas HTML por módulo.*
+*Tabla 4.2 - Rutas HTML por mÃ³dulo.*
 
-#### Manual técnico CONDOSYS — Fragmento (capítulos 5 y 6)
+#### Manual tÃ©cnico CONDOSYS â€” Fragmento (capÃ­tulos 5 y 6)
 
 ## 5. Usuarios, roles y permisos
 
@@ -547,18 +547,18 @@ El sistema no usa el modelo de usuario por defecto de Django. `accounts.User` ex
 | Sin username | `username = None`; `USERNAME_FIELD = 'email'` | El login, el admin y createsuperuser piden email |
 | Campo role | `admin \| manager \| resident \| propietario \| security` | El permiso se decide por rol, no por grupos |
 | Campo status | `active \| inactive \| pending` | El login manual rechaza a quien no tenga `'active'` |
-| Teléfono y documento | `phone`, `document` (únicos) | Identificación operativa del residente |
+| TelÃ©fono y documento | `phone`, `document` (Ãºnicos) | IdentificaciÃ³n operativa del residente |
 | Avatar | `avatar` (ImageField) y `avatar_url` (URLField) | Permite imagen local o remota |
-| Vínculo a jardín | `garden = FK a structure.Garden (SET_NULL)` | Encuadre del usuario dentro del residencial |
+| VÃ­nculo a jardÃ­n | `garden = FK a structure.Garden (SET_NULL)` | Encuadre del usuario dentro del residencial |
 
 *Tabla 5.1 - Diferencias del modelo de usuario frente al de Django.*
 
 ### 5.2 Estados de la cuenta
 
-| Estado | Significado | Puede iniciar sesión |
+| Estado | Significado | Puede iniciar sesiÃ³n |
 | --- | --- | --- |
-| `active` | Cuenta habilitada | Sí |
-| `pending` | En verificación, pendiente de autorización | No |
+| `active` | Cuenta habilitada | SÃ­ |
+| `pending` | En verificaciÃ³n, pendiente de autorizaciÃ³n | No |
 | `inactive` | Cuenta desactivada | No |
 
 El campo `is_active` (heredado de Django) convive con `status`. La vista de login exige las dos condiciones: `user.is_active and user.status == 'active'`. Mantenga ambas sincronizadas.
@@ -574,7 +574,7 @@ ROLES_RESIDENTE = ('admin', 'manager', 'resident', 'propietario')
 ROLES_TODOS = ('admin', 'manager', 'security', 'resident', 'propietario')
 ```
 
-Usar siempre estas constantes en vez de escribir las tuplas a mano: si un rol se agrega después, basta con actualizar la constante.
+Usar siempre estas constantes en vez de escribir las tuplas a mano: si un rol se agrega despuÃ©s, basta con actualizar la constante.
 
 ### 5.4 Mecanismo de control de acceso
 
@@ -593,7 +593,7 @@ def agregar_pago(request):
     ... # renderiza el formulario
 ```
 
-Si el usuario no tiene el rol, el decorador muestra un mensaje de error y redirige: a `visitantes_index` para seguridad (su único módulo) y a `inicio` en cualquier otro caso.
+Si el usuario no tiene el rol, el decorador muestra un mensaje de error y redirige: a `visitantes_index` para seguridad (su Ãºnico mÃ³dulo) y a `inicio` en cualquier otro caso.
 
 #### Capa 2 - Permisos de clase para la API
 
@@ -603,17 +603,17 @@ Si el usuario no tiene el rol, el decorador muestra un mensaje de error y rediri
 | `IsManager` | `role in ROLES_GESTION` | Propietario, Solicitud, AuditLog, Report |
 | `IsAdminOrGestionLectura` | lectura: `ROLES_GESTION`; escritura: solo admin | Garden, Block, Building |
 | `IsResident` | `role in ROLES_RESIDENTE` | CommonAreaViewSet, ReservationViewSet |
-| `IsGestionOrSoloLectura` | Autenticado y (método seguro o `role in ROLES_GESTION`) | Resident, Payment, MaintenanceCharge, AreaComun, Communication, Notification |
+| `IsGestionOrSoloLectura` | Autenticado y (mÃ©todo seguro o `role in ROLES_GESTION`) | Resident, Payment, MaintenanceCharge, AreaComun, Communication, Notification |
 | `CanModifyUser` | admin, o el propio usuario | UserViewSet (detalle, editar, borrar) |
-| `CanModifyIncident` | Gestión; o el que reporta; o el asignado (solo lectura) | IncidentViewSet |
-| `CanModifyVisitor` | Gestión; o security; o residente del apartamento | VisitorViewSet |
-| `CanAccessApartment` | Gestión; o propietario del apartamento; o residente actual | ApartmentViewSet |
+| `CanModifyIncident` | GestiÃ³n; o el que reporta; o el asignado (solo lectura) | IncidentViewSet |
+| `CanModifyVisitor` | GestiÃ³n; o security; o residente del apartamento | VisitorViewSet |
+| `CanAccessApartment` | GestiÃ³n; o propietario del apartamento; o residente actual | ApartmentViewSet |
 
 *Tabla 5.2 - Permisos DRF personalizados definidos en accounts/permissions.py.*
 
 #### Capa 3 - Contexto de plantilla
 
-Los context processors `modulos_usuario` y `permisos_modulo` publican en los HTML los módulos visibles y los permisos de crear, editar y eliminar de cada módulo. Es lo que permite ocultar botones según el rol sin duplicar lógica en el template.
+Los context processors `modulos_usuario` y `permisos_modulo` publican en los HTML los mÃ³dulos visibles y los permisos de crear, editar y eliminar de cada mÃ³dulo. Es lo que permite ocultar botones segÃºn el rol sin duplicar lÃ³gica en el template.
 
 #### Nombres de los context processors
 
@@ -641,84 +641,84 @@ ROL_CREADOR, ROL_EDITOR, ROL_ELIMINADOR = ... # tabla de roles por modulo
 
 La tabla siguiente resume el alcance funcional de cada rol. Es la referencia para responder preguntas de soporte y para validar requisitos antes de implementar.
 
-| Capacidad | Admin | Gestión | Seguridad | Residente | Propietario |
+| Capacidad | Admin | GestiÃ³n | Seguridad | Residente | Propietario |
 | --- | --- | --- | --- | --- | --- |
-| Autorizar registro de usuarios | Sí | No | No | No | No |
-| Gestionar roles y permisos | Sí | No | No | No | No |
-| Configurar ficha del residencial | Sí | No | No | No | No |
-| Registrar y editar departamentos | Sí | Sí | No | No | No |
-| Registrar propietarios | Sí | Sí | No | No | No |
-| Registrar residentes | Sí | Sí | No | No | No |
-| Registrar pagos y cuotas | Sí | Sí | No | No | No |
-| Emitir comprobantes de pago | Sí | Sí | No | Sí | Sí |
-| Consultar pagos | Sí | Sí | No | Solo los suyos | Solo los suyos |
-| Consultar pagos pendientes y vencidos | Sí | Sí | No | No | No |
-| Registrar cargos de mantenimiento | Sí | Sí | No | No | No |
-| Reportar incidencias | Sí | Sí | No | Sí | Sí |
-| Cambiar estado de incidencias | Sí | Sí | No | No | No |
-| Ver historial de incidencias | Sí | Sí | No | Sí | Sí |
-| Gestionar solicitudes | Sí | Sí | No | No | No |
-| Registrar visitantes | Sí | Sí | Sí | No | No |
-| Autorizar y controlar accesos | Sí | Sí | Sí | No | No |
-| Administrar áreas comunes | Sí | Sí | No | No | No |
-| Reservar áreas comunes | Sí | Sí | No | Sí | Sí |
-| Publicar comunicados | Sí | Sí | No | No | No |
-| Ver comunicados | Sí | Sí | Sí | Sí | Sí |
-| Ver reportes administrativos | Sí | Sí | No | No | No |
-| Usar la bitácora de auditoría | Sí | Sí | No | No | No |
-| Acceder al panel /admin/ | Sí | No | No | No | No |
+| Autorizar registro de usuarios | SÃ­ | No | No | No | No |
+| Gestionar roles y permisos | SÃ­ | No | No | No | No |
+| Configurar ficha del residencial | SÃ­ | No | No | No | No |
+| Registrar y editar departamentos | SÃ­ | SÃ­ | No | No | No |
+| Registrar propietarios | SÃ­ | SÃ­ | No | No | No |
+| Registrar residentes | SÃ­ | SÃ­ | No | No | No |
+| Registrar pagos y cuotas | SÃ­ | SÃ­ | No | No | No |
+| Emitir comprobantes de pago | SÃ­ | SÃ­ | No | SÃ­ | SÃ­ |
+| Consultar pagos | SÃ­ | SÃ­ | No | Solo los suyos | Solo los suyos |
+| Consultar pagos pendientes y vencidos | SÃ­ | SÃ­ | No | No | No |
+| Registrar cargos de mantenimiento | SÃ­ | SÃ­ | No | No | No |
+| Reportar incidencias | SÃ­ | SÃ­ | No | SÃ­ | SÃ­ |
+| Cambiar estado de incidencias | SÃ­ | SÃ­ | No | No | No |
+| Ver historial de incidencias | SÃ­ | SÃ­ | No | SÃ­ | SÃ­ |
+| Gestionar solicitudes | SÃ­ | SÃ­ | No | No | No |
+| Registrar visitantes | SÃ­ | SÃ­ | SÃ­ | No | No |
+| Autorizar y controlar accesos | SÃ­ | SÃ­ | SÃ­ | No | No |
+| Administrar Ã¡reas comunes | SÃ­ | SÃ­ | No | No | No |
+| Reservar Ã¡reas comunes | SÃ­ | SÃ­ | No | SÃ­ | SÃ­ |
+| Publicar comunicados | SÃ­ | SÃ­ | No | No | No |
+| Ver comunicados | SÃ­ | SÃ­ | SÃ­ | SÃ­ | SÃ­ |
+| Ver reportes administrativos | SÃ­ | SÃ­ | No | No | No |
+| Usar la bitÃ¡cora de auditorÃ­a | SÃ­ | SÃ­ | No | No | No |
+| Acceder al panel /admin/ | SÃ­ | No | No | No | No |
 
 *Tabla 5.3 - Alcance funcional por rol.*
 
-### 5.6 Matriz de acceso por módulo
+### 5.6 Matriz de acceso por mÃ³dulo
 
-Equivalente a la anterior, pero por módulo y por acción, que es como el código opera realmente.
+Equivalente a la anterior, pero por mÃ³dulo y por acciÃ³n, que es como el cÃ³digo opera realmente.
 
-| Módulo | Ver | Crear / editar | Eliminar | Permiso DRF |
+| MÃ³dulo | Ver | Crear / editar | Eliminar | Permiso DRF |
 | --- | --- | --- | --- | --- |
 | Inicio | Todos | - | - | `role_required` |
 | Residencial | Admin | Admin | Admin | `IsAdmin` |
 | Cuentas | Admin | Admin | Admin | `IsAdmin` / `CanModifyUser` |
-| Departamentos | Todos | Gestión | Gestión | `IsManager` / `CanAccessApartment` |
-| Propietarios | Gestión | Gestión | Gestión | `IsManager` |
-| Residentes | Gestión + propietario | Gestión | Gestión | `IsGestionOrSoloLectura` |
-| Pagos | Todos | Gestión | Gestión | `IsGestionOrSoloLectura` |
-| Mantenimientos | Todos | Gestión | Gestión | `IsGestionOrSoloLectura` |
-| Incidencias | Todos | Todos (crear); Gestión (editar) | Gestión | `CanModifyIncident` |
-| Solicitudes | Gestión | Gestión | Gestión | `IsManager` |
-| Visitantes | Todos | Seguridad + Gestión | Gestión | `CanModifyVisitor` |
-| Áreas comunes | Todos | Gestión | Gestión | `IsGestionOrSoloLectura` |
-| Reservas | Todos | Todos | Gestión | `IsResident` |
-| Comunicados | Todos | Gestión | Gestión | `IsGestionOrSoloLectura` |
-| Notificaciones | Gestión | Gestión | Gestión | `IsGestionOrSoloLectura` |
-| Reportes | Gestión | Gestión | - | `IsManager` |
+| Departamentos | Todos | GestiÃ³n | GestiÃ³n | `IsManager` / `CanAccessApartment` |
+| Propietarios | GestiÃ³n | GestiÃ³n | GestiÃ³n | `IsManager` |
+| Residentes | GestiÃ³n + propietario | GestiÃ³n | GestiÃ³n | `IsGestionOrSoloLectura` |
+| Pagos | Todos | GestiÃ³n | GestiÃ³n | `IsGestionOrSoloLectura` |
+| Mantenimientos | Todos | GestiÃ³n | GestiÃ³n | `IsGestionOrSoloLectura` |
+| Incidencias | Todos | Todos (crear); GestiÃ³n (editar) | GestiÃ³n | `CanModifyIncident` |
+| Solicitudes | GestiÃ³n | GestiÃ³n | GestiÃ³n | `IsManager` |
+| Visitantes | Todos | Seguridad + GestiÃ³n | GestiÃ³n | `CanModifyVisitor` |
+| Ãreas comunes | Todos | GestiÃ³n | GestiÃ³n | `IsGestionOrSoloLectura` |
+| Reservas | Todos | Todos | GestiÃ³n | `IsResident` |
+| Comunicados | Todos | GestiÃ³n | GestiÃ³n | `IsGestionOrSoloLectura` |
+| Notificaciones | GestiÃ³n | GestiÃ³n | GestiÃ³n | `IsGestionOrSoloLectura` |
+| Reportes | GestiÃ³n | GestiÃ³n | - | `IsManager` |
 | Chat | Todos | Todos | Todos | `IsAuthenticated` |
 
-*Tabla 5.4 - Acceso por módulo y acción.*
+*Tabla 5.4 - Acceso por mÃ³dulo y acciÃ³n.*
 
-### 5.7 Sesión y autenticación
+### 5.7 SesiÃ³n y autenticaciÃ³n
 
 - Login por email. `settings.py` define `LOGIN_URL = '/'`, `LOGIN_REDIRECT_URL = '/inicio'` y `LOGOUT_REDIRECT_URL = '/'`.
-- Redirección por rol tras entrar. Seguridad aterriza en `visitantes_index`; admin y gestor sin residencial configurado, en `residencial_index`; el resto, en `inicio`.
-- Sesión en base de datos con duración de 24 horas, expiración al cerrar el navegador, cookie HttpOnly y SameSite=Lax.
-- CSRF con cookie HttpOnly y orígenes de confianza configurables.
-- API por sesión: SessionAuthentication es la única clase de autenticación global, y el permiso por defecto es IsAuthenticated.
-- Validación de contraseñas: longitud mínima de 8, similitud con los datos del usuario, contraseñas comunes y sin solo dígitos.
+- RedirecciÃ³n por rol tras entrar. Seguridad aterriza en `visitantes_index`; admin y gestor sin residencial configurado, en `residencial_index`; el resto, en `inicio`.
+- SesiÃ³n en base de datos con duraciÃ³n de 24 horas, expiraciÃ³n al cerrar el navegador, cookie HttpOnly y SameSite=Lax.
+- CSRF con cookie HttpOnly y orÃ­genes de confianza configurables.
+- API por sesiÃ³n: SessionAuthentication es la Ãºnica clase de autenticaciÃ³n global, y el permiso por defecto es IsAuthenticated.
+- ValidaciÃ³n de contraseÃ±as: longitud mÃ­nima de 8, similitud con los datos del usuario, contraseÃ±as comunes y sin solo dÃ­gitos.
 
-> **ADVERTENCIA** — El logout exige POST
+> **ADVERTENCIA** â€” El logout exige POST
 >
-> `cerrar_sesion` solo ejecuta `django_logout` cuando el método es POST. Enlazarlo con un enlace `<a href>` no cierra la sesión; use un formulario con botón o JavaScript.
+> `cerrar_sesion` solo ejecuta `django_logout` cuando el mÃ©todo es POST. Enlazarlo con un enlace `<a href>` no cierra la sesiÃ³n; use un formulario con botÃ³n o JavaScript.
 
 ## 6. Modelo de datos
 
 ### 6.1 Convenciones del modelo de datos
 
-- Clave primaria UUID en casi todos los modelos (`id = UUIDField(default=uuid.uuid4, editable=False)`). Excepción: `chat.ChatGroup`, `incidents.IncidentImage` y `reports.AuditLogDetail` usan AutoField implícito.
-- `related_name` explícito en todas las relaciones inversas. No hay relaciones de tipo ManyToMany propias ni OneToOne en todo el proyecto.
-- `on_delete` explícito en cada ForeignKey. Se usan los cuatro valores con significado distinto: CASCADE, PROTECT, SET_NULL y (en un caso) SET_DEFAULT.
-- Índices declarados en los campos por los que se filtra o se agrupa (estado, periodo, fechas), y en los compuestos de las consultas frecuentes.
-- `unique_together` en las entidades que pertenecen a un padre: un edificio no repite nombre dentro de un jardín, un apartamento no repite nombre dentro de un edificio.
-- Sin lógica de negocio en `save()` salvo el caso único de `residencial.Residencial`, que documenta su excepción (ver 6.7).
+- Clave primaria UUID en casi todos los modelos (`id = UUIDField(default=uuid.uuid4, editable=False)`). ExcepciÃ³n: `chat.ChatGroup`, `incidents.IncidentImage` y `reports.AuditLogDetail` usan AutoField implÃ­cito.
+- `related_name` explÃ­cito en todas las relaciones inversas. No hay relaciones de tipo ManyToMany propias ni OneToOne en todo el proyecto.
+- `on_delete` explÃ­cito en cada ForeignKey. Se usan los cuatro valores con significado distinto: CASCADE, PROTECT, SET_NULL y (en un caso) SET_DEFAULT.
+- Ãndices declarados en los campos por los que se filtra o se agrupa (estado, periodo, fechas), y en los compuestos de las consultas frecuentes.
+- `unique_together` en las entidades que pertenecen a un padre: un edificio no repite nombre dentro de un jardÃ­n, un apartamento no repite nombre dentro de un edificio.
+- Sin lÃ³gica de negocio en `save()` salvo el caso Ãºnico de `residencial.Residencial`, que documenta su excepciÃ³n (ver 6.7).
 
 ### 6.2 Mapa relacional
 
@@ -765,40 +765,40 @@ reports.AuditLog --CASCADE--> User
 residencial.Residencial <- modelo aislado, sin ninguna FK
 ```
 
-### 6.3 Estructura física: Jardines, edificios y apartamentos
+### 6.3 Estructura fÃ­sica: Jardines, edificios y apartamentos
 
-El núcleo espacial del sistema es una jerarquía de tres niveles que determina la organización de casi todos los demás módulos: los pagos cuelgan de un apartamento, los residentes de un apartamento, las incidencias de un apartamento.
+El nÃºcleo espacial del sistema es una jerarquÃ­a de tres niveles que determina la organizaciÃ³n de casi todos los demÃ¡s mÃ³dulos: los pagos cuelgan de un apartamento, los residentes de un apartamento, las incidencias de un apartamento.
 
 | Modelo | App | Campos principales | Relaciones |
 | --- | --- | --- | --- |
-| Garden | structure | name (único), location, description, is_active | blocks, buildings, users, common_areas, communications |
+| Garden | structure | name (Ãºnico), location, description, is_active | blocks, buildings, users, common_areas, communications |
 | Block | structure | name, description, is_active | garden (PROTECT, related_name='blocks'); unique_together (garden, name) |
 | Building | structure | name (edificio = torre), number_of_floors, description, is_active | block (PROTECT, related_name='buildings'); garden (PROTECT, se sincroniza con el del bloque en `save()`) |
 | Apartment | structure | name, floor, status, photo, is_active | building (CASCADE), owner (SET_NULL -> Propietario) |
 
-*Tabla 6.1 - Jerarquía espacial.*
+*Tabla 6.1 - JerarquÃ­a espacial.*
 
 #### Estados de un departamento
 
 | Valor | Etiqueta | Significado |
 | --- | --- | --- |
-| `empty` | Vacío | Disponible, sinmogador asignado |
+| `empty` | VacÃ­o | Disponible, sinmogador asignado |
 | `occupied` | Ocupado | Alquilado o en uso |
-| `maintenance` | En reparación | No disponible temporalmente |
-| `blocked` | Bloqueado | Inhabilitado por la administración |
+| `maintenance` | En reparaciÃ³n | No disponible temporalmente |
+| `blocked` | Bloqueado | Inhabilitado por la administraciÃ³n |
 
-El estado por defecto de un apartamento nuevo es `empty`. El estado se filtra en la vista HTML mediante el parámetro `?estado=` y en la API mediante `?status=`.
+El estado por defecto de un apartamento nuevo es `empty`. El estado se filtra en la vista HTML mediante el parÃ¡metro `?estado=` y en la API mediante `?status=`.
 
 ### 6.4 Personas: propietarios y residentes
 
-El sistema distingue dos figuras jurídicas distintas y las modela por separado:
+El sistema distingue dos figuras jurÃ­dicas distintas y las modela por separado:
 
 | Aspecto | propietarios.Propietario | residents.Resident |
 | --- | --- | --- |
-| Qué representa | El dueño del inmueble | La persona que ocupa el apartamento |
-| Clave de negocio | cedula (única) | cedula (única) |
-| Relación con el apartamento | Apartment.owner (SET_NULL) | Resident.apartment (CASCADE, obligatorio) |
-| Relación con el usuario | user (CASCADE, opcional) | user (CASCADE, opcional) |
+| QuÃ© representa | El dueÃ±o del inmueble | La persona que ocupa el apartamento |
+| Clave de negocio | cedula (Ãºnica) | cedula (Ãºnica) |
+| RelaciÃ³n con el apartamento | Apartment.owner (SET_NULL) | Resident.apartment (CASCADE, obligatorio) |
+| RelaciÃ³n con el usuario | user (CASCADE, opcional) | user (CASCADE, opcional) |
 | Datos de contacto | phone, email, emergency_contact | phone, email, emergency_contact |
 | Estado civil | marital_status (5 opciones) | marital_status (5 opciones, duplicadas) |
 | Datos adicionales | photo | photo, tipo_relacion, fecha_ingreso, mascotas |
@@ -806,41 +806,41 @@ El sistema distingue dos figuras jurídicas distintas y las modela por separado:
 
 *Tabla 6.2 - Propietario frente a residente.*
 
-Cómo leerlo: un apartamento puede tener un propietario y N residentes. El propietario no necesita estar, registrado como usuario; el residente puede ser un ocupante sin cuenta. Ambos pueden vincularse a un `accounts.User` opcional para que pueda iniciar sesión y ver su información.
+CÃ³mo leerlo: un apartamento puede tener un propietario y N residentes. El propietario no necesita estar, registrado como usuario; el residente puede ser un ocupante sin cuenta. Ambos pueden vincularse a un `accounts.User` opcional para que pueda iniciar sesiÃ³n y ver su informaciÃ³n.
 
-#### Tipo de relación del residente
+#### Tipo de relaciÃ³n del residente
 
-| Valor | Etiqueta | Implicación |
+| Valor | Etiqueta | ImplicaciÃ³n |
 | --- | --- | --- |
-| `propietario` | Propietario | El residente es también el dueño |
+| `propietario` | Propietario | El residente es tambiÃ©n el dueÃ±o |
 | `inquilino` | Inquilino | Ocupa en alquiler |
 | `familiar` | Familiar | Pariente del titular |
-| `ocupante` | Ocupante | Sin relación contractual (por defecto) |
+| `ocupante` | Ocupante | Sin relaciÃ³n contractual (por defecto) |
 
 ### 6.5 Dinero: cargos de mantenimiento y pagos
 
-El módulo financiero separa el concepto de lo que se cobra del hecho de pago. Es la única forma de tener un catálogo de tarifas independiente de los movimientos reales.
+El mÃ³dulo financiero separa el concepto de lo que se cobra del hecho de pago. Es la Ãºnica forma de tener un catÃ¡logo de tarifas independiente de los movimientos reales.
 
 | | maintenance.MaintenanceCharge | payments.Payment |
 | --- | --- | --- |
-| **Qué es** | El cargo o cuota a cobrar | El pago efectivamente realizado |
+| **QuÃ© es** | El cargo o cuota a cobrar | El pago efectivamente realizado |
 | **Campos clave** | concept, periodicity, amount, effective_date, payment_methods | amount, concept, period, payment_date, payment_method, status, receipt_image |
 | **Periodicidad** | monthly, quarterly, semiannual, annual | No aplica (se registra por periodo) |
 | **Apartamento** | Opcional. NULL significa 'aplica a todos' | Obligatorio (PROTECT) |
 | **Residente** | - | Obligatorio (PROTECT) |
 | **Estado** | is_active (activo/inactivo) | pending, at_risk, overdue, paid, cancelled |
 | **Orden por defecto** | -effective_date | -period |
-| **Validación cruzada** | - | clean(): el residente debe pertenecer al apartamento elegido |
+| **ValidaciÃ³n cruzada** | - | clean(): el residente debe pertenecer al apartamento elegido |
 
-*Tabla 6.3 - Catálogo de cargos frente a registro de pagos.*
+*Tabla 6.3 - CatÃ¡logo de cargos frente a registro de pagos.*
 
 #### Conceptos de pago
 
-| Valor | Etiqueta | Tipo de obligación |
+| Valor | Etiqueta | Tipo de obligaciÃ³n |
 | --- | --- | --- |
 | `maintenance` | Mantenimiento | Cuota ordinaria |
 | `extraordinary` | Cuota extraordinaria | Cargo adicional puntual |
-| `reservation` | Reserva | Cargo por uso de área común |
+| `reservation` | Reserva | Cargo por uso de Ã¡rea comÃºn |
 | `parking` | Parqueo | Cargo fijo |
 | `services` | Servicios | Consumo (agua, luz) |
 | `other` | Otro | Cualquier otro concepto |
@@ -849,21 +849,21 @@ El módulo financiero separa el concepto de lo que se cobra del hecho de pago. E
 
 | Estado | Etiqueta | Significado operativo |
 | --- | --- | --- |
-| `pending` | Pendiente | Registrado, aún no pagado, sin retraso |
-| `at_risk` | En riesgo | Próximo a vencer; aparece en el panel de pagos por vencer |
-| `overdue` | Vencido | Venció su periodo sin pago; entra en el reporte de morosidad |
+| `pending` | Pendiente | Registrado, aÃºn no pagado, sin retraso |
+| `at_risk` | En riesgo | PrÃ³ximo a vencer; aparece en el panel de pagos por vencer |
+| `overdue` | Vencido | VenciÃ³ su periodo sin pago; entra en el reporte de morosidad |
 | `paid` | Pagado | Cancelado |
 | `cancelled` | Anulado | Registro invalidado, no cuenta para balances |
 
-> **NOTA** — Cómo se modela el periodo
+> **NOTA** â€” CÃ³mo se modela el periodo
 >
-> El campo `period` es un DateField que representa el PRIMER día del mes que se cobra (por ejemplo 2026-09-01 para septiembre de 2026).
+> El campo `period` es un DateField que representa el PRIMER dÃ­a del mes que se cobra (por ejemplo 2026-09-01 para septiembre de 2026).
 >
-> Los filtros de la vista HTML (mes, año) y de la API (month, year) operan sobre ese campo; las funciones de los reportes calculan el rango de meses con esa misma convención.
+> Los filtros de la vista HTML (mes, aÃ±o) y de la API (month, year) operan sobre ese campo; las funciones de los reportes calculan el rango de meses con esa misma convenciÃ³n.
 
 ### 6.6 Incidencias y su ciclo de vida
 
-El módulo de incidencias es el más rico del sistema: maneja clasificación, prioridad, asignación, evidencia, notas de resolución e historial.
+El mÃ³dulo de incidencias es el mÃ¡s rico del sistema: maneja clasificaciÃ³n, prioridad, asignaciÃ³n, evidencia, notas de resoluciÃ³n e historial.
 
 #### Ciclo de estados
 
@@ -879,34 +879,34 @@ Nueva   Asignada        En progreso          Resuelta        Cerrada
 
 | Campo | Opciones | Uso |
 | --- | --- | --- |
-| `category` | plumbing, electricity, structural, cleaning, security, noise, water, other | Clasificación del reporte |
-| `priority` | low, normal, high, urgent | Prioridad de atención |
+| `category` | plumbing, electricity, structural, cleaning, security, noise, water, other | ClasificaciÃ³n del reporte |
+| `priority` | low, normal, high, urgent | Prioridad de atenciÃ³n |
 | `status` | new, assigned, in_progress, resolved, closed, rejected | Estado del flujo |
 | `evidence` | FileField (upload a incidentes/evidencia/) | Archivo adjunto principal |
-| `resolution_notes` | TextField | Descripción de la solución |
-| `resolved_at` | DateTimeField | Momento de la resolución |
+| `resolution_notes` | TextField | DescripciÃ³n de la soluciÃ³n |
+| `resolved_at` | DateTimeField | Momento de la resoluciÃ³n |
 
-*Tabla 6.4 - Campos de clasificación y seguimiento de una incidencia.*
+*Tabla 6.4 - Campos de clasificaciÃ³n y seguimiento de una incidencia.*
 
 #### Tablas Satellite
 
-| Modelo | Para qué sirve | Relación |
+| Modelo | Para quÃ© sirve | RelaciÃ³n |
 | --- | --- | --- |
-| IncidentImage | Adjuntar imágenes mediante URLs externas a la incidencia | incident (CASCADE, related_name='images') |
-| IncidentHistory | Bitácora de cada transición de estado, con autor y comentario | incident (CASCADE, related_name='history') |
+| IncidentImage | Adjuntar imÃ¡genes mediante URLs externas a la incidencia | incident (CASCADE, related_name='images') |
+| IncidentHistory | BitÃ¡cora de cada transiciÃ³n de estado, con autor y comentario | incident (CASCADE, related_name='history') |
 
-> **ADVERTENCIA** — Dos mecanismos de adjuntos coexisten
+> **ADVERTENCIA** â€” Dos mecanismos de adjuntos coexisten
 >
-> `Incident.evidence` (FileField, subida de archivo) e `IncidentImage` (tabla de URLs) cumplen la misma función. Antes de implementar, decida cuál usar y evite generar adjuntos en ambos.
+> `Incident.evidence` (FileField, subida de archivo) e `IncidentImage` (tabla de URLs) cumplen la misma funciÃ³n. Antes de implementar, decida cuÃ¡l usar y evite generar adjuntos en ambos.
 
 ### 6.7 Ficha del residencial
 
-`residencial.Residencial` es un modelo conceptualmente singular: describe el residencial al que pertenece el sistema. No tiene ninguna relación con el resto de modelos.
+`residencial.Residencial` es un modelo conceptualmente singular: describe el residencial al que pertenece el sistema. No tiene ninguna relaciÃ³n con el resto de modelos.
 
 | Grupo de campos | Contenido |
 | --- | --- |
-| Identificación | nombre, rnc |
-| Dirección | nombre_via, numero_edificacion, sector, codigo_postal, municipio, provincia |
+| IdentificaciÃ³n | nombre, rnc |
+| DirecciÃ³n | nombre_via, numero_edificacion, sector, codigo_postal, municipio, provincia |
 | Estructura | distribucion (torres \| edificios), cantidad_edificios, cantidad_pisos |
 | Contacto | telefono, correo |
 
@@ -915,20 +915,20 @@ Nueva   Asignada        En progreso          Resuelta        Cerrada
 | --- | --- | --- |
 | | | mapa_iframe (TextField para incrustar un mapa) |
 
-> **NOTA** — La distribución es inmutable
+> **NOTA** â€” La distribuciÃ³n es inmutable
 >
-> Residencial.save() consulta el valor original de distribución y lo restaura si se intenta cambiar. La razón: una vez definida la estructura del residencial, cambiarla invalidaría los datos ya cargados. La UI muestra el campo como bloqueado. Consecuencia práctica: si necesita cambiar la distribución, actualice la fila directamente en la base de datos, no desde la aplicación.
+> Residencial.save() consulta el valor original de distribuciÃ³n y lo restaura si se intenta cambiar. La razÃ³n: una vez definida la estructura del residencial, cambiarla invalidarÃ­a los datos ya cargados. La UI muestra el campo como bloqueado. Consecuencia prÃ¡ctica: si necesita cambiar la distribuciÃ³n, actualice la fila directamente en la base de datos, no desde la aplicaciÃ³n.
 
-### 6.8 Inventario de modelos por aplicación
+### 6.8 Inventario de modelos por aplicaciÃ³n
 
-Resumen de los 25 modelos del sistema, agrupados por aplicación.
+Resumen de los 25 modelos del sistema, agrupados por aplicaciÃ³n.
 
 | App | Modelos | Cantidad |
 | --- | --- | --- |
 | accounts | User (AbstractUser con PK UUID, login por email) | 1 |
-| configuracion | IntegracionIA (configuración de IA, registro único) | 1 |
-| login | PasswordResetToken (token de recuperación de contraseña) | 1 |
-| residencial | Residencial (modelo de configuración singular) | 1 |
+| configuracion | IntegracionIA (configuraciÃ³n de IA, registro Ãºnico) | 1 |
+| login | PasswordResetToken (token de recuperaciÃ³n de contraseÃ±a) | 1 |
+| residencial | Residencial (modelo de configuraciÃ³n singular) | 1 |
 | structure | Garden, Block, Building, Apartment | 4 |
 | propietarios | Propietario | 1 |
 | residents | Resident | 1 |
@@ -945,56 +945,56 @@ Resumen de los 25 modelos del sistema, agrupados por aplicación.
 | chat | ChatGroup, ChatMessage | 2 |
 | inicio | (sin modelos) | 0 |
 
-*Tabla 6.5 - Modelos por aplicación (25 en total).*
+*Tabla 6.5 - Modelos por aplicaciÃ³n (25 en total).*
 
-### 6.9 Decisiones de diseño del modelo
+### 6.9 Decisiones de diseÃ±o del modelo
 
-#### PROTECT en los vínculos con el usuario que registra
+#### PROTECT en los vÃ­nculos con el usuario que registra
 
-Varias relaciones usan on_delete=PROTECT para el usuario que creó el registro: incidencias (reported_by), visitantes (registered_by), comunicados (sender), pagos registrados y el historial de incidencias. La razón es de trazabilidad: no se debe poder eliminar un usuario que ha generado movimientos o cuya firma aparece en un documento.
+Varias relaciones usan on_delete=PROTECT para el usuario que creÃ³ el registro: incidencias (reported_by), visitantes (registered_by), comunicados (sender), pagos registrados y el historial de incidencias. La razÃ³n es de trazabilidad: no se debe poder eliminar un usuario que ha generado movimientos o cuya firma aparece en un documento.
 
-#### SET_NULL donde la relación es contextual
+#### SET_NULL donde la relaciÃ³n es contextual
 
-Los vínculos que enriquecen pero no definen el registro usan SET_NULL: el propietario de un apartamento, el cargo que aplica a todos, el garden de un usuario, la asignación de una incidencia, la aprobación de una reserva.
+Los vÃ­nculos que enriquecen pero no definen el registro usan SET_NULL: el propietario de un apartamento, el cargo que aplica a todos, el garden de un usuario, la asignaciÃ³n de una incidencia, la aprobaciÃ³n de una reserva.
 
 #### CASCADE donde la dependencia es fuerte
 
-Un apartamento que se elimina arrastra sus residentes, pagos, incidencias, solicitudes, visitantes y reservas. Un jardín arrastra sus edificios y, en cascada, sus apartamentos.
+Un apartamento que se elimina arrastra sus residentes, pagos, incidencias, solicitudes, visitantes y reservas. Un jardÃ­n arrastra sus edificios y, en cascada, sus apartamentos.
 
 #### Restricciones de integridad a nivel de base de datos
 
-| Restricción | Modelo | Efecto |
+| RestricciÃ³n | Modelo | Efecto |
 | --- | --- | --- |
 | unique_together (block, name) | Building | No se repiten nombres de edificio dentro de un bloque |
 | unique_together (building, name) | Apartment | No se repiten nombres de apartamento dentro de un edificio |
-| unique_together (garden, name) | reservations.CommonArea | No se repiten áreas dentro de un jardín |
+| unique_together (garden, name) | reservations.CommonArea | No se repiten Ã¡reas dentro de un jardÃ­n |
 | UniqueConstraint (common_area, start_time, end_time) | Reservation | Bloquea reservas exactamente duplicadas |
 | UniqueConstraint (incident, url) | IncidentImage | No se repite la misma URL en una incidencia |
-| UniqueConstraint (audit_log, key) | AuditLogDetail | No se repite una clave de detalle en una bitácora |
-| unique=True | User.email, User.document, Propietario.cedula, Resident.cedula, Garden.name, ChatGroup.name | Claves de negocio únicas |
+| UniqueConstraint (audit_log, key) | AuditLogDetail | No se repite una clave de detalle en una bitÃ¡cora |
+| unique=True | User.email, User.document, Propietario.cedula, Resident.cedula, Garden.name, ChatGroup.name | Claves de negocio Ãºnicas |
 
 *Tabla 6.6 - Restricciones declaradas a nivel de modelo.*
 
-> **ADVERTENCIA** — La reserva no valida solapamientos parciales
+> **ADVERTENCIA** â€” La reserva no valida solapamientos parciales
 >
-> La UniqueConstraint de Reservation solo impide duplicados exactos de (common_area, start_time, end_time). Dos reservas de 10:00 a 12:00 y de 11:00 a 13:00 en la misma área pasan la validación de base de datos y colisionan. Los horarios de disponibilidad del AreaComun (available_from / available_until / available_days) tampoco se aplican a nivel de modelo: solo se validan en el código del serializer o de la vista.
+> La UniqueConstraint de Reservation solo impide duplicados exactos de (common_area, start_time, end_time). Dos reservas de 10:00 a 12:00 y de 11:00 a 13:00 en la misma Ã¡rea pasan la validaciÃ³n de base de datos y colisionan. Los horarios de disponibilidad del AreaComun (available_from / available_until / available_days) tampoco se aplican a nivel de modelo: solo se validan en el cÃ³digo del serializer o de la vista.
 
-### 6.10 Claves foráneas polimórficas manuales
+### 6.10 Claves forÃ¡neas polimÃ³rficas manuales
 
 Dos modelos usan un UUIDField suelto en lugar de una ForeignKey para apuntar a entidades de naturaleza variable. Esto evita una tabla puente, a costa de perder la integridad referencial:
 
 | Modelo | Campo | Apunta a | Riesgo |
 | --- | --- | --- | --- |
-| communications.Communication | target_id (UUID) + target_type | building_id o user_id, según target_type | Puede apuntar a un registro ya borrado |
+| communications.Communication | target_id (UUID) + target_type | building_id o user_id, segÃºn target_type | Puede apuntar a un registro ya borrado |
 | notifications.Notification | related_id (UUID) | incident_id, payment_id, etc. | Puede apuntar a un registro ya borrado |
 
 *Tabla 6.7 - Referencias sin integridad referencial.*
 
-Si necesita integridad garantizada para estos vínculos, el camino es un patrón de referencia genérica (content_type + object_id) o un modelo puente por tipo.
+Si necesita integridad garantizada para estos vÃ­nculos, el camino es un patrÃ³n de referencia genÃ©rica (content_type + object_id) o un modelo puente por tipo.
 
 ## 7. API REST
 
-### 7.1 Configuración global de DRF
+### 7.1 ConfiguraciÃ³n global de DRF
 
 ```python
 # settings.py (bloque REST_FRAMEWORK que manda)
@@ -1016,20 +1016,20 @@ REST_FRAMEWORK = {
 }
 ```
 
-| Ajuste | Valor | Implicación |
+| Ajuste | Valor | ImplicaciÃ³n |
 | --- | --- | --- |
-| Autenticación | SessionAuthentication | La API usa la cookie de sesión; no hay tokens |
-| Permiso por defecto | IsAuthenticated | Cualquier endpoint sin permiso explícito exige sesión |
-| Paginación | PageNumberPagination, 20 por página | Respuesta con count / next / previous / results |
+| AutenticaciÃ³n | SessionAuthentication | La API usa la cookie de sesiÃ³n; no hay tokens |
+| Permiso por defecto | IsAuthenticated | Cualquier endpoint sin permiso explÃ­cito exige sesiÃ³n |
+| PaginaciÃ³n | PageNumberPagination, 20 por pÃ¡gina | Respuesta con count / next / previous / results |
 | Filtro | DjangoFilterBackend | Campos declarados en filterset_fields |
-| Búsqueda | SearchFilter | Campos declarados en search_fields |
+| BÃºsqueda | SearchFilter | Campos declarados en search_fields |
 | Orden | OrderingFilter | Campos declarados en ordering_fields |
 
-### 7.2 Patrón de los ViewSets
+### 7.2 PatrÃ³n de los ViewSets
 
-Los 21 ViewSets del sistema siguen el mismo esqueleto: queryset base filtrado por visibilidad, serializer (a veces elegido por acción), permiso de clase, y tres backends de filtro con sus campos declarados.
+Los 21 ViewSets del sistema siguen el mismo esqueleto: queryset base filtrado por visibilidad, serializer (a veces elegido por acciÃ³n), permiso de clase, y tres backends de filtro con sus campos declarados.
 
-#### Anatomía de un ViewSet típico
+#### AnatomÃ­a de un ViewSet tÃ­pico
 
 ```python
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -1040,7 +1040,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     # Filtro por query string sobre campos del modelo
     filterset_fields = ['apartment', 'resident', 'status',
                         'payment_method', 'concept']
-    # Búsqueda de texto libre
+    # BÃºsqueda de texto libre
     search_fields = ['resident__full_name', 'apartment__number',
                      'resident__cedula']
     # Campos por los que se puede ordenar
@@ -1054,7 +1054,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
 ### 7.3 Inventario de endpoints
 
-Cada aplicación monta su propio DefaultRouter. No existe un prefijo global /api/: los endpoints cuelgan del prefijo de la app.
+Cada aplicaciÃ³n monta su propio DefaultRouter. No existe un prefijo global /api/: los endpoints cuelgan del prefijo de la app.
 
 | App | Prefijo | ViewSet | Acciones propias |
 | --- | --- | --- | --- |
@@ -1085,35 +1085,35 @@ Cada aplicación monta su propio DefaultRouter. No existe un prefijo global /api
 
 ### 7.4 Operaciones CRUD generadas por el router
 
-Cada ModelViewSet expone automáticamente las operaciones estándar. El nombre de la URL aparece en el campo name de cada ruta del router:
+Cada ModelViewSet expone automÃ¡ticamente las operaciones estÃ¡ndar. El nombre de la URL aparece en el campo name de cada ruta del router:
 
-| Operación | Método HTTP | Ruta | Nombre en el router |
+| OperaciÃ³n | MÃ©todo HTTP | Ruta | Nombre en el router |
 | --- | --- | --- | --- |
 | Listar | GET | /prefijo/ | `<basename>-list` |
 | Crear | POST | /prefijo/ | `<basename>-list` |
 | Detalle | GET | /prefijo/`<pk>`/ | `<basename>-detail` |
 | Actualizar | PUT / PATCH | /prefijo/`<pk>`/ | `<basename>-detail` |
 | Borrar | DELETE | /prefijo/`<pk>`/ | `<basename>-detail` |
-| Raíz de la API | GET | /prefijo/ | `<basename>-root` (navegador) |
+| RaÃ­z de la API | GET | /prefijo/ | `<basename>-root` (navegador) |
 
-El `<pk>` es el UUID del objeto. Las operaciones de creación, actualización y borrado solo funcionan si el permiso asignado a la acción lo permite.
+El `<pk>` es el UUID del objeto. Las operaciones de creaciÃ³n, actualizaciÃ³n y borrado solo funcionan si el permiso asignado a la acciÃ³n lo permite.
 
 ### 7.5 Acciones personalizadas
 
-#### Autenticación y perfil (accounts)
+#### AutenticaciÃ³n y perfil (accounts)
 
-| Acción | Método | Ruta | Permiso | Qué hace |
+| AcciÃ³n | MÃ©todo | Ruta | Permiso | QuÃ© hace |
 | --- | --- | --- | --- | --- |
-| login | POST | /cuentas/login/ | AllowAny | Autentica por email y contraseña |
+| login | POST | /cuentas/login/ | AllowAny | Autentica por email y contraseÃ±a |
 | profile | GET | /cuentas/profile/ | IsAuthenticated | Devuelve el perfil del usuario autenticado |
-| change_password | POST | /cuentas/change_password/ | IsAuthenticated | Cambia la contraseña validando la actual |
-| logout | POST | /cuentas/logout/ | IsAuthenticated | Cierra la sesión |
+| change_password | POST | /cuentas/change_password/ | IsAuthenticated | Cambia la contraseÃ±a validando la actual |
+| logout | POST | /cuentas/logout/ | IsAuthenticated | Cierra la sesiÃ³n |
 
 #### Ciclo de vida de un visitante (visitors)
 
-El control de acceso de portería se implementa como acciones de detalle. Todas exigen POST y devuelven 403 si el usuario no es de seguridad o gestión.
+El control de acceso de porterÃ­a se implementa como acciones de detalle. Todas exigen POST y devuelven 403 si el usuario no es de seguridad o gestiÃ³n.
 
-| Acción | Ruta | Estado requerido | Resultado |
+| AcciÃ³n | Ruta | Estado requerido | Resultado |
 | --- | --- | --- | --- |
 | authorize | POST /visitantes/registros/`<pk>`/authorize/ | pending | Pasa a authorized y registra authorized_by |
 | reject | POST /visitantes/registros/`<pk>`/reject/ | pending | Pasa a rejected |
@@ -1122,23 +1122,23 @@ El control de acceso de portería se implementa como acciones de detalle. Todas 
 
 *Tabla 7.2 - Transiciones de estado de un visitante.*
 
-> **NOTA** — Estados del visitante
+> **NOTA** â€” Estados del visitante
 >
 > Flujo normal: pending (esperando) -> authorized (autorizado) -> check_in registra la entrada real y check_out la salida. En cualquier momento antes de la entrada se puede rechazar.
 
 #### Reportes (reports)
 
-| Acción | Ruta | Qué devuelve |
+| AcciÃ³n | Ruta | QuÃ© devuelve |
 | --- | --- | --- |
-| summary | GET /reportes/resumen/ | 14 métricas: totales de apartamentos, ocupados, residentes activos, pagos, incidencias, visitantes, reservas e ingresos mensuales |
+| summary | GET /reportes/resumen/ | 14 mÃ©tricas: totales de apartamentos, ocupados, residentes activos, pagos, incidencias, visitantes, reservas e ingresos mensuales |
 | payments | GET /reportes/pagos/ | Conteo e importes por estado de pago; acepta `<apartment>`, `<status>`, `<month>`, `<year>` |
-| occupancy | GET /reportes/ocupacion/ | Conteo de apartamentos por estado (vacío, ocupado, etc.) |
+| occupancy | GET /reportes/ocupacion/ | Conteo de apartamentos por estado (vacÃ­o, ocupado, etc.) |
 
 *Tabla 7.3 - Reportes accesibles por API.*
 
-### 7.6 Filtros, búsqueda y ordenamiento
+### 7.6 Filtros, bÃºsqueda y ordenamiento
 
-Los tres backends conviven en la misma respuesta. Se combinan en un único query string:
+Los tres backends conviven en la misma respuesta. Se combinan en un Ãºnico query string:
 
 #### Combinando filtros en una consulta
 
@@ -1146,16 +1146,16 @@ Los tres backends conviven en la misma respuesta. Se combinan en un único query
 GET /pagos/registros/
 ?apartment=<uuid> DjangoFilterBackend (filtro exacto)
 &status=overdue DjangoFilterBackend (filtro exacto)
-&search=juan SearchFilter (búsqueda en search_fields)
+&search=juan SearchFilter (bÃºsqueda en search_fields)
 &ordering=-period OrderingFilter (campo en ordering_fields)
-&page=2 PageNumberPagination (20 por página)
+&page=2 PageNumberPagination (20 por pÃ¡gina)
 ```
 
-Los search_fields se pueden recorrer en relaciones (resident__full_name significa buscar en el nombre del residente del pago). Los ordering_fields controlan qué campos se pueden ordenar vía query string; un campo no listado allí no es ordenable.
+Los search_fields se pueden recorrer en relaciones (resident__full_name significa buscar en el nombre del residente del pago). Los ordering_fields controlan quÃ© campos se pueden ordenar vÃ­a query string; un campo no listado allÃ­ no es ordenable.
 
 ### 7.7 Visibilidad en la API
 
-Los ViewSets no se limitan al permiso de clase: además recortan el queryset para que un usuario no pueda ver más de lo que le corresponde, aunque tenga permiso de lectura. El recorte se hace en get_queryset() con un filtro por usuario.
+Los ViewSets no se limitan al permiso de clase: ademÃ¡s recortan el queryset para que un usuario no pueda ver mÃ¡s de lo que le corresponde, aunque tenga permiso de lectura. El recorte se hace en get_queryset() con un filtro por usuario.
 
 #### Recorte de queryset por usuario
 
@@ -1163,37 +1163,37 @@ Los ViewSets no se limitan al permiso de clase: además recortan el queryset par
 def get_queryset(self):
     user = self.request.user
     if user.role in ('admin', 'manager'):
-        return Model.objects.all()  # gestión ve todo
+        return Model.objects.all()  # gestiÃ³n ve todo
     return Model.objects.filter(<lo que le toca>).distinct()
 ```
 
 ### 7.8 Formato de las respuestas
 
-Una petición de listado devuelve la estructura de PageNumberPagination:
+Una peticiÃ³n de listado devuelve la estructura de PageNumberPagination:
 
 #### Estructura de una respuesta paginada
 
 ```json
 {
     "count": 137,               // total de registros que cumplen el filtro
-    "next": "http://...page=2", // URL de la siguiente página (null si es la última)
+    "next": "http://...page=2", // URL de la siguiente pÃ¡gina (null si es la Ãºltima)
     "previous": null,           // URL de la anterior (null si es la primera)
-    "results": [                // la página actual de resultados
+    "results": [                // la pÃ¡gina actual de resultados
         { "id": "...", "...": "..." },
         ...
     ]
 }
 ```
 
-Los errores de validación devuelven el detalle por campo; los errores de permiso devuelven 403; los de autenticación, 401 (o 403 con sesión).
+Los errores de validaciÃ³n devuelven el detalle por campo; los errores de permiso devuelven 403; los de autenticaciÃ³n, 401 (o 403 con sesiÃ³n).
 
 ## 8. Frontend: plantillas, CSS y JavaScript
 
 ### 8.1 Arquitectura del frontend
 
-El frontend es un servidor renderizado clásico, sin framework de JavaScript. Cada página se renderiza en el
-servidor con plantillas de Django, y el JavaScript externo solo añade interactividad (diálogos, filtros asíncronos,
-confirmaciones, máscaras de entrada). No hay paso de build, ni bundler, ni npm.
+El frontend es un servidor renderizado clÃ¡sico, sin framework de JavaScript. Cada pÃ¡gina se renderiza en el
+servidor con plantillas de Django, y el JavaScript externo solo aÃ±ade interactividad (diÃ¡logos, filtros asÃ­ncronos,
+confirmaciones, mÃ¡scaras de entrada). No hay paso de build, ni bundler, ni npm.
 
 ### 8.2 Plantillas
 
@@ -1202,95 +1202,95 @@ confirmaciones, máscaras de entrada). No hay paso de build, ni bundler, ni npm.
 Toda la interfaz se apoya en `templates/base.html`, que incluye los componentes reutilizables del directorio
 `templates/componentes/`:
 
-| Componente | Función |
+| Componente | FunciÃ³n |
 | --- | --- |
-| `base.html` | Esqueleto común: head, estilos, barra superior, menú lateral y bloque de contenido |
-| `header.html` | Cabecera superior con el logotipo y el menú de usuario |
-| `aside.html` | Menú lateral de navegación entre módulos (respeta los permisos del usuario) |
-| `menu_usuario.html` | Desplegable del perfil con opción de cerrar sesión y editar perfil |
-| `modal.html` | Estructura base de los diálogos (modales) |
-| `botones.html` | Botones de acción reutilizables (guardar, cancelar, eliminar) |
+| `base.html` | Esqueleto comÃºn: head, estilos, barra superior, menÃº lateral y bloque de contenido |
+| `header.html` | Cabecera superior con el logotipo y el menÃº de usuario |
+| `aside.html` | MenÃº lateral de navegaciÃ³n entre mÃ³dulos (respeta los permisos del usuario) |
+| `menu_usuario.html` | Desplegable del perfil con opciÃ³n de cerrar sesiÃ³n y editar perfil |
+| `modal.html` | Estructura base de los diÃ¡logos (modales) |
+| `botones.html` | Botones de acciÃ³n reutilizables (guardar, cancelar, eliminar) |
 | `mini_card.html` | Tarjeta compacta para el dashboard |
-| `paginacion_tabla.html` | Controles de paginación reutilizables |
-| `login.html` | Estructura de la pantalla de inicio de sesión |
+| `paginacion_tabla.html` | Controles de paginaciÃ³n reutilizables |
+| `login.html` | Estructura de la pantalla de inicio de sesiÃ³n |
 
 *Tabla 8.1 - Componentes globales de plantilla.*
 
-#### Plantillas por módulo
+#### Plantillas por mÃ³dulo
 
-Cada módulo de dominio aporta sus propias plantillas en `<app>/templates/<app>/`. La pestaña principal de cada
-módulo se llama siempre `index.html`; los formularios suelen estar en `agregar.html` o `nuevo.html`.
+Cada mÃ³dulo de dominio aporta sus propias plantillas en `<app>/templates/<app>/`. La pestaÃ±a principal de cada
+mÃ³dulo se llama siempre `index.html`; los formularios suelen estar en `agregar.html` o `nuevo.html`.
 
-| Vista | Plantilla | Contexto típico |
+| Vista | Plantilla | Contexto tÃ­pico |
 | --- | --- | --- |
-| Listado | `index.html` | `page_obj` (paginación), objeto, filtros, `puede_crear/editar/eliminar` |
+| Listado | `index.html` | `page_obj` (paginaciÃ³n), objeto, filtros, `puede_crear/editar/eliminar` |
 | Formulario nuevo | `agregar.html` / `nuevo.html` | `form` (ModelForm), `titulo`, `accion` |
 | Formulario editar | `agregar.html` / `nuevo.html` | `form`, `instancia`, `editing=True` |
 | Perfil | `perfil.html` | `form` de datos personales |
 
-### 8.3 Sistema de diseño: variables.css
+### 8.3 Sistema de diseÃ±o: variables.css
 
-Los estilos se organizan en torno a un archivo de variables que es la fuente única de verdad del diseño.
+Los estilos se organizan en torno a un archivo de variables que es la fuente Ãºnica de verdad del diseÃ±o.
 `static/css/variables.css` define todos los tokens (colores, sombras, bordes, radios, espaciados) y se importa
 desde las hojas base.
 
 #### Paleta de colores
 
-El sistema usa una paleta de verdes como color de marca, más una escala de grises para superficies y texto, y una
-escala de azules para elementos informativos. Los nombres siguen el patrón `--<familia>-<tono>`.
+El sistema usa una paleta de verdes como color de marca, mÃ¡s una escala de grises para superficies y texto, y una
+escala de azules para elementos informativos. Los nombres siguen el patrÃ³n `--<familia>-<tono>`.
 
 | Familia | Ejemplo de variables | Uso |
 | --- | --- | --- |
 | Verdes (marca) | `--green-500`, `--green-700`, `--green-900` | Color primario, enlaces, acciones, estados activos |
-| Blancos (superficies) | `--white-50` a `--white-900` | Fondos de página, tarjetas, superficies elevadas |
+| Blancos (superficies) | `--white-50` a `--white-900` | Fondos de pÃ¡gina, tarjetas, superficies elevadas |
 | Negros (texto) | `--black-300`, `--black-500`, `--black-900` | Texto principal, texto secundario, texto deshabilitado |
 | Azules (informativo) | `--blue-500`, `--blue-600` | Mensajes informativos, enlaces, foco |
 
-*Tabla 8.2 - Familias de color del sistema de diseño.*
+*Tabla 8.2 - Familias de color del sistema de diseÃ±o.*
 
 #### Reglas de uso de las variables
 
 - Todo color, sombra, borde, radio, margen y padding se escribe con una variable, nunca como valor literal
   repetido.
-- La única unidad px permitida es para bordes y sombras (los tokens `--border-*`, `--borderR-*` y `--shadow-*` ya
-  están en px).
-- Cualquier otra medida (margen, padding, tamaño, tipografía, ancho, alto) se escribe en rem. Con `font-size:
+- La Ãºnica unidad px permitida es para bordes y sombras (los tokens `--border-*`, `--borderR-*` y `--shadow-*` ya
+  estÃ¡n en px).
+- Cualquier otra medida (margen, padding, tamaÃ±o, tipografÃ­a, ancho, alto) se escribe en rem. Con `font-size:
   62.5%` en `:root`, 1rem equivale a 10px.
-- Los breakpoints de las media queries se mantienen en px (560px y 900px), que es la práctica estándar.
-- Quien use variables debe asegurar que su hoja las importe antes (directamente o vía `style.css`).
+- Los breakpoints de las media queries se mantienen en px (560px y 900px), que es la prÃ¡ctica estÃ¡ndar.
+- Quien use variables debe asegurar que su hoja las importe antes (directamente o vÃ­a `style.css`).
 
-> **BUENA PRACTICA** — *Por qué importa*
+> **BUENA PRACTICA** â€” *Por quÃ© importa*
 >
-> Centralizar el diseño en variables permite cambiar la identidad visual completa del sistema editando un solo archivo, y
-> garantiza coherencia entre módulos. Es la diferencia entre un sistema mantenible y veinte páginas que se parecen pero
+> Centralizar el diseÃ±o en variables permite cambiar la identidad visual completa del sistema editando un solo archivo, y
+> garantiza coherencia entre mÃ³dulos. Es la diferencia entre un sistema mantenible y veinte pÃ¡ginas que se parecen pero
 > no encajan.
 
-### 8.4 Organización de los estilos
+### 8.4 OrganizaciÃ³n de los estilos
 
-| Archivo | Ámbito | Contenido |
+| Archivo | Ãmbito | Contenido |
 | --- | --- | --- |
-| `static/css/variables.css` | Global | Tokens de diseño (fuente única) |
+| `static/css/variables.css` | Global | Tokens de diseÃ±o (fuente Ãºnica) |
 | `static/css/style.css` | Global | Estilos base; importa `variables.css` |
 | `static/css/formularios.css` | Global | Secciones, filas, campos, interruptores de los formularios |
 | `static/css/tablas.css` | Global | Estilo de las tablas de datos |
-| `static/css/paginacion.css` | Global | Controles de paginación |
-| `static/css/dialogos.css` | Global | Modales y diálogos |
+| `static/css/paginacion.css` | Global | Controles de paginaciÃ³n |
+| `static/css/dialogos.css` | Global | Modales y diÃ¡logos |
 | `static/css/acciones.css` | Global | Paneles de acciones del dashboard |
 | `static/css/entradas.css` | Global | Campos de entrada |
 | `static/css/mediaquerys.css` | Global | Breakpoints comunes |
-| `<app>/static/css/*.css` | Módulo | Estilos específicos del módulo |
+| `<app>/static/css/*.css` | MÃ³dulo | Estilos especÃ­ficos del mÃ³dulo |
 
-*Tabla 8.3 - Organización de las hojas de estilo.*
+*Tabla 8.3 - OrganizaciÃ³n de las hojas de estilo.*
 
-La separación es deliberada: lo que comparten dos o más módulos vive en `static/css/` del proyecto; lo que solo
-usa un módulo, en su propia carpeta `static/`.
+La separaciÃ³n es deliberada: lo que comparten dos o mÃ¡s mÃ³dulos vive en `static/css/` del proyecto; lo que solo
+usa un mÃ³dulo, en su propia carpeta `static/`.
 
 ### 8.5 Convenciones de nombres en CSS
 
-Toda la nomenclatura de clases está en español, con nombres claros y concisos. El proyecto mantiene un mapeo
-canónico desde los nombres genéricos originales a los nombres en español:
+Toda la nomenclatura de clases estÃ¡ en espaÃ±ol, con nombres claros y concisos. El proyecto mantiene un mapeo
+canÃ³nico desde los nombres genÃ©ricos originales a los nombres en espaÃ±ol:
 
-| Nombre original | Nombre canónico en el proyecto |
+| Nombre original | Nombre canÃ³nico en el proyecto |
 | --- | --- |
 | `form-section` | `seccion-formulario` |
 | `form-row` | `fila-formulario` |
@@ -1313,20 +1313,20 @@ canónico desde los nombres genéricos originales a los nombres en español:
 
 *Tabla 8.4 - Mapeo de nombres de clase.*
 
-Los nombres de archivo siguen la misma línea: los estilos específicos se llaman como el módulo y en español
+Los nombres de archivo siguen la misma lÃ­nea: los estilos especÃ­ficos se llaman como el mÃ³dulo y en espaÃ±ol
 (`pagos.css`, `departamentos.css`, `incidencias.css`, `visitantes.css`).
 
 ### 8.6 Reglas obligatorias del frontend
 
-> **PENDIENTE / BUG** — Reglas de refactor frontend (obligatorias)
+> **PENDIENTE / BUG** â€” Reglas de refactor frontend (obligatorias)
 >
-> 1. Nada de `<script>` inline ni estilos `style=` en el HTML. El único `<script>` permitido es `<script src='...'>` para conectar el
+> 1. Nada de `<script>` inline ni estilos `style=` en el HTML. El Ãºnico `<script>` permitido es `<script src='...'>` para conectar el
 >    HTML con su JS. Los manejadores (`onchange`, `onclick`, ...) van dentro del archivo JS externo.
-> 2. Estilos y JS compartidos entre apps viven en `static/css/` y `static/js/` del proyecto. Lo específico de un módulo queda en
+> 2. Estilos y JS compartidos entre apps viven en `static/css/` y `static/js/` del proyecto. Lo especÃ­fico de un mÃ³dulo queda en
 >    su `static/` propio.
-> 3. El HTML principal de cada módulo se llama siempre `index.html`; los demás archivos se nombran por su contenido.
-> 4. CSS en español, con nombres claros y concisos. Los valores salen de `variables.css`; px solo para bordes y sombras;
->    rem para todo lo demás.
+> 3. El HTML principal de cada mÃ³dulo se llama siempre `index.html`; los demÃ¡s archivos se nombran por su contenido.
+> 4. CSS en espaÃ±ol, con nombres claros y concisos. Los valores salen de `variables.css`; px solo para bordes y sombras;
+>    rem para todo lo demÃ¡s.
 > 5. El JS externo no puede usar etiquetas de plantilla Django. El HTML le pasa los valores con atributos `data-*`
 >    (`data-url-comprobante`, `data-pago-apartamento`, `data-departamento`).
 > 6. Mantener la responsividad: los estilos compartidos incluyen media queries (breakpoints 560px / 900px) usados por
@@ -1334,22 +1334,22 @@ Los nombres de archivo siguen la misma línea: los estilos específicos se llama
 
 ### 8.7 JavaScript
 
-#### Organización
+#### OrganizaciÃ³n
 
-| Archivo | Ámbito | Responsabilidad |
+| Archivo | Ãmbito | Responsabilidad |
 | --- | --- | --- |
 | `static/js/dialogos.js` | Global | Apertura, cierre y control de los modales |
-| `static/js/pagos.js` | Global | Lógica compartida del módulo de pagos |
-| `static/js/mascaras.js` | Global | Máscaras de entrada (teléfono, cédula, montants) |
+| `static/js/pagos.js` | Global | LÃ³gica compartida del mÃ³dulo de pagos |
+| `static/js/mascaras.js` | Global | MÃ¡scaras de entrada (telÃ©fono, cÃ©dula, montants) |
 | `static/js/contadores.js` | Global | Contadores animados del dashboard |
-| `static/js/menu-movil.js` | Global | Comportamiento del menú en móvil |
-| `static/js/usuario-menu.js` | Global | Desplegable del menú de usuario |
+| `static/js/menu-movil.js` | Global | Comportamiento del menÃº en mÃ³vil |
+| `static/js/usuario-menu.js` | Global | Desplegable del menÃº de usuario |
 | `static/js/encabezado-acciones.js` | Global | Barra de acciones superior |
-| `<app>/static/js/*.js` | Módulo | Comportamiento específico del módulo |
+| `<app>/static/js/*.js` | MÃ³dulo | Comportamiento especÃ­fico del mÃ³dulo |
 
-#### Cómo el JS recibe datos del HTML
+#### CÃ³mo el JS recibe datos del HTML
 
-El punto de fricción clásico entre plantillas Django y JavaScript son las URLs y los identificadores. La solución del
+El punto de fricciÃ³n clÃ¡sico entre plantillas Django y JavaScript son las URLs y los identificadores. La soluciÃ³n del
 proyecto es pasar los valores del servidor al script mediante atributos `data-*`, de modo que el JS nunca tenga que
 interpretar una etiqueta de plantilla:
 
@@ -1374,34 +1374,34 @@ document.querySelectorAll('[data-url-comprobante]').forEach(function (btn) {
 });
 ```
 
-> **ATENCION** — *Por qué esta regla existe*
+> **ATENCION** â€” *Por quÃ© esta regla existe*
 >
-> Si el JS contuviera `{% url %}` o `{{ var }}`, Django lo renderizaría como texto literal dentro del archivo `.js` y el script fallaría en
-> tiempo de ejecución. Los `data-*` evitan por completo ese problema y mantienen el JS reutilizable entre páginas.
+> Si el JS contuviera `{% url %}` o `{{ var }}`, Django lo renderizarÃ­a como texto literal dentro del archivo `.js` y el script fallarÃ­a en
+> tiempo de ejecuciÃ³n. Los `data-*` evitan por completo ese problema y mantienen el JS reutilizable entre pÃ¡ginas.
 
 ### 8.8 Accesibilidad y experiencia de usuario
 
-El proyecto aplica varias prácticas de usabilidad de forma consistente:
+El proyecto aplica varias prÃ¡cticas de usabilidad de forma consistente:
 
-- Confirmación antes de acciones destructivas (eliminar) mediante diálogos.
-- Mensajes de éxito y de error mediante el sistema de mensajes de Django, renderizados como notificaciones.
+- ConfirmaciÃ³n antes de acciones destructivas (eliminar) mediante diÃ¡logos.
+- Mensajes de Ã©xito y de error mediante el sistema de mensajes de Django, renderizados como notificaciones.
 - Tablas ordenables y paginadas para manejar volumen de datos.
-- Formularios con validación en servidor (ModelForm) y máscaras de entrada en el cliente.
-- Estados vacíos y de carga considerados en los listados.
-- Menú lateral que se adapta a móvil mediante JavaScript y media queries.
-- Diseño responsivo con dos breakpoints principales (560px y 900px).
+- Formularios con validaciÃ³n en servidor (ModelForm) y mÃ¡scaras de entrada en el cliente.
+- Estados vacÃ­os y de carga considerados en los listados.
+- MenÃº lateral que se adapta a mÃ³vil mediante JavaScript y media queries.
+- DiseÃ±o responsivo con dos breakpoints principales (560px y 900px).
 
-## 9. Servidor ASGI, tiempo real y tareas asíncronas
+## 9. Servidor ASGI, tiempo real y tareas asÃ­ncronas
 
 ### 9.1 Modelo de despliegue previsto
 
-CONDOSYS está diseñado para correr sobre una pila ASGI con Daphne como servidor principal. La entrada es
+CONDOSYS estÃ¡ diseÃ±ado para correr sobre una pila ASGI con Daphne como servidor principal. La entrada es
 `condosys/asgi.py`.
 
 ### 9.2 Estado actual de ASGI
 
-El punto de entrada ASGI es deliberadamente mínimo: solo expone la aplicación Django como callable, sin enrutar
-websockets. Ese es el único motivo por el que los websockets no funcionan, aunque el código de channels esté
+El punto de entrada ASGI es deliberadamente mÃ­nimo: solo expone la aplicaciÃ³n Django como callable, sin enrutar
+websockets. Ese es el Ãºnico motivo por el que los websockets no funcionan, aunque el cÃ³digo de channels estÃ©
 escrito.
 
 #### condosys/asgi.py
@@ -1417,7 +1417,7 @@ application = get_asgi_application()
 # ^ Solo Django. No hay ProtocolTypeRouter.
 ```
 
-Existe un módulo de routing completo en `chat/routing.py`, y los consumers están implementados en
+Existe un mÃ³dulo de routing completo en `chat/routing.py`, y los consumers estÃ¡n implementados en
 `chat/consumers.py`. Las rutas definidas son:
 
 ```python
@@ -1432,14 +1432,14 @@ websocket_urlpatterns = [
 ]
 ```
 
-### 9.3 Qué falta para activar el tiempo real
+### 9.3 QuÃ© falta para activar el tiempo real
 
-| Paso | Qué hacer | Archivo |
+| Paso | QuÃ© hacer | Archivo |
 | --- | --- | --- |
-| 1 | Añadir `'channels'` a `INSTALLED_APPS` | `settings.py` |
-| 2 | Envolver la aplicación en un `ProtocolTypeRouter` con `'http'` y `'websocket'`, usando `AuthMiddlewareStack` | `condosys/asgi.py` |
+| 1 | AÃ±adir `'channels'` a `INSTALLED_APPS` | `settings.py` |
+| 2 | Envolver la aplicaciÃ³n en un `ProtocolTypeRouter` con `'http'` y `'websocket'`, usando `AuthMiddlewareStack` | `condosys/asgi.py` |
 | 3 | Incluir las rutas de websocket (`AuthMiddlewareStack(URLRouter(...))`) | `condosys/asgi.py` |
-| 4 | Verificar que el channel layer (Redis) esté accesible | `settings.py` `CHANNEL_LAYERS` |
+| 4 | Verificar que el channel layer (Redis) estÃ© accesible | `settings.py` `CHANNEL_LAYERS` |
 | 5 | Probar el handshake del websocket desde el cliente JS | cliente |
 
 *Tabla 9.1 - Pasos para activar los WebSockets.*
@@ -1466,59 +1466,59 @@ application = ProtocolTypeRouter({
 })
 ```
 
-> **PENDIENTE / BUG** — *Punto ciego de seguridad*
+> **PENDIENTE / BUG** â€” *Punto ciego de seguridad*
 >
-> Los consumers existentes usan `self.scope['user']`, que solo existe si la conexión pasa por `AuthMiddlewareStack`. Sin ese
-> middleware, el usuario no se puede resolver y el consumer fallaría al autenticar.
+> Los consumers existentes usan `self.scope['user']`, que solo existe si la conexiÃ³n pasa por `AuthMiddlewareStack`. Sin ese
+> middleware, el usuario no se puede resolver y el consumer fallarÃ­a al autenticar.
 >
-> El `AllowedHostsOriginValidator` es igualmente necesario en producción para evitar conexiones websocket desde
-> orígenes no autorizados.
+> El `AllowedHostsOriginValidator` es igualmente necesario en producciÃ³n para evitar conexiones websocket desde
+> orÃ­genes no autorizados.
 
-### 9.4 Tareas asíncronas (Celery)
+### 9.4 Tareas asÃ­ncronas (Celery)
 
-Celery está configurado en settings (broker y backend Redis, serialización JSON, zona horaria America/Bogota)
-pero no hay aplicación Celery implementada: no existe el archivo `celery.py` ni el inicializador de la app. Los casos
-de uso naturales si se quisiera activar son: envío de notificaciones por correo, avisos de pago por vencer y limpieza
+Celery estÃ¡ configurado en settings (broker y backend Redis, serializaciÃ³n JSON, zona horaria America/Bogota)
+pero no hay aplicaciÃ³n Celery implementada: no existe el archivo `celery.py` ni el inicializador de la app. Los casos
+de uso naturales si se quisiera activar son: envÃ­o de notificaciones por correo, avisos de pago por vencer y limpieza
 de sesiones.
 
-## 10. Despliegue en producción
+## 10. Despliegue en producciÃ³n
 
-### 10.1 Requisitos de producción
+### 10.1 Requisitos de producciÃ³n
 
-| Componente | Papel en producción |
+| Componente | Papel en producciÃ³n |
 | --- | --- |
-| Gunicorn | Servidor WSGI de aplicación |
+| Gunicorn | Servidor WSGI de aplicaciÃ³n |
 | Daphne (ASGI) | Servidor para el tiempo real (cuando se cablee) |
-| WhiteNoise | Servidor de archivos estáticos desde el propio proceso |
-| PostgreSQL | Base de datos de producción |
-| Nginx / reverse proxy | Terminación TLS y proxy hacia Gunicorn |
+| WhiteNoise | Servidor de archivos estÃ¡ticos desde el propio proceso |
+| PostgreSQL | Base de datos de producciÃ³n |
+| Nginx / reverse proxy | TerminaciÃ³n TLS y proxy hacia Gunicorn |
 | Redis | Channel layer y broker de Celery |
 
 ### 10.2 Checklist de despliegue
 
-| # | Paso | Comando / acción |
+| # | Paso | Comando / acciÃ³n |
 | --- | --- | --- |
 | 1 | Rama estable | `git checkout main && git pull` |
 | 2 | Entorno virtual | `python -m venv venv && venv\Scripts\activate` |
 | 3 | Dependencias | `python -m pip install -r requirements.txt` |
-| 4 | Archivo `.env` de producción | Configurar `DEBUG=False`, `SECRET_KEY` fuerte, `ALLOWED_HOSTS` del dominio, CORS y CSRF |
+| 4 | Archivo `.env` de producciÃ³n | Configurar `DEBUG=False`, `SECRET_KEY` fuerte, `ALLOWED_HOSTS` del dominio, CORS y CSRF |
 | 5 | Migraciones | `python manage.py migrate` |
 | 6 | Base de datos | Cambiar `DATABASES` a PostgreSQL y descomentar el bloque |
-| 7 | Estáticos | `python manage.py collectstatic --noinput` |
-| 8 | Verificación | `python manage.py check --deploy` |
+| 7 | EstÃ¡ticos | `python manage.py collectstatic --noinput` |
+| 8 | VerificaciÃ³n | `python manage.py check --deploy` |
 | 9 | Superusuario | `python manage.py createsuperuser` |
 | 10 | Arranque | `gunicorn condosys.wsgi:application` (con Daphne si hay websockets) |
 
 *Tabla 10.1 - Secuencia de despliegue.*
 
-> **ATENCION** — *No olvide collectstatic*
+> **ATENCION** â€” *No olvide collectstatic*
 >
-> En DEBUG, Django sirve los estáticos desde las carpetas de cada app. En producción, con `DEBUG=False`, Django no
-> los sirve: si no ejecuta `collectstatic`, la aplicación arranca pero aparece sin estilos ni JavaScript.
+> En DEBUG, Django sirve los estÃ¡ticos desde las carpetas de cada app. En producciÃ³n, con `DEBUG=False`, Django no
+> los sirve: si no ejecuta `collectstatic`, la aplicaciÃ³n arranca pero aparece sin estilos ni JavaScript.
 
 ### 10.3 Conmutar a PostgreSQL
 
-El bloque de PostgreSQL está listo y comentado en `settings.py`. Para activarlo sustituya el bloque de SQLite por el
+El bloque de PostgreSQL estÃ¡ listo y comentado en `settings.py`. Para activarlo sustituya el bloque de SQLite por el
 bloque de PostgreSQL y configure las variables en `.env`.
 
 ```python
@@ -1537,75 +1537,75 @@ DATABASES = {
 }
 ```
 
-- Instale el driver con: `python -m pip install psycopg` (ya está en requirements).
+- Instale el driver con: `python -m pip install psycopg` (ya estÃ¡ en requirements).
 - Cree la base de datos y el usuario en PostgreSQL antes de migrar.
-- `ATOMIC_REQUESTS=True` envuelve cada petición en una transacción, lo que garantiza consistencia pero
+- `ATOMIC_REQUESTS=True` envuelve cada peticiÃ³n en una transacciÃ³n, lo que garantiza consistencia pero
   puede afectar al rendimiento con operaciones pesadas.
 
-### 10.4 Seguridad en producción
+### 10.4 Seguridad en producciÃ³n
 
 `settings.py` define un bloque de endurecimiento que se activa cuando `DEBUG=False`. Cada variable se lee del `.env`,
 de modo que puede ajustarse por entorno:
 
-| Ajuste | Propósito |
+| Ajuste | PropÃ³sito |
 | --- | --- |
-| `SECURE_SSL_REDIRECT` | Redirigir todo el tráfico HTTP a HTTPS |
-| `SECURE_HSTS_SECONDS` | Duración del HSTS (31536000 = 1 año) |
+| `SECURE_SSL_REDIRECT` | Redirigir todo el trÃ¡fico HTTP a HTTPS |
+| `SECURE_HSTS_SECONDS` | DuraciÃ³n del HSTS (31536000 = 1 aÃ±o) |
 | `SECURE_HSTS_INCLUDE_SUBDOMAINS` | Incluir subdominios en HSTS |
 | `SECURE_HSTS_PRELOAD` | Permitir pre-carga del HSTS en el navegador |
-| `SESSION_COOKIE_SECURE` | Cookie de sesión solo por HTTPS |
+| `SESSION_COOKIE_SECURE` | Cookie de sesiÃ³n solo por HTTPS |
 | `CSRF_COOKIE_SECURE` | Cookie CSRF solo por HTTPS |
 | `SECURE_CONTENT_TYPE_NOSNIFF` | Prevenir el olfateo de tipos de contenido |
-| `SECURE_REFERRER_POLICY` | Política de referencia (`same-origin`) |
-| `CSRF_TRUSTED_ORIGINS` | Orígenes de confianza para formularios (dominio de producción) |
-| `CORS_ALLOWED_ORIGINS` | Orígenes permitidos si hay consumos externos |
+| `SECURE_REFERRER_POLICY` | PolÃ­tica de referencia (`same-origin`) |
+| `CSRF_TRUSTED_ORIGINS` | OrÃ­genes de confianza para formularios (dominio de producciÃ³n) |
+| `CORS_ALLOWED_ORIGINS` | OrÃ­genes permitidos si hay consumos externos |
 
 *Tabla 10.2 - Ajustes de seguridad disponibles por entorno.*
 
-> **PENDIENTE / BUG** — *SECRET_KEY no debe quedar en el repositorio*
+> **PENDIENTE / BUG** â€” *SECRET_KEY no debe quedar en el repositorio*
 >
-> La clave secreta se lee del `.env` y `.env` está en `.gitignore`, lo cual es correcto. Verifique que ninguna copia de la clave se
+> La clave secreta se lee del `.env` y `.env` estÃ¡ en `.gitignore`, lo cual es correcto. Verifique que ninguna copia de la clave se
 > haya committeado por error antes de publicar el repositorio.
 
-### 10.5 Lista de verificación de seguridad antes de publicar
+### 10.5 Lista de verificaciÃ³n de seguridad antes de publicar
 
-| # | Verificación | Estado |
+| # | VerificaciÃ³n | Estado |
 | --- | --- | --- |
-| 1 | `DEBUG=False` en el `.env` de producción | `[ ]` |
-| 2 | `SECRET_KEY` única, larga y no versionada | `[ ]` |
+| 1 | `DEBUG=False` en el `.env` de producciÃ³n | `[ ]` |
+| 2 | `SECRET_KEY` Ãºnica, larga y no versionada | `[ ]` |
 | 3 | `ALLOWED_HOSTS` limitado a los dominios reales | `[ ]` |
-| 4 | `ALLOWED_HOSTS` no incluye comodines en producción | `[ ]` |
+| 4 | `ALLOWED_HOSTS` no incluye comodines en producciÃ³n | `[ ]` |
 | 5 | `CSRF_TRUSTED_ORIGINS` configurado con el dominio real | `[ ]` |
 | 6 | `SECURE_SSL_REDIRECT` activo (sitio bajo HTTPS) | `[ ]` |
-| 7 | Cookies de sesión y CSRF marcadas como seguras | `[ ]` |
+| 7 | Cookies de sesiÃ³n y CSRF marcadas como seguras | `[ ]` |
 | 8 | `collectstatic` ejecutado y servido por WhiteNoise | `[ ]` |
-| 9 | `manage.py check --deploy` sin avisos críticos | `[ ]` |
+| 9 | `manage.py check --deploy` sin avisos crÃ­ticos | `[ ]` |
 | 10 | Datos de ejemplo (`poblar_datos`) eliminados | `[ ]` |
-| 11 | Contraseñas del superusuario cambiadas | `[ ]` |
-| 12 | Redis con autenticación y no expuesto a Internet | `[ ]` |
+| 11 | ContraseÃ±as del superusuario cambiadas | `[ ]` |
+| 12 | Redis con autenticaciÃ³n y no expuesto a Internet | `[ ]` |
 
 
-## 11. Problemas conocidos y deuda técnica
+## 11. Problemas conocidos y deuda tÃ©cnica
 
-Este capítulo documenta los defectos y limitaciones que hoy existen en el código. Se incluye de forma deliberada: conocerlos antes de tocar el sistema evita descubrimientos en producción. Cada punto indica dónde está el problema y cuál es el camino de corrección.
+Este capÃ­tulo documenta los defectos y limitaciones que hoy existen en el cÃ³digo. Se incluye de forma deliberada: conocerlos antes de tocar el sistema evita descubrimientos en producciÃ³n. Cada punto indica dÃ³nde estÃ¡ el problema y cuÃ¡l es el camino de correcciÃ³n.
 
-### 11.1 Configuración (settings.py)
+### 11.1 ConfiguraciÃ³n (settings.py)
 
-| # | Problema | Ubicación | Corrección sugerida |
+| # | Problema | UbicaciÃ³n | CorrecciÃ³n sugerida |
 |---|----------|-----------|---------------------|
 | 1 | Bloque `REST_FRAMEWORK` duplicado: el primero define throttling y el segundo lo sobreescribe. El throttling configurado nunca se aplica. | `settings.py` | Consolidar en un solo bloque, con throttling incluido |
-| 2 | `AUTH_USER_MODEL` declarado dos veces | `settings.py` | Dejar una sola declaración |
+| 2 | `AUTH_USER_MODEL` declarado dos veces | `settings.py` | Dejar una sola declaraciÃ³n |
 | 3 | `STATIC_URL`, `STATICFILES_DIRS` y `STATIC_ROOT` definidos dos veces | `settings.py` | Eliminar el bloque duplicado |
 | 4 | El bloque de seguridad `if not DEBUG` es sobreescrito por el bloque posterior que lee del `.env` | `settings.py` | Unificar en una sola lectura por entorno |
-| 5 | `SECRET_KEY` sin valor por defecto; el import de `ImproperlyConfigured` no se usa | `settings.py` | Añadir fallback seguro o error explícito |
+| 5 | `SECRET_KEY` sin valor por defecto; el import de `ImproperlyConfigured` no se usa | `settings.py` | AÃ±adir fallback seguro o error explÃ­cito |
 
-*Tabla 11.1 - Duplicaciones y omisiones en la configuración.*
+*Tabla 11.1 - Duplicaciones y omisiones en la configuraciÃ³n.*
 
 ### 11.2 URLs
 
-| # | Problema | Efecto | Corrección sugerida |
+| # | Problema | Efecto | CorrecciÃ³n sugerida |
 |---|----------|--------|---------------------|
-| 5 | En 9 apps, la vista HTML `app_index` está registrada en `''` antes de `include(router.urls)` con el router en `r''`. | El listado HTML tapa el listado JSON: los endpoints `-list` y `-root` de la API quedan inalcanzables en la raíz del prefijo. El `-detail` y las acciones `detail=False` sí funcionan. | Mover el router a un prefijo propio (por ejemplo `api/`), como ya hace `areas_comunes` |
+| 5 | En 9 apps, la vista HTML `app_index` estÃ¡ registrada en `''` antes de `include(router.urls)` con el router en `r''`. | El listado HTML tapa el listado JSON: los endpoints `-list` y `-root` de la API quedan inalcanzables en la raÃ­z del prefijo. El `-detail` y las acciones `detail=False` sÃ­ funcionan. | Mover el router a un prefijo propio (por ejemplo `api/`), como ya hace `areas_comunes` |
 
 *Tabla 11.2 - Sombreo de rutas entre HTML y API.*
 
@@ -1613,25 +1613,25 @@ Apps afectadas: `accounts`, `propietarios`, `residents`, `maintenance`, `solicit
 
 ### 11.3 Tiempo real
 
-| # | Problema | Efecto | Corrección sugerida |
+| # | Problema | Efecto | CorrecciÃ³n sugerida |
 |---|----------|--------|---------------------|
-| 6 | `asgi.py` no usa `ProtocolTypeRouter` | Los WebSockets de chat y notificaciones no se pueden conectar | Cablear el routing (ver capítulo 9) |
-| 7 | `channels` no está en `INSTALLED_APPS` | Channels no inicializa su app | Añadir la app |
+| 6 | `asgi.py` no usa `ProtocolTypeRouter` | Los WebSockets de chat y notificaciones no se pueden conectar | Cablear el routing (ver capÃ­tulo 9) |
+| 7 | `channels` no estÃ¡ en `INSTALLED_APPS` | Channels no inicializa su app | AÃ±adir la app |
 | 8 | Consumers sin `AuthMiddlewareStack` | `self.scope['user']` no se resuelve | Envolver el `URLRouter` en `AuthMiddlewareStack` |
 
 *Tabla 11.3 - Estado del tiempo real.*
 
 ### 11.4 Modelo de datos
 
-| # | Problema | Ubicación | Corrección sugerida |
+| # | Problema | UbicaciÃ³n | CorrecciÃ³n sugerida |
 |---|----------|-----------|---------------------|
 | 9 | `chat.ChatMessage.__str__` referencia `self.group_name`, campo que no existe: lanza `AttributeError` en todo mensaje grupal | `chat/models.py` | Usar `self.group.name` y proteger el caso group nulo |
-| 10 | Dos modelos para el área común: `reservations.CommonArea` (con garden) y `areas_comunes.AreaComun` (sin garden). `CommonArea` quedó huérfano tras la migración 0003, pero sigue registrado en admin, forms, serializers, ViewSet, router y en el seed. | `reservations/`, `areas_comunes/` | Eliminar `CommonArea` y migrar sus referencias |
-| 11 | `AreaComun` no tiene relación con `Garden` ni con `Residencial`: no se puede asignar un área a un jardín o edificio concreto | `areas_comunes/models.py` | Añadir la FK a `Garden` |
+| 10 | Dos modelos para el Ã¡rea comÃºn: `reservations.CommonArea` (con garden) y `areas_comunes.AreaComun` (sin garden). `CommonArea` quedÃ³ huÃ©rfano tras la migraciÃ³n 0003, pero sigue registrado en admin, forms, serializers, ViewSet, router y en el seed. | `reservations/`, `areas_comunes/` | Eliminar `CommonArea` y migrar sus referencias |
+| 11 | `AreaComun` no tiene relaciÃ³n con `Garden` ni con `Residencial`: no se puede asignar un Ã¡rea a un jardÃ­n o edificio concreto | `areas_comunes/models.py` | AÃ±adir la FK a `Garden` |
 | 12 | PK no uniforme: `chat.ChatGroup`, `incidents.IncidentImage` y `reports.AuditLogDetail` usan `AutoField` | varios | Migrar a `UUIDField` |
 | 13 | Import muerto: `Building` en `communications/models.py`; `PROTECT` sin usar en `accounts` y `structure` | varios | Limpiar |
-| 14 | `ChatGroup` no define clase `Meta` | `chat/models.py` | Añadir `ordering` y `verbose_name_plural` |
-| 15 | FK polimórficas manuales sin integridad (`Communication.target_id`, `Notification.related_id`) | varios | Referencia genérica o tabla puente |
+| 14 | `ChatGroup` no define clase `Meta` | `chat/models.py` | AÃ±adir `ordering` y `verbose_name_plural` |
+| 15 | FK polimÃ³rficas manuales sin integridad (`Communication.target_id`, `Notification.related_id`) | varios | Referencia genÃ©rica o tabla puente |
 
 *Tabla 11.4 - Inconsistencias del modelo de datos.*
 
@@ -1639,9 +1639,9 @@ Apps afectadas: `accounts`, `propietarios`, `residents`, `maintenance`, `solicit
 
 | # | Problema | Efecto |
 |---|----------|--------|
-| 16 | El middleware de CORS está activo pero la app `corsheaders` no está en `INSTALLED_APPS` | Las cabeceras CORS probablemente no se aplican |
-| 17 | El throttling de DRF está configurado en el bloque que se sobreescribe | No hay límite de peticiones a la API |
-| 18 | Permisos declarados pero sin usar: `IsResidentOnly`, `IsPropietario`, `IsResidentOrManager`, `IsSecurity`, `CanModifyReservation` | Código muerto; `IsResidentOrManager` duplica a `IsResident` |
+| 16 | El middleware de CORS estÃ¡ activo pero la app `corsheaders` no estÃ¡ en `INSTALLED_APPS` | Las cabeceras CORS probablemente no se aplican |
+| 17 | El throttling de DRF estÃ¡ configurado en el bloque que se sobreescribe | No hay lÃ­mite de peticiones a la API |
+| 18 | Permisos declarados pero sin usar: `IsResidentOnly`, `IsPropietario`, `IsResidentOrManager`, `IsSecurity`, `CanModifyReservation` | CÃ³digo muerto; `IsResidentOrManager` duplica a `IsResident` |
 | 19 | Permisos de objeto aplicados como permiso de clase sin `has_permission`: `CanAccessApartment` y `CanModifyIncident` no restringen los listados | El recorte real depende del filtro de `get_queryset`, no del permiso |
 | 20 | Los mensajes de chat no validan rol (solo `login_required`) | Cualquier usuario autenticado puede usar el chat (consistente con la tabla de permisos) |
 
@@ -1651,48 +1651,48 @@ Apps afectadas: `accounts`, `propietarios`, `residents`, `maintenance`, `solicit
 
 | # | Problema | Efecto | Riesgo |
 |---|----------|--------|--------|
-| 21 | Los `tests.py` de todas las apps son plantillas vacías; no hay suite real | Ninguna regresión se detecta automáticamente | Alto |
-| 22 | No hay linter, formateador ni integración continua | El estilo depende de la disciplina individual | Medio |
+| 21 | Los `tests.py` de todas las apps son plantillas vacÃ­as; no hay suite real | Ninguna regresiÃ³n se detecta automÃ¡ticamente | Alto |
+| 22 | No hay linter, formateador ni integraciÃ³n continua | El estilo depende de la disciplina individual | Medio |
 | 23 | `requirements.txt` sin versiones fijadas | Instalaciones no reproducibles | Medio |
 | 24 | Constantes duplicadas entre apps: `MARITAL_CHOICES` en `propietarios` y `residents`; `PAYMENT_METHOD_CHOICES` en `payments` y `maintenance` | Cambiar una exige cambiar la otra | Bajo |
 | 25 | El atributo `filter_fields` (obsoleto en DRF moderno) se usa en `accounts.UserViewSet` | Se ignora silenciosamente; el filtro por rol/estado no se aplica | Medio |
-| 26 | Envío de datos de demostración: el comando `poblar_datos` crea usuarios con contraseña conocida | Riesgo si se ejecuta en producción | Alto |
+| 26 | EnvÃ­o de datos de demostraciÃ³n: el comando `poblar_datos` crea usuarios con contraseÃ±a conocida | Riesgo si se ejecuta en producciÃ³n | Alto |
 
-*Tabla 11.6 - Deuda técnica y riesgos de calidad.*
+*Tabla 11.6 - Deuda tÃ©cnica y riesgos de calidad.*
 
 ### 11.7 Orden de trabajo sugerido
 
-Si va a abordar la deuda técnica, este orden minimiza el riesgo:
+Si va a abordar la deuda tÃ©cnica, este orden minimiza el riesgo:
 
-| Prioridad | Tarea | Por qué primero |
+| Prioridad | Tarea | Por quÃ© primero |
 |-----------|-------|-----------------|
 | 1 | Eliminar los datos de ejemplo del flujo de despliegue y proteger el comando | Riesgo de seguridad directo |
 | 2 | Arreglar el sombreado de URLs moviendo los routers a `/api/` | Devuelve la API a la normalidad sin romper la UI |
-| 3 | Consolidar los bloques duplicados de `settings.py` | Reduce la confusión sobre qué configuración manda |
-| 4 | Activar o retirar channels/Celery | Decidir si son capacidad real o código muerto |
-| 5 | Arreglar `ChatMessage.__str__` y limpiar permisos sin uso | Corrección de bajo riesgo, alto valor |
-| 6 | Escribir la suite de pruebas mínima (permisos y lógica de pagos) | Sin esto, cualquier refactor grande es arriesgado |
+| 3 | Consolidar los bloques duplicados de `settings.py` | Reduce la confusiÃ³n sobre quÃ© configuraciÃ³n manda |
+| 4 | Activar o retirar channels/Celery | Decidir si son capacidad real o cÃ³digo muerto |
+| 5 | Arreglar `ChatMessage.__str__` y limpiar permisos sin uso | CorrecciÃ³n de bajo riesgo, alto valor |
+| 6 | Escribir la suite de pruebas mÃ­nima (permisos y lÃ³gica de pagos) | Sin esto, cualquier refactor grande es arriesgado |
 | 7 | Congelar versiones en `requirements.txt` | Reproducibilidad del despliegue |
-| 8 | Unificar los modelos de área común | Limpieza estructural, hacerla antes de crecer |
+| 8 | Unificar los modelos de Ã¡rea comÃºn | Limpieza estructural, hacerla antes de crecer |
 
-*Tabla 11.7 - Backlog técnico priorizado.*
+*Tabla 11.7 - Backlog tÃ©cnico priorizado.*
 
-## 12. Guía de mantenimiento y extensión
+## 12. GuÃ­a de mantenimiento y extensiÃ³n
 
-### 12.1 Cómo agregar un módulo nuevo
+### 12.1 CÃ³mo agregar un mÃ³dulo nuevo
 
-El sistema está diseñado para que agregar un módulo sea mecánico. Los pasos:
+El sistema estÃ¡ diseÃ±ado para que agregar un mÃ³dulo sea mecÃ¡nico. Los pasos:
 
 | # | Paso | Detalle |
 |---|------|---------|
-| 1 | Crear la app | `python manage.py startapp` (en español, en plural) |
-| 2 | Registrar la app | Añadir `''` a `INSTALLED_APPS` en `settings.py` |
-| 3 | Definir el modelo | `models.py` con `UUIDField` como PK, `related_name` en todas las FK, índices en los campos de filtro |
+| 1 | Crear la app | `python manage.py startapp` (en espaÃ±ol, en plural) |
+| 2 | Registrar la app | AÃ±adir `''` a `INSTALLED_APPS` en `settings.py` |
+| 3 | Definir el modelo | `models.py` con `UUIDField` como PK, `related_name` en todas las FK, Ã­ndices en los campos de filtro |
 | 4 | Crear migraciones | `python manage.py makemigrations && python manage.py migrate` |
 | 5 | Definir serializers | `serializers.py` con el serializer de listado y, si difiere, el de detalle |
 | 6 | Definir el ViewSet | `views.py` con el ViewSet, `permission_classes`, `filterset_fields`, `search_fields`, `ordering_fields` y `get_queryset` con el filtro de visibilidad |
-| 7 | Definir permisos | Usar los permisos de `accounts.permissions`; si hace falta uno nuevo, crearlo allí |
-| 8 | Definir el contexto de permisos | Añadir el módulo a `MODULOS` y a las tablas de roles en `accounts/context_processors.py` |
+| 7 | Definir permisos | Usar los permisos de `accounts.permissions`; si hace falta uno nuevo, crearlo allÃ­ |
+| 8 | Definir el contexto de permisos | AÃ±adir el mÃ³dulo a `MODULOS` y a las tablas de roles en `accounts/context_processors.py` |
 | 9 | Definir rutas | `urls.py` con `app_index` (`@role_required`) y el `DefaultRouter`; registrar en `ROOT_URLCONF` |
 | 10 | Definir formularios | `forms.py` con `ModelForms` para crear y editar |
 | 11 | Crear plantillas | `index.html` (listado) y `agregar.html` / `nuevo.html` (formulario), extendiendo `base.html` |
@@ -1701,9 +1701,9 @@ El sistema está diseñado para que agregar un módulo sea mecánico. Los pasos:
 | 14 | Registrar en el admin | `admin.py` con los `ModelAdmin` correspondientes |
 | 15 | Probar | `python manage.py check`, luego recorrer el flujo con cada rol |
 
-*Tabla 12.1 - Checklist para agregar un módulo.*
+*Tabla 12.1 - Checklist para agregar un mÃ³dulo.*
 
-### 12.2 Cómo agregar un campo a un modelo
+### 12.2 CÃ³mo agregar un campo a un modelo
 
 ```python
 # 1. Modificar el modelo
@@ -1711,7 +1711,7 @@ class Incident(models.Model):
     ...
     categoria_seguridad = models.CharField(max_length=50, blank=True)
 
-# 2. Crear y aplicar la migración
+# 2. Crear y aplicar la migraciÃ³n
 python manage.py makemigrations incidents
 python manage.py migrate
 
@@ -1719,51 +1719,51 @@ python manage.py migrate
 class IncidentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incident
-        fields = '__all__'  # o la lista explícita
+        fields = '__all__'  # o la lista explÃ­cita
 
 # 4. Si el campo debe filtrarse en la API, declararlo
 filterset_fields = [..., 'categoria_seguridad']
 ```
 
-> **ADVERTENCIA** — Cuidado con los `on_delete` al agregar relaciones
+> **ADVERTENCIA** â€” Cuidado con los `on_delete` al agregar relaciones
 >
-> Al agregar una ForeignKey, especifique siempre `on_delete` de forma explícita. `CASCADE` borra en cascada, `PROTECT` impide el borrado y `SET_NULL` deja el campo vacío. Elegir por defecto puede tener consecuencias irreversibles sobre los datos.
+> Al agregar una ForeignKey, especifique siempre `on_delete` de forma explÃ­cita. `CASCADE` borra en cascada, `PROTECT` impide el borrado y `SET_NULL` deja el campo vacÃ­o. Elegir por defecto puede tener consecuencias irreversibles sobre los datos.
 
-### 12.3 Buenas prácticas al escribir código en este proyecto
+### 12.3 Buenas prÃ¡cticas al escribir cÃ³digo en este proyecto
 
-- Idioma: todo el código, comentarios, nombres de plantilla y mensajes van en español, salvo los nombres de clase y método de Django/DRF.
-- Modelos: `UUIDField` como PK, `related_name` explícito, `on_delete` explícito, índices en los campos de filtro, `unique_together` en lo que pertenece a un padre.
+- Idioma: todo el cÃ³digo, comentarios, nombres de plantilla y mensajes van en espaÃ±ol, salvo los nombres de clase y mÃ©todo de Django/DRF.
+- Modelos: `UUIDField` como PK, `related_name` explÃ­cito, `on_delete` explÃ­cito, Ã­ndices en los campos de filtro, `unique_together` en lo que pertenece a un padre.
 - Permisos: usar las constantes de cuentas (`ROLES_*`) y los permisos de `accounts.permissions.py`; nunca escribir la tupla de roles a mano.
 - Visibilidad: todo listado debe pasar por un helper `_<entidad>_visibles(user)` y terminar en `.distinct()` cuando hay joins.
-- Serializers: un serializer de listado ligero y uno de detalle cuando el detalle enriquece; seleccionarlos con `get_serializer_class` según la acción.
-- Frontend: sin script inline, sin estilos inline, CSS en español, tokens de `variables.css`, `rem` excepto bordes y sombras.
+- Serializers: un serializer de listado ligero y uno de detalle cuando el detalle enriquece; seleccionarlos con `get_serializer_class` segÃºn la acciÃ³n.
+- Frontend: sin script inline, sin estilos inline, CSS en espaÃ±ol, tokens de `variables.css`, `rem` excepto bordes y sombras.
 - JS y plantillas: pasar datos por `data-*`, nunca por etiquetas de plantilla dentro del JS.
-- Paginación: 15 elementos por página en la vista HTML; 20 en la API (el default de DRF).
+- PaginaciÃ³n: 15 elementos por pÃ¡gina en la vista HTML; 20 en la API (el default de DRF).
 
-### 12.4 Cómo diagnosticar problemas
+### 12.4 CÃ³mo diagnosticar problemas
 
-| Síntoma | Causa probable | Qué revisar |
+| SÃ­ntoma | Causa probable | QuÃ© revisar |
 |---------|----------------|-------------|
-| No arranca: `ImproperlyConfigured` | Falta `DJANGO_SECRET_KEY` en `.env` | El archivo `.env` y que `python-dotenv` lo esté leyendo |
+| No arranca: `ImproperlyConfigured` | Falta `DJANGO_SECRET_KEY` en `.env` | El archivo `.env` y que `python-dotenv` lo estÃ© leyendo |
 | No arranca: No module named X | Dependencia no instalada o app no registrada | `pip install -r requirements.txt`; `INSTALLED_APPS` |
 | Login correcto pero redirige mal | `status` distinto de `'active'` | El campo `status` del usuario |
 | La API devuelve HTML en vez de JSON | El listado HTML sombrea el listado JSON | El orden de las rutas en `urls.py` (ver 11.2) |
-| Los estilos no cargan en producción | `collectstatic` no ejecutado | `STATIC_ROOT` y WhiteNoise |
-| Un filtro de la API no hace nada | El campo no está en `filterset_fields`, o se usó `filter_fields` (obsoleto) | Declarar el campo en `filterset_fields` |
+| Los estilos no cargan en producciÃ³n | `collectstatic` no ejecutado | `STATIC_ROOT` y WhiteNoise |
+| Un filtro de la API no hace nada | El campo no estÃ¡ en `filterset_fields`, o se usÃ³ `filter_fields` (obsoleto) | Declarar el campo en `filterset_fields` |
 | El JS no encuentra un valor | El HTML no pasa el `data-*` esperado | Revisar que el JS lea `dataset` y que el HTML tenga el atributo |
-| Un color no coincide con el diseño | Se usó un literal en vez de una variable | Revisar el uso de `variables.css` y las reglas de px/rem |
-| Los websockets no conectan | `asgi.py` no enruta websockets | Cablear el `ProtocolTypeRouter` (capítulo 9) |
-| `check` reporta 0 pero algo falla | El bloque de configuración que manda no es el que se lee | Revisar duplicados en `settings.py` |
+| Un color no coincide con el diseÃ±o | Se usÃ³ un literal en vez de una variable | Revisar el uso de `variables.css` y las reglas de px/rem |
+| Los websockets no conectan | `asgi.py` no enruta websockets | Cablear el `ProtocolTypeRouter` (capÃ­tulo 9) |
+| `check` reporta 0 pero algo falla | El bloque de configuraciÃ³n que manda no es el que se lee | Revisar duplicados en `settings.py` |
 
-*Tabla 12.2 - Diagnóstico rápido por síntoma.*
+*Tabla 12.2 - DiagnÃ³stico rÃ¡pido por sÃ­ntoma.*
 
-### 12.5 Comandos de verificación antes de publicar
+### 12.5 Comandos de verificaciÃ³n antes de publicar
 
 ```bash
-# 1. Verificar la configuración (debe reportar 0 problemas)
+# 1. Verificar la configuraciÃ³n (debe reportar 0 problemas)
 python manage.py check
 
-# 2. Revisar la configuración de producción
+# 2. Revisar la configuraciÃ³n de producciÃ³n
 python manage.py check --deploy
 
 # 3. Verificar que no hay cambios de modelo pendientes
@@ -1776,141 +1776,141 @@ python manage.py showmigrations
 python manage.py test
 ```
 
-### 12.6 Resumen de la arquitectura en una línea
+### 12.6 Resumen de la arquitectura en una lÃ­nea
 
-CONDOSYS es un monolito modular de Django: un único proyecto y una única base de datos, dieciocho aplicaciones de dominio que se comunican exclusivamente a través del modelo de usuario compartido y de las relaciones entre modelos, una capa de presentación renderizada en el servidor con un sistema de diseño basado en variables, y una API REST en paralelo que expone cada módulo con los mismos datos y los mismos permisos por rol. Toda la lógica de negocio vive en el lado del servidor; el JavaScript solo aporta interactividad. El sistema está preparado para escalar hacia tiempo real y base de datos de producción, pero ambas rutas requieren trabajo adicional documentado en los capítulos 9 y 10.
+CONDOSYS es un monolito modular de Django: un Ãºnico proyecto y una Ãºnica base de datos, dieciocho aplicaciones de dominio que se comunican exclusivamente a travÃ©s del modelo de usuario compartido y de las relaciones entre modelos, una capa de presentaciÃ³n renderizada en el servidor con un sistema de diseÃ±o basado en variables, y una API REST en paralelo que expone cada mÃ³dulo con los mismos datos y los mismos permisos por rol. Toda la lÃ³gica de negocio vive en el lado del servidor; el JavaScript solo aporta interactividad. El sistema estÃ¡ preparado para escalar hacia tiempo real y base de datos de producciÃ³n, pero ambas rutas requieren trabajo adicional documentado en los capÃ­tulos 9 y 10.
 
 
-## 13. Módulos y funciones incorporados en 2026
+## 13. MÃ³dulos y funciones incorporados en 2026
 
-Este capítulo documenta las piezas que se añadieron al sistema después de la primera versión del manual y que no aparecían en los capítulos anteriores: la aplicación `configuracion`, sus modelos, la recuperación de contraseña por correo y la lectura de cédulas con inteligencia artificial. Debe leerse como complemento de los capítulos 3, 5, 6 y 7.
+Este capÃ­tulo documenta las piezas que se aÃ±adieron al sistema despuÃ©s de la primera versiÃ³n del manual y que no aparecÃ­an en los capÃ­tulos anteriores: la aplicaciÃ³n `configuracion`, sus modelos, la recuperaciÃ³n de contraseÃ±a por correo y la lectura de cÃ©dulas con inteligencia artificial. Debe leerse como complemento de los capÃ­tulos 3, 5, 6 y 7.
 
-### 13.1 La aplicación `configuracion`
+### 13.1 La aplicaciÃ³n `configuracion`
 
-`configuracion` es una app nueva que centraliza la administración de cuentas de usuario y la conexión del sistema con un proveedor de inteligencia artificial. A diferencia del resto de apps, **no expone API REST**: no tiene `ModelViewSet` ni `DefaultRouter`; toda su capa de presentación son vistas de función protegidas.
+`configuracion` es una app nueva que centraliza la administraciÃ³n de cuentas de usuario y la conexiÃ³n del sistema con un proveedor de inteligencia artificial. A diferencia del resto de apps, **no expone API REST**: no tiene `ModelViewSet` ni `DefaultRouter`; toda su capa de presentaciÃ³n son vistas de funciÃ³n protegidas.
 
 | Elemento | Valor |
 |---|---|
 | Ruta base | `/configuracion/` (registrada en `condosys/urls.py`, antes de `login.urls`) |
-| Presentación | Templates `configuracion/index.html`, `crear.html` y `editar.html` |
-| Estáticos | `configuracion/static/configuracion/` (CSS y JS propios) |
+| PresentaciÃ³n | Templates `configuracion/index.html`, `crear.html` y `editar.html` |
+| EstÃ¡ticos | `configuracion/static/configuracion/` (CSS y JS propios) |
 | Acceso | Exclusivo del rol `admin` (todas las vistas usan `@role_required('admin')`) |
-| API REST | No. Solo vistas HTML de función |
+| API REST | No. Solo vistas HTML de funciÃ³n |
 
 **Vistas y rutas (`configuracion/urls.py`):**
 
-| Nombre de URL | Ruta | Vista | Función |
+| Nombre de URL | Ruta | Vista | FunciÃ³n |
 |---|---|---|---|
-| `configuracion_index` | `/configuracion/` | `app_index` | Página principal con pestañas y listado de usuarios |
-| `crear_usuario` | `/configuracion/agregar/` | `crear_usuario` | Alta de usuario con contraseña temporal |
-| `actualizar_usuario` | `/configuracion/actualizar/<uuid:pk>/` | `actualizar_usuario` | Edición de un usuario |
-| `eliminar_usuario` | `/configuracion/eliminar/<uuid:pk>/` | `eliminar_usuario` | Baja de usuario (con diálogo de confirmación) |
-| `guardar_ia` | `/configuracion/guardar-ia/` | `guardar_ia` | Guarda proveedor, modelo y API Key de la integración IA |
+| `configuracion_index` | `/configuracion/` | `app_index` | PÃ¡gina principal con pestaÃ±as y listado de usuarios |
+| `crear_usuario` | `/configuracion/agregar/` | `crear_usuario` | Alta de usuario con contraseÃ±a temporal |
+| `actualizar_usuario` | `/configuracion/actualizar/<uuid:pk>/` | `actualizar_usuario` | EdiciÃ³n de un usuario |
+| `eliminar_usuario` | `/configuracion/eliminar/<uuid:pk>/` | `eliminar_usuario` | Baja de usuario (con diÃ¡logo de confirmaciÃ³n) |
+| `guardar_ia` | `/configuracion/guardar-ia/` | `guardar_ia` | Guarda proveedor, modelo y API Key de la integraciÃ³n IA |
 
 *Tabla 13.1 - Rutas y vistas de la app configuracion.*
 
-La pantalla `configuracion_index` se organiza en seis pestañas. Solo **Usuarios** e **Integración AI** están implementadas; **Seguridad**, **Notificaciones**, **Comprobantes fiscales** y **Preferencias generales** muestran el texto "Módulo próximamente". La opción **Configuración** del menú de usuario (no del menú lateral) apunta a `configuracion_index` y solo se renderiza para el rol `admin` (`templates/componentes/menu_usuario.html`). El módulo **Residencial** del menú lateral sigue existiendo de forma independiente.
+La pantalla `configuracion_index` se organiza en seis pestaÃ±as. Solo **Usuarios** e **IntegraciÃ³n AI** estÃ¡n implementadas; **Seguridad**, **Notificaciones**, **Comprobantes fiscales** y **Preferencias generales** muestran el texto "MÃ³dulo prÃ³ximamente". La opciÃ³n **ConfiguraciÃ³n** del menÃº de usuario (no del menÃº lateral) apunta a `configuracion_index` y solo se renderiza para el rol `admin` (`templates/componentes/menu_usuario.html`). El mÃ³dulo **Residencial** del menÃº lateral sigue existiendo de forma independiente.
 
-**Protecciones de la vista de edición (`actualizar_usuario`):** al editar la propia cuenta se fuerza `role='admin'`, `status='active'` e `is_active=True` para no bloquear el acceso, y `eliminar_usuario` impide borrar la cuenta con la que se está trabajando.
+**Protecciones de la vista de ediciÃ³n (`actualizar_usuario`):** al editar la propia cuenta se fuerza `role='admin'`, `status='active'` e `is_active=True` para no bloquear el acceso, y `eliminar_usuario` impide borrar la cuenta con la que se estÃ¡ trabajando.
 
 **Formularios (`configuracion/forms.py`):**
 
 | Formulario | Campos | Reglas |
 |---|---|---|
-| `UsuarioForm` | first_name, last_name, document, avatar, phone, email, role, status, is_active | email y document únicos (validación propia) |
-| `UsuarioCreateForm` | Los anteriores + password y password_confirmation | Contraseña mínima de 8 caracteres; se hashea con `set_password` |
+| `UsuarioForm` | first_name, last_name, document, avatar, phone, email, role, status, is_active | email y document Ãºnicos (validaciÃ³n propia) |
+| `UsuarioCreateForm` | Los anteriores + password y password_confirmation | ContraseÃ±a mÃ­nima de 8 caracteres; se hashea con `set_password` |
 | `IntegracionIAForm` | proveedor, modelo, api_key | `api_key` opcional; en blanco conserva la guardada |
 
 *Tabla 13.2 - Formularios de la app configuracion.*
 
 ### 13.2 Modelo `configuracion.IntegracionIA`
 
-Registro único (singleton lógico) que guarda la conexión con un proveedor de IA. Tiene PK `UUIDField`.
+Registro Ãºnico (singleton lÃ³gico) que guarda la conexiÃ³n con un proveedor de IA. Tiene PK `UUIDField`.
 
-| Campo | Tipo | Descripción |
+| Campo | Tipo | DescripciÃ³n |
 |---|---|---|
-| `proveedor` | CharField (choices) | `gpt` (GPT · OpenAI), `claude` (Claude · Anthropic), `gemini` (Gemini · Google), `llama` (Llama · Meta), `mistral` (Mistral AI), `deepseek` (DeepSeek), `grok` (Grok · xAI). Por defecto `gpt` |
+| `proveedor` | CharField (choices) | `gpt` (GPT Â· OpenAI), `claude` (Claude Â· Anthropic), `gemini` (Gemini Â· Google), `llama` (Llama Â· Meta), `mistral` (Mistral AI), `deepseek` (DeepSeek), `grok` (Grok Â· xAI). Por defecto `gpt` |
 | `modelo` | CharField | Identificador del modelo (texto libre con sugerencias) |
 | `api_key` | CharField | Clave de la API; puede quedar en blanco |
-| `MODELOS_POR_PROVEEDOR` | dict de clase | Modelos con visión por proveedor (ver tabla siguiente) |
+| `MODELOS_POR_PROVEEDOR` | dict de clase | Modelos con visiÃ³n por proveedor (ver tabla siguiente) |
 
 *Tabla 13.3 - Modelo IntegracionIA.*
 
-| Proveedor | Modelos con visión |
+| Proveedor | Modelos con visiÃ³n |
 |---|---|
 | gpt | gpt-5, gpt-4o, gpt-4.1, gpt-4o-mini, gpt-4.1-mini |
 | claude | claude-opus-4, claude-sonnet-4, claude-3-7-sonnet, claude-3.5-sonnet |
 | gemini | gemini-2.5-pro, gemini-2.5-flash, gemini-2.0-flash, gemini-1.5-pro |
 | mistral | pixtral-large, pixtral-12b, mistral-medium-3, mistral-small-3 |
 | grok | grok-4, grok-3 |
-| deepseek, llama | Sin modelos con visión |
+| deepseek, llama | Sin modelos con visiÃ³n |
 
-*Tabla 13.3.1 - Modelos con visión por proveedor.*
+*Tabla 13.3.1 - Modelos con visiÃ³n por proveedor.*
 
-Métodos relevantes: `obtener_unico()` devuelve el registro único de configuración (o `None`) y se usa tanto en la vista como en `ia_vision`. El campo `api_key` es un `PasswordInput` con `render_value=True` y botón de ojo para mostrar u ocultar la clave.
+MÃ©todos relevantes: `obtener_unico()` devuelve el registro Ãºnico de configuraciÃ³n (o `None`) y se usa tanto en la vista como en `ia_vision`. El campo `api_key` es un `PasswordInput` con `render_value=True` y botÃ³n de ojo para mostrar u ocultar la clave.
 
 ### 13.3 Modelo `login.PasswordResetToken`
 
-Token de un solo uso que respalda la recuperación de contraseña. PK `UUIDField`.
+Token de un solo uso que respalda la recuperaciÃ³n de contraseÃ±a. PK `UUIDField`.
 
-| Campo | Tipo | Descripción |
+| Campo | Tipo | DescripciÃ³n |
 |---|---|---|
 | `user` | FK a `User` (CASCADE) | Cuenta que solicita el restablecimiento (`related_name='password_reset_tokens'`) |
-| `token` | CharField(64), único, indexado | Valor generado con `secrets.token_hex(32)` |
-| `created_at` | DateTimeField | Fecha de emisión |
-| `expires_at` | DateTimeField | Vencimiento (emisión + 30 minutos) |
+| `token` | CharField(64), Ãºnico, indexado | Valor generado con `secrets.token_hex(32)` |
+| `created_at` | DateTimeField | Fecha de emisiÃ³n |
+| `expires_at` | DateTimeField | Vencimiento (emisiÃ³n + 30 minutos) |
 | `used_at` | DateTimeField (nullable) | Marca de uso; `NULL` mientras no se haya consumido |
 
 *Tabla 13.4 - Campos de PasswordResetToken.*
 
-`Meta` ordena por `-created_at` e incluye el índice compuesto `(user, used_at)`. Los métodos `esta_usado`, `expirado()`, `es_valido()` y `marcar_como_usado()` concentran la lógica de vigencia.
+`Meta` ordena por `-created_at` e incluye el Ã­ndice compuesto `(user, used_at)`. Los mÃ©todos `esta_usado`, `expirado()`, `es_valido()` y `marcar_como_usado()` concentran la lÃ³gica de vigencia.
 
-### 13.4 Recuperación de contraseña por correo
+### 13.4 RecuperaciÃ³n de contraseÃ±a por correo
 
-El flujo se compone de dos vistas de función en `login/views.py`.
+El flujo se compone de dos vistas de funciÃ³n en `login/views.py`.
 
 | Nombre de URL | Ruta | Vista | Responsabilidad |
 |---|---|---|---|
-| `recuperar_clave` | `/recuperar-clave/` | `solicitar_recuperacion` | Solicita el correo y envía el enlace |
-| `restablecer_clave` | `/restablecer-clave/` | `restablecer_clave` | Valida el token y guarda la nueva contraseña |
+| `recuperar_clave` | `/recuperar-clave/` | `solicitar_recuperacion` | Solicita el correo y envÃ­a el enlace |
+| `restablecer_clave` | `/restablecer-clave/` | `restablecer_clave` | Valida el token y guarda la nueva contraseÃ±a |
 
-*Tabla 13.5 - Rutas del flujo de recuperación.*
+*Tabla 13.5 - Rutas del flujo de recuperaciÃ³n.*
 
 **Secuencia:**
 
-1. El usuario abre `/recuperar-clave/` desde el enlace "¿Se te ha olvidado la clave?" del login y escribe su correo.
-2. `solicitar_recuperacion` busca `User` con `is_active=True` y `status='active'`. Si existe, elimina los tokens activos previos, crea uno nuevo (`secrets.token_hex(32)`) que vence en 30 minutos (`DURACION_TOKEN_MINUTOS = 30`) y envía el correo con el enlace a `/restablecer-clave/?token=...`.
-3. La respuesta es siempre el mismo mensaje genérico, exista o no la cuenta, para evitar la enumeración de usuarios.
-4. `restablecer_clave` comprueba que el token no esté usado ni vencido, valida que las dos claves coincidan y pasen `validate_password`, guarda con `set_password` y llama a `marcar_como_usado()`.
+1. El usuario abre `/recuperar-clave/` desde el enlace "Â¿Se te ha olvidado la clave?" del login y escribe su correo.
+2. `solicitar_recuperacion` busca `User` con `is_active=True` y `status='active'`. Si existe, elimina los tokens activos previos, crea uno nuevo (`secrets.token_hex(32)`) que vence en 30 minutos (`DURACION_TOKEN_MINUTOS = 30`) y envÃ­a el correo con el enlace a `/restablecer-clave/?token=...`.
+3. La respuesta es siempre el mismo mensaje genÃ©rico, exista o no la cuenta, para evitar la enumeraciÃ³n de usuarios.
+4. `restablecer_clave` comprueba que el token no estÃ© usado ni vencido, valida que las dos claves coincidan y pasen `validate_password`, guarda con `set_password` y llama a `marcar_como_usado()`.
 
-**Envío del correo.** `login/correos.py::enviar_correo_recuperacion` usa la biblioteca **Resend**. Requiere las variables de entorno `RESEND_API_KEY` y `RESEND_FROM` (valor por defecto `CONDOSYS <onboarding@resend.dev>`). Si falta la API key lanza `RuntimeError`; en modo `DEBUG` registra el enlace en el log en lugar de fallar silenciosamente. El asunto es "Solicitud de restablecimiento de contraseña".
+**EnvÃ­o del correo.** `login/correos.py::enviar_correo_recuperacion` usa la biblioteca **Resend**. Requiere las variables de entorno `RESEND_API_KEY` y `RESEND_FROM` (valor por defecto `CONDOSYS <onboarding@resend.dev>`). Si falta la API key lanza `RuntimeError`; en modo `DEBUG` registra el enlace en el log en lugar de fallar silenciosamente. El asunto es "Solicitud de restablecimiento de contraseÃ±a".
 
-> **NOTA** — Relación con `settings.py`
+> **NOTA** â€” RelaciÃ³n con `settings.py`
 >
-> El bloque "Email Configuration" (EMAIL_BACKEND, EMAIL_HOST, etc.) sigue presente para correo SMTP genérico; el envío transaccional de recuperación usa específicamente Resend mediante `RESEND_API_KEY` / `RESEND_FROM`.
+> El bloque "Email Configuration" (EMAIL_BACKEND, EMAIL_HOST, etc.) sigue presente para correo SMTP genÃ©rico; el envÃ­o transaccional de recuperaciÃ³n usa especÃ­ficamente Resend mediante `RESEND_API_KEY` / `RESEND_FROM`.
 
-### 13.5 Lectura de cédula con inteligencia artificial
+### 13.5 Lectura de cÃ©dula con inteligencia artificial
 
-El módulo de Visitantes incorpora la búsqueda por cédula a partir de una foto. La lógica vive en `configuracion/ia_vision.py` y se invoca desde `visitors/views.py::buscar_cedula`.
+El mÃ³dulo de Visitantes incorpora la bÃºsqueda por cÃ©dula a partir de una foto. La lÃ³gica vive en `configuracion/ia_vision.py` y se invoca desde `visitors/views.py::buscar_cedula`.
 
 | Elemento | Valor |
 |---|---|
 | Ruta | `/visitantes/buscar-cedula/` (nombre `buscar_cedula`, POST multipart) |
-| Imagen máxima | 8 MB (`MAX_IMAGEN_CEDULA_MB`) |
-| Procesamiento | `configuracion/ia_vision.py` con Pillow: valida la imagen y la reduce a JPEG (lado máximo 1280 px) |
-| Prompt | Pide los 11 dígitos de la cédula dominicana (formato 000-0000000-0) o `NADA` |
+| Imagen mÃ¡xima | 8 MB (`MAX_IMAGEN_CEDULA_MB`) |
+| Procesamiento | `configuracion/ia_vision.py` con Pillow: valida la imagen y la reduce a JPEG (lado mÃ¡ximo 1280 px) |
+| Prompt | Pide los 11 dÃ­gitos de la cÃ©dula dominicana (formato 000-0000000-0) o `NADA` |
 | Timeout | 60 segundos |
-| Resultado | Redirige a `/visitantes/?documento=<cédula>` para filtrar el listado |
+| Resultado | Redirige a `/visitantes/?documento=<cÃ©dula>` para filtrar el listado |
 
-*Tabla 13.6 - Lectura de cédula con IA.*
+*Tabla 13.6 - Lectura de cÃ©dula con IA.*
 
-`extraer_digitos()` toma de la respuesta del modelo los primeros 11 dígitos, o `None` si no hay cédula legible. La función depende de que la app `configuracion` tenga una `IntegracionIA` con `api_key`; si no, `ia_vision` lanza `ErrorVision`. En la plantilla, el diálogo "Buscar por cédula" permite usar la cámara del dispositivo o adjuntar un archivo.
+`extraer_digitos()` toma de la respuesta del modelo los primeros 11 dÃ­gitos, o `None` si no hay cÃ©dula legible. La funciÃ³n depende de que la app `configuracion` tenga una `IntegracionIA` con `api_key`; si no, `ia_vision` lanza `ErrorVision`. En la plantilla, el diÃ¡logo "Buscar por cÃ©dula" permite usar la cÃ¡mara del dispositivo o adjuntar un archivo.
 
 ### 13.6 Variables de entorno nuevas
 
 | Variable | Uso | Valor por defecto |
 |---|---|---|
-| `RESEND_API_KEY` | Clave privada de Resend | Vacío |
+| `RESEND_API_KEY` | Clave privada de Resend | VacÃ­o |
 | `RESEND_FROM` | Remitente verificado del correo | `CONDOSYS <onboarding@resend.dev>` |
 
 *Tabla 13.7 - Variables de entorno del correo transaccional.*
@@ -1918,7 +1918,8 @@ El módulo de Visitantes incorpora la búsqueda por cédula a partir de una foto
 ### 13.7 Impacto en los inventarios
 
 - La app `configuracion` se suma a las aplicaciones del proyecto y aporta el modelo `IntegracionIA`.
-- La app `login` deja de estar vacía: aporta `PasswordResetToken`.
-- El total de modelos pasa de 23 a **25** (ver la tabla del capítulo 6.8, actualizada).
-- La tabla de rutas principales (capítulo 4.5) incorpora `/configuracion/`, `/recuperar-clave/`, `/restablecer-clave/` y `/visitantes/buscar-cedula/`.
-- La matriz de permisos (capítulo 5.5) incluye el módulo **Configuración** como acceso exclusivo del rol `admin`.
+- La app `login` deja de estar vacÃ­a: aporta `PasswordResetToken`.
+- El total de modelos pasa de 23 a **25** (ver la tabla del capÃ­tulo 6.8, actualizada).
+- La tabla de rutas principales (capÃ­tulo 4.5) incorpora `/configuracion/`, `/recuperar-clave/`, `/restablecer-clave/` y `/visitantes/buscar-cedula/`.
+- La matriz de permisos (capÃ­tulo 5.5) incluye el mÃ³dulo **ConfiguraciÃ³n** como acceso exclusivo del rol `admin`.
+
